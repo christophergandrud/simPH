@@ -1,6 +1,7 @@
 export(coxsimPoly)
 export(coxsimtvc)
 export(ggfitStrata)
+export(ggpoly)
 export(ggtvc)
 export(tvc)
 import(ggplot2)

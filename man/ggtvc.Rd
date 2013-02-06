@@ -1,6 +1,6 @@
 \name{ggtvc}
 \alias{ggtvc}
-\title{Create a plot of simulated time-varying hazard ratios or stratified time-varying hazard rates from a simtvc class object using ggplot2}
+\title{Plot simulated time-varying hazard ratios or stratified time-varying hazard rates from a simtvc class object using ggplot2}
 \usage{
   ggtvc(obj, qi = "Relative Hazard", strata = FALSE,
     from = NULL, to = NULL, xlab = NULL, ylab = NULL,

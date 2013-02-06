@@ -7,7 +7,8 @@
 #' @param X numeric vector of values of X to simulate relative hazards for.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
-#' @description Simulates hazards for polynomial covariate effects.
+#' @return a simpoly class object.
+#' @description Simulates relative hazards for polynomial covariate effects.
 #' 
 #' @examples
 #' # Load Carpenter (2002) data
@@ -22,10 +23,14 @@
 #'              peddiz01 + orphdum + natreg + I(natreg^2) + vandavg3 + 
 #'              wpnoavg3 + condavg3 + orderent + stafcder, 
 #'             data = CarpenterFdaData)
-#'
+#' 
+#' # Simulate simpoly class object
+#' simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = c(1:13))
+#' 
 #' @references Keele, Luke. 2010. “Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.” Political Analysis 18(2): 189–205.
 #'
 #' Carpenter, Daniel P. 2002. “Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.” American Journal of Political Science 46(3): 490–505.
+#' @seealso \code{\link{ggpoly}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #' @import MSBVAR plyr reshape2 survival
 #' @export 
 

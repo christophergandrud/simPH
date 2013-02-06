@@ -24,8 +24,12 @@
   percent. Other possibilities include: \code{"90"},
   \code{"99"}, \code{"all"}.}
 }
+\value{
+  a simpoly class object.
+}
 \description{
-  Simulates hazards for polynomial covariate effects.
+  Simulates relative hazards for polynomial covariate
+  effects.
 }
 \details{
   \code{coxsimPoly} simulates hazards for polynomial
@@ -44,6 +48,9 @@ M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 +
              peddiz01 + orphdum + natreg + I(natreg^2) + vandavg3 +
              wpnoavg3 + condavg3 + orderent + stafcder,
             data = CarpenterFdaData)
+
+# Simulate simpoly class object
+simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = c(1:13))
 }
 \references{
   Keele, Luke. 2010. “Proportionally Difficult: Testing for
@@ -53,5 +60,10 @@ M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 +
   Carpenter, Daniel P. 2002. “Groups, the Media, Agency
   Waiting Costs, and FDA Drug Approval.” American Journal
   of Political Science 46(3): 490–505.
+}
+\seealso{
+  \code{\link{ggpoly}}, \code{\link{rmultinorm}},
+  \code{\link{survival}}, \code{\link{strata}}, and
+  \code{\link{coxph}}
 }
 
