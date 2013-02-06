@@ -70,7 +70,7 @@ coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95")
   		TempComb$ID <- 1:nsim
   		CombinedDF <- rbind(CombinedDF, TempComb)
   	}
-  	CombinedDF$RH <- rowSums(CombinedDF[, VNames])
+  	CombinedDF$RH <- exp(rowSums(CombinedDF[, VNames]))
 
 	if (ci == "all"){
 	    PolySimPerc <- CombinedDF 
