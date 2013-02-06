@@ -11,7 +11,7 @@
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
 #' @param title the plot's main title
 #' @param xbreaks breaks for x axis tick marks. These will be on the scale you used for the transformed function of time.
-#' @param xlabels labels for the x axis tick marks. These should be on the real time scale. 
+#' @param xlabels labels for the x axis tick marks. Default is the time variable's scale. 
 #' @param smoother what type of smoothing line to use to summarize the plotted coefficient
 #' @param colour character string colour of the simulated points for relative hazards. Default is hexadecimal colour A6CEE3. Works if \code{strata = FALSE}.
 #' @param spalette colour palette for stratified hazard rates. Only works if \code{strata = TRUE}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.

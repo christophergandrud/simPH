@@ -25,7 +25,7 @@
 #'             data = CarpenterFdaData)
 #' 
 #' # Simulate simpoly class object
-#' simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = c(1:13))
+#' simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
 #' 
 #' @references Keele, Luke. 2010. “Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.” Political Analysis 18(2): 189–205.
 #'

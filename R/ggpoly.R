@@ -2,14 +2,44 @@
 #'
 #' \code{ggpoly} uses ggplot2 to plot simulated relative hazards from a simpoly class object.
 #' @param obj a simpoly object
+#' @param xlab a label for the plot's x-axis.
+#' @param ylab a label of the plot's y-axis.
+#' @param title the plot's main title
+#' @param smoother what type of smoothing line to use to summarize the plotted coefficient
+#' @param colour character string colour of the simulated points for relative hazards. Default is hexadecimal colour A6CEE3. Works if \code{strata = FALSE}.
+#' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
+#' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
+#' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
+#' @param ... other arguments passed to specific methods
 #'
+#' @examples
+#' # Load Carpenter (2002) data
+#' data("CarpenterFdaData")
+#'
+#' # Load survival package
+#' library(survival)
+#'
+#' # Run basic model
+#' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + 
+#'              acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + 
+#'              peddiz01 + orphdum + natreg + I(natreg^2) + vandavg3 + 
+#'              wpnoavg3 + condavg3 + orderent + stafcder, 
+#'             data = CarpenterFdaData)
+#' 
+#' # Simulate simpoly class object
+#' simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
+#' 
+#' # Plot simulations
+#' ggpoly(simM1)
+#'
+#' @seealso \code{\link{coxsimpoly}} and \code{\link{ggplot2}}
 #'
 #' @returns a ggplot2 object.
 #'
 #' @import ggplot2
 #' @export
 
-ggpoly <- function(obj, xlab = NULL, ylab = NULL, title = NULL, xbreaks = NULL, xlabels = NULL, smoother = "auto", colour = "#A6CEE3", spalette = "Set1", leg.name = "", lsize = 2, psize = 1, palpha = 0.1, ...){
+ggpoly <- function(obj, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", colour = "#A6CEE3",lsize = 2, psize = 1, palpha = 0.1, ...){
   if (!inherits(obj, "simpoly")){
   	stop("must be a simpoly object")
   }
@@ -17,15 +47,13 @@ ggpoly <- function(obj, xlab = NULL, ylab = NULL, title = NULL, xbreaks = NULL, 
   objdf <- data.frame(obj$X, obj$RH)
   names(objdf) <- c("X", "RH")
   ggplot(objdf, aes(X, RH)) +
-    geom_point(shape = 21, alpha = I(palpha), size = psize) +
-    geom_smooth(method = smoother, size = lsize, se = FALSE) +
-    geom_hline(aes(yintercept = 1), linetype = "dotted") +
-    scale_colour_brewer(palette = spalette, name = leg.name) +
-    scale_y_continuous()+
-    scale_x_continuous() +
-    xlab(xlab) + ylab(ylab) +
-    ggtitle(title) +
-    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-    theme_bw(base_size = 15)
+        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = colour) +
+        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+        scale_y_continuous()+
+        scale_x_continuous() +
+        xlab(xlab) + ylab(ylab) +
+        ggtitle(title) +
+        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 
 }

@@ -18,7 +18,7 @@ The package includes the following functions:
 
 - `coxsimtvc`: a function for simulating time-varying hazards (relative hazards, first differences, and hazard ratios) from a Cox PH model estimated using `coxph` from the [survival](http://cran.r-project.org/web/packages/survival/index.html) package. For more information see this [blog post](http://christophergandrud.blogspot.kr/2012/10/graphing-non-proportional-hazards-in-r.html). If `strata = TRUE` the function will calculate time-varying hazard ratios for multiple strata estimated from a stratified Cox PH model.
 
-- `simpoly`: a function for graphing simulated polynomial relative hazards.
+- `coxsimPoly`: a function for graphing simulated polynomial relative hazards.
 
 - `ggtvc`: uses [ggplot2](http://ggplot2.org/) to graph the simulated time-varying relative hazards, first differences, hazard ratios or stratified hazard rates.
 
