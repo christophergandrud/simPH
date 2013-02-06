@@ -1,4 +1,4 @@
-#' Create a plot of simulated time-varying hazard ratios or stratified time-varying hazard rates from a simtvc class object using ggplot2
+#' Plot simulated time-varying hazard ratios or stratified time-varying hazard rates from a simtvc class object using ggplot2
 #' 
 #' \code{ggtvc} uses ggplot2 to plot the simulated hazard ratios from a simtvc class object using ggplot2. 
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs.

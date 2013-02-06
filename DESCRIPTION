@@ -26,5 +26,6 @@ Collate:
     'coxsimPoly.R'
     'ggfitStrata.R'
     'ggtvc.R'
+    'ggpoly.R'
     'GolubEUPData.R'
     'CarpenterFdaData.R'
