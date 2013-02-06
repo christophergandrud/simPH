@@ -4,40 +4,29 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>simPH by christophergandrud</title>
+
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/main.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
   <body>
-
+    <div class="wrapper">
       <header>
         <h1>simPH</h1>
         <p>Tools for simulating and graphing results from proportion hazards survival models.</p>
+
+        <p class="view"><a href="https://github.com/christophergandrud/simPH">View the Project on GitHub <small>christophergandrud/simPH</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/christophergandrud/simPH/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/christophergandrud/simPH/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/christophergandrud/simPH">View On <strong>GitHub</strong></a></li>
+        </ul>
       </header>
-
-      <div id="banner">
-        <span id="logo"></span>
-
-        <a href="https://github.com/christophergandrud/simPH" class="button fork"><strong>View On GitHub</strong></a>
-        <div class="downloads">
-          <span>Downloads:</span>
-          <ul>
-            <li><a href="https://github.com/christophergandrud/simPH/zipball/master" class="button">ZIP</a></li>
-            <li><a href="https://github.com/christophergandrud/simPH/tarball/master" class="button">TAR</a></li>
-          </ul>
-        </div>
-      </div><!-- end banner -->
-
-    <div class="wrapper">
-      <nav>
-        <ul></ul>
-      </nav>
       <section>
         <h1>simPH</h1>
 
@@ -47,7 +36,7 @@
 
 <h3>Note: <strong>simPH</strong> is in beta. Please report any bugs at <a href="https://github.com/christophergandrud/simPH/issues">https://github.com/christophergandrud/simPH/issues</a>.</h3>
 
-<hr><p>An R package for simulating and graphing non-proportional hazards (relative hazards, first differences, and hazard ratios) from <a href="http://en.wikipedia.org/wiki/Proportional_hazards_models">Cox Proportional Hazard (PH) models</a>. It can also simulate and graph stratified non-proportional hazard rates from Cox models.</p>
+<hr><p>An R package for simulating and ploting, polynomial hazards, non-proportional hazards (relative hazards, first differences, and hazard ratios) from <a href="http://en.wikipedia.org/wiki/Proportional_hazards_models">Cox Proportional Hazard (PH) models</a>. It can also simulate and graph stratified non-proportional hazard rates from Cox models.</p>
 
 <p>The package includes the following functions:</p>
 
@@ -62,7 +51,7 @@
 
 <p>Use the <a href="https://github.com/hadley/devtools">devtools</a> command <code>install_github</code> to install <strong>simPH</strong> in R. Here is the exact code for installing version:</p>
 
-<div class="highlight"><pre><span class="nv">devtools::install_github</span><span class="gs">(</span><span class="s">"simPH"</span><span class="nv">,</span> <span class="s">"christophergandrud"</span><span class="gs">)</span>
+<div class="highlight"><pre>devtools<span class="p">::</span>install_github<span class="p">(</span><span class="s">"simPH"</span><span class="p">,</span> <span class="s">"christophergandrud"</span><span class="p">)</span>
 </pre></div>
 
 <h2>Sources</h2>
@@ -88,11 +77,21 @@
 <p>I am also working on a way to graph hazard ratios with frailties. </p>
       </section>
       <footer>
-        <p>Project maintained by <a href="https://github.com/christophergandrud">christophergandrud</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+        <p>This project is maintained by <a href="https://github.com/christophergandrud">christophergandrud</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
+    <script src="javascripts/scale.fix.js"></script>
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-985930-7");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
