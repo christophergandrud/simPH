@@ -9,23 +9,21 @@
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
 #' @return a simpoly class object.
 #' @description Simulates relative hazards for polynomial covariate effects.
+#'
+#' Note, you must use \code{\link{I}} to create the polynomials.
 #' 
 #' @examples
 #' # Load Carpenter (2002) data
-#' data("CarpenterFdaData")
+#' # data("CarpenterFdaData")
 #'
 #' # Load survival package
-#' library(survival)
+#' # library(survival)
 #'
 #' # Run basic model
-#' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + 
-#'              acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + 
-#'              peddiz01 + orphdum + natreg + I(natreg^2) + vandavg3 + 
-#'              wpnoavg3 + condavg3 + orderent + stafcder, 
-#'             data = CarpenterFdaData)
+#' # M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
 #' 
 #' # Simulate simpoly class object
-#' simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
+#' # simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
 #' 
 #' @references Keele, Luke. 2010. “Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.” Political Analysis 18(2): 189–205.
 #'
@@ -55,7 +53,6 @@ coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95")
 	NamePow <- c(bpos, NamePow)
   	Drawn <- data.frame(Drawn[, NamePow])
   	VNames <- names(Drawn)
-  	#Drawn$ID <- 1:nsim
 	powFull <- as.numeric(1:pow)
 
   	Fitted <- function(VN, x, p){

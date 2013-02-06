@@ -2,16 +2,66 @@
 \alias{ggpoly}
 \title{Plot simulated polynomial hazards.}
 \usage{
-  ggpoly(obj, xlab = NULL, ylab = NULL, title = NULL,
-    xbreaks = NULL, xlabels = NULL, smoother = "auto",
-    colour = "#A6CEE3", spalette = "Set1", leg.name = "",
+  ggpoly(obj, xlab = NULL, ylab = "Relative Hazard\n",
+    title = NULL, smoother = "auto", colour = "#A6CEE3",
     lsize = 2, psize = 1, palpha = 0.1, ...)
 }
 \arguments{
   \item{obj}{a simpoly object}
+
+  \item{xlab}{a label for the plot's x-axis.}
+
+  \item{ylab}{a label of the plot's y-axis. The default is
+  \code{ylab = "Relative Hazard \n"}.}
+
+  \item{title}{the plot's main title}
+
+  \item{smoother}{what type of smoothing line to use to
+  summarize the plotted coefficient}
+
+  \item{colour}{character string colour of the simulated
+  points for relative hazards. Default is hexadecimal
+  colour A6CEE3. Works if \code{strata = FALSE}.}
+
+  \item{lsize}{size of the smoothing line. Default is 2.
+  See \code{\link{ggplot2}}.}
+
+  \item{psize}{size of the plotted simulation points.
+  Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
+
+  \item{palpha}{point alpha (e.g. transparency). Default is
+  \code{palpha = 0.05}. See \code{\link{ggplot2}}.}
+
+  \item{...}{other arguments passed to specific methods}
+}
+\value{
+  a ggplot2 object.
 }
 \description{
   \code{ggpoly} uses ggplot2 to plot simulated relative
   hazards from a simpoly class object.
+}
+\examples{
+# Load Carpenter (2002) data
+# data("CarpenterFdaData")
+
+# Load survival package
+library(survival)
+
+# Run basic model
+# M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 +
+  #           acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 +
+  #           peddiz01 + orphdum + natreg + I(natreg^2) + vandavg3 +
+  #           wpnoavg3 + condavg3 + orderent + stafcder,
+  #          data = CarpenterFdaData)
+
+# Simulate simpoly class object
+# simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
+
+# Plot simulations
+# ggpoly(simM1)
+}
+\seealso{
+  \code{\link{coxsimpoly}} and \code{\link{ggplot2}}
 }
 

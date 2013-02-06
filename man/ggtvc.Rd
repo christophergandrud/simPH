@@ -36,8 +36,8 @@
   be on the scale you used for the transformed function of
   time.}
 
-  \item{xlabels}{labels for the x axis tick marks. These
-  should be on the real time scale.}
+  \item{xlabels}{labels for the x axis tick marks. Default
+  is the time variable's scale.}
 
   \item{smoother}{what type of smoothing line to use to
   summarize the plotted coefficient}

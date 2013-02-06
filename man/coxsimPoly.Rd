@@ -30,6 +30,9 @@
 \description{
   Simulates relative hazards for polynomial covariate
   effects.
+
+  Note, you must use \code{\link{I}} to create the
+  polynomials.
 }
 \details{
   \code{coxsimPoly} simulates hazards for polynomial
@@ -37,20 +40,16 @@
 }
 \examples{
 # Load Carpenter (2002) data
-data("CarpenterFdaData")
+# data("CarpenterFdaData")
 
 # Load survival package
-library(survival)
+# library(survival)
 
 # Run basic model
-M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 +
-             acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 +
-             peddiz01 + orphdum + natreg + I(natreg^2) + vandavg3 +
-             wpnoavg3 + condavg3 + orderent + stafcder,
-            data = CarpenterFdaData)
+# M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
 
 # Simulate simpoly class object
-simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = c(1:13))
+# simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
 }
 \references{
   Keele, Luke. 2010. “Proportionally Difficult: Testing for
