@@ -1,4 +1,8 @@
 
 Version 0.01
 
-First version, largely ported from simtvc version 0.04, with the addition of the ability to work with polynomials.
+First version, largely ported from simtvc version 0.04, with the addition of the ability to work with polynomials. This includes two functions
+
+- `simpoly` simulates polynomial relative hazards
+
+- `ggpoly` graphs the simulated polynomial relative hazards
