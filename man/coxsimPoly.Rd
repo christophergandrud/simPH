@@ -2,7 +2,7 @@
 \alias{coxsimPoly}
 \title{Simulate non-linear hazards for a range of values}
 \usage{
-  coxsimPoly(obj, b, pow = 2, X = 1, nsim = 1000)
+  coxsimPoly(obj, b, pow = 2, X, nsim = 1000, ci = "95")
 }
 \arguments{
   \item{obj}{a coxph fitted model object with a polynomial
@@ -18,6 +18,11 @@
 
   \item{nsim}{the number of simulations to run per value of
   X. Default is \code{nsim = 1000}.}
+
+  \item{ci}{the proportion of middle simulations to keep.
+  The default is \code{ci = "95"}, i.e. keep the middle 95
+  percent. Other possibilities include: \code{"90"},
+  \code{"99"}, \code{"all"}.}
 }
 \description{
   Simulates hazards for polynomial covariate effects.

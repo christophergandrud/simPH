@@ -6,6 +6,7 @@
 #' @param pow numeric polynomial used in \code{coxph}.  
 #' @param X numeric vector of values of X to simulate relative hazards for.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
+#' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
 #' @description Simulates hazards for polynomial covariate effects.
 #' 
 #' @examples
@@ -28,7 +29,7 @@
 #' @import MSBVAR plyr reshape2 survival
 #' @export 
 
-coxsimPoly <- function(obj, b, pow = 2, X = 1, nsim = 1000) 
+coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95") 
 {
 	Coef <- matrix(obj$coefficients)
 	VC <- vcov(obj)
@@ -43,11 +44,53 @@ coxsimPoly <- function(obj, b, pow = 2, X = 1, nsim = 1000)
 		Temp <- paste0("I.", b, ".", p, ".")
 		match(Temp, dfn)
   	}
-	pows <- 2:pow
+	pows <- as.numeric(2:pow)
   	NamePow <- sapply(pows, NamesLoc, simplify = TRUE)
 
 	NamePow <- c(bpos, NamePow)
   	Drawn <- data.frame(Drawn[, NamePow])
-  	Drawn$ID <- 1:nsim
+  	VNames <- names(Drawn)
+  	#Drawn$ID <- 1:nsim
+	powFull <- as.numeric(1:pow)
 
+  	Fitted <- function(VN, x, p){
+  		Temp <- outer(Drawn[, VN], x^p)
+  		TempDF <- data.frame(melt(Temp))
+  		TempDF <- TempDF[, "value"]
+  		TempDF
+  	}
+
+    CombinedDF <- data.frame()
+  	for (i in X){
+  		TempComb <- mapply(Fitted, VN = VNames, x = i, p = powFull)
+  		TempComb <- data.frame(TempComb)
+  		TempComb$X <- i
+  		TempComb$ID <- 1:nsim
+  		CombinedDF <- rbind(CombinedDF, TempComb)
+  	}
+  	CombinedDF$RH <- rowSums(CombinedDF[, VNames])
+
+	if (ci == "all"){
+	    PolySimPerc <- CombinedDF 
+	  } else if (ci == "95"){
+	    PolySimPerc <- ddply(CombinedDF, .(X), transform, Lower = RH < quantile(RH, c(0.025)))
+	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, 0.975))
+	    PolySimPerc <- subset(PolySimPerc, Lower == FALSE & Upper == FALSE)
+	  } else if (ci == "90"){
+	    PolySimPerc <- ddply(CombinedDF, .(X), transform, Lower = RH < quantile(RH, c(0.05)))
+	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, 0.95))
+	    PolySimPerc <- subset(PolySimPerc, Lower == FALSE & Upper == FALSE)
+	  } else if (ci == "99"){
+	    PolySimPerc <- ddply(CombinedDF, .(X), transform, Lower = RH < quantile(RH, c(0.005)))
+	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, 0.995))
+	    PolySimPerc <- subset(PolySimPerc, Lower == FALSE & Upper == FALSE)
+	  }
+	PolySimPerc <- PolySimPerc[, c("ID", "X", "RH")]
+	class(PolySimPerc) <- "simpoly"
+	PolySimPerc
 }
+
+
+
+
+
