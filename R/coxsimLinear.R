@@ -3,9 +3,9 @@
 #' \code{coxsimLinear} simulates relative hazards, first differences, and hazard ratios for time-constant covariates from models estimated with \code{\link{coxph}} using the multivariate normal distribution.
 #' @param obj a coxph fitted model object.
 #' @param b character string name of the coefficient you would like to simulate.
-#' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{"qi = "Relative Hazard"}. If code{"qi = "Hazard Rate"} and the \code{coxph} model has strata, then these will also be calculated.
+#' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{"qi = "Relative Hazard"}. If code{"qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param Xj numeric vector of values of X to simulate for.
-#' @param Xl numeric vector of values to compare \code{Xj} to.
+#' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} only \code{Xj} is relevant.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
 #'
@@ -40,7 +40,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 
 	Coef <- matrix(obj$coefficients)
 	VC <- vcov(obj)
 	
-	# Draw covaritate estiamtes from the multivariate normal distribution	    
+	# Draw covariate estimates from the multivariate normal distribution	    
 	Drawn <- rmultnorm(n = nsim, mu = Coef, vmat = VC)
 	DrawnDF <- data.frame(Drawn)
 	dfn <- names(DrawnDF)
@@ -52,7 +52,11 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 
 
   # Find quantity of interest
   if (qi == "Relative Hazard"){
-      Simb$HR <- exp(Simb[, 1] * Xj)
+  	Xl <- rep(0, length(Xj))
+  	Xs <- data.frame(Xj, Xl)
+    Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
+	Simb <- merge(Simb, Xs)
+  	Simb$HR <- exp((Simb$Xj - Simb$Xl) * Simb$Coef)	
   } 
   else if (qi == "First Difference"){
   	if (length(Xj) != length(Xl)){
@@ -66,10 +70,13 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 
   	}
   }
   else if (qi == "Hazard Ratio"){
-    if (length(Xj) != length(Xl)){
+    if (length(Xl) > 1 & length(Xj) != length(Xl)){
       stop("Xj and Xl must be the same length.")
     }
     else {
+    	if (length(Xj) > 1 & length(Xl) == 1){
+    		Xl <- rep(0, length(Xj))
+    	}
     	Xs <- data.frame(Xj, Xl)
     	Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
 	    Simb <- merge(Simb, Xs)
@@ -77,10 +84,13 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 
     } 
   }
   else if (qi == "Hazard Rate"){
-    if (length(Xj) != length(Xl)){
+    if (length(Xl) > 1 & length(Xj) != length(Xl)){
       stop("Xj and Xl must be the same length.")
     }
     else {
+    	if (length(Xj) > 1 & length(Xl) == 1){
+    		Xl <- rep(0, length(Xj))
+    	}
     	Xs <- data.frame(Xj, Xl)
     	Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
 	    Simb <- merge(Simb, Xs)

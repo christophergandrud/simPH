@@ -16,7 +16,7 @@
 #' @seealso \code{\link{coxsimLinear}} and \code{\link{ggplot2}}
 #' @references Licht, Amanda A. 2011. “Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.” Political Analysis 19: 227–43.
 
-gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, xbreaks = NULL, xlabels = NULL, smoother = "auto", colour = "#A6CEE3", spalette = "Set1", leg.name = "", lsize = 2, psize = 1, palpha = 0.1, ...)
+gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", colour = "#A6CEE3", spalette = "Set1", leg.name = "", lsize = 2, psize = 1, palpha = 0.1, ...)
 {
 	if (!inherits(obj, "simlinear")){
     	stop("must be a simlinear object")
@@ -32,10 +32,10 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 	if (qi == "Hazard Rate"){
 		colour <- NULL
 		if (is.null(obj$strata)){
-			objdf <- data.frame(obj$RealTime, obj$HRate, obj$Comparison)
+			objdf <- data.frame(obj$time, obj$HRate, obj$Comparison)
 			names(objdf) <- c("Time", "HRate", "Comparison")
 		} else {
-		objdf <- data.frame(obj$RealTime, obj$HRate, obj$strata, obj$Comparison)
+		objdf <- data.frame(obj$time, obj$HRate, obj$strata, obj$Comparison)
 		names(objdf) <- c("Time", "HRate", "Strata", "Comparison")
 		}
 		if (!is.null(from)){
@@ -45,15 +45,76 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
   			objdf <- subset(objdf, Time <= to)
   		}
 	} else if (qi == "Hazard Ratio"){
-	  	objdf <- data.frame(obj$RealTime, obj$HR, obj$Comparison)
-	  	names(objdf) <- c("Time", "HR", "Comparison")
+	  	objdf <- data.frame(obj$Xj, obj$HR, obj$Comparison)
+	  	names(objdf) <- c("Xj", "HR", "Comparison")
 	} else if (qi == "Relative Hazard"){
 	  	spalette <- NULL
-	  	objdf <- data.frame(obj$RealTime, obj$HR)
-	  	names(objdf) <- c("Time", "HR")
+	  	objdf <- data.frame(obj$Xj, obj$HR)
+	  	names(objdf) <- c("Xj", "HR")
 	} else if (qi == "First Difference"){
 		spalette <- NULL
-		objdf <- data.frame(obj$RealTime, obj$FirstDiff, obj$Comparison)
-		names(objdf) <- c("Time", "FirstDiff", "Comparison")
+		objdf <- data.frame(obj$Xj, obj$FirstDiff, obj$Comparison)
+		names(objdf) <- c("Xj", "FirstDiff", "Comparison")
 	}
+
+	# Plot
+	  if (qi == "Hazard Rate"){
+	  	if (!is.null(objdf$strata)) {
+	  		ggplot(objdf, aes(x = Time, y = HRate, colour = factor(Comparison))) +
+	  			geom_point(alpha = I(palpha), size = psize) +
+	  			geom_smooth(method = smoother, size = lsize, se = 	FALSE) +
+	  			facet_grid(.~ Strata) +
+	  			scale_y_continuous()+
+	  			scale_x_continuous() +
+	  			xlab(xlab) + ylab(ylab) +
+	  			scale_colour_brewer(palette = spalette, name = leg.name) +
+	  			ggtitle(title) +
+	  			guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+	  		theme_bw(base_size = 15)
+    	} else if (is.null(objdf$strata)){
+	      	ggplot(objdf, aes(Time, HRate, colour = factor(Comparison))) +
+	        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+		        scale_colour_brewer(palette = spalette, name = leg.name) +
+		        scale_y_continuous()+
+		        scale_x_continuous() +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+		}
+	} else if (qi == "Relative Hazard"){
+		ggplot(objdf, aes(Xj, HR)) +
+		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = colour) +
+		    geom_hline(aes(yintercept = 1), linetype = "dotted") +
+		    scale_y_continuous() +
+			scale_y_continuous() +    
+		    xlab(xlab) + ylab(ylab) +
+		    ggtitle(title) +
+		    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		    theme_bw(base_size = 15)
+	} else if (qi == "First Difference"){
+    	ggplot(objdf, aes(Xj, FirstDiff, group = Comparison)) +
+        	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = colour) +
+	        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+	        geom_hline(aes(yintercept = 0), linetype = "dotted") +
+	        scale_y_continuous()+
+	        scale_x_continuous() +
+	        xlab(xlab) + ylab(ylab) +
+	        ggtitle(title) +
+	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+	        theme_bw(base_size = 15)
+	} else if (qi == "Hazard Ratio"){
+		ggplot(objdf, aes(Xj, HR)) +
+	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = colour) +
+	        stat_smooth(method = smoother, size = lsize, colour = colour, se = FALSE) +
+	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+	        scale_y_continuous()+
+	        scale_x_continuous() +
+	        xlab(xlab) + ylab(ylab) +
+	        ggtitle(title) +
+	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+	        theme_bw(base_size = 15)
+    }
 }

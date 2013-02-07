@@ -16,12 +16,14 @@
   \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The
   default is \code{"qi = "Relative Hazard"}. If code{"qi =
   "Hazard Rate"} and the \code{coxph} model has strata,
-  then these will also be calculated.}
+  then hazard rates for each strata will also be
+  calculated.}
 
   \item{Xj}{numeric vector of values of X to simulate for.}
 
   \item{Xl}{numeric vector of values to compare \code{Xj}
-  to.}
+  to. Note if \code{qi = "Relative Hazard"} only \code{Xj}
+  is relevant.}
 
   \item{nsim}{the number of simulations to run per value of
   X. Default is \code{nsim = 1000}.}

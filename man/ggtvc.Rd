@@ -4,8 +4,7 @@
 \usage{
   ggtvc(obj, qi = "Relative Hazard", strata = FALSE,
     from = NULL, to = NULL, xlab = NULL, ylab = NULL,
-    title = NULL, xbreaks = NULL, xlabels = NULL,
-    smoother = "auto", colour = "#A6CEE3",
+    title = NULL, smoother = "auto", colour = "#A6CEE3",
     spalette = "Set1", leg.name = "", lsize = 2, psize = 1,
     palpha = 0.1, ...)
 }
@@ -31,13 +30,6 @@
   uses the value of \code{qi}.}
 
   \item{title}{the plot's main title}
-
-  \item{xbreaks}{breaks for x axis tick marks. These will
-  be on the scale you used for the transformed function of
-  time.}
-
-  \item{xlabels}{labels for the x axis tick marks. Default
-  is the time variable's scale.}
 
   \item{smoother}{what type of smoothing line to use to
   summarize the plotted coefficient}
@@ -69,10 +61,10 @@
   a ggplot2 object
 }
 \description{
-  \code{ggtvc} uses ggplot2 to plot the simulated hazard
-  ratios from a simtvc class object using ggplot2. Note: A
-  dotted line is created at y = 1 (0 for first difference),
-  i.e. no effect, for time-varying hazard ratio graphs.
+  \code{ggtvc} uses ggplot2 to plot the simulated hazards
+  from a simtvc class object using ggplot2. Note: A dotted
+  line is created at y = 1 (0 for first difference), i.e.
+  no effect, for time-varying hazard ratio graphs.
 }
 \details{
   Plots either a time varying hazard ratio or the hazard
@@ -141,8 +133,5 @@ ggtvc(Sim3, qi = "Hazard Ratio", leg.name = "Comparision", from = 1200)
   Licht, Amanda A. 2011. “Change Comes with Time:
   Substantive Interpretation of Nonproportional Hazards in
   Event History Analysis.” Political Analysis 19: 227–43.
-}
-\seealso{
-  \code{\link{coxsimtvc}} and \code{\link{ggplot2}}
 }
 
