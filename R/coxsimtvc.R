@@ -96,12 +96,15 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
     stop("firstDiff and strata cannot both be TRUE")
   }
 
+  # Parameter estimates & Varance/Covariance matrix
   Coef <- matrix(obj$coefficients)
   VC <- vcov(obj)
     
+  # Draw values from the multivariate normal distribution
   Drawn <- rmultnorm(n = nsim, mu = Coef, vmat = VC)
   DrawnDF <- data.frame(Drawn)
  
+  # Extract simulations for variables of interest
   dfn <- names(DrawnDF)
   bpos <- match(b, dfn)
   btvcpos <- match(btvc, dfn)

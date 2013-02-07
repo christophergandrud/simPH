@@ -22,6 +22,7 @@ Imports:
 License: GPL (>= 2)
 Collate:
     'tvc.R'
+    'coxsimLinear.R'
     'coxsimtvc.R'
     'coxsimPoly.R'
     'ggfitStrata.R'
