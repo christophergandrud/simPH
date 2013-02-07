@@ -34,7 +34,7 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 		if (is.null(obj$strata)){
 			objdf <- data.frame(obj$time, obj$HRate, obj$Comparison)
 			names(objdf) <- c("Time", "HRate", "Comparison")
-		} else {
+		} else if (!is.null(obj$strata)) {
 		objdf <- data.frame(obj$time, obj$HRate, obj$strata, obj$Comparison)
 		names(objdf) <- c("Time", "HRate", "Strata", "Comparison")
 		}
@@ -59,19 +59,19 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 
 	# Plot
 	  if (qi == "Hazard Rate"){
-	  	if (!is.null(objdf$strata)) {
-	  		ggplot(objdf, aes(x = Time, y = HRate, colour = factor(Comparison))) +
-	  			geom_point(alpha = I(palpha), size = psize) +
-	  			geom_smooth(method = smoother, size = lsize, se = 	FALSE) +
-	  			facet_grid(.~ Strata) +
-	  			scale_y_continuous()+
-	  			scale_x_continuous() +
-	  			xlab(xlab) + ylab(ylab) +
-	  			scale_colour_brewer(palette = spalette, name = leg.name) +
-	  			ggtitle(title) +
-	  			guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-	  		theme_bw(base_size = 15)
-    	} else if (is.null(objdf$strata)){
+	  	if (!is.null(obj$strata)) {
+	      ggplot(objdf, aes(x = Time, y = HRate, colour = factor(Comparison))) +
+	        geom_point(alpha = I(palpha), size = psize) +
+	        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+	        facet_grid(.~ Strata) +
+	        scale_y_continuous()+
+	        scale_x_continuous() +
+	        xlab(xlab) + ylab(ylab) +
+	        scale_colour_brewer(palette = spalette, name = leg.name) +
+	        ggtitle(title) +
+	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+	        theme_bw(base_size = 15)
+    	} else if (is.null(obj$strata)){
 	      	ggplot(objdf, aes(Time, HRate, colour = factor(Comparison))) +
 	        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
