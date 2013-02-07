@@ -1,6 +1,6 @@
 #' Plot simulated time-varying hazard ratios or stratified time-varying hazard rates from a simtvc class object using ggplot2
 #' 
-#' \code{ggtvc} uses ggplot2 to plot the simulated hazard ratios from a simtvc class object using ggplot2. 
+#' \code{ggtvc} uses ggplot2 to plot the simulated hazards from a simtvc class object using ggplot2. 
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs.
 #' @param obj a simtvc class object
 #' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, or \code{'Hazard Ratio'}. Default is \code{qi = 'Relative Hazard'}. 
@@ -74,7 +74,7 @@
 #' ggtvc(Sim1, qi = "Relative Hazard")
 #' ggtvc(Sim2, qi = "First Difference")
 #' ggtvc(Sim3, qi = "Hazard Ratio", leg.name = "Comparision", from = 1200)
-#' @seealso \code{\link{coxsimtvc}} and \code{\link{ggplot2}}
+
 #' @import ggplot2
 #' @export
 #' @references Licht, Amanda A. 2011. “Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.” Political Analysis 19: 227–43.
@@ -88,12 +88,14 @@ ggtvc <- function(obj, qi = "Relative Hazard", strata = FALSE, from = NULL, to =
     stop("firstDiff and strata cannot both be TRUE")
   }
 
+  # Create y-axis label
   if (is.null(ylab)){
     ylab <- paste(qi, "\n")
   } else {
     ylab <- ylab
   }
 
+  # Subset simtvc object & create data frame of important variables
   if (qi == "Hazard Ratio" & strata == TRUE){
     colour <- NULL
     objdf <- data.frame(obj$RealTime, obj$HRate, obj$strata, obj$Comparison)
@@ -114,6 +116,8 @@ ggtvc <- function(obj, qi = "Relative Hazard", strata = FALSE, from = NULL, to =
       objdf <- data.frame(obj$RealTime, obj$FirstDiff, obj$Comparison)
       names(objdf) <- c("Time", "FirstDiff", "Comparison")
   }
+
+  # Keep certain times
   if (!is.null(from)){
     objdf <- subset(objdf, Time >= from)
   }
@@ -121,6 +125,7 @@ ggtvc <- function(obj, qi = "Relative Hazard", strata = FALSE, from = NULL, to =
     objdf <- subset(objdf, Time <= to)
   }
 
+  # Plot
   if (qi == "Hazard Ratio"){
     if (strata == TRUE){
       ggplot(objdf, aes(x = Time, y = HRate, colour = factor(Comparison))) +
