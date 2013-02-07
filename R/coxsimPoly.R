@@ -23,7 +23,7 @@
 #' # M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
 #' 
 #' # Simulate simpoly class object
-#' # simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
+#' # Sim1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
 #' 
 #' @references Keele, Luke. 2010. “Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.” Political Analysis 18(2): 189–205.
 #'
@@ -34,15 +34,17 @@
 
 coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95") 
 {
+	# Parameter estimates & Varance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
 	VC <- vcov(obj)
-	    
+	  
+	# Draw covaritate estiamtes from the multivariate normal distribution	   
 	Drawn <- rmultnorm(n = nsim, mu = Coef, vmat = VC)
 	DrawnDF <- data.frame(Drawn)
 	dfn <- names(DrawnDF)
 
+	# Subset data frame to only include polynomial.
 	bpos <- match(b, dfn)
-
 	NamesLoc <- function(p){
 		Temp <- paste0("I.", b, ".", p, ".")
 		match(Temp, dfn)
@@ -55,6 +57,7 @@ coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95")
   	VNames <- names(Drawn)
 	powFull <- as.numeric(1:pow)
 
+	# Function to Multiply covaraites by polynomials
   	Fitted <- function(VN, x, p){
   		Temp <- outer(Drawn[, VN], x^p)
   		TempDF <- data.frame(melt(Temp))
@@ -62,6 +65,7 @@ coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95")
   		TempDF
   	}
 
+  	# Create combined relative hazards
     CombinedDF <- data.frame()
   	for (i in X){
   		TempComb <- mapply(Fitted, VN = VNames, x = i, p = powFull)
@@ -72,21 +76,24 @@ coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95")
   	}
   	CombinedDF$RH <- exp(rowSums(CombinedDF[, VNames]))
 
+  	# Drop simulations outside of 'confidence bounds'
 	if (ci == "all"){
 	    PolySimPerc <- CombinedDF 
 	  } else if (ci == "95"){
 	    PolySimPerc <- ddply(CombinedDF, .(X), transform, Lower = RH < quantile(RH, c(0.025)))
 	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, 0.975))
-	    PolySimPerc <- subset(PolySimPerc, Lower == FALSE & Upper == FALSE)
 	  } else if (ci == "90"){
 	    PolySimPerc <- ddply(CombinedDF, .(X), transform, Lower = RH < quantile(RH, c(0.05)))
 	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, 0.95))
-	    PolySimPerc <- subset(PolySimPerc, Lower == FALSE & Upper == FALSE)
 	  } else if (ci == "99"){
 	    PolySimPerc <- ddply(CombinedDF, .(X), transform, Lower = RH < quantile(RH, c(0.005)))
 	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, 0.995))
-	    PolySimPerc <- subset(PolySimPerc, Lower == FALSE & Upper == FALSE)
 	  }
+  	if (ci != "all"){
+    	PolySimPerc <- subset(PolySimPerc, Lower == FALSE & Upper == FALSE)
+  	}
+
+	# Clean up
 	PolySimPerc <- PolySimPerc[, c("ID", "X", "RH")]
 	class(PolySimPerc) <- "simpoly"
 	PolySimPerc

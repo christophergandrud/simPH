@@ -112,6 +112,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   Drawn <- data.frame(Drawn[, c(bpos, btvcpos)])
   Drawn$ID <- 1:nsim
   
+  # Create time function
   tfunOpts <- c("linear", "log", "power")
   TestforTOpts <- tfun %in% tfunOpts
   if (TestforTOpts == FALSE){
@@ -126,18 +127,19 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
     tf <- (seq(from = from, to = to, by = by))^pow
   }
   
+  # Multiply time function with btvc
   TVSim <- outer(Drawn[,2], tf)
-
   TVSim <- data.frame(melt(TVSim))
   TVSim <- rename(TVSim, c(Var1 = "ID", Var2 = "time", value = "TVC"))
   time <- 1:length(tf)
   Tempdf <- data.frame(time, tf)
   TVSim <- merge(TVSim, Tempdf)
 
+  # Combine with non TVC version of the variable
   TVSim <- merge(Drawn, TVSim, by = "ID")
-
   TVSim$CombCoef <- TVSim[[2]] + TVSim$TVC
 
+  # Find quantity of interest
   if (qi == "Relative Hazard"){
       TVSim$HR <- exp(TVSim$CombCoef)
   } 
@@ -170,24 +172,25 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
     TVSim$HRate <- TVSim$hazard * TVSim$HR
   }
 
+  # Drop simulations outside of 'confidence bounds'
   TVSim <- TVSim[order(TVSim$time),]
-  
   if (ci == "all"){
     TVSimPerc <- TVSim 
   } else if (ci == "95"){
     TVSimPerc <- ddply(TVSim, .(time), transform, Lower = HR < quantile(HR, c(0.025)))
     TVSimPerc <- ddply(TVSimPerc, .(time), transform, Upper = HR > quantile(HR, 0.975))
-    TVSimPerc <- subset(TVSimPerc, Lower == FALSE & Upper == FALSE)
   } else if (ci == "90"){
     TVSimPerc <- ddply(TVSim, .(time), transform, Lower = HR < quantile(HR, c(0.05)))
     TVSimPerc <- ddply(TVSimPerc, .(time), transform, Upper = HR > quantile(HR, 0.95))
-    TVSimPerc <- subset(TVSimPerc, Lower == FALSE & Upper == FALSE)
   } else if (ci == "99"){
     TVSimPerc <- ddply(TVSim, .(time), transform, Lower = HR < quantile(HR, c(0.005)))
     TVSimPerc <- ddply(TVSimPerc, .(time), transform, Upper = HR > quantile(HR, 0.995))
+  }
+  if (ci != "all"){
     TVSimPerc <- subset(TVSimPerc, Lower == FALSE & Upper == FALSE)
   }
 
+  # Create real time variable
   if (tfun == "linear"){
     TVSimPerc$RealTime <- TVSimPerc$tf
   } else if (tfun == "log"){
@@ -196,6 +199,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
     TVSimPerc$RealTime <- TVSimPerc$tf^(1/pow)
   }
   
+  # Final clean up
   class(TVSimPerc) <- "simtvc"
   TVSimPerc
 }

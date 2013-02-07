@@ -9,7 +9,6 @@ simPH
 
 ---
 
-
 An R package for simulating and ploting, polynomial hazards, non-proportional hazards (relative hazards, first differences, and hazard ratios) from [Cox Proportional Hazard (PH) models](http://en.wikipedia.org/wiki/Proportional_hazards_models). It can also simulate and graph stratified non-proportional hazard rates from Cox models.
 
 The package includes the following functions:

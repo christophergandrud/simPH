@@ -1,3 +1,4 @@
+export(coxsimLinear)
 export(coxsimPoly)
 export(coxsimtvc)
 export(ggfitStrata)
