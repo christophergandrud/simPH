@@ -67,7 +67,8 @@
 }
 \description{
   \code{coxsimtvc} simulates time-varying hazards from
-  coxph fitted model objects using the normal distribution.
+  coxph fitted model objects using the multivariate normal
+  distribution.
 }
 \details{
   Simulates time-varying relative hazards, first

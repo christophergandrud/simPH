@@ -1,6 +1,6 @@
 #' Simulate time-varying hazards from coxph fitted model objects
 #' 
-#' \code{coxsimtvc} simulates time-varying hazards from coxph fitted model objects using the normal distribution.
+#' \code{coxsimtvc} simulates time-varying hazards from coxph fitted model objects using the multivariate normal distribution.
 #' @param obj a coxph fitted model object with a time interaction. 
 #' @param b the non-time interacted variable's name.
 #' @param btvc the time interacted variable's name.
@@ -141,7 +141,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
 
   # Find quantity of interest
   if (qi == "Relative Hazard"){
-      TVSim$HR <- exp(TVSim$CombCoef)
+      TVSim$HR <- exp(TVSim$CombCoef * Xj)
   } 
   else if (qi == "First Difference"){
     if (length(Xj) != length(Xl)){
@@ -166,6 +166,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
     }
   }
 
+  # Find hazard rates for multiple strata
   if (strata == TRUE){
     bfit <- basehaz(obj)
     TVSim <- merge(bfit, TVSim, by = "time")

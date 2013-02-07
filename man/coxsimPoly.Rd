@@ -49,7 +49,7 @@
 # M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
 
 # Simulate simpoly class object
-# simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
+# Sim1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
 }
 \references{
   Keele, Luke. 2010. “Proportionally Difficult: Testing for

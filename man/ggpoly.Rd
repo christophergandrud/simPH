@@ -56,10 +56,10 @@ library(survival)
   #          data = CarpenterFdaData)
 
 # Simulate simpoly class object
-# simM1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
+# Sim1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
 
 # Plot simulations
-# ggpoly(simM1)
+# ggpoly(Sim1)
 }
 \seealso{
   \code{\link{coxsimpoly}} and \code{\link{ggplot2}}
