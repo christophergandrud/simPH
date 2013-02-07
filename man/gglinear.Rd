@@ -11,7 +11,7 @@
 \arguments{
   \item{obj}{a simlinear object}
 
-  \item{qi}{character string indicationg what quantity of
+  \item{qi}{character string indicating what quantity of
   interest you would like to calculate. Can be
   \code{'Relative Hazard'}, \code{'First Difference'},
   \code{'Hazard Ratio'}, or \code{'Hazard Rate'}. Default
@@ -21,17 +21,88 @@
 
   \item{ylab}{a label of the plot's y-axis. The default
   uses the value of \code{qi}.}
+
+  \item{from}{numeric time to start the plot from. Only
+  relevant if \code{qi = "Hazard Rate"}.}
+
+  \item{to}{numeric time to plot to. Only relevant if
+  \code{qi = "Hazard Rate"}.}
+
+  \item{title}{the plot's main title}
+
+  \item{smoother}{what type of smoothing line to use to
+  summarize the plotted coefficient}
+
+  \item{colour}{character string colour of the simulated
+  points for relative hazards. Default is hexadecimal
+  colour A6CEE3. Works if \code{strata = FALSE}.}
+
+  \item{spalette}{colour palette for stratified hazard
+  rates. Only works if \code{strata = TRUE}. Default
+  palette is \code{"Set1"}. See
+  \code{\link{scale_colour_brewer}}.}
+
+  \item{leg.name}{name of the stratified hazard rates
+  legend. Only works if \code{strata = TRUE}.}
+
+  \item{lsize}{size of the smoothing line. Default is 2.
+  See \code{\link{ggplot2}}.}
+
+  \item{psize}{size of the plotted simulation points.
+  Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
+
+  \item{palpha}{point alpha (e.g. transparency). Default is
+  \code{palpha = 0.05}. See \code{\link{ggplot2}}.}
+
+  \item{...}{other arguments passed to specific methods}
+}
+\value{
+  a ggplot2 object
 }
 \description{
+  Uses ggplot2 to plot the quantities of interest from
+  \code{simlinear} objects, including relative hazards,
+  first differences, hazard ratios, and hazard rates. If
+  there are multiple strata, the quantities of interest
+  will be plotted in a grid by strata.
+}
+\details{
   \code{gglinear} uses ggplot2 to plot the quantities of
-  interest from \code{simlinear} objects.
+  interest from \code{simlinear} objects, including
+  relative hazards, first differences, hazard ratios, and
+  hazard rates.
+}
+\examples{
+# Load survival package
+library(survival)
+# Load Carpenter (2002) data
+data("CarpenterFdaData")
+
+# Estimate survival model
+M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
+
+# Simulate and plot Hazard Ratios for stafcder variable
+Sim1 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Ratio", Xj = seq(1237, 1600, by = 2))
+gglinear(Sim1, qi = "Hazard Ratio")
+
+# Simulate and plot Hazard Rate for stafcder variable
+Sim2 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Rate", Xj = c(1237, 1600))
+gglinear(Sim2, qi = "Hazard Rate")
 }
 \references{
   Licht, Amanda A. 2011. “Change Comes with Time:
   Substantive Interpretation of Nonproportional Hazards in
   Event History Analysis.” Political Analysis 19: 227–43.
+  Keele, Luke. 2010. “Proportionally Difficult: Testing for
+  Nonproportional Hazards in Cox Models.” Political
+  Analysis 18(2): 189–205.
+
+  Carpenter, Daniel P. 2002. “Groups, the Media, Agency
+  Waiting Costs, and FDA Drug Approval.” American Journal
+  of Political Science 46(3): 490–505.
 }
 \seealso{
-  \code{\link{coxsimLinear}} and \code{\link{ggplot2}}
+  \code{\link{coxsimLinear}}, \code{\link{ggtvc}}, and
+  \code{\link{ggplot2}}
 }
 

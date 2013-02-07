@@ -66,9 +66,10 @@
   a simtvc object
 }
 \description{
-  \code{coxsimtvc} simulates time-varying hazards from
-  coxph fitted model objects using the multivariate normal
-  distribution.
+  \code{coxsimtvc} simulates time-varying relative hazards,
+  first differences, and hazard ratios from models
+  estimated with \code{\link{coxph}} using the multivariate
+  normal distribution.
 }
 \details{
   Simulates time-varying relative hazards, first

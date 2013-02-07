@@ -11,7 +11,6 @@
 #'
 #' @return a simlinear object
 #'
-#'
 #' @description Simulates relative hazards, first differences, hazard ratios, and hazard rates for linear time-constant covariates from Cox Proportional Hazard models.
 #'
 #' @examples
@@ -27,7 +26,7 @@
 #' # Simulate values
 #' # Sim1 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Ratio", Xj = c(1237, 1600), Xl = c(1000, 1000), ci = "99")
 #'
-#' @seealso \code{\link{ggLinear}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
+#' @seealso \code{\link{gglinear}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #' @references Licht, Amanda A. 2011. “Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.” Political Analysis 19: 227–43.
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
@@ -36,7 +35,7 @@
 
 coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = "95")
 {	
-	# Parameter estimates & Varance/Covariance matrix
+	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
 	VC <- vcov(obj)
 	

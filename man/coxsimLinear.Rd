@@ -71,8 +71,7 @@
   Political Science 44(2): 347–61.
 }
 \seealso{
-  \code{\link{ggLinear}}, \code{\link{rmultinorm}},
-  \code{\link{survival}}, \code{\link{strata}}, and
-  \code{\link{coxph}}
+  \code{\link{gglinear}}, \code{\link{survival}},
+  \code{\link{strata}}, and \code{\link{coxph}}
 }
 
