@@ -1,3 +1,7 @@
+Version 0.02.1
+
+Updated documentation and added the ability to change the smoothing line colour for first difference and relative hazard plots.
+
 Version 0.02
 
 Added functions for simulating and plotting linear non-time-varying hazards. 

@@ -10,10 +10,11 @@
 #' @param to numeric time to plot to. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param title the plot's main title
 #' @param smoother what type of smoothing line to use to summarize the plotted coefficient
-#' @param colour character string colour of the simulated points for relative hazards. Default is hexadecimal colour A6CEE3. Works if \code{strata = FALSE}.
-#' @param spalette colour palette for stratified hazard rates. Only works if \code{strata = TRUE}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
-#' @param leg.name name of the stratified hazard rates legend. Only works if \code{strata = TRUE}.
+#' @param spalette colour palette for stratified hazard rates. Only relevant if \code{qi = "Hazard Rate"}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
+#' @param leg.name name of the stratified hazard rates legend. Only relevant if \code{qi = "Hazard Rate"}.
+#' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
 #' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
+#' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
 #' @param ... other arguments passed to specific methods
@@ -46,7 +47,7 @@
 #'
 #' Carpenter, Daniel P. 2002. “Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.” American Journal of Political Science 46(3): 490–505.
 
-gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", colour = "#A6CEE3", spalette = "Set1", leg.name = "", lsize = 2, psize = 1, palpha = 0.1, ...)
+gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
 {
 	if (!inherits(obj, "simlinear")){
     	stop("must be a simlinear object")
@@ -124,7 +125,8 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 		}
 	} else if (qi == "Relative Hazard"){
 		ggplot(objdf, aes(Xj, HR)) +
-		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = colour) +
+		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 		    geom_hline(aes(yintercept = 1), linetype = "dotted") +
 		    scale_y_continuous() +
 			scale_y_continuous() +    
@@ -134,8 +136,8 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 		    theme_bw(base_size = 15)
 	} else if (qi == "First Difference"){
     	ggplot(objdf, aes(Xj, FirstDiff, group = Comparison)) +
-        	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = colour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+        	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 	        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 	        scale_y_continuous()+
 	        scale_x_continuous() +
@@ -145,8 +147,8 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 	        theme_bw(base_size = 15)
 	} else if (qi == "Hazard Ratio"){
 		ggplot(objdf, aes(Xj, HR)) +
-	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = colour) +
-	        stat_smooth(method = smoother, size = lsize, colour = colour, se = FALSE) +
+	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        scale_y_continuous()+
 	        scale_x_continuous() +

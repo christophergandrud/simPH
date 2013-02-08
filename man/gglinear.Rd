@@ -4,9 +4,9 @@
 \usage{
   gglinear(obj, qi = "Relative Hazard", from = NULL,
     to = NULL, xlab = NULL, ylab = NULL, title = NULL,
-    smoother = "auto", colour = "#A6CEE3",
-    spalette = "Set1", leg.name = "", lsize = 2, psize = 1,
-    palpha = 0.1, ...)
+    smoother = "auto", spalette = "Set1", leg.name = "",
+    lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
+    psize = 1, palpha = 0.1, ...)
 }
 \arguments{
   \item{obj}{a simlinear object}
@@ -33,20 +33,27 @@
   \item{smoother}{what type of smoothing line to use to
   summarize the plotted coefficient}
 
-  \item{colour}{character string colour of the simulated
-  points for relative hazards. Default is hexadecimal
-  colour A6CEE3. Works if \code{strata = FALSE}.}
-
   \item{spalette}{colour palette for stratified hazard
-  rates. Only works if \code{strata = TRUE}. Default
-  palette is \code{"Set1"}. See
+  rates. Only relevant if \code{qi = "Hazard Rate"}.
+  Default palette is \code{"Set1"}. See
   \code{\link{scale_colour_brewer}}.}
 
   \item{leg.name}{name of the stratified hazard rates
-  legend. Only works if \code{strata = TRUE}.}
+  legend. Only relevant if \code{qi = "Hazard Rate"}.}
+
+  \item{lcolour}{character string colour of the smoothing
+  line. The default is hexadecimal colour \code{lcolour =
+  '#2B8CBE'}. Only relevant if \code{qi = "Relative
+  Hazard"} or \code{qi = "First Difference"}.}
 
   \item{lsize}{size of the smoothing line. Default is 2.
   See \code{\link{ggplot2}}.}
+
+  \item{pcolour}{character string colour of the simulated
+  points for relative hazards. Default is hexadecimal
+  colour \code{pcolour = '#A6CEE3'}. Only relevant if
+  \code{qi = "Relative Hazard"} or \code{qi = "First
+  Difference"}.}
 
   \item{psize}{size of the plotted simulation points.
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}

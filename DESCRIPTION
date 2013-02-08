@@ -4,8 +4,8 @@ Title: Tools for simulating and graphing quantities of interest estimated using
 Description: The package simulates and plots, polynomial hazards,
     non-proportional hazards (relative hazards, first differences, and hazard
     ratios), and stratified survial curves from Cox Proportional Hazard models.
-Version: 0.02
-Date: 2013-02-07
+Version: 0.02.1
+Date: 2013-02-08
 Author: Christopher Gandrud
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
 URL: http://christophergandrud.github.com/simPH/

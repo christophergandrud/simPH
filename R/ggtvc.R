@@ -11,10 +11,11 @@
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
 #' @param title the plot's main title
 #' @param smoother what type of smoothing line to use to summarize the plotted coefficient
-#' @param colour character string colour of the simulated points for relative hazards. Default is hexadecimal colour A6CEE3. Works if \code{strata = FALSE}.
 #' @param spalette colour palette for stratified hazard rates. Only works if \code{strata = TRUE}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
 #' @param leg.name name of the stratified hazard rates legend. Only works if \code{strata = TRUE}.
+#' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Works if \code{strata = FALSE}.
 #' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
+#' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Works if \code{strata = FALSE}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
 #' @param ... other arguments passed to specific methods
@@ -77,7 +78,7 @@
 #' @export
 #' @references Licht, Amanda A. 2011. “Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.” Political Analysis 19: 227–43.
 
-ggtvc <- function(obj, qi = "Relative Hazard", strata = FALSE, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", colour = "#A6CEE3", spalette = "Set1", leg.name = "", lsize = 2, psize = 1, palpha = 0.1, ...)
+ggtvc <- function(obj, qi = "Relative Hazard", strata = FALSE, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
 {
   if (!inherits(obj, "simtvc")){
     stop("must be a simtvc object")
@@ -166,8 +167,8 @@ ggtvc <- function(obj, qi = "Relative Hazard", strata = FALSE, from = NULL, to =
 
     } else if (strata == FALSE){
       ggplot(objdf, aes(Time, HR)) +
-        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = colour) +
-        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+        geom_smooth(method = smoother, size = lsize, se = FALSE, colour = lcolour) +
         geom_hline(aes(yintercept = 1), linetype = "dotted") +
         scale_y_continuous()+
         scale_x_continuous() +
@@ -178,8 +179,8 @@ ggtvc <- function(obj, qi = "Relative Hazard", strata = FALSE, from = NULL, to =
     }
   } else if (qi == "First Difference"){
       ggplot(objdf, aes(Time, FirstDiff, group = Comparison)) +
-        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = colour) +
-        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
         geom_hline(aes(yintercept = 0), linetype = "dotted") +
         scale_y_continuous()+
         scale_x_continuous() +

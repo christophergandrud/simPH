@@ -5,8 +5,9 @@
 #' @param xlab a label for the plot's x-axis.
 #' @param ylab a label of the plot's y-axis. The default is \code{ylab = "Relative Hazard \n"}.
 #' @param title the plot's main title
-#' @param smoother what type of smoothing line to use to summarize the plotted coefficient
-#' @param colour character string colour of the simulated points for relative hazards. Default is hexadecimal colour A6CEE3. Works if \code{strata = FALSE}.
+#' @param smoother what type of smoothing line to use to summarize the plotted coefficient.
+#' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Works if \code{strata = FALSE}.
+#' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. 
 #' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
@@ -39,7 +40,7 @@
 #' @import ggplot2
 #' @export
 
-ggpoly <- function(obj, xlab = NULL, ylab = "Relative Hazard\n", title = NULL, smoother = "auto", colour = "#A6CEE3",lsize = 2, psize = 1, palpha = 0.1, ...){
+ggpoly <- function(obj, xlab = NULL, ylab = "Relative Hazard\n", title = NULL, smoother = "auto", lcolour = "#2B8CBE", pcolour = "#A6CEE3",lsize = 2, psize = 1, palpha = 0.1, ...){
   if (!inherits(obj, "simpoly")){
   	stop("must be a simpoly object")
   }
@@ -47,8 +48,8 @@ ggpoly <- function(obj, xlab = NULL, ylab = "Relative Hazard\n", title = NULL, s
   objdf <- data.frame(obj$X, obj$RH)
   names(objdf) <- c("X", "RH")
   ggplot(objdf, aes(X, RH)) +
-        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = colour) +
-        geom_smooth(method = smoother, colour = colour, size = lsize, se = FALSE) +
+        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+        geom_smooth(method = smoother, colour = lcolour, size = lsize, se = FALSE) +
         geom_hline(aes(yintercept = 1), linetype = "dotted") +
         scale_y_continuous()+
         scale_x_continuous() +

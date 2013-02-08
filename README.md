@@ -3,7 +3,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 0.02
+### Version 0.02.1
 
 ### Note: **simPH** is in beta. Please report any bugs at <https://github.com/christophergandrud/simPH/issues>.
 
@@ -25,9 +25,9 @@ The package includes the following functions:
 
 - `gglinear`: plots simulated linear time-constant hazards using [ggplot2](http://ggplot2.org/).
 
-- `ggtvc`: uses ggplot2 to graph the simulated time-varying relative hazards, first differences, hazard ratios or stratified hazard rates.
+- `ggtvc`: uses **ggplot2** to graph the simulated time-varying relative hazards, first differences, hazard ratios or stratified hazard rates.
 
-- `ggpoly`: uses ggplot2 to graph the simulated polynomial relative hazards.
+- `ggpoly`: uses **ggplot2** to graph the simulated polynomial relative hazards.
 
 #### Misc.
 

@@ -3,8 +3,9 @@
 \title{Plot simulated polynomial hazards.}
 \usage{
   ggpoly(obj, xlab = NULL, ylab = "Relative Hazard\n",
-    title = NULL, smoother = "auto", colour = "#A6CEE3",
-    lsize = 2, psize = 1, palpha = 0.1, ...)
+    title = NULL, smoother = "auto", lcolour = "#2B8CBE",
+    pcolour = "#A6CEE3", lsize = 2, psize = 1,
+    palpha = 0.1, ...)
 }
 \arguments{
   \item{obj}{a simpoly object}
@@ -17,11 +18,15 @@
   \item{title}{the plot's main title}
 
   \item{smoother}{what type of smoothing line to use to
-  summarize the plotted coefficient}
+  summarize the plotted coefficient.}
 
-  \item{colour}{character string colour of the simulated
+  \item{lcolour}{character string colour of the smoothing
+  line. The default is hexadecimal colour \code{lcolour =
+  '#2B8CBE'}. Works if \code{strata = FALSE}.}
+
+  \item{pcolour}{character string colour of the simulated
   points for relative hazards. Default is hexadecimal
-  colour A6CEE3. Works if \code{strata = FALSE}.}
+  colour \code{pcolour = '#A6CEE3'}.}
 
   \item{lsize}{size of the smoothing line. Default is 2.
   See \code{\link{ggplot2}}.}
