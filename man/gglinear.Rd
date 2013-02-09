@@ -33,9 +33,8 @@
   \item{smoother}{what type of smoothing line to use to
   summarize the plotted coefficient}
 
-  \item{spalette}{colour palette for stratified hazard
-  rates. Only relevant if \code{qi = "Hazard Rate"}.
-  Default palette is \code{"Set1"}. See
+  \item{spalette}{colour palette for use in \code{qi =
+  "Hazard Rate"}. Default palette is \code{"Set1"}. See
   \code{\link{scale_colour_brewer}}.}
 
   \item{leg.name}{name of the stratified hazard rates

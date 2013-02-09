@@ -130,7 +130,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   # Multiply time function with btvc
   TVSim <- outer(Drawn[,2], tf)
   TVSim <- data.frame(melt(TVSim))
-  TVSim <- rename(TVSim, c(Var1 = "ID", Var2 = "time", value = "TVC"))
+  names(TVSim) <- c("ID", "time", "TVC")
   time <- 1:length(tf)
   Tempdf <- data.frame(time, tf)
   TVSim <- merge(TVSim, Tempdf)

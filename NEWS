@@ -1,3 +1,8 @@
+Version 0.02.2
+
+Minor change to how `coxsimtvc` runs so that it is no longer dependent on **reshape**.
+
+
 Version 0.02.1
 
 Updated documentation and added the ability to change the smoothing line colour for first difference and relative hazard plots.
