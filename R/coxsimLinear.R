@@ -3,7 +3,7 @@
 #' \code{coxsimLinear} simulates relative hazards, first differences, and hazard ratios for time-constant covariates from models estimated with \code{\link{coxph}} using the multivariate normal distribution.
 #' @param obj a coxph fitted model object.
 #' @param b character string name of the coefficient you would like to simulate.
-#' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{"qi = "Relative Hazard"}. If code{"qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
+#' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param Xj numeric vector of values of X to simulate for.
 #' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} only \code{Xj} is relevant.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.

@@ -14,7 +14,7 @@
   \item{qi}{quantity of interest to simulate. Values can be
   \code{"Relative Hazard"}, \code{"First Difference"},
   \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The
-  default is \code{"qi = "Relative Hazard"}. If code{"qi =
+  default is \code{qi = "Relative Hazard"}. If \code{qi =
   "Hazard Rate"} and the \code{coxph} model has strata,
   then hazard rates for each strata will also be
   calculated.}
