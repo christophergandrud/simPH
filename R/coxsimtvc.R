@@ -31,7 +31,7 @@
 #' When simulating non-stratifed time-varying harzards \code{coxsimtvc} uses the point estimates for a given coefficient \eqn{\hat{\beta}_{x}} and its time interaction \eqn{\hat{\beta}_{xt}} along with the variance matrix (\eqn{\hat{V}(\hat{\beta})}) estimated from a \code{coxph} model. These are used to draw values of \eqn{\beta_{x}} and \eqn{\beta_{xt}} from the multivariate normal distribution \eqn{N(\hat{\beta},\: \hat{V}(\hat{beta}))}.
 #'
 #' When simulating stratified time-varying hazard rates \eqn{H} for a given strata \eqn{k}, \code{coxsimtvc} uses:
-#' \deqn{H_{kx} = \hat{\beta_{k0}}\exp{\hat{\beta_{x}} + \beta_{xt}(t)}}
+#' \deqn{H_{kxt} = \hat{\beta_{k0t}}\exp{\hat{\beta_{x}} + \beta_{xt}(t)}}
 #' The resulting simulation values can be plotted using \code{\link{ggtvc}}. 
 #'
 #' @examples

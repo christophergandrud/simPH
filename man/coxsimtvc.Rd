@@ -100,9 +100,10 @@
 
   When simulating stratified time-varying hazard rates
   \eqn{H} for a given strata \eqn{k}, \code{coxsimtvc}
-  uses: \deqn{H_{kx} = \hat{\beta_{k0}}\exp{\hat{\beta_{x}}
-  + \beta_{xt}(t)}} The resulting simulation values can be
-  plotted using \code{\link{ggtvc}}.
+  uses: \deqn{H_{kxt} =
+  \hat{\beta_{k0t}}\exp{\hat{\beta_{x}} + \beta_{xt}(t)}}
+  The resulting simulation values can be plotted using
+  \code{\link{ggtvc}}.
 }
 \examples{
 # Load Golub & Steunenberg (2007) Data
