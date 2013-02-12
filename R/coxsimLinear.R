@@ -5,7 +5,7 @@
 #' @param b character string name of the coefficient you would like to simulate.
 #' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param Xj numeric vector of values of X to simulate for.
-#' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} only \code{Xj} is relevant.
+#' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} or \code{code = "Hazard Rate"} only \code{Xj} is relevant.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
 #'
@@ -83,17 +83,17 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 
     } 
   }
   else if (qi == "Hazard Rate"){
-    if (length(Xl) > 1 & length(Xj) != length(Xl)){
-      stop("Xj and Xl must be the same length.")
+    if (Xl != 0){
+      stop("Only Xj can be used for Hazard Rates.")
     }
     else {
     	if (length(Xj) > 1 & length(Xl) == 1){
     		Xl <- rep(0, length(Xj))
     	}
     	Xs <- data.frame(Xj, Xl)
-    	Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
+    	Xs$HRValue <- paste(Xs[, 1])
 	    Simb <- merge(Simb, Xs)
-  	    Simb$HR <- exp((Simb$Xj - Simb$Xl) * Simb$Coef)	 
+      Simb$HR <- exp(Simb$Xj * Simb$Coef)	 
 	  	bfit <- basehaz(obj)
 	  	bfit$FakeID <- 1
 	  	Simb$FakeID <- 1

@@ -1,3 +1,12 @@
+Version 0.03
+
+Added `coxsimInteract` to simulate quantities of interest for linear multiplicative interactions and `gginteract` for plotting these simulations.
+
+Also made an important fix to how `coxsimLinear` calculates hazard rates and how `gglinear` plots these simulations.
+
+Other documentation fixes.
+
+
 Version 0.02.2
 
 Minor change to how `coxsimtvc` runs so that it is no longer dependent on **reshape**.

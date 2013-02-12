@@ -89,9 +89,9 @@ coxsimInteract <- function(obj, b1, b2, qi = "Relative Hazard", X1 = NULL, X2 = 
 			X2 <- rep(0, length(X1))
 		}
 		Xs <- data.frame(X1, X2)
-		Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
+		Xs$Comparison <- paste(Xs[, 1], ",", Xs[, 2])
 	    Simb <- merge(Simb, Xs)
-		    Simb$HR <- exp((Simb$X1 - Simb$X2) * Simb$Coef)	 
+		Simb$HR <- exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb$X3))	 
 	  	bfit <- basehaz(obj)
 	  	bfit$FakeID <- 1
 	  	Simb$FakeID <- 1

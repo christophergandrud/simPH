@@ -63,11 +63,11 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 	if (qi == "Hazard Rate"){
 		colour <- NULL
 		if (is.null(obj$strata)){
-			objdf <- data.frame(obj$time, obj$HRate, obj$Comparison)
-			names(objdf) <- c("Time", "HRate", "Comparison")
+			objdf <- data.frame(obj$time, obj$HRate, obj$HRValue)
+			names(objdf) <- c("Time", "HRate", "HRValue")
 		} else if (!is.null(obj$strata)) {
-		objdf <- data.frame(obj$time, obj$HRate, obj$strata, obj$Comparison)
-		names(objdf) <- c("Time", "HRate", "Strata", "Comparison")
+		objdf <- data.frame(obj$time, obj$HRate, obj$strata, obj$HRValue)
+		names(objdf) <- c("Time", "HRate", "Strata", "HRValue")
 		}
 		if (!is.null(from)){
 			objdf <- subset(objdf, Time >= from)
@@ -99,7 +99,7 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 	# Plot
 	  if (qi == "Hazard Rate"){
 	  	if (!is.null(obj$strata)) {
-	      ggplot(objdf, aes(x = Time, y = HRate, colour = factor(Comparison))) +
+	      ggplot(objdf, aes(x = Time, y = HRate, colour = factor(HRValue))) +
 	        geom_point(alpha = I(palpha), size = psize) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 	        facet_grid(.~ Strata) +
@@ -111,7 +111,7 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 	        theme_bw(base_size = 15)
     	} else if (is.null(obj$strata)){
-	      	ggplot(objdf, aes(Time, HRate, colour = factor(Comparison))) +
+	      	ggplot(objdf, aes(Time, HRate, colour = factor(HRValue))) +
 	        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
