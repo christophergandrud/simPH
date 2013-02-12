@@ -34,16 +34,16 @@
 
 coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95") 
 {
-	# Parameter estimates & Varance/Covariance matrix
+	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
 	VC <- vcov(obj)
 	  
-	# Draw covaritate estiamtes from the multivariate normal distribution	   
+	# Draw covariate estimates from the multivariate normal distribution	   
 	Drawn <- rmultnorm(n = nsim, mu = Coef, vmat = VC)
 	DrawnDF <- data.frame(Drawn)
 	dfn <- names(DrawnDF)
 
-	# Subset data frame to only include polynomial.
+	# Subset data frame to only include polynomial constitutive terms.
 	bpos <- match(b, dfn)
 	NamesLoc <- function(p){
 		Temp <- paste0("I.", b, ".", p, ".")
@@ -57,7 +57,7 @@ coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95")
   	VNames <- names(Drawn)
 	powFull <- as.numeric(1:pow)
 
-	# Function to Multiply covaraites by polynomials
+	# Function to Multiply covariates by polynomials
   	Fitted <- function(VN, x, p){
   		Temp <- outer(Drawn[, VN], x^p)
   		TempDF <- data.frame(melt(Temp))
