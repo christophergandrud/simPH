@@ -30,5 +30,6 @@ Collate:
     'gglinear.R'
     'ggtvc.R'
     'ggpoly.R'
+    'gginteract.R'
     'GolubEUPData.R'
     'CarpenterFdaData.R'

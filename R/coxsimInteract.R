@@ -2,7 +2,7 @@
 #'
 #' \code{coxsimInteract} simulates quantities of interest for linear multiplicative interactions.
 #' @param obj a coxph fitted model object with a linear multiplicative interaction.
-#' @param b1 character string of the first constitutive variable's name.
+#' @param b1 character string of the first constitutive variable's name. Note \code{b1} and \code{b2} must be entered in the order in which they are entered into the \code{coxph} model.
 #' @param b2 character string of the second constitutive variable's name.
 #' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set.
@@ -17,6 +17,19 @@
 #'
 #' Unlike in \code{\link{coxsimtvc}} and \code{\link{coxsimLinear}} Hazard Ratios and First Differences can only be calculated by comparing a specified value of \code{X1} and \code{X2} to 0.
 #'
+#'
+#' @examples 
+#' # Load Carpenter (2002) data
+#' data("CarpenterFdaData")
+#'
+#' # Load survival package
+#' library(survival)
+#'
+#' # Run basic model
+#' M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
+#' 
+#' # Simulate Marginal Effect of lethal for multiple values of prevgenx
+#' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2))
 #' @references Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. “Understanding Interaction Models: Improving Empirical Analyses.” Political Analysis 14(1): 63–82.
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
@@ -73,7 +86,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	else if (qi == "Hazard Rate"){
 		Xs <- merge(X1, X2)
 		names(Xs) <- c("X1", "X2")
-		Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
+		Xs$HRValue <- paste0(Xs[, 1], ", ", Xs[, 2])
 	    Simb <- merge(Simb, Xs)
 		Simb$HR <- exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]))	 
 	  	bfit <- basehaz(obj)

@@ -61,6 +61,19 @@
   \code{coxsimInteract} simulates quantities of interest
   for linear multiplicative interactions.
 }
+\examples{
+# Load Carpenter (2002) data
+data("CarpenterFdaData")
+
+# Load survival package
+library(survival)
+
+# Run basic model
+M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
+
+# Simulate Marginal Effect of lethal for multiple values of prevgenx
+Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2))
+}
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.
   2006. “Understanding Interaction Models: Improving
