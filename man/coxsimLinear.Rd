@@ -23,7 +23,7 @@
 
   \item{Xl}{numeric vector of values to compare \code{Xj}
   to. Note if \code{qi = "Relative Hazard"} or \code{code =
-  "Hazard Rate"} only \code{Xj} is relevant.}
+  "Hazard"} only \code{Xj} is relevant.}
 
   \item{nsim}{the number of simulations to run per value of
   X. Default is \code{nsim = 1000}.}
