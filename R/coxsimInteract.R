@@ -2,21 +2,22 @@
 #'
 #' \code{coxsimInteract} simulates quantities of interest for linear multiplicative interactions.
 #' @param obj a coxph fitted model object with a linear multiplicative interaction.
-#' @param bs character vector of the two constitutive variables' names.
-#' @param qi quantities of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
-#' @X1 numeric vector of fitted values of \code{X1} to simulate for.3
-#' @X2 numeric vector of fitted values of \code{X2} to simulate for.
+#' @param b1 character string of the first constitutive variable's name.
+#' @param b2 character string of the second constitutive variable's name.
+#' @param qi quantities of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
+#' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set.
+#' @param X2 numeric vector of fitted values of \code{b2} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
 #'
 #'
 #' @references Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. “Understanding Interaction Models: Improving Empirical Analyses.” Political Analysis 14(1): 63–82.
 #'
-#' @returm a siminteract class object
+#' @return a siminteract class object
 #' @import MSBVAR plyr reshape2 survival
 #' @export
 
-coxsimInteract <- function(obj, bs, qi = "Relative Hazard", X1 =NULL, X2 = NULL, nsim = 1000, ci = "95")
+coxsimInteract <- function(obj, b1, b2, qi = "Relative Hazard", X1 = NULL, X2 = NULL, nsim = 1000, ci = "95")
 {
 	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
@@ -27,7 +28,8 @@ coxsimInteract <- function(obj, bs, qi = "Relative Hazard", X1 =NULL, X2 = NULL,
 	DrawnDF <- data.frame(Drawn)
 	dfn <- names(DrawnDF)
 
-	# Subset data frame to only include interaction constitutive terms and 
+	# Subset data frame to only include interaction constitutive terms and
+	bs <- c(b1, b2) 
 	bpos <- match(bs, dfn)
 	binter <- paste0(bs[[1]], ".", bs[[2]])
 	binter <- match(binter, dfn)
@@ -42,7 +44,7 @@ coxsimInteract <- function(obj, bs, qi = "Relative Hazard", X1 =NULL, X2 = NULL,
 			X2df <- data.frame(X2)
 			names(X2df) <- c("X2")
 			Simb <- merge(Simb, X2df)
-			Simb$ME <- exp(Simb[, 1] + (Simb[, 3] * Simb[, 4]))	
+			Simb$HR <- exp(Simb[, 1] + (Simb[, 3] * Simb[, 4])) 
 		}
 	}
 
@@ -100,9 +102,11 @@ coxsimInteract <- function(obj, bs, qi = "Relative Hazard", X1 =NULL, X2 = NULL,
 	}
 
 	# Drop simulations outside of 'confidence bounds'
-	if (qi != "Hazard Rate"){
+	if (qi == "Relative Hazard" | qi == "First Difference" | qi == "Hazard Ratio"){
 		SubVar <- "X1"
-	} else if (qi == "Hazard Rate"){
+	} else if (qi == "Marginal Effect"){
+		SubVar <- "X2"
+	}else if (qi == "Hazard Rate"){
 		SubVar <- "time"
 	}
 	if (ci == "all"){

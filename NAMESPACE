@@ -1,3 +1,4 @@
+export(coxsimInteract)
 export(coxsimLinear)
 export(coxsimPoly)
 export(coxsimtvc)
