@@ -59,7 +59,7 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
     	ylab <- ylab
     }
 
-    # Subset simlinear object & create data frame of important variables
+    # Subset simlinear object & create a data frame of important variables
 	if (qi == "Hazard Rate"){
 		colour <- NULL
 		if (is.null(obj$strata)){
@@ -84,16 +84,8 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 	  	names(objdf) <- c("Xj", "HR")
 	} else if (qi == "First Difference"){
 		spalette <- NULL
-		objdf <- data.frame(obj$Xj, obj$FirstDiff, obj$Comparison)
+		objdf <- data.frame(obj$Xj, obj$HR, obj$Comparison)
 		names(objdf) <- c("Xj", "FirstDiff", "Comparison")
-	}
-
-	# Keep certain times when plotting hazard rates
-	if (!is.null(from)){
-	objdf <- subset(objdf, Time >= from)
-	}
-	if (!is.null(to)){
-	objdf <- subset(objdf, Time <= to)
 	}
 
 	# Plot
@@ -129,7 +121,7 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 		    geom_hline(aes(yintercept = 1), linetype = "dotted") +
 		    scale_y_continuous() +
-			scale_y_continuous() +    
+			scale_x_continuous() +    
 		    xlab(xlab) + ylab(ylab) +
 		    ggtitle(title) +
 		    guides(colour = guide_legend(override.aes = list(alpha = 1))) +

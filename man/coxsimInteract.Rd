@@ -10,7 +10,9 @@
   multiplicative interaction.}
 
   \item{b1}{character string of the first constitutive
-  variable's name.}
+  variable's name. Note \code{b1} and \code{b2} must be
+  entered in the order in which they are entered into the
+  \code{coxph} model.}
 
   \item{b2}{character string of the second constitutive
   variable's name.}
@@ -48,9 +50,11 @@
   interactions.
 
   Marginal effects are calculated as in Brambor et al.
-  (2006). For an interaction between variables \eqn{X} and
-  \eqn{Z} then the marginal effect for \eqn{X} is:
-  \deqn{ME_{X} = \beta_{X} + \beta_{XZ}Z}
+  (2006) with the addition that we take the exponent, so
+  that it resembles a hazard ratio. For an interaction
+  between variables \eqn{X} and \eqn{Z} then the marginal
+  effect for \eqn{X} is: \deqn{ME_{X} = exp(\beta_{X} +
+  \beta_{XZ}Z)}
 
   Unlike in \code{\link{coxsimtvc}} and
   \code{\link{coxsimLinear}} Hazard Ratios and First

@@ -19,7 +19,9 @@ The package includes the following functions:
 
 - `coxsimtvc`: a function for simulating time-varying hazards (relative hazards, first differences, and hazard ratios) from a Cox PH model estimated using `coxph` from the [survival](http://cran.r-project.org/web/packages/survival/index.html) package. For more information see this [blog post](http://christophergandrud.blogspot.kr/2012/10/graphing-non-proportional-hazards-in-r.html). If `strata = TRUE` the function will calculate time-varying hazard ratios for multiple strata estimated from a stratified Cox PH model.
 
-- `coxsimPoly`: a function for graphing simulated polynomial relative hazards.
+- `coxsimPoly`: a function for simulating polynomial relative hazards.
+
+- `coxsimInteract`: a function for simulating quantities of interest for linear multiplicative interactions, including marginal effects and hazard rates.
 
 #### Plotting Functions
 
@@ -28,6 +30,8 @@ The package includes the following functions:
 - `ggtvc`: uses **ggplot2** to graph the simulated time-varying relative hazards, first differences, hazard ratios or stratified hazard rates.
 
 - `ggpoly`: uses **ggplot2** to graph the simulated polynomial relative hazards.
+
+- `gginteract`: uses **ggplot2** to graph linear multiplicative interactions
 
 #### Misc.
 
@@ -54,6 +58,10 @@ King, Gary, Michael Tomz, and Jason Wittenberg. 2000. [“Making the Most of Sta
 For more information about stratified Cox PH models (and frailties, which I am working to incorporate in future versions) see:
 
 Box-Steffensmeier, Janet M, and Suzanna De Boef. 2006. [“Repeated Events Survival Models: the Conditional Frailty Model.”](http://onlinelibrary.wiley.com/doi/10.1002/sim.2434/abstract;jsessionid=28218243DD3D6E01A3D10EEE75D96675.d01t02) Statistics in Medicine 25(20): 3518–33.
+
+For more information about interpreting interaction terms:
+
+Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. “Understanding Interaction Models: Improving Empirical Analyses.” Political Analysis 14(1): 63–82.
 
 For an example of how non-proportional hazard results were often presented before `simPH` see (some of the problems I encountered in this paper were a major part of why I'm developing this package): 
 

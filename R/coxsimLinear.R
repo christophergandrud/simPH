@@ -66,7 +66,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 
 	    Xs <- data.frame(Xj, Xl)
 	    Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
 	    Simb <- merge(Simb, Xs)
-	    Simb$FirstDiff <- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
+	    Simb$HR <- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
   	}
   }
   else if (qi == "Hazard Ratio"){

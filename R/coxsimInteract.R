@@ -12,8 +12,8 @@
 #'
 #' @description Simulates marginal effects, first differences, hazard ratios, and hazard rates for linear multiplicative interactions. 
 #'
-#' Marginal effects are calculated as in Brambor et al. (2006). For an interaction between variables \eqn{X} and \eqn{Z} then the marginal effect for \eqn{X} is:
-#' \deqn{ME_{X} = \beta_{X} + \beta_{XZ}Z}
+#' Marginal effects are calculated as in Brambor et al. (2006) with the addition that we take the exponent, so that it resembles a hazard ratio. For an interaction between variables \eqn{X} and \eqn{Z} then the marginal effect for \eqn{X} is:
+#' \deqn{ME_{X} = exp(\beta_{X} + \beta_{XZ}Z)}
 #'
 #' Unlike in \code{\link{coxsimtvc}} and \code{\link{coxsimLinear}} Hazard Ratios and First Differences can only be calculated by comparing a specified value of \code{X1} and \code{X2} to 0.
 #'
@@ -30,6 +30,7 @@
 #' 
 #' # Simulate Marginal Effect of lethal for multiple values of prevgenx
 #' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2))
+#'
 #' @references Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. “Understanding Interaction Models: Improving Empirical Analyses.” Political Analysis 14(1): 63–82.
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
