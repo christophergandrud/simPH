@@ -47,6 +47,10 @@ Use the [devtools](https://github.com/hadley/devtools) command `install_github` 
 devtools::install_github("simPH", "christophergandrud")
 ```
 
+## Tip
+
+Before running the simulation and graph commands in this package carefully consider how many simulations you are about to make. Especially for hazard rates over long periods of time and with multiple strata, you can be asking **simPH** to run very many simulations. This will be computationally intensive. 
+
 ## Sources
 
 For more information about simulating parameter estimates to make interpretation of results easier see:
