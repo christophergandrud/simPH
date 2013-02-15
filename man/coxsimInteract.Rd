@@ -30,8 +30,7 @@
   \code{X2} can be set.}
 
   \item{X2}{numeric vector of fitted values of \code{b2} to
-  simulate for. If \code{qi = "Marginal Effect"} then only
-  \code{X2} can be set.}
+  simulate for.}
 
   \item{nsim}{the number of simulations to run per value of
   X. Default is \code{nsim = 1000}.}

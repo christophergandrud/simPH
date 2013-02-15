@@ -1,3 +1,8 @@
+Version 0.03.1
+
+Improved error messages in `coxsimInteract` and minor documentation changes.
+
+
 Version 0.03
 
 Added `coxsimInteract` to simulate quantities of interest for linear multiplicative interactions and `gginteract` for plotting these simulations.

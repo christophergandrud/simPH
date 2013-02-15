@@ -6,7 +6,7 @@
 #' @param b2 character string of the second constitutive variable's name.
 #' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set.
-#' @param X2 numeric vector of fitted values of \code{b2} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set.
+#' @param X2 numeric vector of fitted values of \code{b2} to simulate for. 
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
 #'
@@ -71,20 +71,31 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		}
 	}
 	else if (qi == "First Difference"){
-		Xs <- merge(X1, X2)
-		names(Xs) <- c("X1", "X2")
-		Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
-	    Simb <- merge(Simb, Xs)
-		Simb$HR <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]) - 1) * 100)	 
-	}
-	else if (qi == "Hazard Ratio"){
+	  if (!is.null(X1) | is.null(X2)){
+	    stop("For First Differences both X1 and X2 should be specified.")
+	  } else{
 		Xs <- merge(X1, X2)
 		names(Xs) <- c("X1", "X2")
 		Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
 	    Simb <- merge(Simb, Xs)
 		Simb$HR <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]) - 1) * 100)	
+	  }
+	}
+	else if (qi == "Hazard Ratio"){
+	  if (!is.null(X1) | is.null(X2)){
+	    stop("For Hazard Ratios both X1 and X2 should be specified.")
+	  } else{
+		Xs <- merge(X1, X2)
+		names(Xs) <- c("X1", "X2")
+		Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
+	    Simb <- merge(Simb, Xs)
+		Simb$HR <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]) - 1) * 100)
+	  }
 	}
 	else if (qi == "Hazard Rate"){
+	  if (!is.null(X1) | is.null(X2)){
+	    stop("For Hazard Rates both X1 and X2 should be specified.")
+	  } else{
 		Xs <- merge(X1, X2)
 		names(Xs) <- c("X1", "X2")
 		Xs$HRValue <- paste0(Xs[, 1], ", ", Xs[, 2])
@@ -96,6 +107,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	  	Simb <- merge(bfit, Simb, by = "FakeID")
 	  	Simb$HRate <- Simb$hazard * Simb$HR 
 	  	Simb <- Simb[, -1]
+	  }
 	}
 
 	# Drop simulations outside of 'confidence bounds'
