@@ -70,6 +70,11 @@
   first differences, hazard ratios, and hazard rates. If
   there are multiple strata, the quantities of interest
   will be plotted in a grid by strata.
+
+  Note: if \code{qi = "Hazard Ratio"} or \code{qi = "First
+  Difference"} then you need to have choosen more than one
+  fitted value for \code{X1} in
+  \code{\link{coxsimInteract}}.
 }
 \details{
   \code{gginteract} uses ggplot2 to plot the quantities of
@@ -91,7 +96,7 @@ M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
 Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2))
 
 # Plot Marginal Effects
-gginteract(Sim1, xlab = "\\nprevgenx", ylab = "Marginal Effect of lethal\\n")
+gginteract(Sim1, qi = "Marginal Effect", xlab = "\\nprevgenx", ylab = "Marginal Effect of lethal\\n")
 }
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.

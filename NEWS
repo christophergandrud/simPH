@@ -1,3 +1,8 @@
+Version 0.03.2
+
+Minor bug fixes, documentation improvements for `coxsimInteract`.
+
+
 Version 0.03.1
 
 Improved error messages in `coxsimInteract` and minor documentation changes.

@@ -71,7 +71,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		}
 	}
 	else if (qi == "First Difference"){
-	  if (!is.null(X1) | is.null(X2)){
+	  if (is.null(X1) | is.null(X2)){
 	    stop("For First Differences both X1 and X2 should be specified.")
 	  } else{
 		Xs <- merge(X1, X2)
@@ -82,7 +82,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	  }
 	}
 	else if (qi == "Hazard Ratio"){
-	  if (!is.null(X1) | is.null(X2)){
+	  if (is.null(X1) | is.null(X2)){
 	    stop("For Hazard Ratios both X1 and X2 should be specified.")
 	  } else{
 		Xs <- merge(X1, X2)
@@ -93,7 +93,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	  }
 	}
 	else if (qi == "Hazard Rate"){
-	  if (!is.null(X1) | is.null(X2)){
+	  if (is.null(X1) | is.null(X2)){
 	    stop("For Hazard Rates both X1 and X2 should be specified.")
 	  } else{
 		Xs <- merge(X1, X2)

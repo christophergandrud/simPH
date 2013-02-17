@@ -34,9 +34,12 @@
 #' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2))
 #' 
 #' # Plot Marginal Effects
-#' gginteract(Sim1, xlab = "\nprevgenx", ylab = "Marginal Effect of lethal\n")
+#' gginteract(Sim1, qi = "Marginal Effect", xlab = "\nprevgenx", ylab = "Marginal Effect of lethal\n")
 #'
 #' @description Uses ggplot2 to plot the quantities of interest from \code{siminteract} objects, including marginal effects, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
+#'
+#'
+#' Note: if \code{qi = "Hazard Ratio"} or \code{qi = "First Difference"} then you need to have choosen more than one fitted value for \code{X1} in \code{\link{coxsimInteract}}. 
 #'
 #' @import ggplot2
 #' @export
@@ -130,29 +133,39 @@ gginteract <- function(obj, qi = "Marginal Effect", from = NULL, to = NULL, xlab
 		    theme_bw(base_size = 15)
 	} 
 	else if (qi == "First Difference"){
-		ggplot(objdf, aes(X1, FirstDiff, colour = factor(X2), group = factor(X2))) +
-	        geom_point(shape = 21, alpha = I(palpha), size = psize) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-	        geom_hline(aes(yintercept = 0), linetype = "dotted") +
-	        scale_y_continuous()+
-	        scale_x_continuous() +
-	        scale_colour_brewer(palette = spalette, name = leg.name) +
-	        xlab(xlab) + ylab(ylab) +
-	        ggtitle(title) +
-	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-	        theme_bw(base_size = 15)
+		X1Unique <- objdf[!duplicated(objdf[, "X1"]), ]
+		if (nrow(X1Unique) <= 1){
+			print("X1 must have more than one fitted value.")
+		} else {
+			ggplot(objdf, aes(X1, FirstDiff, colour = factor(X2), group = factor(X2))) +
+		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
+		        scale_y_continuous()+
+		        scale_x_continuous() +
+		        scale_colour_brewer(palette = spalette, name = leg.name) +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+	    }
 	} 
 	else if (qi == "Hazard Ratio"){
-		ggplot(objdf, aes(X1, HR, colour = factor(X2), group = factor(X2))) +
-	        geom_point(shape = 21, alpha = I(palpha), size = psize) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
-	        scale_y_continuous()+
-	        scale_x_continuous() +
-	        scale_colour_brewer(palette = spalette, name = leg.name) +
-	        xlab(xlab) + ylab(ylab) +
-	        ggtitle(title) +
-	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-	        theme_bw(base_size = 15)
+		X1Unique <- objdf[!duplicated(objdf[, "X1"]), ]
+		if (nrow(X1Unique) <= 1){
+			print("X1 must have more than one fitted value.")
+		} else {
+			ggplot(objdf, aes(X1, HR, colour = factor(X2), group = factor(X2))) +
+		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+		        scale_y_continuous()+
+		        scale_x_continuous() +
+		        scale_colour_brewer(palette = spalette, name = leg.name) +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+	    }
     }
 }
