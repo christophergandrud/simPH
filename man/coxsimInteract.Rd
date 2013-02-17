@@ -27,7 +27,8 @@
 
   \item{X1}{numeric vector of fitted values of \code{b1} to
   simulate for. If \code{qi = "Marginal Effect"} then only
-  \code{X2} can be set.}
+  \code{X2} can be set. If you want to plot the results,
+  \code{X1} should have more than one value.}
 
   \item{X2}{numeric vector of fitted values of \code{b2} to
   simulate for.}
@@ -44,25 +45,23 @@
   a siminteract class object
 }
 \description{
+  \code{coxsimInteract} simulates quantities of interest
+  for linear multiplicative interactions.
+}
+\details{
   Simulates marginal effects, first differences, hazard
   ratios, and hazard rates for linear multiplicative
-  interactions.
-
-  Marginal effects are calculated as in Brambor et al.
-  (2006) with the addition that we take the exponent, so
-  that it resembles a hazard ratio. For an interaction
-  between variables \eqn{X} and \eqn{Z} then the marginal
-  effect for \eqn{X} is: \deqn{ME_{X} = exp(\beta_{X} +
-  \beta_{XZ}Z)}
+  interactions. Marginal effects are calculated as in
+  Brambor et al. (2006) with the addition that we take the
+  exponent, so that it resembles a hazard ratio. For an
+  interaction between variables \eqn{X} and \eqn{Z} then
+  the marginal effect for \eqn{X} is: \deqn{ME_{X} =
+  exp(\beta_{X} + \beta_{XZ}Z)}
 
   Unlike in \code{\link{coxsimtvc}} and
   \code{\link{coxsimLinear}} Hazard Ratios and First
   Differences can only be calculated by comparing a
   specified value of \code{X1} and \code{X2} to 0.
-}
-\details{
-  \code{coxsimInteract} simulates quantities of interest
-  for linear multiplicative interactions.
 }
 \examples{
 # Load Carpenter (2002) data
