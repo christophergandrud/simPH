@@ -1,4 +1,4 @@
-#' Simulate quantities of interest for linear multiplicative interactions.
+#' Simulate quantities of interest for linear multiplicative interactions from coxph models.
 #'
 #' \code{coxsimInteract} simulates quantities of interest for linear multiplicative interactions.
 #' @param obj a coxph fitted model object with a linear multiplicative interaction.

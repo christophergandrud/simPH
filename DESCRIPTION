@@ -16,6 +16,7 @@ Imports:
     MSBVAR,
     reshape2,
     plyr,
+    stringr,
     ggplot2,
     survival,
     gridExtra
@@ -26,6 +27,7 @@ Collate:
     'coxsimtvc.R'
     'coxsimPoly.R'
     'coxsimInteract.R'
+    'coxsimSpline.R'
     'ggfitStrata.R'
     'gglinear.R'
     'ggtvc.R'
