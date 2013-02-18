@@ -1,7 +1,7 @@
-#' Simulate quantities of interest for linear multiplicative interactions from coxph models.
+#' Simulate quantities of interest for linear multiplicative interactions from \code{coxph} models.
 #'
-#' \code{coxsimInteract} simulates quantities of interest for linear multiplicative interactions.
-#' @param obj a coxph fitted model object with a linear multiplicative interaction.
+#' \code{coxsimInteract} simulates quantities of interest for linear multiplicative interactions using multivariate normal distributions.
+#' @param obj a \code{coxph} fitted model object with a linear multiplicative interaction.
 #' @param b1 character string of the first constitutive variable's name. Note \code{b1} and \code{b2} must be entered in the order in which they are entered into the \code{coxph} model.
 #' @param b2 character string of the second constitutive variable's name.
 #' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.

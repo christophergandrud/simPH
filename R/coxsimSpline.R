@@ -1,4 +1,18 @@
-#' Simulated quantities of interest for penalised splines from coxph models.
+#' Simulated quantities of interest for penalised splines from \code{coxph} models.
+#'
+#' \code(coxsimSpline) simulates quantities of interest from penalised splines using multivariate normal distributions.
+#' @param obj a \code{coxph} fitted model object with a penalised spline.
+#' @param bspline a character string of the full \code{\link{psline}} call used in \code{obj}.
+#' @param bdata a numeric vector of splined variable's values.
+#' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
+#' @param Xj numeric vector of values of X to simulate for.
+#' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} or \code{code = "Hazard"} only \code{Xj} is relevant.
+#' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
+#' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
+#'
+#' @return a simspline object
+#'
+#' @description Simulates relative hazards, first differences, hazard ratios, and hazard rates for penalised splines from Cox Proportional Hazards models. These can be plotted with \code{\link{ggspline}}.
 #'
 #' @examples
 #' # Load Carpenter (2002) data
@@ -9,6 +23,8 @@
 #' # Run basic model
 #' # From Keele (2010) replication data
 #' M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + acutediz + hosp01  + pspline(hospdisc, df=4) + pspline(hhosleng, df = 3) + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 + pspline(condavg3, df=4) + pspline(orderent, df=4) + pspline(stafcder, df=4), data = CarpenterFdaData)
+#'
+#' @seealso \code{\link{gg}}, \code{\link{pspline}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #'
 #' @references Luke Keele, "Replication data for: Proportionally Difficult: Testing for Nonproportional Hazards In Cox Models", 2010, http://hdl.handle.net/1902.1/17068 V1 [Version] 
 #' 
@@ -27,7 +43,7 @@ Xj <- 1:10
 Xl <- 2:11
 #############
 
-coxsimSpline <- function(obj, bspline, bdata, qi = "Realative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = "95")
+coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = "95")
 { 
 	# Find term number
 	TermNum <- names(obj$pterms)
