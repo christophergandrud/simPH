@@ -82,7 +82,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	else if (qi == "Hazard Ratio"){
 	  if (is.null(X1) | is.null(X2)){
 	    stop("For Hazard Ratios both X1 and X2 should be specified.")
-	  } else{
+	  } else {
 		Xs <- merge(X1, X2)
 		names(Xs) <- c("X1", "X2")
 		Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])

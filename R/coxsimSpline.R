@@ -9,6 +9,10 @@
 #' # Run basic model
 #' # From Keele (2010) replication data
 #' M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + acutediz + hosp01  + pspline(hospdisc, df=4) + pspline(hhosleng, df = 3) + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 + pspline(condavg3, df=4) + pspline(orderent, df=4) + pspline(stafcder, df=4), data = CarpenterFdaData)
+#'
+#' @references Luke Keele, "Replication data for: Proportionally Difficult: Testing for Nonproportional Hazards In Cox Models", 2010, http://hdl.handle.net/1902.1/17068 V1 [Version] 
+#' 
+#' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
 #' 
 #' @import MSBVAR stringr reshape2
 #' @export
@@ -109,12 +113,13 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Realative Hazard", Xj = 1, X
 	      stop("Xj and Xl must be the same length.")
 	    } 
 	    else {
-	 	Xs <- data.frame(Xj, Xl)   	
-		CombinedDF <- MergeX(Xj)
-	    names(CombinedDF) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
-	    Simb <- merge(CombinedDF, Xs, by = "Xj")
-	 	Simb$HR <- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
-	    Simb$Comparison <- paste(Simb$Xj, "vs.", Simb$Xl)
+		 	Xs <- data.frame(Xj, Xl)   	
+			CombinedDF <- MergeX(Xj)
+		    names(CombinedDF) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
+		    Simb <- merge(CombinedDF, Xs, by = "Xj")
+		 	Simb$HR <- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
+		    Simb$Comparison <- paste(Simb$Xj, "vs.", Simb$Xl)
+		}
 	}
 	else if (qi == "Hazard Ratio"){
 	  	if (length(Xj) != length(Xl)){
@@ -128,7 +133,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Realative Hazard", Xj = 1, X
 		 	Simb$HR <- exp((Simb$Xj - Simb$Xl) * Simb$Coef)
 		    Simb$Comparison <- paste(Simb$Xj, "vs.", Simb$Xl)
 	   	}
-  }
+	}
 	else if (qi == "Hazard Rate"){
 	    if (Xl != 0){
 	    	stop("Only Xj can be used for Hazard Rates.")
@@ -176,5 +181,4 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Realative Hazard", Xj = 1, X
   # Final clean up
   class(SimbPerc) <- "simspline"
   SimbPerc
-
 }
