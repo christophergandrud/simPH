@@ -1,10 +1,12 @@
 Package: simPH
 Title: Tools for simulating and graphing quantities of interest estimated using
     Cox Proportional Hazards models.
-Description: The package simulates and plots, polynomial hazards,
-    non-proportional hazards (relative hazards, first differences, and hazard
-    ratios), and stratified survial curves from Cox Proportional Hazard models.
-Version: 0.03.2
+Description: The package simulates and plots quantities of interest (relative
+    hazards, first differences, and hazard ratios)for linear coefficients,
+    multiplicative interactions, polynomials, penalised splines, and
+    non-proportional hazards, as well as stratified survial curves from Cox
+    Proportional Hazard models.
+Version: 0.04
 Date: 2013-02-19
 Author: Christopher Gandrud
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
@@ -13,6 +15,7 @@ BugReports: https://github.com/christophergandrud/SimPH/issues
 Depends:
     R (>= 2.15.2)
 Imports:
+    car,
     MSBVAR,
     reshape2,
     plyr,
@@ -36,3 +39,4 @@ Collate:
     'gginteract.R'
     'GolubEUPData.R'
     'CarpenterFdaData.R'
+    'ggspline.R'

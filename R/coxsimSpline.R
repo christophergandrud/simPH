@@ -4,7 +4,7 @@
 #' @param obj a \code{coxph} fitted model object with a penalised spline.
 #' @param bspline a character string of the full \code{\link{psline}} call used in \code{obj}.
 #' @param bdata a numeric vector of splined variable's values.
-#' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated. Think carefully before using \code{qi = "Hazard Rate"}. You may be creating very many simulated values which can be very computationally intensive to do. Adjust the number of simulations per fitted value with \code{nsim}.
+#' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. Think carefully before using \code{qi = "Hazard Rate"}. You may be creating very many simulated values which can be very computationally intensive to do. Adjust the number of simulations per fitted value with \code{nsim}.
 #' @param Xj numeric vector of values of X to simulate for.
 #' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} or \code{code = "Hazard"} only \code{Xj} is relevant.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
@@ -12,7 +12,9 @@
 #'
 #' @return a simspline object
 #'
-#' @description Simulates relative hazards, first differences, hazard ratios, and hazard rates for penalised splines from Cox Proportional Hazards models. These can be plotted with \code{\link{ggspline}}.
+#' @description Simulates relative hazards, first differences, hazard ratios, and hazard rates for penalised splines from Cox Proportional Hazards models. These can be plotted with \code{\link{ggspline}}. 
+#'
+#' Currently does not support simulating hazard rates form multiple stratified models.
 #'
 #' @examples
 #' # Load Carpenter (2002) data
@@ -25,11 +27,18 @@
 #' # From Keele (2010) replication data
 #' M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + acutediz + hosp01  + pspline(hospdisc, df = 4) + pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 + pspline(condavg3, df = 4) + pspline(orderent, df = 4) + pspline(stafcder, df = 4), data = CarpenterFdaData)
 #'
-#'# Simulate Relative Hazards for orderent
+#' # Simulate Relative Hazards for orderent
 #' Sim1 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
 #'                        bdata = CarpenterFdaData$orderent,
 #'                        qi = "Relative Hazard",
-#'                        Xj = seq(2, 53, by = 3))
+#'                        Xj = seq(2, 30, by = 3))
+#'  
+#' # Simulate Hazard Rates for orderent
+#' Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
+#'                        bdata = CarpenterFdaData$orderent,
+#'                        qi = "Hazard Rate",
+#'                        Xj = seq(2, 53, by = 3),
+#'                        nsim = 100)
 #'
 #'
 #' @seealso \code{\link{gg}}, \code{\link{pspline}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
@@ -43,8 +52,8 @@
 
 coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = "95")
 { 
-	if (nsim > 100 & qi == "Hazard Rate"){
-		print(paste0("Warning: finding Hazard Rates with ", nsim, " simulations may take awhile."))
+	if (nsim > 10 & qi == "Hazard Rate"){
+		print(paste0("Warning: finding Hazard Rates with ", nsim, " simulations may take awhile.  Consider changing the number of simulations with nsim."))
 	}
 	# Find term number
 	TermNum <- names(obj$pterms)
@@ -104,7 +113,10 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	names(TempDF) <- c("CoefName", "Coef")
 
 	# Merge with CoefIntervals
-	TempDF <- merge(TempDF, CoefIntervals, by = "CoefName")
+	CoefIntervalsDT <- data.table(CoefIntervals, key = "CoefName")
+	TempDT <- data.table(TempDF, key = "CoefName")
+	TempCombDT <- TempDT[CoefIntervalsDT]
+	TempDF <- data.frame(TempCombDT)
 
 	# Merge in fitted X values
 	MergeX <- function(f){
@@ -120,13 +132,11 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 
 	# Find quantities of interest
 	if (qi == "Relative Hazard"){
-	    print("All Xl were set to 0.")
-	  	Xl <- rep(0, length(Xj))
-		CombinedDF <- MergeX(Xj)
-	    Simb <- merge(CombinedDF, Xl)
-	    names(Simb) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj", "Xl")
-	    Simb$HR <- exp((Simb$Xj - Simb$Xl) * Simb$Coef)	
-	    Simb$Comparison <- paste(Simb[, 5], "vs.", Simb[, 6])
+		Xl <- NULL
+		print("Xl is ignored")  
+		Simb <- MergeX(Xj)
+	    names(Simb) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
+	    Simb$HR <- exp(Simb$Xj * Simb$Coef)	
 	}
 	else if (qi == "First Difference"){
 	  	if (length(Xj) != length(Xl)){
@@ -161,13 +171,16 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	    names(Simb) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
 	 	Simb$HR <- exp(Simb$Xj * Simb$Coef)
 	  	bfit <- basehaz(obj)
+	  	## Currently does not support strata
+	  	if (!is.null(bfit$strata)){
+	  		stop("coxsimSpline currently does not support strata.")
+	  	}
 	  	bfit$FakeID <- 1
 	  	Simb$FakeID <- 1
 		bfitDT <- data.table(bfit, key = "FakeID")
 		SimbDT <- data.table(Simb, key = "FakeID")
 		SimbCombDT <- SimbDT[bfitDT]
 		Simb <- data.frame(SimbCombDT)
-
 	  	Simb$HRate <- Simb$hazard * Simb$HR 
 	  	Simb <- Simb[, -1]	
 		}

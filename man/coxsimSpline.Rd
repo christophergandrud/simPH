@@ -18,14 +18,11 @@
   \item{qi}{quantity of interest to simulate. Values can be
   \code{"Relative Hazard"}, \code{"First Difference"},
   \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The
-  default is \code{qi = "Relative Hazard"}. If \code{qi =
-  "Hazard Rate"} and the \code{coxph} model has strata,
-  then hazard rates for each strata will also be
-  calculated. Think carefully before using \code{qi =
-  "Hazard Rate"}. You may be creating very many simulated
-  values which can be very computationally intensive to do.
-  Adjust the number of simulations per fitted value with
-  \code{nsim}.}
+  default is \code{qi = "Relative Hazard"}. Think carefully
+  before using \code{qi = "Hazard Rate"}. You may be
+  creating very many simulated values which can be very
+  computationally intensive to do. Adjust the number of
+  simulations per fitted value with \code{nsim}.}
 
   \item{Xj}{numeric vector of values of X to simulate for.}
 
@@ -49,6 +46,9 @@
   ratios, and hazard rates for penalised splines from Cox
   Proportional Hazards models. These can be plotted with
   \code{\link{ggspline}}.
+
+  Currently does not support simulating hazard rates form
+  multiple stratified models.
 }
 \details{
   \code{coxsimSpline} simulates quantities of interest from
@@ -70,7 +70,14 @@ M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + acutediz + h
 Sim1 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
                        bdata = CarpenterFdaData$orderent,
                        qi = "Relative Hazard",
-                       Xj = seq(2, 53, by = 3))
+                       Xj = seq(2, 30, by = 3))
+
+# Simulate Hazard Rates for orderent
+Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
+                       bdata = CarpenterFdaData$orderent,
+                       qi = "Hazard Rate",
+                       Xj = seq(2, 53, by = 3),
+                       nsim = 100)
 }
 \references{
   Luke Keele, "Replication data for: Proportionally

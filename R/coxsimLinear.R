@@ -102,6 +102,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 
       bfitDT <- data.table(bfit, key = "FakeID")
       SimbDT <- data.table(Simb, key = "FakeID")
       SimbCombDT <- SimbDT[bfitDT]
+      Simb <- data.frame(SimbCombDT)
 	  	Simb$HRate <- Simb$hazard * Simb$HR 
 	  	Simb <- Simb[, -1]
   	}

@@ -9,7 +9,7 @@ simPH
 
 ---
 
-An R package for simulating and ploting, polynomial hazards, non-proportional hazards (relative hazards, first differences, and hazard ratios) from [Cox Proportional Hazard (PH) models](http://en.wikipedia.org/wiki/Proportional_hazards_models). It can also simulate and graph stratified non-proportional hazard rates from Cox models.
+An R package for simulating and plotting quantities of interest (relative hazards, first differences, and hazard ratios)for linear coefficients, multiplicative interactions, polynomials, penalised splines, and non-proportional hazards, as well as stratified survival curves from Cox Proportional Hazard models.
 
 The package includes the following functions:
 
@@ -18,6 +18,8 @@ The package includes the following functions:
 - `coxsimLinear`: Simulates relative hazards, first differences, hazard ratios, and hazard rates for linear time-constant covariates from Cox Proportional Hazard models.
 
 - `coxsimtvc`: a function for simulating time-varying hazards (relative hazards, first differences, and hazard ratios) from a Cox PH model estimated using `coxph` from the [survival](http://cran.r-project.org/web/packages/survival/index.html) package. For more information see this [blog post](http://christophergandrud.blogspot.kr/2012/10/graphing-non-proportional-hazards-in-r.html). If `strata = TRUE` the function will calculate time-varying hazard ratios for multiple strata estimated from a stratified Cox PH model.
+
+- `coxsimSpline`: a function for simulating quantities of interest from penalised splines using multivariate normal distributions. Currently does not support simulating hazard rates from stratified models. **Note:** be extremely careful about the number of simulations you ask the function to find. It is very easy to ask for more than your computer can handle.
 
 - `coxsimPoly`: a function for simulating polynomial relative hazards.
 
@@ -28,6 +30,8 @@ The package includes the following functions:
 - `gglinear`: plots simulated linear time-constant hazards using [ggplot2](http://ggplot2.org/).
 
 - `ggtvc`: uses **ggplot2** to graph the simulated time-varying relative hazards, first differences, hazard ratios or stratified hazard rates.
+
+- `ggspline`: uses **ggplot2** and `scatter3d` (from the [car](http://cran.r-project.org/web/packages/car/index.html) package) to plot quantities of interest from \code{simspline} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
 
 - `ggpoly`: uses **ggplot2** to graph the simulated polynomial relative hazards.
 
