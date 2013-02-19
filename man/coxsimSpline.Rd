@@ -21,7 +21,11 @@
   default is \code{qi = "Relative Hazard"}. If \code{qi =
   "Hazard Rate"} and the \code{coxph} model has strata,
   then hazard rates for each strata will also be
-  calculated.}
+  calculated. Think carefully before using \code{qi =
+  "Hazard Rate"}. You may be creating very many simulated
+  values which can be very computationally intensive to do.
+  Adjust the number of simulations per fitted value with
+  \code{nsim}.}
 
   \item{Xj}{numeric vector of values of X to simulate for.}
 
@@ -54,18 +58,19 @@
 \examples{
 # Load Carpenter (2002) data
 data("CarpenterFdaData")
+
 # Load survival package
 library(survival)
 
 # Run basic model
 # From Keele (2010) replication data
-M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + acutediz + hosp01  + pspline(hospdisc, df=4) + pspline(hhosleng, df = 3) + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 + pspline(condavg3, df=4) + pspline(orderent, df=4) + pspline(stafcder, df=4), data = CarpenterFdaData)
+M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + acutediz + hosp01  + pspline(hospdisc, df = 4) + pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 + pspline(condavg3, df = 4) + pspline(orderent, df = 4) + pspline(stafcder, df = 4), data = CarpenterFdaData)
 
-# Simulate Hazard Ratios for orderent
-Sim1 <- coxsimSpline(M1, bspline = "pspline(orderent, df=4)",
-                      bdata = CarpenterFdaData$orderent,
-                      qi = "Hazard Ratio",
-                      Xj = seq(1, 53, by = 3))
+# Simulate Relative Hazards for orderent
+Sim1 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
+                       bdata = CarpenterFdaData$orderent,
+                       qi = "Relative Hazard",
+                       Xj = seq(2, 53, by = 3))
 }
 \references{
   Luke Keele, "Replication data for: Proportionally

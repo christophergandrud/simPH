@@ -5,7 +5,7 @@ Description: The package simulates and plots, polynomial hazards,
     non-proportional hazards (relative hazards, first differences, and hazard
     ratios), and stratified survial curves from Cox Proportional Hazard models.
 Version: 0.03.2
-Date: 2013-02-12
+Date: 2013-02-19
 Author: Christopher Gandrud
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
 URL: http://christophergandrud.github.com/simPH/
@@ -17,6 +17,7 @@ Imports:
     reshape2,
     plyr,
     stringr,
+    data.table,
     ggplot2,
     survival,
     gridExtra

@@ -35,7 +35,7 @@
 #'
 #' @seealso \code{\link{gginteract}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}},
 #' @return a siminteract class object
-#' @import MSBVAR plyr reshape2 survival
+#' @import MSBVAR plyr reshape2 survival data.table
 #' @export
 
 coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, nsim = 1000, ci = "95")
@@ -102,7 +102,9 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	  	bfit <- basehaz(obj)
 	  	bfit$FakeID <- 1
 	  	Simb$FakeID <- 1
-	  	Simb <- merge(bfit, Simb, by = "FakeID")
+		bfitDT <- data.table(bfit, key = "FakeID")
+		SimbDT <- data.table(Simb, key = "FakeID")
+		SimbCombDT <- SimbDT[bfitDT]
 	  	Simb$HRate <- Simb$hazard * Simb$HR 
 	  	Simb <- Simb[, -1]
 	  }

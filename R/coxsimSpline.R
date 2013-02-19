@@ -4,7 +4,7 @@
 #' @param obj a \code{coxph} fitted model object with a penalised spline.
 #' @param bspline a character string of the full \code{\link{psline}} call used in \code{obj}.
 #' @param bdata a numeric vector of splined variable's values.
-#' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
+#' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated. Think carefully before using \code{qi = "Hazard Rate"}. You may be creating very many simulated values which can be very computationally intensive to do. Adjust the number of simulations per fitted value with \code{nsim}.
 #' @param Xj numeric vector of values of X to simulate for.
 #' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} or \code{code = "Hazard"} only \code{Xj} is relevant.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
@@ -25,12 +25,11 @@
 #' # From Keele (2010) replication data
 #' M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + acutediz + hosp01  + pspline(hospdisc, df = 4) + pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 + pspline(condavg3, df = 4) + pspline(orderent, df = 4) + pspline(stafcder, df = 4), data = CarpenterFdaData)
 #'
- # Simulate Hazard Ratios for orderent
- Sim1 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
-                       bdata = CarpenterFdaData$orderent,
-                       qi = "Hazard Rate",
-                       Xj = seq(2, 53, by = 3),
-                       Xl = rep(0, times = 18))
+#'# Simulate Relative Hazards for orderent
+#' Sim1 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
+#'                        bdata = CarpenterFdaData$orderent,
+#'                        qi = "Relative Hazard",
+#'                        Xj = seq(2, 53, by = 3))
 #'
 #'
 #' @seealso \code{\link{gg}}, \code{\link{pspline}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
@@ -39,11 +38,14 @@
 #' 
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
 #' 
-#' @import MSBVAR stringr reshape2
+#' @import MSBVAR stringr reshape2 data.table
 #' @export
 
 coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = "95")
 { 
+	if (nsim > 100 & qi == "Hazard Rate"){
+		print(paste0("Warning: finding Hazard Rates with ", nsim, " simulations may take awhile."))
+	}
 	# Find term number
 	TermNum <- names(obj$pterms)
 	bterm <- match(bspline, TermNum)
@@ -98,7 +100,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	names(CoefIntervals) <- c("CoefName", "IntervalStart", "IntervalFinish")
 
 	# Melt Drawn DF to long format
-	TempDF <- data.frame(melt(DrawnDF))
+	TempDF <- suppressMessages(data.frame(melt(DrawnDF)))
 	names(TempDF) <- c("CoefName", "Coef")
 
 	# Merge with CoefIntervals
@@ -161,7 +163,11 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	  	bfit <- basehaz(obj)
 	  	bfit$FakeID <- 1
 	  	Simb$FakeID <- 1
-	  	Simb <- merge(bfit, Simb, by = "FakeID")
+		bfitDT <- data.table(bfit, key = "FakeID")
+		SimbDT <- data.table(Simb, key = "FakeID")
+		SimbCombDT <- SimbDT[bfitDT]
+		Simb <- data.frame(SimbCombDT)
+
 	  	Simb$HRate <- Simb$hazard * Simb$HR 
 	  	Simb <- Simb[, -1]	
 		}
