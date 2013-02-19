@@ -39,7 +39,8 @@
 \description{
   Simulates relative hazards, first differences, hazard
   ratios, and hazard rates for linear time-constant
-  covariates from Cox Proportional Hazard models.
+  covariates from Cox Proportional Hazard models. These can
+  be plotted with \code{\link{ggsplinear}}.
 }
 \details{
   \code{coxsimLinear} simulates relative hazards, first
@@ -57,7 +58,7 @@
 # Run basic model
 # M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
 
-# Simulate values
+# Simulate Hazard Ratios
 # Sim1 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Ratio", Xj = c(1237, 1600), Xl = c(1000, 1000), ci = "99")
 }
 \references{

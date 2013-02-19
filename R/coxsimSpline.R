@@ -1,6 +1,6 @@
 #' Simulated quantities of interest for penalised splines from \code{coxph} models.
 #'
-#' \code(coxsimSpline) simulates quantities of interest from penalised splines using multivariate normal distributions.
+#' \code{coxsimSpline} simulates quantities of interest from penalised splines using multivariate normal distributions.
 #' @param obj a \code{coxph} fitted model object with a penalised spline.
 #' @param bspline a character string of the full \code{\link{psline}} call used in \code{obj}.
 #' @param bdata a numeric vector of splined variable's values.
@@ -17,12 +17,21 @@
 #' @examples
 #' # Load Carpenter (2002) data
 #' data("CarpenterFdaData")
+#' 
 #' # Load survival package
 #' library(survival)
 #' 
 #' # Run basic model
 #' # From Keele (2010) replication data
-#' M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + acutediz + hosp01  + pspline(hospdisc, df=4) + pspline(hhosleng, df = 3) + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 + pspline(condavg3, df=4) + pspline(orderent, df=4) + pspline(stafcder, df=4), data = CarpenterFdaData)
+#' M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + acutediz + hosp01  + pspline(hospdisc, df = 4) + pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 + pspline(condavg3, df = 4) + pspline(orderent, df = 4) + pspline(stafcder, df = 4), data = CarpenterFdaData)
+#'
+ # Simulate Hazard Ratios for orderent
+ Sim1 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
+                       bdata = CarpenterFdaData$orderent,
+                       qi = "Hazard Rate",
+                       Xj = seq(2, 53, by = 3),
+                       Xl = rep(0, times = 18))
+#'
 #'
 #' @seealso \code{\link{gg}}, \code{\link{pspline}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #'
@@ -33,21 +42,14 @@
 #' @import MSBVAR stringr reshape2
 #' @export
 
-
-##################################
-obj <- M1
-bspline <- "pspline(condavg3, df = 4)"
-bdata <- CarpenterFdaData$condavg
-nsim <- 1000
-Xj <- 1:10
-Xl <- 2:11
-#############
-
 coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = "95")
 { 
 	# Find term number
 	TermNum <- names(obj$pterms)
 	bterm <- match(bspline, TermNum)
+	if (is.na(bterm)){
+		stop(paste0("Unable to find ", bspline, "."))
+	}
 
 	# Extract boundary knots for default Boundary.knots = range(x) & number of knots
 	OA <- obj$assign
@@ -80,8 +82,8 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	DrawnDF <- data.frame(DrawnDF[, NameCoe])
 
 	# Match coefficients to knot interval
-	IntervalStartAbs <- "\\(-?[0-9]*.[0-9]*,"
-	IntervalFinishAbs <- ",-?[0-9]*.[0-9]*\\]" 
+	IntervalStartAbs <- "\\(-?[0-9]*.[0-9]*e?\\+?[0-9]*,"
+	IntervalFinishAbs <- ",-?[0-9]*.[0-9]*e?\\+?[0-9]*\\]" 
 	IntervalStart <- str_match(KnotIntervals, IntervalStartAbs)
 	IntervalStart <- str_replace(IntervalStart, "\\(", "")
 	IntervalStart <- str_replace(IntervalStart, ",", "")
@@ -151,25 +153,17 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	   	}
 	}
 	else if (qi == "Hazard Rate"){
-	    if (Xl != 0){
-	    	stop("Only Xj can be used for Hazard Rates.")
-	    }
-	    else {
-	    	if (length(Xj) > 1 & length(Xl) == 1){
-	    		Xl <- rep(0, length(Xj))
-	    	} else
-			 	Xs <- data.frame(Xj, Xl)   	
-				CombinedDF <- MergeX(Xj)
-			    names(CombinedDF) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
-			    Simb <- merge(CombinedDF, Xs, by = "Xj")
-			 	Simb$HR <- exp(Simb$Xj * Simb$Coef)
-			  	bfit <- basehaz(obj)
-			  	bfit$FakeID <- 1
-			  	Simb$FakeID <- 1
-			  	Simb <- merge(bfit, Simb, by = "FakeID")
-			  	Simb$HRate <- Simb$hazard * Simb$HR 
-			  	Simb <- Simb[, -1]	
-		  }
+		Xl <- NULL
+		print("Xl is ignored")       
+		Simb <- MergeX(Xj)
+	    names(Simb) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
+	 	Simb$HR <- exp(Simb$Xj * Simb$Coef)
+	  	bfit <- basehaz(obj)
+	  	bfit$FakeID <- 1
+	  	Simb$FakeID <- 1
+	  	Simb <- merge(bfit, Simb, by = "FakeID")
+	  	Simb$HRate <- Simb$hazard * Simb$HR 
+	  	Simb <- Simb[, -1]	
 		}
 
 # Drop simulations outside of 'confidence bounds'

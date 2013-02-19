@@ -1,13 +1,13 @@
 \name{coxsimInteract}
 \alias{coxsimInteract}
-\title{Simulate quantities of interest for linear multiplicative interactions.}
+\title{Simulate quantities of interest for linear multiplicative interactions from \code{coxph} models.}
 \usage{
   coxsimInteract(obj, b1, b2, qi = "Marginal Effect",
     X1 = NULL, X2 = NULL, nsim = 1000, ci = "95")
 }
 \arguments{
-  \item{obj}{a coxph fitted model object with a linear
-  multiplicative interaction.}
+  \item{obj}{a \code{coxph} fitted model object with a
+  linear multiplicative interaction.}
 
   \item{b1}{character string of the first constitutive
   variable's name. Note \code{b1} and \code{b2} must be
@@ -46,7 +46,8 @@
 }
 \description{
   \code{coxsimInteract} simulates quantities of interest
-  for linear multiplicative interactions.
+  for linear multiplicative interactions using multivariate
+  normal distributions.
 }
 \details{
   Simulates marginal effects, first differences, hazard
