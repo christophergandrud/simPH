@@ -31,7 +31,7 @@ The package includes the following functions:
 
 - `ggtvc`: uses **ggplot2** to graph the simulated time-varying relative hazards, first differences, hazard ratios or stratified hazard rates.
 
-- `ggspline`: uses **ggplot2** and `scatter3d` (from the [car](http://cran.r-project.org/web/packages/car/index.html) package) to plot quantities of interest from \code{simspline} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
+- `ggspline`: uses **ggplot2** and `scatter3d` (from the [car](http://cran.r-project.org/web/packages/car/index.html) package) to plot quantities of interest from `simspline` objects, including relative hazards, first differences, hazard ratios, and hazard rates.
 
 - `ggpoly`: uses **ggplot2** to graph the simulated polynomial relative hazards.
 
