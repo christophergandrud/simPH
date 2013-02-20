@@ -146,6 +146,17 @@ Sim2$time <- round(Sim2$time, digits = 2)
 
 # Create plot
 ggspline(Sim2, qi = "Hazard Rate", FacetTime = c(6.21, 25.68, 100.64, 202.36))
+
+# Simulated Fitted Values of stafcder
+Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
+                    bdata = CarpenterFdaData$stafcder,
+                    qi = "Hazard Ratio",
+                    Xj = seq(1100, 1700, by = 10),
+                    Xl = seq(1099, 1699, by = 10), ci = "90")
+
+# Plot simulated Hazard Ratios
+ggspline(Sim3, qi = "Hazard Ratio",
+        xlab = "\\nFDA Drug Review Staff", palpha = 0.2)
 }
 \seealso{
   \code{\link{coxsimLinear}}, \code{\link{ggtvc}},
