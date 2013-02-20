@@ -128,7 +128,7 @@ ggspline <- function(obj, qi = "Relative Hazard", FacetTime = NULL, from = NULL,
 		    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		    theme_bw(base_size = 15)
 	} else if (qi == "First Difference"){
-    	ggplot(objdf, aes(Xj, FirstDiff, group = Comparison)) +
+    	ggplot(objdf, aes(Xj, FirstDiff)) +
         	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 	        geom_hline(aes(yintercept = 0), linetype = "dotted") +

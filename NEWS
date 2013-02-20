@@ -1,3 +1,12 @@
+Version 0.04.1
+
+Minor bug fix for `ggspline` when `qi == 'First Difference'`.
+
+Version 0.04
+
+Added `coxsimSpline` and `ggspline` to simulate and plot quantities of interest for penalised splines.
+
+
 Version 0.03.2
 
 Minor bug fixes, documentation improvements for `coxsimInteract`.
