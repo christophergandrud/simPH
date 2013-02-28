@@ -133,5 +133,4 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 
   # Final clean up
   class(SimbPerc) <- "simlinear"
   SimbPerc
-
 }

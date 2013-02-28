@@ -4,7 +4,7 @@
 #' @param obj a coxph fitted model object with a time interaction. 
 #' @param b the non-time interacted variable's name.
 #' @param btvc the time interacted variable's name.
-#' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, or \code{'Hazard Ratio'}. Default is \code{qi = 'Relative Hazard'}. If \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'} then you can set \code{Xj} and \code{Xl}. If \code{qi = 'First Difference'} then \code{strata} must be \code{FALSE}.
+#' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, \code{'Hazard Rate'. Default is \code{qi = 'Relative Hazard'}. If \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'} then you can set \code{Xj} and \code{Xl}.
 #' @param Xj numeric vector of fitted values for Xj. Must be the same length as Xl. Default is \code{Xj = 1} Only applies if \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'}.
 #' @param Xl numeric vector of fitted values for Xl. Must be the same length as Xj. Default is \code{Xl = 0}. Only applies if \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'}.
 #' @param nsim the number of simulations to run per point in time. Default is \code{nsim = 1000}.
@@ -14,7 +14,7 @@
 #' @param to point in time to stop simulating coefficient values
 #' @param by time intervals by which to simulate coefficient values
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
-#' @param strata logical for whether or not the coxph model used stratification and you would like to simulate the hazard rates for each strata
+#'
 #' @return a simtvc object
 #' @details Simulates time-varying relative hazards, first differences, and hazard ratios using parameter estimates from \code{coxph} models. Can also simulate hazard rates for multiple strata.
 #'
@@ -90,12 +90,8 @@
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
 
-coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, nsim = 1000, from, to, by, ci = "95", strata = FALSE)
-{  
-  if (qi == "First Difference" & strata == TRUE){
-    stop("firstDiff and strata cannot both be TRUE")
-  }
-
+coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, nsim = 1000, from, to, by, ci = "95")
+{
   # Parameter estimates & Varance/Covariance matrix
   Coef <- matrix(obj$coefficients)
   VC <- vcov(obj)
@@ -142,12 +138,10 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   # Find quantity of interest
   if (qi == "Relative Hazard"){
       TVSim$HR <- exp(TVSim$CombCoef * Xj)
-  } 
-  else if (qi == "First Difference"){
+  } else if (qi == "First Difference"){
     if (length(Xj) != length(Xl)){
       stop("Xj and Xl must be the same length.")
-    } 
-    else {
+    } else {
       TVSim$HR <- exp(TVSim$CombCoef)
       Xs <- data.frame(Xj, Xl)
       Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
@@ -164,13 +158,28 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
       TVSim <- merge(TVSim, Xs)
       TVSim$HR <- exp((TVSim$Xj - TVSim$Xl) * TVSim$CombCoef)
     }
-  }
-
-  # Find hazard rates for multiple strata
-  if (strata == TRUE){
-    bfit <- basehaz(obj)
-    TVSim <- merge(bfit, TVSim, by = "time")
-    TVSim$HRate <- TVSim$hazard * TVSim$HR
+  } else if (qi == "Hazard Rate"){
+    if (Xl != 0){
+      stop("Only Xj can be used for Hazard Rates.")
+    }
+    else {
+      if (length(Xj) > 1 & length(Xl) == 1){
+        Xl <- rep(0, length(Xj))
+      }
+      Xs <- data.frame(Xj, Xl)
+      Xs$HRValue <- paste(Xs[, 1])
+      Simb <- merge(TVSim, Xs)
+      Simb$HR <- exp(Simb$Xj * Simb$CombCoef)  
+      bfit <- basehaz(obj)
+      bfit$FakeID <- 1
+      Simb$FakeID <- 1
+      bfitDT <- data.table(bfit, key = "FakeID")
+      SimbDT <- data.table(Simb, key = "FakeID")
+      SimbCombDT <- SimbDT[bfitDT]
+      Simb <- data.frame(SimbCombDT)
+      Simb$HRate <- Simb$hazard * Simb$HR 
+      TVSim <- Simb[, -1]
+    }
   }
 
   # Drop simulations outside of 'confidence bounds'

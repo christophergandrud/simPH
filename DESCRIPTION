@@ -6,7 +6,7 @@ Description: The package simulates and plots quantities of interest (relative
     multiplicative interactions, polynomials, penalised splines, and
     non-proportional hazards, as well as stratified survial curves from Cox
     Proportional Hazard models.
-Version: 0.04.1
+Version: 0.04.2
 Date: 2013-02-20
 Author: Christopher Gandrud
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>

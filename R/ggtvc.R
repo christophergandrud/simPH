@@ -3,19 +3,18 @@
 #' \code{ggtvc} uses ggplot2 to plot the simulated hazards from a simtvc class object using ggplot2. 
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs.
 #' @param obj a simtvc class object
-#' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, or \code{'Hazard Ratio'}. Default is \code{qi = 'Relative Hazard'}. 
-#' @param strata logical whether or not you would like to plot the hazard rate for the separate strata
+#' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, or \code{'Hazard Rate}.he default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param from numeric time to start the plot from.
 #' @param to numeric time to plot to.
 #' @param xlab a label for the plot's x-axis.
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
 #' @param title the plot's main title
 #' @param smoother what type of smoothing line to use to summarize the plotted coefficient
-#' @param spalette colour palette for stratified hazard rates. Only works if \code{strata = TRUE}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
-#' @param leg.name name of the stratified hazard rates legend. Only works if \code{strata = TRUE}.
-#' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Works if \code{strata = FALSE}.
+#' @param spalette colour palette for use in \code{qi = "Hazard Rate"}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
+#' @param leg.name name of the stratified hazard rates legend. Only relevant if \code{qi = "Hazard Rate"}.
+#' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
 #' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
-#' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Works if \code{strata = FALSE}.
+#' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
 #' @param ... other arguments passed to specific methods
@@ -78,14 +77,10 @@
 #' @export
 #' @references Licht, Amanda A. 2011. “Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.” Political Analysis 19: 227–43.
 
-ggtvc <- function(obj, qi = "Relative Hazard", strata = FALSE, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
+ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
 {
   if (!inherits(obj, "simtvc")){
     stop("must be a simtvc object")
-  }
-  if (qi == "First Difference" & strata == TRUE){
-    stop("firstDiff and strata cannot both be TRUE")
-  }
 
   # Create y-axis label
   if (is.null(ylab)){
@@ -95,18 +90,18 @@ ggtvc <- function(obj, qi = "Relative Hazard", strata = FALSE, from = NULL, to =
   }
 
   # Subset simtvc object & create data frame of important variables
-  if (qi == "Hazard Ratio" & strata == TRUE){
+  if (qi == "Hazard Rate"){
     colour <- NULL
-    objdf <- data.frame(obj$RealTime, obj$HRate, obj$strata, obj$Comparison)
-    names(objdf) <- c("Time", "HRate", "Strata", "Comparison")
-  } else if (qi == "Hazard Ratio" & strata == FALSE){
+    if (is.null(obj$strata)){
+      objdf <- data.frame(obj$RealTime, obj$HRate, obj$HRValue)
+      names(objdf) <- c("Time", "HRate", "HRValue")
+    } else if (!is.null(obj$strata)) {
+    objdf <- data.frame(obj$RealTime, obj$HRate, obj$strata, obj$HRValue)
+    names(objdf) <- c("Time", "HRate", "Strata", "HRValue")
+  } else if (qi == "Hazard Ratio"){
       objdf <- data.frame(obj$RealTime, obj$HR, obj$Comparison)
       names(objdf) <- c("Time", "HR", "Comparison")
-  } else if (qi == "Relative Hazard" & strata == TRUE){
-      colour <- NULL
-      objdf <- data.frame(obj$RealTime, obj$HRate, obj$strata)
-      names(objdf) <- c("Time", "HRate", "Strata")
-  } else if (qi == "Relative Hazard" & strata == FALSE){
+  } else if (qi == "Relative Hazard"){
       spalette <- NULL
       objdf <- data.frame(obj$RealTime, obj$HR)
       names(objdf) <- c("Time", "HR")
@@ -125,8 +120,33 @@ ggtvc <- function(obj, qi = "Relative Hazard", strata = FALSE, from = NULL, to =
   }
 
   # Plot
-  if (qi == "Hazard Ratio"){
-    if (strata == TRUE){
+  if (qi == "Hazard Rate"){
+    if (!is.null(obj$strata)) {
+      ggplot(objdf, aes(x = Time, y = HRate, colour = factor(HRValue))) +
+        geom_point(alpha = I(palpha), size = psize) +
+        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+        facet_grid(.~ Strata) +
+        scale_y_continuous()+
+        scale_x_continuous() +
+        xlab(xlab) + ylab(ylab) +
+        scale_colour_brewer(palette = spalette, name = leg.name) +
+        ggtitle(title) +
+        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+        theme_bw(base_size = 15)
+    } else if (is.null(obj$strata)){
+        ggplot(objdf, aes(Time, HRate, colour = factor(HRValue))) +
+          geom_point(shape = 21, alpha = I(palpha), size = psize) +
+          geom_smooth(method = smoother, size = lsize, se = FALSE) +
+          geom_hline(aes(yintercept = 1), linetype = "dotted") +
+          scale_colour_brewer(palette = spalette, name = leg.name) +
+          scale_y_continuous()+
+          scale_x_continuous() +
+          xlab(xlab) + ylab(ylab) +
+          ggtitle(title) +
+          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          theme_bw(base_size = 15)
+    }
+  } else if (qi == "Hazard Ratio"){
       ggplot(objdf, aes(x = Time, y = HRate, colour = factor(Comparison))) +
         geom_point(alpha = I(palpha), size = psize) +
         geom_smooth(method = smoother, size = lsize, se = FALSE) +
@@ -138,34 +158,8 @@ ggtvc <- function(obj, qi = "Relative Hazard", strata = FALSE, from = NULL, to =
         ggtitle(title) +
         guides(colour = guide_legend(override.aes = list(alpha = 1))) +
         theme_bw(base_size = 15)
-
-    } else if (strata == FALSE){
-      ggplot(objdf, aes(Time, HR, colour = factor(Comparison))) +
-        geom_point(shape = 21, alpha = I(palpha), size = psize) +
-        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-        geom_hline(aes(yintercept = 1), linetype = "dotted") +
-        scale_colour_brewer(palette = spalette, name = leg.name) +
-        scale_y_continuous()+
-        scale_x_continuous() +
-        xlab(xlab) + ylab(ylab) +
-        ggtitle(title) +
-        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-        theme_bw(base_size = 15)
     }
   } else if (qi == "Relative Hazard"){
-    if (strata == TRUE){
-      ggplot(objdf, aes(Time, HRate, colour = factor(Strata))) +
-        geom_point(alpha = I(palpha), size = psize) +
-        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-        scale_y_continuous()+
-        scale_x_continuous() +
-        xlab(xlab) + ylab(ylab) +
-        scale_colour_brewer(palette = spalette, name = leg.name) +
-        ggtitle(title) +
-        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-        theme_bw(base_size = 15)
-
-    } else if (strata == FALSE){
       ggplot(objdf, aes(Time, HR)) +
         geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
         geom_smooth(method = smoother, size = lsize, se = FALSE, colour = lcolour) +
@@ -176,7 +170,6 @@ ggtvc <- function(obj, qi = "Relative Hazard", strata = FALSE, from = NULL, to =
         ggtitle(title) +
         guides(colour = guide_legend(override.aes = list(alpha = 1))) +
         theme_bw(base_size = 15)
-    }
   } else if (qi == "First Difference"){
       ggplot(objdf, aes(Time, FirstDiff, group = Comparison)) +
         geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
