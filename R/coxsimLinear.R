@@ -52,7 +52,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 
 
   # Find quantity of interest
   if (qi == "Relative Hazard"){
-    print("All Xl ignored.")
+    message("All Xl ignored.")
     Xs <- data.frame(Xj)
     names(Xs) <- c("Xj")
     Xs$Comparison <- paste(Xs[, 1])

@@ -135,7 +135,7 @@ gginteract <- function(obj, qi = "Marginal Effect", from = NULL, to = NULL, xlab
 	else if (qi == "First Difference"){
 		X1Unique <- objdf[!duplicated(objdf[, "X1"]), ]
 		if (nrow(X1Unique) <= 1){
-			print("X1 must have more than one fitted value.")
+			message("X1 must have more than one fitted value.")
 		} else {
 			ggplot(objdf, aes(X1, FirstDiff, colour = factor(X2), group = factor(X2))) +
 		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
@@ -153,7 +153,7 @@ gginteract <- function(obj, qi = "Marginal Effect", from = NULL, to = NULL, xlab
 	else if (qi == "Hazard Ratio"){
 		X1Unique <- objdf[!duplicated(objdf[, "X1"]), ]
 		if (nrow(X1Unique) <= 1){
-			print("X1 must have more than one fitted value.")
+			message("X1 must have more than one fitted value.")
 		} else {
 			ggplot(objdf, aes(X1, HR, colour = factor(X2), group = factor(X2))) +
 		        geom_point(shape = 21, alpha = I(palpha), size = psize) +

@@ -53,7 +53,7 @@
 coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = "95")
 { 
 	if (nsim > 10 & qi == "Hazard Rate"){
-		print(paste0("Warning: finding Hazard Rates with ", nsim, " simulations may take awhile.  Consider changing the number of simulations with nsim."))
+		message(paste0("Warning: finding Hazard Rates with ", nsim, " simulations may take awhile.  Consider changing the number of simulations with nsim."))
 	}
 	# Find term number
 	TermNum <- names(obj$pterms)
@@ -133,7 +133,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	# Find quantities of interest
 	if (qi == "Relative Hazard"){
 		Xl <- NULL
-		print("Xl is ignored")  
+		message("Xl is ignored")  
 		Simb <- MergeX(Xj)
 	    names(Simb) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
 	    Simb$HR <- exp(Simb$Xj * Simb$Coef)	
@@ -166,7 +166,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	}
 	else if (qi == "Hazard Rate"){
 		Xl <- NULL
-		print("Xl is ignored")       
+		message("Xl is ignored")       
 		Simb <- MergeX(Xj)
 	    names(Simb) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
 	 	Simb$HR <- exp(Simb$Xj * Simb$Coef)

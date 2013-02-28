@@ -124,6 +124,7 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
       ggplot(objdf, aes(x = Time, y = HRate, colour = factor(HRValue))) +
         geom_point(alpha = I(palpha), size = psize) +
         geom_smooth(method = smoother, size = lsize, se = FALSE) +
+        geom_hline(aes(yintercept = 1), linetype = "dotted") +
         facet_grid(.~ Strata) +
         scale_y_continuous()+
         scale_x_continuous() +
@@ -149,6 +150,7 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
       ggplot(objdf, aes(x = Time, y = HR, colour = factor(Comparison))) +
         geom_point(alpha = I(palpha), size = psize) +
         geom_smooth(method = smoother, size = lsize, se = FALSE) +
+        geom_hline(aes(yintercept = 1), linetype = "dotted") +
         scale_y_continuous()+
         scale_x_continuous() +
         xlab(xlab) + ylab(ylab) +
@@ -160,6 +162,7 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
       ggplot(objdf, aes(x = Time, y = HR, colour = factor(Comparison))) +
         geom_point(alpha = I(palpha), size = psize) +
         geom_smooth(method = smoother, size = lsize, se = FALSE) +
+        geom_hline(aes(yintercept = 1), linetype = "dotted") +
         scale_y_continuous()+
         scale_x_continuous() +
         xlab(xlab) + ylab(ylab) +
