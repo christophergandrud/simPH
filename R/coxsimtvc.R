@@ -137,6 +137,11 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
 
   # Find quantity of interest
   if (qi == "Relative Hazard"){
+      print("All Xl were set to 0.")
+      Xl <- rep(0, length(Xj))
+      Xs <- data.frame(Xj, Xl)
+      Xs$Comparison <- paste(Xs[, 1])
+      TVSim <- merge(TVSim, Xs)
       TVSim$HR <- exp(TVSim$CombCoef * Xj)
   } else if (qi == "First Difference"){
     if (length(Xj) != length(Xl)){
@@ -149,10 +154,13 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
       TVSim$FirstDiff <- (exp((TVSim$Xj - TVSim$Xl) * TVSim$CombCoef) - 1) * 100
     }
   } else if (qi == "Hazard Ratio"){
-    if (length(Xj) != length(Xl)){
+    if (length(Xl) > 1 & length(Xj) != length(Xl)){
       stop("Xj and Xl must be the same length.")
-    } 
+    }
     else {
+      if (length(Xj) > 1 & length(Xl) == 1){
+        Xl <- rep(0, length(Xj))
+      }
       Xs <- data.frame(Xj, Xl)
       Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
       TVSim <- merge(TVSim, Xs)

@@ -22,7 +22,6 @@
 #' @details Plots either a time varying hazard ratio or the hazard rates for multiple strata. Currently the strata legend labels need to be changed manually (see \code{\link{revalue}} in the \link{plyr} package) in the \code{simtvc} object with the \code{strata} component. Also, currently the x-axis tick marks and break labels must be adjusted manually for non-linear functions of time.
 #' @examples
 #' # Load Golub & Steunenberg (2007) Data
-#' # Load Golub & Steunenberg (2007) Data
 #' data("GolubEUPData")
 #' 
 #' # Load survival package
@@ -82,7 +81,7 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
   if (!inherits(obj, "simtvc")){
     stop("must be a simtvc object")
   }
-  
+
   # Create y-axis label
   if (is.null(ylab)){
     ylab <- paste(qi, "\n")
@@ -104,11 +103,9 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
       objdf <- data.frame(obj$RealTime, obj$HR, obj$Comparison)
       names(objdf) <- c("Time", "HR", "Comparison")
   } else if (qi == "Relative Hazard"){
-      spalette <- NULL
-      objdf <- data.frame(obj$RealTime, obj$HR)
-      names(objdf) <- c("Time", "HR")
+      objdf <- data.frame(obj$RealTime, obj$HR, obj$Comparison)
+      names(objdf) <- c("Time", "HR", "Comparison")
   } else if (qi == "First Difference"){
-      spalette <- NULL
       objdf <- data.frame(obj$RealTime, obj$FirstDiff, obj$Comparison)
       names(objdf) <- c("Time", "FirstDiff", "Comparison")
   }
@@ -149,10 +146,9 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
           theme_bw(base_size = 15)
     }
   } else if (qi == "Hazard Ratio"){
-      ggplot(objdf, aes(x = Time, y = HRate, colour = factor(Comparison))) +
+      ggplot(objdf, aes(x = Time, y = HR, colour = factor(Comparison))) +
         geom_point(alpha = I(palpha), size = psize) +
         geom_smooth(method = smoother, size = lsize, se = FALSE) +
-        facet_grid(.~ Strata) +
         scale_y_continuous()+
         scale_x_continuous() +
         xlab(xlab) + ylab(ylab) +
@@ -161,13 +157,13 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
         guides(colour = guide_legend(override.aes = list(alpha = 1))) +
         theme_bw(base_size = 15)
   } else if (qi == "Relative Hazard"){
-      ggplot(objdf, aes(Time, HR)) +
-        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-        geom_smooth(method = smoother, size = lsize, se = FALSE, colour = lcolour) +
-        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+      ggplot(objdf, aes(x = Time, y = HR, colour = factor(Comparison))) +
+        geom_point(alpha = I(palpha), size = psize) +
+        geom_smooth(method = smoother, size = lsize, se = FALSE) +
         scale_y_continuous()+
         scale_x_continuous() +
         xlab(xlab) + ylab(ylab) +
+        scale_colour_brewer(palette = spalette, name = leg.name) +
         ggtitle(title) +
         guides(colour = guide_legend(override.aes = list(alpha = 1))) +
         theme_bw(base_size = 15)
@@ -179,6 +175,7 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
         scale_y_continuous()+
         scale_x_continuous() +
         xlab(xlab) + ylab(ylab) +
+        scale_colour_brewer(palette = spalette, name = leg.name) +
         ggtitle(title) +
         guides(colour = guide_legend(override.aes = list(alpha = 1))) +
         theme_bw(base_size = 15)
