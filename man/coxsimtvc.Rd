@@ -4,7 +4,7 @@
 \usage{
   coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = 1,
     Xl = 0, tfun = "linear", pow = NULL, nsim = 1000, from,
-    to, by, ci = "95", strata = FALSE)
+    to, by, ci = "95")
 }
 \arguments{
   \item{obj}{a coxph fitted model object with a time
@@ -16,15 +16,14 @@
 
   \item{qi}{character string indicating what quantity of
   interest you would like to calculate. Can be
-  \code{'Relative Hazard'}, \code{'First Difference'}, or
-  \code{'Hazard Ratio'}. Default is \code{qi = 'Relative
-  Hazard'}. If \code{qi = 'First Difference'} or \code{qi =
-  'Hazard Ratio'} then you can set \code{Xj} and \code{Xl}.
-  If \code{qi = 'First Difference'} then \code{strata} must
-  be \code{FALSE}.}
+  \code{'Relative Hazard'}, \code{'First Difference'},
+  \code{'Hazard Ratio'}, \code{'Hazard Rate'}. Default is
+  \code{qi = 'Relative Hazard'}. If \code{qi = 'First
+  Difference'} or \code{qi = 'Hazard Ratio'} then you can
+  set \code{Xj} and \code{Xl}.}
 
   \item{Xj}{numeric vector of fitted values for Xj. Must be
-  the same length as Xl. Default is \code{Xj = 1} Only
+  the same length as Xl. Default is \code{Xj = 1}. Only
   applies if \code{qi = 'First Difference'} or \code{qi =
   'Hazard Ratio'}.}
 
@@ -57,10 +56,6 @@
   The default is \code{ci = "95"}, i.e. keep the middle 95
   percent. Other possibilities include: \code{"90"},
   \code{"99"}, \code{"all"}.}
-
-  \item{strata}{logical for whether or not the coxph model
-  used stratification and you would like to simulate the
-  hazard rates for each strata}
 }
 \value{
   a simtvc object

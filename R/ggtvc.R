@@ -3,7 +3,7 @@
 #' \code{ggtvc} uses ggplot2 to plot the simulated hazards from a simtvc class object using ggplot2. 
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs.
 #' @param obj a simtvc class object
-#' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, or \code{'Hazard Rate}.he default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
+#' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, or \code{'Hazard Rate'}.he default is \code{qi = "Relative Hazard"}. If \code{qi = 'Hazard Rate'} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param from numeric time to start the plot from.
 #' @param to numeric time to plot to.
 #' @param xlab a label for the plot's x-axis.

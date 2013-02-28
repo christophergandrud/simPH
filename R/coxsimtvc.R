@@ -4,8 +4,8 @@
 #' @param obj a coxph fitted model object with a time interaction. 
 #' @param b the non-time interacted variable's name.
 #' @param btvc the time interacted variable's name.
-#' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, \code{'Hazard Rate'. Default is \code{qi = 'Relative Hazard'}. If \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'} then you can set \code{Xj} and \code{Xl}.
-#' @param Xj numeric vector of fitted values for Xj. Must be the same length as Xl. Default is \code{Xj = 1} Only applies if \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'}.
+#' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, \code{'Hazard Rate'}. Default is \code{qi = 'Relative Hazard'}. If \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'} then you can set \code{Xj} and \code{Xl}.
+#' @param Xj numeric vector of fitted values for Xj. Must be the same length as Xl. Default is \code{Xj = 1}. Only applies if \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'}.
 #' @param Xl numeric vector of fitted values for Xl. Must be the same length as Xj. Default is \code{Xl = 0}. Only applies if \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'}.
 #' @param nsim the number of simulations to run per point in time. Default is \code{nsim = 1000}.
 #' @param tfun function of time that btvc was multiplied by. Default is "linear". Can also be "log" (natural log) and "power". If \code{tfun = "power"} then the pow argument needs to be specified also.
@@ -128,8 +128,8 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   TVSim <- data.frame(melt(TVSim))
   names(TVSim) <- c("ID", "time", "TVC")
   time <- 1:length(tf)
-  Tempdf <- data.frame(time, tf)
-  TVSim <- merge(TVSim, Tempdf)
+  TempDF <- data.frame(time, tf)
+  TVSim <- merge(TVSim, TempDF)
 
   # Combine with non TVC version of the variable
   TVSim <- merge(Drawn, TVSim, by = "ID")
@@ -137,12 +137,12 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
 
   # Find quantity of interest
   if (qi == "Relative Hazard"){
-      print("All Xl were set to 0.")
-      Xl <- rep(0, length(Xj))
-      Xs <- data.frame(Xj, Xl)
+      print("All Xl ignored.")
+      Xs <- data.frame(Xj)
+      names(Xs) <- c("Xj")
       Xs$Comparison <- paste(Xs[, 1])
       TVSim <- merge(TVSim, Xs)
-      TVSim$HR <- exp(TVSim$CombCoef * Xj)
+      TVSim$HR <- exp(TVSim$CombCoef * TVSim$Xj)
   } else if (qi == "First Difference"){
     if (length(Xj) != length(Xl)){
       stop("Xj and Xl must be the same length.")
@@ -194,15 +194,15 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   TVSim <- TVSim[order(TVSim$time),]
   if (ci == "all"){
     TVSimPerc <- TVSim 
-  } else if (ci == "95"){
-    TVSimPerc <- ddply(TVSim, .(time), transform, Lower = HR < quantile(HR, c(0.025)))
-    TVSimPerc <- ddply(TVSimPerc, .(time), transform, Upper = HR > quantile(HR, 0.975))
   } else if (ci == "90"){
-    TVSimPerc <- ddply(TVSim, .(time), transform, Lower = HR < quantile(HR, c(0.05)))
-    TVSimPerc <- ddply(TVSimPerc, .(time), transform, Upper = HR > quantile(HR, 0.95))
+    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, c(0.05)))
+    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, 0.95))
+  } else if (ci == "95"){
+    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, c(0.025)))
+    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, 0.975))
   } else if (ci == "99"){
-    TVSimPerc <- ddply(TVSim, .(time), transform, Lower = HR < quantile(HR, c(0.005)))
-    TVSimPerc <- ddply(TVSimPerc, .(time), transform, Upper = HR > quantile(HR, 0.995))
+    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, c(0.005)))
+    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, 0.995))
   }
   if (ci != "all"){
     TVSimPerc <- subset(TVSimPerc, Lower == FALSE & Upper == FALSE)

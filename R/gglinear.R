@@ -80,8 +80,8 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 	  	names(objdf) <- c("Xj", "HR", "Comparison")
 	} else if (qi == "Relative Hazard"){
 	  	spalette <- NULL
-	  	objdf <- data.frame(obj$Xj, obj$HR, obj$Comparision)
-	  	names(objdf) <- c("Xj", "HR", "Comparision")
+	  	objdf <- data.frame(obj$Xj, obj$HR)
+	  	names(objdf) <- c("Xj", "HR")
 	} else if (qi == "First Difference"){
 		spalette <- NULL
 		objdf <- data.frame(obj$Xj, obj$HR, obj$Comparison)
@@ -138,15 +138,15 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 	        theme_bw(base_size = 15)
 	} else if (qi == "Hazard Ratio"){
-      ggplot(objdf, aes(x = Xj, y = HR, colour = factor(Comparison))) +
-        geom_point(alpha = I(palpha), size = psize) +
-        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-        scale_y_continuous()+
-        scale_x_continuous() +
-        xlab(xlab) + ylab(ylab) +
-        scale_colour_brewer(palette = spalette, name = leg.name) +
-        ggtitle(title) +
-        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-        theme_bw(base_size = 15)
+		ggplot(objdf, aes(Xj, HR)) +
+	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+	        scale_y_continuous()+
+	        scale_x_continuous() +
+	        xlab(xlab) + ylab(ylab) +
+	        ggtitle(title) +
+	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+	        theme_bw(base_size = 15)
     }
 }
