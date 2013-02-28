@@ -81,7 +81,8 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
 {
   if (!inherits(obj, "simtvc")){
     stop("must be a simtvc object")
-
+  }
+  
   # Create y-axis label
   if (is.null(ylab)){
     ylab <- paste(qi, "\n")
@@ -96,8 +97,9 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
       objdf <- data.frame(obj$RealTime, obj$HRate, obj$HRValue)
       names(objdf) <- c("Time", "HRate", "HRValue")
     } else if (!is.null(obj$strata)) {
-    objdf <- data.frame(obj$RealTime, obj$HRate, obj$strata, obj$HRValue)
-    names(objdf) <- c("Time", "HRate", "Strata", "HRValue")
+      objdf <- data.frame(obj$RealTime, obj$HRate, obj$strata, obj$HRValue)
+      names(objdf) <- c("Time", "HRate", "Strata", "HRValue")
+    }
   } else if (qi == "Hazard Ratio"){
       objdf <- data.frame(obj$RealTime, obj$HR, obj$Comparison)
       names(objdf) <- c("Time", "HR", "Comparison")
@@ -158,7 +160,6 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
         ggtitle(title) +
         guides(colour = guide_legend(override.aes = list(alpha = 1))) +
         theme_bw(base_size = 15)
-    }
   } else if (qi == "Relative Hazard"){
       ggplot(objdf, aes(Time, HR)) +
         geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
