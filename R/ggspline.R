@@ -27,6 +27,7 @@
 #' @description Uses \code{ggplot2} and \code{scatter3d} to plot the quantities of interest from \code{simspline} objects, including relative hazards, first differences, hazard ratios, and hazard rates. If currently does not support hazard rates for multiple strata.
 #'
 #' It can graph hazard rates as a 3D plot using \code{\link{scatter3d}} with the dimensions: Time, Hazard Rate, and the value of Xj. You can also choose to plot hazard rates for a range of values of Xj in two dimensional plots at specific points in time. Each plot is arranged in a facet grid.
+#' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
 #'
 #' @examples
 #' # Load Carpenter (2002) data
@@ -179,7 +180,6 @@ ggspline <- function(obj, qi = "Relative Hazard", FacetTime = NULL, from = NULL,
 		ggplot(objdfSub, aes(Xj, HRate)) +
 	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        facet_grid(.~Time) +
 	        scale_y_continuous()+
 	        scale_x_continuous() +

@@ -1,3 +1,7 @@
+Version 0.04.3 
+
+Minor bug fixes.
+
 Version 0.04.2
 
 Updated the syntax for `simcoxtvc` and `ggtvc` for hazard ratios and stratified hazard rates so that it matches the syntax for the other commands.

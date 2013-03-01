@@ -100,7 +100,10 @@
   Rate, and the value of Xj. You can also choose to plot
   hazard rates for a range of values of Xj in two
   dimensional plots at specific points in time. Each plot
-  is arranged in a facet grid.
+  is arranged in a facet grid. Note: A dotted line is
+  created at y = 1 (0 for first difference), i.e. no
+  effect, for time-varying hazard ratio graphs. No line is
+  created for hazard rates.
 }
 \details{
   \code{ggspline} uses ggplot2 and scatter3d to plot

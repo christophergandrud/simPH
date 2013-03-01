@@ -37,6 +37,7 @@
 #' gginteract(Sim1, qi = "Marginal Effect", xlab = "\nprevgenx", ylab = "Marginal Effect of lethal\n")
 #'
 #' @description Uses ggplot2 to plot the quantities of interest from \code{siminteract} objects, including marginal effects, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
+#' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
 #'
 #'
 #' Note: if \code{qi = "Hazard Ratio"} or \code{qi = "First Difference"} then you need to have choosen more than one fitted value for \code{X1} in \code{\link{coxsimInteract}}. 
@@ -110,7 +111,6 @@ gginteract <- function(obj, qi = "Marginal Effect", from = NULL, to = NULL, xlab
 	      	ggplot(objdf, aes(Time, HRate, colour = factor(HRValue))) +
 	        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 		        scale_colour_brewer(palette = spalette, name = leg.name) +
 		        scale_y_continuous()+
 		        scale_x_continuous() +

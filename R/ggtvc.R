@@ -1,7 +1,6 @@
 #' Plot simulated time-varying hazard ratios or stratified time-varying hazard rates from a simtvc class object using ggplot2
 #' 
 #' \code{ggtvc} uses ggplot2 to plot the simulated hazards from a simtvc class object using ggplot2. 
-#' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs.
 #' @param obj a simtvc class object
 #' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, or \code{'Hazard Rate'}.he default is \code{qi = "Relative Hazard"}. If \code{qi = 'Hazard Rate'} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param from numeric time to start the plot from.
@@ -19,7 +18,8 @@
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
 #' @param ... other arguments passed to specific methods
 #' @return a ggplot2 object
-#' @details Plots either a time varying hazard ratio or the hazard rates for multiple strata. Currently the strata legend labels need to be changed manually (see \code{\link{revalue}} in the \link{plyr} package) in the \code{simtvc} object with the \code{strata} component. Also, currently the x-axis tick marks and break labels must be adjusted manually for non-linear functions of time.
+#' @details Plots either a time varying hazard ratio or the hazard rates for multiple strata. Currently the strata legend labels need to be changed manually (see \code{\link{revalue}} in the \link{plyr} package) in the \code{simtvc} object with the \code{strata} component. Also, currently the x-axis tick marks and break labels must be adjusted manually for non-linear functions of time. 
+#' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
 #' @examples
 #' # Load Golub & Steunenberg (2007) Data
 #' data("GolubEUPData")
@@ -124,7 +124,6 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
       ggplot(objdf, aes(x = Time, y = HRate, colour = factor(HRValue))) +
         geom_point(alpha = I(palpha), size = psize) +
         geom_smooth(method = smoother, size = lsize, se = FALSE) +
-        geom_hline(aes(yintercept = 1), linetype = "dotted") +
         facet_grid(.~ Strata) +
         scale_y_continuous()+
         scale_x_continuous() +
@@ -137,7 +136,6 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
         ggplot(objdf, aes(Time, HRate, colour = factor(HRValue))) +
           geom_point(shape = 21, alpha = I(palpha), size = psize) +
           geom_smooth(method = smoother, size = lsize, se = FALSE) +
-          geom_hline(aes(yintercept = 1), linetype = "dotted") +
           scale_colour_brewer(palette = spalette, name = leg.name) +
           scale_y_continuous()+
           scale_x_continuous() +

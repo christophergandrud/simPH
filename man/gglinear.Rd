@@ -70,7 +70,10 @@
   \code{simlinear} objects, including relative hazards,
   first differences, hazard ratios, and hazard rates. If
   there are multiple strata, the quantities of interest
-  will be plotted in a grid by strata.
+  will be plotted in a grid by strata. Note: A dotted line
+  is created at y = 1 (0 for first difference), i.e. no
+  effect, for time-varying hazard ratio graphs. No line is
+  created for hazard rates.
 }
 \details{
   \code{gglinear} uses ggplot2 to plot the quantities of

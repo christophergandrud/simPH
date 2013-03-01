@@ -38,6 +38,7 @@
 #' gglinear(Sim2, qi = "Hazard Rate")
 #'
 #' @description Uses ggplot2 to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
+#' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
 #'
 #' @import ggplot2
 #' @export
@@ -94,7 +95,6 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 	      ggplot(objdf, aes(x = Time, y = HRate, colour = factor(HRValue))) +
 	        geom_point(alpha = I(palpha), size = psize) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        facet_grid(.~ Strata) +
 	        scale_y_continuous()+
 	        scale_x_continuous() +
@@ -107,7 +107,7 @@ gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab =
 	      	ggplot(objdf, aes(Time, HRate, colour = factor(HRValue))) +
 	        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+
 		        scale_colour_brewer(palette = spalette, name = leg.name) +
 		        scale_y_continuous()+
 		        scale_x_continuous() +
