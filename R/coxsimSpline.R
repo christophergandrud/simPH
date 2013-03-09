@@ -177,9 +177,9 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	  	}
 	  	bfit$FakeID <- 1
 	  	Simb$FakeID <- 1
-		bfitDT <- data.table(bfit, key = "FakeID")
-		SimbDT <- data.table(Simb, key = "FakeID")
-		SimbCombDT <- SimbDT[bfitDT]
+		bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+		SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+		SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
 		Simb <- data.frame(SimbCombDT)
 	  	Simb$HRate <- Simb$hazard * Simb$HR 
 	  	Simb <- Simb[, -1]	

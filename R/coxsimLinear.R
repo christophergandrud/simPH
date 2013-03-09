@@ -85,27 +85,21 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 
     } 
   }
   else if (qi == "Hazard Rate"){
-    if (Xl != 0){
-      stop("Only Xj can be used for Hazard Rates.")
-    }
-    else {
-    	if (length(Xj) > 1 & length(Xl) == 1){
-    		Xl <- rep(0, length(Xj))
-    	}
-    	Xs <- data.frame(Xj, Xl)
+      Xl <- NULL
+      message("Xl is ignored") 
+    	Xs <- data.frame(Xj)
     	Xs$HRValue <- paste(Xs[, 1])
 	    Simb <- merge(Simb, Xs)
       Simb$HR <- exp(Simb$Xj * Simb$Coef)	 
 	  	bfit <- basehaz(obj)
 	  	bfit$FakeID <- 1
 	  	Simb$FakeID <- 1
-      bfitDT <- data.table(bfit, key = "FakeID")
-      SimbDT <- data.table(Simb, key = "FakeID")
-      SimbCombDT <- SimbDT[bfitDT]
+      bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+      SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+      SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
       Simb <- data.frame(SimbCombDT)
 	  	Simb$HRate <- Simb$hazard * Simb$HR 
 	  	Simb <- Simb[, -1]
-  	}
   }
 
   # Drop simulations outside of 'confidence bounds'

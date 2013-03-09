@@ -82,7 +82,7 @@
 #'                   by = 15, ci = "99")
 #'
 #' @seealso \code{\link{ggtvc}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
-#' @import MSBVAR plyr reshape2 survival
+#' @import MSBVAR plyr reshape2 survival data.table
 #' @export
 #' @references Golub, Jonathan, and Bernard Steunenberg. 2007. “How Time Affects EU Decision-Making.” European Union Politics 8(4): 555–66.
 #'
@@ -167,27 +167,21 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
       TVSim$HR <- exp((TVSim$Xj - TVSim$Xl) * TVSim$CombCoef)
     }
   } else if (qi == "Hazard Rate"){
-    if (Xl != 0){
-      stop("Only Xj can be used for Hazard Rates.")
-    }
-    else {
-      if (length(Xj) > 1 & length(Xl) == 1){
-        Xl <- rep(0, length(Xj))
-      }
-      Xs <- data.frame(Xj, Xl)
+      Xl <- NULL
+      message("Xl is ignored") 
+      Xs <- data.frame(Xj)
       Xs$HRValue <- paste(Xs[, 1])
       Simb <- merge(TVSim, Xs)
       Simb$HR <- exp(Simb$Xj * Simb$CombCoef)  
       bfit <- basehaz(obj)
       bfit$FakeID <- 1
       Simb$FakeID <- 1
-      bfitDT <- data.table(bfit, key = "FakeID")
-      SimbDT <- data.table(Simb, key = "FakeID")
-      SimbCombDT <- SimbDT[bfitDT]
+      bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+      SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+      SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
       Simb <- data.frame(SimbCombDT)
       Simb$HRate <- Simb$hazard * Simb$HR 
       TVSim <- Simb[, -1]
-    }
   }
 
   # Drop simulations outside of 'confidence bounds'

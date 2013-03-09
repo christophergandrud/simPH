@@ -102,9 +102,9 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	  	bfit <- basehaz(obj)
 	  	bfit$FakeID <- 1
 	  	Simb$FakeID <- 1
-		bfitDT <- data.table(bfit, key = "FakeID")
-		SimbDT <- data.table(Simb, key = "FakeID")
-		SimbCombDT <- SimbDT[bfitDT]
+		bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+		SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+		SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
 	  	Simb$HRate <- Simb$hazard * Simb$HR 
 	  	Simb <- Simb[, -1]
 	  }

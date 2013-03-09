@@ -103,8 +103,8 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
       objdf <- data.frame(obj$RealTime, obj$HR, obj$Comparison)
       names(objdf) <- c("Time", "HR", "Comparison")
   } else if (qi == "Relative Hazard"){
-      objdf <- data.frame(obj$RealTime, obj$HR, obj$Comparison)
-      names(objdf) <- c("Time", "HR", "Comparison")
+      objdf <- data.frame(obj$RealTime, obj$HR, obj$Xj)
+      names(objdf) <- c("Time", "HR", "Xj")
   } else if (qi == "First Difference"){
       objdf <- data.frame(obj$RealTime, obj$FirstDiff, obj$Comparison)
       names(objdf) <- c("Time", "FirstDiff", "Comparison")
@@ -157,7 +157,7 @@ ggtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NU
         guides(colour = guide_legend(override.aes = list(alpha = 1))) +
         theme_bw(base_size = 15)
   } else if (qi == "Relative Hazard"){
-      ggplot(objdf, aes(x = Time, y = HR, colour = factor(Comparison))) +
+      ggplot(objdf, aes(x = Time, y = HR, colour = factor(Xj))) +
         geom_point(alpha = I(palpha), size = psize) +
         geom_smooth(method = smoother, size = lsize, se = FALSE) +
         geom_hline(aes(yintercept = 1), linetype = "dotted") +
