@@ -86,7 +86,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 
   }
   else if (qi == "Hazard Rate"){
       Xl <- NULL
-      message("Xl is ignored") 
+      message("Xl is ignored. All variables values other than b fitted at 0.") 
     	Xs <- data.frame(Xj)
     	Xs$HRValue <- paste(Xs[, 1])
 	    Simb <- merge(Simb, Xs)

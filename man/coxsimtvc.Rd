@@ -3,8 +3,8 @@
 \title{Simulate time-varying hazards from coxph fitted model objects}
 \usage{
   coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = 1,
-    Xl = 0, tfun = "linear", pow = NULL, nsim = 1000, from,
-    to, by, ci = "95")
+    Xl = 0, tfun = "linear", pow = NULL, newdata = NULL,
+    nsim = 1000, from, to, by, ci = "95")
 }
 \arguments{
   \item{obj}{a coxph fitted model object with a time
@@ -42,6 +42,12 @@
 
   \item{pow}{if \code{tfun = "power"}, then use pow to
   specify what power the time interaction was raised to.}
+
+  \item{newdata}{a data frame with the same variable names
+  as those that appear in the coxph formula. It is also
+  valid to use a vector, if the data frame would consist of
+  a single row. If \code{qi = 'Hazard Rate'} then you can
+  set fit the values of all of the variables.}
 
   \item{from}{point in time from when to begin simulating
   coefficient values}
@@ -89,14 +95,14 @@
   \eqn{\hat{\beta}_{xt}} along with the variance matrix
   (\eqn{\hat{V}(\hat{\beta})}) estimated from a
   \code{coxph} model. These are used to draw values of
-  \eqn{\beta_{x}} and \eqn{\beta_{xt}} from the
-  multivariate normal distribution \eqn{N(\hat{\beta},\:
+  \eqn{\beta_{1}} and \eqn{\beta_{2}} from the multivariate
+  normal distribution \eqn{N(\hat{\beta},\:
   \hat{V}(\hat{beta}))}.
 
   When simulating stratified time-varying hazard rates
   \eqn{H} for a given strata \eqn{k}, \code{coxsimtvc}
   uses: \deqn{H_{kxt} =
-  \hat{\beta_{k0t}}\exp{\hat{\beta_{x}} + \beta_{xt}(t)}}
+  \hat{\beta_{k0t}}\exp{\hat{\beta_{1}} + \beta_{2}f(t)}}
   The resulting simulation values can be plotted using
   \code{\link{ggtvc}}.
 }
@@ -163,7 +169,7 @@ Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
 }
 \seealso{
   \code{\link{ggtvc}}, \code{\link{rmultinorm}},
-  \code{\link{survival}}, \code{\link{strata}}, and
-  \code{\link{coxph}}
+  \code{\link{survival}}, \code{\link{strata}},
+  \code{\link{survfit.coxph}}, and \code{\link{coxph}}
 }
 

@@ -166,7 +166,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	}
 	else if (qi == "Hazard Rate"){
 		Xl <- NULL
-		message("Xl is ignored")       
+      message("Xl is ignored. All variables values other than b fitted at 0.") 
 		Simb <- MergeX(Xj)
 	    names(Simb) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
 	 	Simb$HR <- exp(Simb$Xj * Simb$Coef)

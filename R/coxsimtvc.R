@@ -10,6 +10,7 @@
 #' @param nsim the number of simulations to run per point in time. Default is \code{nsim = 1000}.
 #' @param tfun function of time that btvc was multiplied by. Default is "linear". Can also be "log" (natural log) and "power". If \code{tfun = "power"} then the pow argument needs to be specified also.
 #' @param pow if \code{tfun = "power"}, then use pow to specify what power the time interaction was raised to.
+#' @param newdata a data frame with the same variable names as those that appear in the coxph formula. It is also valid to use a vector, if the data frame would consist of a single row. If \code{qi = 'Hazard Rate'} then you can set fit the values of all of the variables. 
 #' @param from point in time from when to begin simulating coefficient values
 #' @param to point in time to stop simulating coefficient values
 #' @param by time intervals by which to simulate coefficient values
@@ -28,10 +29,10 @@
 #'
 #' Hazard ratios are calculated using:
 #' \deqn{FD = e^{(X_{j} - X_{l}) (\beta_{1} + \beta_{2}f(t))}}
-#' When simulating non-stratifed time-varying harzards \code{coxsimtvc} uses the point estimates for a given coefficient \eqn{\hat{\beta}_{x}} and its time interaction \eqn{\hat{\beta}_{xt}} along with the variance matrix (\eqn{\hat{V}(\hat{\beta})}) estimated from a \code{coxph} model. These are used to draw values of \eqn{\beta_{x}} and \eqn{\beta_{xt}} from the multivariate normal distribution \eqn{N(\hat{\beta},\: \hat{V}(\hat{beta}))}.
+#' When simulating non-stratifed time-varying harzards \code{coxsimtvc} uses the point estimates for a given coefficient \eqn{\hat{\beta}_{x}} and its time interaction \eqn{\hat{\beta}_{xt}} along with the variance matrix (\eqn{\hat{V}(\hat{\beta})}) estimated from a \code{coxph} model. These are used to draw values of \eqn{\beta_{1}} and \eqn{\beta_{2}} from the multivariate normal distribution \eqn{N(\hat{\beta},\: \hat{V}(\hat{beta}))}.
 #'
 #' When simulating stratified time-varying hazard rates \eqn{H} for a given strata \eqn{k}, \code{coxsimtvc} uses:
-#' \deqn{H_{kxt} = \hat{\beta_{k0t}}\exp{\hat{\beta_{x}} + \beta_{xt}(t)}}
+#' \deqn{H_{kxt} = \hat{\beta_{k0t}}\exp{\hat{\beta_{1}} + \beta_{2}f(t)}}
 #' The resulting simulation values can be plotted using \code{\link{ggtvc}}. 
 #'
 #' @examples
@@ -81,7 +82,7 @@
 #'                   tfun = "log", from = 80, to = 2000, 
 #'                   by = 15, ci = "99")
 #'
-#' @seealso \code{\link{ggtvc}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
+#' @seealso \code{\link{ggtvc}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, \code{\link{survfit.coxph}}, and \code{\link{coxph}}
 #' @import MSBVAR plyr reshape2 survival data.table
 #' @export
 #' @references Golub, Jonathan, and Bernard Steunenberg. 2007. “How Time Affects EU Decision-Making.” European Union Politics 8(4): 555–66.
@@ -90,24 +91,12 @@
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
 
-coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, nsim = 1000, from, to, by, ci = "95")
+coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, newdata = NULL, nsim = 1000, from, to, by, ci = "95")
 {
-  # Parameter estimates & Varance/Covariance matrix
-  Coef <- matrix(obj$coefficients)
-  VC <- vcov(obj)
-    
-  # Draw values from the multivariate normal distribution
-  Drawn <- rmultnorm(n = nsim, mu = Coef, vmat = VC)
-  DrawnDF <- data.frame(Drawn)
- 
-  # Extract simulations for variables of interest
-  dfn <- names(DrawnDF)
-  bpos <- match(b, dfn)
-  btvcpos <- match(btvc, dfn)
-  
-  Drawn <- data.frame(Drawn[, c(bpos, btvcpos)])
-  Drawn$ID <- 1:nsim
-  
+  if (qi != "Hazard Rate" & newdata != NULL){
+    stop("newdata can only be set when qi = 'Hazard Rate'.")
+  }
+
   # Create time function
   tfunOpts <- c("linear", "log", "power")
   TestforTOpts <- tfun %in% tfunOpts
@@ -122,66 +111,91 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   } else if (tfun == "power"){
     tf <- (seq(from = from, to = to, by = by))^pow
   }
-  
-  # Multiply time function with btvc
-  TVSim <- outer(Drawn[,2], tf)
-  TVSim <- data.frame(melt(TVSim))
-  names(TVSim) <- c("ID", "time", "TVC")
-  time <- 1:length(tf)
-  TempDF <- data.frame(time, tf)
-  TVSim <- merge(TVSim, TempDF)
 
-  # Combine with non TVC version of the variable
-  TVSim <- merge(Drawn, TVSim, by = "ID")
-  TVSim$CombCoef <- TVSim[[2]] + TVSim$TVC
+  # Parameter estimates & Varance/Covariance matrix
+  Coef <- matrix(obj$coefficients)
+  VC <- vcov(obj)
+    
+  # Draw values from the multivariate normal distribution
+  Drawn <- rmultnorm(n = nsim, mu = Coef, vmat = VC)
+  DrawnDF <- data.frame(Drawn)
+  dfn <- names(DrawnDF)
+ 
+  # If all values aren't set for calculating the hazard rate
+  if (is.null(newdata)){
 
-  # Find quantity of interest
-  if (qi == "Relative Hazard"){
-      message("All Xl ignored.")
-      Xs <- data.frame(Xj)
-      names(Xs) <- c("Xj")
-      Xs$Comparison <- paste(Xs[, 1])
-      TVSim <- merge(TVSim, Xs)
-      TVSim$HR <- exp(TVSim$CombCoef * TVSim$Xj)
-  } else if (qi == "First Difference"){
-    if (length(Xj) != length(Xl)){
-      stop("Xj and Xl must be the same length.")
-    } else {
-      TVSim$HR <- exp(TVSim$CombCoef)
-      Xs <- data.frame(Xj, Xl)
-      Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-      TVSim <- merge(TVSim, Xs)
-      TVSim$FirstDiff <- (exp((TVSim$Xj - TVSim$Xl) * TVSim$CombCoef) - 1) * 100
-    }
-  } else if (qi == "Hazard Ratio"){
-    if (length(Xl) > 1 & length(Xj) != length(Xl)){
-      stop("Xj and Xl must be the same length.")
-    }
-    else {
-      if (length(Xj) > 1 & length(Xl) == 1){
-        Xl <- rep(0, length(Xj))
+    # Extract simulations for variables of interest
+    bpos <- match(b, dfn)
+    btvcpos <- match(btvc, dfn)
+    
+    Drawn <- data.frame(Drawn[, c(bpos, btvcpos)])
+    Drawn$ID <- 1:nsim
+
+    # Multiply time function with btvc
+    TVSim <- outer(Drawn[,2], tf)
+    TVSim <- data.frame(melt(TVSim))
+    names(TVSim) <- c("ID", "time", "TVC")
+    time <- 1:length(tf)
+    TempDF <- data.frame(time, tf)
+    TVSim <- merge(TVSim, TempDF)
+
+    # Combine with non TVC version of the variable
+    TVSim <- merge(Drawn, TVSim, by = "ID")
+    TVSim$CombCoef <- TVSim[[2]] + TVSim$TVC
+
+    # Find quantity of interest
+    if (qi == "Relative Hazard"){
+        message("All Xl ignored.")
+        Xs <- data.frame(Xj)
+        names(Xs) <- c("Xj")
+        Xs$Comparison <- paste(Xs[, 1])
+        TVSim <- merge(TVSim, Xs)
+        TVSim$HR <- exp(TVSim$CombCoef * TVSim$Xj)
+    } else if (qi == "First Difference"){
+      if (length(Xj) != length(Xl)){
+        stop("Xj and Xl must be the same length.")
+      } else {
+        TVSim$HR <- exp(TVSim$CombCoef)
+        Xs <- data.frame(Xj, Xl)
+        Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
+        TVSim <- merge(TVSim, Xs)
+        TVSim$FirstDiff <- (exp((TVSim$Xj - TVSim$Xl) * TVSim$CombCoef) - 1) * 100
       }
-      Xs <- data.frame(Xj, Xl)
-      Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-      TVSim <- merge(TVSim, Xs)
-      TVSim$HR <- exp((TVSim$Xj - TVSim$Xl) * TVSim$CombCoef)
+    } else if (qi == "Hazard Ratio"){
+      if (length(Xl) > 1 & length(Xj) != length(Xl)){
+        stop("Xj and Xl must be the same length.")
+      }
+      else {
+        if (length(Xj) > 1 & length(Xl) == 1){
+          Xl <- rep(0, length(Xj))
+        }
+        Xs <- data.frame(Xj, Xl)
+        Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
+        TVSim <- merge(TVSim, Xs)
+        TVSim$HR <- exp((TVSim$Xj - TVSim$Xl) * TVSim$CombCoef)
+      }
+    } else if (qi == "Hazard Rate"){
+        Xl <- NULL
+        message("Xl is ignored. All variables values other than b fitted at 0.") 
+        Xs <- data.frame(Xj)
+        Xs$HRValue <- paste(Xs[, 1])
+        Simb <- merge(TVSim, Xs)
+        Simb$HR <- exp(Simb$Xj * Simb$CombCoef)  
+        bfit <- basehaz(obj)
+        bfit$FakeID <- 1
+        Simb$FakeID <- 1
+        bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+        SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+        SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
+        Simb <- data.frame(SimbCombDT)
+        Simb$HRate <- Simb$hazard * Simb$HR 
+        TVSim <- Simb[, -1]
     }
-  } else if (qi == "Hazard Rate"){
-      Xl <- NULL
-      message("Xl is ignored") 
-      Xs <- data.frame(Xj)
-      Xs$HRValue <- paste(Xs[, 1])
-      Simb <- merge(TVSim, Xs)
-      Simb$HR <- exp(Simb$Xj * Simb$CombCoef)  
-      bfit <- basehaz(obj)
-      bfit$FakeID <- 1
-      Simb$FakeID <- 1
-      bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
-      SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
-      SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
-      Simb <- data.frame(SimbCombDT)
-      Simb$HRate <- Simb$hazard * Simb$HR 
-      TVSim <- Simb[, -1]
+  }
+
+  # If new values for calculating the hazard rate are set
+  else if (!is.null(newdata)){
+    
   }
 
   # Drop simulations outside of 'confidence bounds'

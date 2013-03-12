@@ -92,7 +92,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	}
 	else if (qi == "Hazard Rate"){
 		Xl <- NULL
-		message("Xl is ignored") 
+      message("Xl is ignored. All variables values other than b fitted at 0.") 
 		Xs <- data.frame(Xj)
 		Xs$HRValue <- paste(Xs[, 1])
 	    Simb <- merge(Simb, Xs)
