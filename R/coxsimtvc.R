@@ -91,7 +91,7 @@
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
 
-coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, newdata = NULL, nsim = 1000, from, to, by, ci = "95")
+coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, means = FALSE, newdata = NULL, nsim = 1000, from, to, by, ci = "95")
 {
   if (qi != "Hazard Rate" & newdata != NULL){
     stop("newdata can only be set when qi = 'Hazard Rate'.")
@@ -122,7 +122,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   dfn <- names(DrawnDF)
  
   # If all values aren't set for calculating the hazard rate
-  if (is.null(newdata)){
+  if (is.null(newdata) & !isTRUE(means)){
 
     # Extract simulations for variables of interest
     bpos <- match(b, dfn)
@@ -194,8 +194,11 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   }
 
   # If new values for calculating the hazard rate are set
-  else if (!is.null(newdata)){
-    
+  else if (!is.null(newdata) | isTRUE(means)){
+    if (!is.null(newdata) & isTRUE(means)) {
+      stop("Either means = TRUE or newdata != NULL, not both.")
+    }
+
   }
 
   # Drop simulations outside of 'confidence bounds'

@@ -34,7 +34,7 @@
 #' @import MSBVAR plyr reshape2 survival data.table
 #' @export
 
-coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = "95")
+coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means = FALSE, newdata = NULL, nsim = 1000, ci = "95")
 {	
 	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
@@ -45,62 +45,102 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 
 	DrawnDF <- data.frame(Drawn)
 	dfn <- names(DrawnDF)
 
-	# Subset simulations to only include b
-	bpos <- match(b, dfn)
-	Simb <- data.frame(DrawnDF[, bpos])
-	names(Simb) <- "Coef"
+  # If all values aren't set for calculating the hazard rate
+  if (is.null(newdata) & is.null(means)){
 
-  # Find quantity of interest
-  if (qi == "Relative Hazard"){
-    message("All Xl ignored.")
-    Xs <- data.frame(Xj)
-    names(Xs) <- c("Xj")
-    Xs$Comparison <- paste(Xs[, 1])
-    Simb <- merge(Simb, Xs)
-  	Simb$HR <- exp((Simb$Xj - Simb$Xl) * Simb$Coef)	
-  } 
-  else if (qi == "First Difference"){
-  	if (length(Xj) != length(Xl)){
-      stop("Xj and Xl must be the same length.")
+  	# Subset simulations to only include b
+  	bpos <- match(b, dfn)
+  	Simb <- data.frame(DrawnDF[, bpos])
+  	names(Simb) <- "Coef"
+
+    # Find quantity of interest
+    if (qi == "Relative Hazard"){
+      message("All Xl ignored.")
+      Xs <- data.frame(Xj)
+      names(Xs) <- c("Xj")
+      Xs$Comparison <- paste(Xs[, 1])
+      Simb <- merge(Simb, Xs)
+    	Simb$HR <- exp((Simb$Xj - Simb$Xl) * Simb$Coef)	
     } 
-    else {
-	    Xs <- data.frame(Xj, Xl)
-	    Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-	    Simb <- merge(Simb, Xs)
-	    Simb$HR <- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
-  	}
-  }
-  else if (qi == "Hazard Ratio"){
-    if (length(Xl) > 1 & length(Xj) != length(Xl)){
-      stop("Xj and Xl must be the same length.")
-    }
-    else {
-    	if (length(Xj) > 1 & length(Xl) == 1){
-    		Xl <- rep(0, length(Xj))
+    else if (qi == "First Difference"){
+    	if (length(Xj) != length(Xl)){
+        stop("Xj and Xl must be the same length.")
+      } 
+      else {
+  	    Xs <- data.frame(Xj, Xl)
+  	    Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
+  	    Simb <- merge(Simb, Xs)
+  	    Simb$HR <- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
     	}
-    	Xs <- data.frame(Xj, Xl)
-    	Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-	    Simb <- merge(Simb, Xs)
-  	  Simb$HR <- exp((Simb$Xj - Simb$Xl) * Simb$Coef)	
-    } 
+    }
+    else if (qi == "Hazard Ratio"){
+      if (length(Xl) > 1 & length(Xj) != length(Xl)){
+        stop("Xj and Xl must be the same length.")
+      }
+      else {
+      	if (length(Xj) > 1 & length(Xl) == 1){
+      		Xl <- rep(0, length(Xj))
+      	}
+      	Xs <- data.frame(Xj, Xl)
+      	Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
+  	    Simb <- merge(Simb, Xs)
+    	  Simb$HR <- exp((Simb$Xj - Simb$Xl) * Simb$Coef)	
+      } 
+    }
+    else if (qi == "Hazard Rate"){
+        Xl <- NULL
+        message("Xl is ignored. All variables values other than b fitted at 0.") 
+      	Xs <- data.frame(Xj)
+      	Xs$HRValue <- paste(Xs[, 1])
+  	    Simb <- merge(Simb, Xs)
+        Simb$HR <- exp(Simb$Xj * Simb$Coef)	 
+  	  	bfit <- basehaz(obj)
+  	  	bfit$FakeID <- 1
+  	  	Simb$FakeID <- 1
+        bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+        SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+        SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
+        Simb <- data.frame(SimbCombDT)
+  	  	Simb$HRate <- Simb$hazard * Simb$HR 
+  	  	Simb <- Simb[, -1]
+    }
   }
-  else if (qi == "Hazard Rate"){
+
+  # If new values for calculating the hazard rate are set
+  else if (!is.null(newdata) | isTRUE(means)){
+    if (!is.null(newdata) & isTRUE(means)) {
+      stop("Either means = TRUE or newdata != NULL, not both.")
+    }
+
+    else if (isTRUE(means)){
       Xl <- NULL
-      message("Xl is ignored. All variables values other than b fitted at 0.") 
-    	Xs <- data.frame(Xj)
-    	Xs$HRValue <- paste(Xs[, 1])
-	    Simb <- merge(Simb, Xs)
-      Simb$HR <- exp(Simb$Xj * Simb$Coef)	 
-	  	bfit <- basehaz(obj)
-	  	bfit$FakeID <- 1
-	  	Simb$FakeID <- 1
-      bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
-      SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
-      SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
-      Simb <- data.frame(SimbCombDT)
-	  	Simb$HRate <- Simb$hazard * Simb$HR 
-	  	Simb <- Simb[, -1]
-  }
+      message("Xl ignored")
+
+      # Set all values of b at means for data used in the analysis
+      NotB <- setdiff(names(obj$means), b)
+      MeanValues <- data.frame(obj$means)
+      Fitted <- function(Z){
+        for (i in Z){
+          BarValue <- MeanValues[i, ]
+          DrawnCoef <- DrawnDF[, i]
+          FittedCoef <- outer(DrawnCoef, BarValue)
+          FCMolten <- data.frame(melt(FittedCoef))
+          # Check from here.
+          FCMolten <- FCMolten[, 3]
+          names(FCMolten) <- i
+          Temp <- rbind(Temp, FCMolten)
+          return(Temp) 
+        }
+      }
+
+    Fitted(NotB) 
+    }
+    else if (!is.null(newdata)){
+      Xj <- Xl <- NULL
+      message(Xj and Xl ignored.)
+
+    }
+  }  
 
   # Drop simulations outside of 'confidence bounds'
   if (qi != "Hazard Rate"){
