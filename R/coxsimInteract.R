@@ -91,12 +91,10 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	  }
 	}
 	else if (qi == "Hazard Rate"){
-	  if (is.null(X1) | is.null(X2)){
-	    stop("For Hazard Rates both X1 and X2 should be specified.")
-	  } else{
-		Xs <- merge(X1, X2)
-		names(Xs) <- c("X1", "X2")
-		Xs$HRValue <- paste0(Xs[, 1], ", ", Xs[, 2])
+		Xl <- NULL
+		message("Xl is ignored") 
+		Xs <- data.frame(Xj)
+		Xs$HRValue <- paste(Xs[, 1])
 	    Simb <- merge(Simb, Xs)
 		Simb$HR <- exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]))	 
 	  	bfit <- basehaz(obj)
@@ -107,7 +105,6 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
 	  	Simb$HRate <- Simb$hazard * Simb$HR 
 	  	Simb <- Simb[, -1]
-	  }
 	}
 
 	# Drop simulations outside of 'confidence bounds'

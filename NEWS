@@ -1,3 +1,7 @@
+Version 0.04.6
+
+Standardise how hazard rates are calculated.
+
 Version 0.04.5
 
 Made updates so that the package is compatible with data.table package version 1.8.8.
