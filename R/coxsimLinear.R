@@ -119,25 +119,55 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
       # Set all values of b at means for data used in the analysis
       NotB <- setdiff(names(obj$means), b)
       MeanValues <- data.frame(obj$means)
-      Fitted <- function(Z){
+      FittedMeans <- function(Z){
+        ID <- 1:nsim
+        Temp <- data.frame(ID)
         for (i in Z){
           BarValue <- MeanValues[i, ]
           DrawnCoef <- DrawnDF[, i]
           FittedCoef <- outer(DrawnCoef, BarValue)
           FCMolten <- data.frame(melt(FittedCoef))
-          # Check from here.
-          FCMolten <- FCMolten[, 3]
-          names(FCMolten) <- i
-          Temp <- rbind(Temp, FCMolten)
-          return(Temp) 
+          Temp <- cbind(Temp, FCMolten[,3])
         }
+        Names <- c("ID", Z)
+        names(Temp) <- Names
+        Temp <- Temp[, -1]
+        return(Temp)
       }
+      FittedComb <-FittedMeans(NotB) 
+      ExpandFC <- do.call(rbind, rep(list(FittedComb), length(Xj)))
 
-    Fitted(NotB) 
+      # Set fitted values for Xj
+      bpos <- match(b, dfn)
+      Simb <- data.frame(DrawnDF[, bpos])
+
+      Xs <- data.frame(Xj)
+      Xs$HRValue <- paste(Xs[, 1])
+
+      Simb <- merge(Simb, Xs)
+      Simb$CombB <- Simb[, 1] * Simb[, 2]
+      Simb <- Simb[, 2:4]
+
+      Simb <- cbind(Simb, ExpandFC)
+      Simb$Sum <- rowSums(Simb[, c(-1, -2)])
+      Simb$HR <- exp(Simb$Sum)
+      Simb <- Simb[, c("HRValue", "HR", "Xj")]
+
+      bfit <- basehaz(obj)
+      bfit$FakeID <- 1
+      Simb$FakeID <- 1
+      bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+      SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+      SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
+      Simb <- data.frame(SimbCombDT)
+      Simb$HRate <- Simb$hazard * Simb$HR 
+
+      # Remove unnecessary
+      Simb <- Simb[, c("HRValue", "HR", "Xj", "hazard", "time", "HRate")]
     }
     else if (!is.null(newdata)){
       Xj <- Xl <- NULL
-      message(Xj and Xl ignored.)
+      message("Xj and Xl ignored.")
 
     }
   }  

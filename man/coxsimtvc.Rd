@@ -3,8 +3,8 @@
 \title{Simulate time-varying hazards from coxph fitted model objects}
 \usage{
   coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = 1,
-    Xl = 0, tfun = "linear", pow = NULL, newdata = NULL,
-    nsim = 1000, from, to, by, ci = "95")
+    Xl = 0, tfun = "linear", pow = NULL, means = FALSE,
+    newdata = NULL, nsim = 1000, from, to, by, ci = "95")
 }
 \arguments{
   \item{obj}{a coxph fitted model object with a time

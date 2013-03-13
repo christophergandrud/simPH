@@ -3,7 +3,8 @@
 \title{Simulate hazards for linear time-constant covariates from Cox Proportional Hazards models.}
 \usage{
   coxsimLinear(obj, b, qi = "Relative Hazard", Xj = 1,
-    Xl = 0, nsim = 1000, ci = "95")
+    Xl = 0, means = FALSE, newdata = NULL, nsim = 1000,
+    ci = "95")
 }
 \arguments{
   \item{obj}{a coxph fitted model object.}
