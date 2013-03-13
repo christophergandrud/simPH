@@ -46,7 +46,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
 	dfn <- names(DrawnDF)
 
   # If all values aren't set for calculating the hazard rate
-  if (is.null(newdata) & is.null(means)){
+  if (is.null(newdata) & !isTRUE(means)){
 
   	# Subset simulations to only include b
   	bpos <- match(b, dfn)
@@ -176,7 +176,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
   if (qi != "Hazard Rate"){
   	SubVar <- "Xj"
   } else if (qi == "Hazard Rate"){
-  	SubVar <- "time"
+  	SubVar <- c("time", "Xj")
   }
   if (ci == "all"){
     SimbPerc <- Simb 

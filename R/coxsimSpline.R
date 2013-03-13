@@ -189,7 +189,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
   if (qi != "Hazard Rate"){
   	SubVar <- "Xj"
   } else if (qi == "Hazard Rate"){
-  	SubVar <- "time"
+  	SubVar <- c("time", "Xj")
   }
   if (ci == "all"){
     SimbPerc <- Simb 
