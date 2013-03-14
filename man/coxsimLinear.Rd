@@ -4,7 +4,7 @@
 \usage{
   coxsimLinear(obj, b, qi = "Relative Hazard", Xj = 1,
     Xl = 0, means = FALSE, newdata = NULL, nsim = 1000,
-    ci = "95")
+    ci = 95, spin = FALSE)
 }
 \arguments{
   \item{obj}{a coxph fitted model object.}
@@ -30,9 +30,14 @@
   X. Default is \code{nsim = 1000}.}
 
   \item{ci}{the proportion of middle simulations to keep.
-  The default is \code{ci = "95"}, i.e. keep the middle 95
-  percent. Other possibilities include: \code{"90"},
-  \code{"99"}, \code{"all"}.}
+  The default is \code{ci = 0.95}, i.e. keep the middle 95
+  percent. Other possibilities include: \code{0.90},
+  \code{0.99}, \code{1}. If \code{spin = TRUE} then any
+  value from 0 to 1 may be used}
+
+  \item{spin}{logical, whether or not to keep only the
+  shortest proability interval rather than the middle
+  simulations.}
 }
 \value{
   a simlinear object
@@ -71,6 +76,10 @@
   “Making the Most of Statistical Analyses: Improving
   Interpretation and Presentation.” American Journal of
   Political Science 44(2): 347–61.
+
+  Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
+  “Simulation-Efficient Shortest Probablility Intervals.”
+  Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 }
 \seealso{
   \code{\link{gglinear}}, \code{\link{survival}},

@@ -23,7 +23,8 @@ Imports:
     data.table,
     ggplot2,
     survival,
-    gridExtra
+    gridExtra,
+    SPIn
 License: GPL (>= 2)
 Collate:
     'tvc.R'

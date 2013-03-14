@@ -7,7 +7,8 @@
 #' @param Xj numeric vector of values of X to simulate for.
 #' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} or \code{code = "Hazard"} only \code{Xj} is relevant.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
-#' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
+#' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. Other possibilities include: \code{0.90}, \code{0.99}, \code{1}. If \code{spin = TRUE} then any value from 0 to 1 may be used
+#' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
 #'
 #' @return a simlinear object
 #'
@@ -31,10 +32,13 @@
 #' @references Licht, Amanda A. 2011. “Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.” Political Analysis 19: 227–43.
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
-#' @import MSBVAR plyr reshape2 survival data.table
+#' 
+#' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. “Simulation-Efficient Shortest Probablility Intervals.” Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
+#'
+#' @import MSBVAR plyr reshape2 survival data.table SPIn
 #' @export
 
-coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means = FALSE, newdata = NULL, nsim = 1000, ci = "95")
+coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means = FALSE, newdata = NULL, nsim = 1000, ci = 95, spin = FALSE)
 {	
 	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
@@ -178,18 +182,40 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
   } else if (qi == "Hazard Rate"){
   	SubVar <- c("time", "Xj")
   }
-  if (ci == "all"){
-    SimbPerc <- Simb 
-  } else if (ci == "90"){
-    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.05)))
-    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.95))
-  } else if (ci == "95"){
-    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.025)))
-    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.975))
-  } else if (ci == "99"){
-    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.005)))
-    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.995))
+
+  if (!isTRUE(spin)){
+    if (ci == 1){
+      SimbPerc <- Simb 
+    } else if (ci == 0.90){
+      SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.05)))
+      SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.95))
+    } else if (ci == 0.95){
+      SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.025)))
+      SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.975))
+    } else if (ci == 0.99){
+      SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.005)))
+      SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.995))
+    }
   }
+
+  # Drop simulations outside of shortest probability interval
+  else if (isTRUE(spin)){
+    SpinMakeL <- function(y) {
+      TempS <- SPIn(x = y, lb = 0, conf = ci)
+      LowSpin <- TempS$spin[[1]]
+      return(LowSpin) 
+    }
+
+    SpinMakeH <- function(y) {
+      TempS <- SPIn(x = y, lb = 0, conf = ci)
+      HighSpin <- TempS$spin[[2]]
+      return(HighSpin) 
+    }
+
+    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < SpinMakeL(HR))
+    SimbPerc <- ddply(Simb, SubVar, transform, Upper = HR > SpinMakeH(HR))
+  }
+
   if (ci != "all"){
     SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
   }  
