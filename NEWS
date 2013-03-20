@@ -1,3 +1,8 @@
+Version 0.04.6.1
+
+Minor change: marginal effect line correctly set for y = 0.
+
+
 Version 0.04.6
 
 Standardise how hazard rates are calculated.

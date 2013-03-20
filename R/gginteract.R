@@ -124,7 +124,7 @@ gginteract <- function(obj, qi = "Marginal Effect", from = NULL, to = NULL, xlab
 		ggplot(objdf, aes(X2, HR)) +
 		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-		    geom_hline(aes(yintercept = 1), linetype = "dotted") +
+		    geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		    scale_y_continuous() +
 			scale_x_continuous() +    
 		    xlab(xlab) + ylab(ylab) +
