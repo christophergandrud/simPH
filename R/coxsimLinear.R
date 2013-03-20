@@ -38,7 +38,7 @@
 #' @import MSBVAR plyr reshape2 survival data.table SPIn
 #' @export
 
-coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means = FALSE, newdata = NULL, nsim = 1000, ci = 95, spin = FALSE)
+coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means = FALSE, newdata = NULL, nsim = 1000, ci = 0.95, spin = FALSE)
 {	
 	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)

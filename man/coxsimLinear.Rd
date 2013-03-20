@@ -4,7 +4,7 @@
 \usage{
   coxsimLinear(obj, b, qi = "Relative Hazard", Xj = 1,
     Xl = 0, means = FALSE, newdata = NULL, nsim = 1000,
-    ci = 95, spin = FALSE)
+    ci = 0.95, spin = FALSE)
 }
 \arguments{
   \item{obj}{a coxph fitted model object.}
