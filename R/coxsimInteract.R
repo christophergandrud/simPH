@@ -119,13 +119,13 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	SimbPerc <- Simb 
 	} else if (ci == "90"){
 	SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.05)))
-	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.95))
+	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.95)))
 	} else if (ci == "95"){
 	SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.025)))
-	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.975))
+	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.975)))
 	} else if (ci == "99"){
 	SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.005)))
-	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.995))
+	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.995)))
 	}
 	if (ci != "all"){
 	SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)

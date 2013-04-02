@@ -1,3 +1,7 @@
+Version 0.04.61 
+
+Minor bug fix for `ci` argument.
+
 Version 0.04.6.1
 
 Minor change: now line drawn.

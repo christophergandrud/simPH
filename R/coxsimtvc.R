@@ -189,14 +189,14 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   if (ci == "all"){
     TVSimPerc <- TVSim 
   } else if (ci == "90"){
-    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, 0.05))
-    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, 0.95))
+    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, c(0.05)))
+    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, c(0.95)))
   } else if (ci == "95"){
-    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, 0.025))
-    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, 0.975))
+    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, c(0.025)))
+    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, c(0.975)))
   } else if (ci == "99"){
-    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, 0.005))
-    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, 0.995))
+    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, c(0.005)))
+    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, c(0.995)))
   }
   if (ci != "all"){
     TVSimPerc <- subset(TVSimPerc, Lower == FALSE & Upper == FALSE)
