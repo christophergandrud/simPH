@@ -82,8 +82,11 @@
 #'                   by = 15, ci = "99")
 #'
 #' @seealso \code{\link{ggtvc}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
-#' @import MSBVAR plyr reshape2 survival data.table
+#'
+#' @import plyr reshape2 survival data.table
+#' @importFrom MSBVAR rmultnorm
 #' @export
+#'
 #' @references Golub, Jonathan, and Bernard Steunenberg. 2007. “How Time Affects EU Decision-Making.” European Union Politics 8(4): 555–66.
 #'
 #' Licht, Amanda A. 2011. “Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.” Political Analysis 19: 227–43.

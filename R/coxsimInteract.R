@@ -35,7 +35,8 @@
 #'
 #' @seealso \code{\link{gginteract}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}},
 #' @return a siminteract class object
-#' @import MSBVAR plyr reshape2 survival data.table
+#' @import plyr reshape2 survival data.table
+#' @importFrom MSBVAR rmultnorm
 #' @export
 
 coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, nsim = 1000, ci = "95")
