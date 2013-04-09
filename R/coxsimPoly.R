@@ -29,7 +29,8 @@
 #'
 #' Carpenter, Daniel P. 2002. “Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.” American Journal of Political Science 46(3): 490–505.
 #' @seealso \code{\link{ggpoly}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
-#' @import MSBVAR plyr reshape2 survival
+#' @import plyr reshape2 survival
+#' @importFrom MSBVAR rmultnorm
 #' @export 
 
 coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95") 

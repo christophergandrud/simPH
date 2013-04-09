@@ -47,7 +47,8 @@
 #' 
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
 #' 
-#' @import MSBVAR stringr reshape2 data.table
+#' @import stringr reshape2 data.table
+#' @importFrom MSBVAR rmultnorm
 #' @export
 
 coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = "95")
