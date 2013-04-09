@@ -4,6 +4,10 @@
 \usage{
   simGG(obj, ...)
 }
+\arguments{
+  \item{obj}{an object created by one of simPH's simulation
+  commands.}
+}
 \description{
   A method for plotting simulation objects created by
   simPH.

@@ -51,7 +51,7 @@ The syntax and capabilities of `simGG` varies depending on the sim object class 
 
 ## Installation
 
-Use the [devtools](https://github.com/hadley/devtools) command `install_github` to install **simPH** in R. Here is the exact code for installing version:
+Use the [devtools](https://github.com/hadley/devtools) command `install_github` to install **simPH** in R. Here is the exact code for installing the most recent development version:
 
 ```r
 devtools::install_github("simPH", "christophergandrud")
