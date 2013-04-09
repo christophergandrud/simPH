@@ -39,9 +39,9 @@ The syntax and capabilities of `simGG` varies depending on the sim object class 
 
 - `simGG.simspline`: uses **ggplot2** and `scatter3d` (from the [car](http://cran.r-project.org/web/packages/car/index.html) package) to plot quantities of interest from `simspline` objects, including relative hazards, first differences, hazard ratios, and hazard rates.
 
-- `simPH.simpoly`: uses **ggplot2** to graph the simulated polynomial relative hazards.
+- `simGG.simpoly`: uses **ggplot2** to graph the simulated polynomial relative hazards.
 
-- `simPH.siminteract`: uses **ggplot2** to graph linear multiplicative interactions
+- `simGG.siminteract`: uses **ggplot2** to graph linear multiplicative interactions
 
 #### Misc.
 
