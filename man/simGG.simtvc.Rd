@@ -1,12 +1,12 @@
-\name{ggtvc}
-\alias{ggtvc}
+\name{simGG.simtvc}
+\alias{simGG.simtvc}
 \title{Plot simulated time-varying hazard ratios or stratified time-varying hazard rates from a simtvc class object using ggplot2}
 \usage{
-  ggtvc(obj, qi = "Relative Hazard", from = NULL,
-    to = NULL, xlab = NULL, ylab = NULL, title = NULL,
-    smoother = "auto", spalette = "Set1", leg.name = "",
-    lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
-    psize = 1, palpha = 0.1, ...)
+  \method{simGG}{simtvc} (obj, qi = "Relative Hazard",
+    from = NULL, to = NULL, xlab = NULL, ylab = NULL,
+    title = NULL, smoother = "auto", spalette = "Set1",
+    leg.name = "", lcolour = "#2B8CBE", lsize = 2,
+    pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
 }
 \arguments{
   \item{obj}{a simtvc class object}
@@ -66,8 +66,8 @@
   a ggplot2 object
 }
 \description{
-  \code{ggtvc} uses ggplot2 to plot the simulated hazards
-  from a simtvc class object using ggplot2.
+  \code{simGG.simtvc} uses ggplot2 to plot the simulated
+  hazards from a \code{simtvc} class object using ggplot2.
 }
 \details{
   Plots either a time varying hazard ratio or the hazard
@@ -129,9 +129,9 @@ Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
                   by = 15, ci = "99")
 
 # Create plots
-ggtvc(Sim1, qi = "Relative Hazard")
-ggtvc(Sim2, qi = "First Difference")
-ggtvc(Sim3, qi = "Hazard Ratio", leg.name = "Comparision", from = 1200)
+simGG(Sim1, qi = "Relative Hazard")
+simGG(Sim2, qi = "First Difference")
+simGG(Sim3, qi = "Hazard Ratio", leg.name = "Comparision", from = 1200)
 }
 \references{
   Licht, Amanda A. 2011. “Change Comes with Time:

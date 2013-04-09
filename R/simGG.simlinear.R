@@ -1,6 +1,6 @@
 #' Plot simulated linear time-constant hazards.
 #'
-#' \code{gglinear} uses ggplot2 to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
+#' \code{simGG.simlinear} uses ggplot2 to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
 #'
 #' @param obj a simlinear object
 #' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, or \code{'Hazard Rate'}. Default is \code{qi = 'Relative Hazard'}. 
@@ -31,24 +31,26 @@
 #' 
 #' # Simulate and plot Hazard Ratios for stafcder variable
 #' Sim1 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Ratio", Xj = seq(1237, 1600, by = 2))
-#' gglinear(Sim1, qi = "Hazard Ratio")
+#' simGG(Sim1, qi = "Hazard Ratio")
 #' 
 #' # Simulate and plot Hazard Rate for stafcder variable
 #' Sim2 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Rate", Xj = c(1237, 1600))
-#' gglinear(Sim2, qi = "Hazard Rate")
+#' simGG(Sim2, qi = "Hazard Rate")
 #'
 #' @description Uses ggplot2 to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
 #'
 #' @import ggplot2
-#' @export
+#' @method simGG simlinear
+#' @S3method simGG simlinear
+#'
 #' @seealso \code{\link{coxsimLinear}}, \code{\link{ggtvc}}, and \code{\link{ggplot2}}
 #' @references Licht, Amanda A. 2011. “Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.” Political Analysis 19: 227–43.
 #' Keele, Luke. 2010. “Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.” Political Analysis 18(2): 189–205.
 #'
 #' Carpenter, Daniel P. 2002. “Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.” American Journal of Political Science 46(3): 490–505.
 
-gglinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
+simGG.simlinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
 {
 	if (!inherits(obj, "simlinear")){
     	stop("must be a simlinear object")

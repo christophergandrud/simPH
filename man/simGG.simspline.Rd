@@ -1,16 +1,17 @@
-\name{ggspline}
-\alias{ggspline}
+\name{simGG.simspline}
+\alias{simGG.simspline}
 \title{Plot simulated penalised spline hazards.}
 \usage{
-  ggspline(obj, qi = "Relative Hazard", FacetTime = NULL,
-    from = NULL, to = NULL, xlab = NULL, ylab = NULL,
-    zlab = NULL, title = NULL, smoother = "auto",
-    spalette = "Set1", leg.name = "", lcolour = "#2B8CBE",
-    lsize = 2, pcolour = "#A6CEE3", psize = 1,
-    palpha = 0.1, surface = TRUE, fit = "linear", ...)
+  \method{simGG}{simspline} (obj, qi = "Relative Hazard",
+    FacetTime = NULL, from = NULL, to = NULL, xlab = NULL,
+    ylab = NULL, zlab = NULL, title = NULL,
+    smoother = "auto", spalette = "Set1", leg.name = "",
+    lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
+    psize = 1, palpha = 0.1, surface = TRUE,
+    fit = "linear", ...)
 }
 \arguments{
-  \item{obj}{a simlinear object}
+  \item{obj}{a simspline object}
 
   \item{qi}{character string indicating what quantity of
   interest you would like to calculate. Can be
@@ -106,7 +107,7 @@
   created for hazard rates.
 }
 \details{
-  \code{ggspline} uses ggplot2 and scatter3d to plot
+  \code{simGG.simspline} uses ggplot2 and scatter3d to plot
   quantities of interest from \code{simspline} objects,
   including relative hazards, first differences, hazard
   ratios, and hazard rates.
@@ -135,10 +136,10 @@ Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
                     Xj = seq(1, 30, by = 2), ci = "90", nsim = 10)
 
 # Plot relative hazard
-ggspline(Sim1, xlab = "\\n orderent", palpha = 1)
+simGG(Sim1, xlab = "\\n orderent", palpha = 1)
 
 # 3D plot hazard rate
-ggspline(Sim2, qi = "Hazard Rate", zlab = "orderent", fit = "quadratic")
+simGG(Sim2, qi = "Hazard Rate", zlab = "orderent", fit = "quadratic")
 
 # Create a time grid plot
 # Find all points in time where baseline hazard was found
@@ -148,7 +149,7 @@ unique(Sim2$time)
 Sim2$time <- round(Sim2$time, digits = 2)
 
 # Create plot
-ggspline(Sim2, qi = "Hazard Rate", FacetTime = c(6.21, 25.68, 100.64, 202.36))
+simGG(Sim2, qi = "Hazard Rate", FacetTime = c(6.21, 25.68, 100.64, 202.36))
 
 # Simulated Fitted Values of stafcder
 Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
@@ -158,7 +159,7 @@ Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
                     Xl = seq(1099, 1699, by = 10), ci = "90")
 
 # Plot simulated Hazard Ratios
-ggspline(Sim3, qi = "Hazard Ratio",
+simGG(Sim3, qi = "Hazard Ratio",
         xlab = "\\nFDA Drug Review Staff", palpha = 0.2)
 }
 \seealso{

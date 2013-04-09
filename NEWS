@@ -1,8 +1,10 @@
-Version 0.04.62
+Version 0.05
 
-Minor bug fixes
+**Major update** to the way simPH plots simulated objects. Instead of using seperate commands for plotting objects of different sim classes it now uses the method `simGG`. 
 
-Version 0.04.61 
+In practical terms this means that you can now just use the command `simGG` rather than the old gg. . . commands.
+
+Version 0.04.62 
 
 Minor bug fix for `ci` argument.
 

@@ -1,6 +1,6 @@
 #' Plot simulated polynomial hazards.
 #'
-#' \code{ggpoly} uses ggplot2 to plot simulated relative hazards from a simpoly class object.
+#' \code{simGG.simpoly} uses ggplot2 to plot simulated relative hazards from a \code{simpoly} class object.
 #' @param obj a simpoly object
 #' @param xlab a label for the plot's x-axis.
 #' @param ylab a label of the plot's y-axis. The default is \code{ylab = "Relative Hazard \n"}.
@@ -31,16 +31,17 @@
 #' # Sim1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
 #' 
 #' # Plot simulations
-#' # ggpoly(Sim1)
+#' # simGG(Sim1)
 #'
 #' @seealso \code{\link{coxsimpoly}} and \code{\link{ggplot2}}
 #'
 #' @return a ggplot2 object.
 #'
 #' @import ggplot2
-#' @export
+#' @method simGG simpoly
+#' @S3method simGG simpoly
 
-ggpoly <- function(obj, xlab = NULL, ylab = "Relative Hazard\n", title = NULL, smoother = "auto", lcolour = "#2B8CBE", pcolour = "#A6CEE3",lsize = 2, psize = 1, palpha = 0.1, ...){
+simGG.simpoly <- function(obj, xlab = NULL, ylab = "Relative Hazard\n", title = NULL, smoother = "auto", lcolour = "#2B8CBE", pcolour = "#A6CEE3",lsize = 2, psize = 1, palpha = 0.1, ...){
   if (!inherits(obj, "simpoly")){
   	stop("must be a simpoly object")
   }
