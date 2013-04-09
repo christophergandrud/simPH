@@ -84,7 +84,7 @@
 #' 
 #' 
 #' 
-#' @import ggplot2 car
+#' @import ggplot2 car rgl
 #' @method simGG simspline
 #' @S3method simGG simspline
 

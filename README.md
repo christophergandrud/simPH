@@ -31,6 +31,8 @@ The package includes the following functions:
 
 **Important Change:** From **simPH** version 0.05 you can now use the method `simGG` for plotting all simulations rather than the old sim model object specific commands. In practical terms this means that you can now just use the command `simGG` rather than the old gg. . . commands. The old commands are deprecated and will no longer work.
 
+The syntax and capabilities of `simGG` varies depending on the sim object class you are using:
+
 - `simGG.simlinear`: plots simulated linear time-constant hazards using [ggplot2](http://ggplot2.org/).
 
 - `simGG.simtvc`: uses **ggplot2** to graph the simulated time-varying relative hazards, first differences, hazard ratios or stratified hazard rates.

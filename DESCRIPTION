@@ -24,6 +24,8 @@ Imports:
     ggplot2,
     survival,
     gridExtra
+Suggests:
+    rgl
 License: GPL (>= 2)
 Collate:
     'CarpenterFdaData.R'
@@ -39,5 +41,5 @@ Collate:
     'simGG.simpoly.R'
     'simGG.siminteract.R'
     'simGG.simspline.R'
-    'tvc.R'
     'simGG.simlinear.R'
+    'tvc.R'
