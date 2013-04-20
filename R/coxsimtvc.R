@@ -114,7 +114,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   # Create time function
   tfunOpts <- c("linear", "log", "power")
   TestforTOpts <- tfun %in% tfunOpts
-  if (TestforTOpts == FALSE){
+  if (!isTRUE(TestforTOpts)){
     stop("Must specify tfun as 'linear', 'log', or 'power'")
   }
     
