@@ -7,7 +7,7 @@
   Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 }
 \usage{
-  SpinBounds(x, conf = ci, LowUp = NULL, bw = 0, lb = 0,
+  SpinBounds(x, conf = 0.95, LowUp = NULL, bw = 0, lb = 0,
     ub = Inf, l = NA, u = NA)
 }
 \arguments{

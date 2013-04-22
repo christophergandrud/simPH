@@ -36,7 +36,7 @@
 #' 
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. “Simulation-Efficient Shortest Probablility Intervals.” Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 #'
-#' @import plyr reshape2 survival data.table SPIn
+#' @import plyr reshape2 survival data.table quadprog
 #' @importFrom MSBVAR rmultnorm
 #' @export
 
@@ -181,26 +181,22 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
   } else if (qi == "Hazard Rate"){
   	SubVar <- c("time", "Xj")
   }
-
+    Bottom <- (1 - ci)/2
+    Top <- 1 - Bottom
   if (!isTRUE(spin)){
-    if (ci == 1){
-      SimbPerc <- Simb 
-    } else if (ci == 0.90){
-      SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.05)))
-      SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.95))
-    } else if (ci == 0.95){
-      SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.025)))
-      SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.975))
-    } else if (ci == 0.99){
-      SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.005)))
-      SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.995))
-    }
+
+    Lowerdf <- do.call("rbind", as.list(by(Simb, df[c("time", "Xj")], transform, Lower = HR < quantile(HR, call(as.symbol(Bottom)) ))))
+
+    #SimbPerc1 <- ddply(Simb, SubVar, .fun = function(HR, BT){Lower <- HR < quantile(HR, BT)}, Bottom)
+    SimbPerc <- ddply(SimbPerc, SubVar, mutate, Upper = HR > quantile(HR, .Top))
   }
+
+
 
   # Drop simulations outside of shortest probability interval
   else if (isTRUE(spin)){
-    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < SpinBounds(HR, conf = ci, LowUp = "Low"))
-    SimbPerc <- ddply(Simb, SubVar, transform, Upper = HR > SpinBounds(HR, conf = ci, LowUp = "Up"))
+    SimbPerc <- ddply(Simb, SubVar, mutate, Lower = HR < SpinBounds(HR, LowUp = "Low"))
+    SimbPerc <- ddply(Simb, SubVar, mutate, Upper = HR > SpinBounds(HR, LowUp = "Up"))
   }
 
   if (ci != "all"){

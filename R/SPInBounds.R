@@ -11,7 +11,7 @@
 #' @import quadprog
 #' @export
 
-SpinBounds <- function (x, conf = ci, LowUp = NULL, bw = 0, lb = 0, ub = Inf, l = NA, 
+SpinBounds <- function (x, conf = 0.95, LowUp = NULL, bw = 0, lb = 0, ub = Inf, l = NA, 
     u = NA) 
 {
     if (lb != -Inf) 
@@ -41,7 +41,7 @@ SpinBounds <- function (x, conf = ci, LowUp = NULL, bw = 0, lb = 0, ub = Inf, l 
         x <- sort(x)
         n.sims <- length(x)
     }
-    library(quadprog)
+    #library(quadprog)
     if (bw <= 0) 
         bw <- round((sqrt(n.sims) - 1)/2)
     k <- which(x == l)[1]
