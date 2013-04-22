@@ -1,11 +1,6 @@
 \name{SpinBounds}
 \alias{SpinBounds}
 \title{Internal function for finding the lower and upper bound of the shortest probability interval.}
-\source{
-  Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
-  “Simulation-Efficient Shortest Probablility Intervals.”
-  Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
-}
 \usage{
   SpinBounds(x, conf = 0.95, LowUp = NULL, bw = 0, lb = 0,
     ub = Inf, l = NA, u = NA)
@@ -23,5 +18,10 @@
 \description{
   \code{SpinBounds} internal function for finding the lower
   bound from SPIn
+}
+\references{
+  Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
+  “Simulation-Efficient Shortest Probablility Intervals.”
+  Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 }
 

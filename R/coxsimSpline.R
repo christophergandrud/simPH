@@ -8,7 +8,8 @@
 #' @param Xj numeric vector of values of X to simulate for.
 #' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} or \code{code = "Hazard"} only \code{Xj} is relevant.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
-#' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
+#' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
+#' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
 #'
 #' @return a simspline object
 #'
@@ -46,12 +47,14 @@
 #' @references Luke Keele, "Replication data for: Proportionally Difficult: Testing for Nonproportional Hazards In Cox Models", 2010, http://hdl.handle.net/1902.1/17068 V1 [Version] 
 #' 
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
+#'
+#' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. “Simulation-Efficient Shortest Probablility Intervals.” Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 #' 
 #' @import stringr reshape2 data.table
 #' @importFrom MSBVAR rmultnorm
 #' @export
 
-coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = "95")
+coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE)
 { 
 	if (nsim > 10 & qi == "Hazard Rate"){
 		message(paste0("Warning: finding Hazard Rates with ", nsim, " simulations may take awhile.  Consider changing the number of simulations with nsim."))
@@ -184,29 +187,36 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 		Simb <- data.frame(SimbCombDT)
 	  	Simb$HRate <- Simb$hazard * Simb$HR 
 	  	Simb <- Simb[, -1]	
-		}
+	}
 
-# Drop simulations outside of 'confidence bounds'
-  if (qi != "Hazard Rate"){
-  	SubVar <- "Xj"
-  } else if (qi == "Hazard Rate"){
-  	SubVar <- c("time", "Xj")
-  }
-  if (ci == "all"){
-    SimbPerc <- Simb 
-  } else if (ci == "90"){
-    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.05)))
-    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.95)))
-  } else if (ci == "95"){
-    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.025)))
-    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.975)))
-  } else if (ci == "99"){
-    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.005)))
-    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.995)))
-  }
-  if (ci != "all"){
-    SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
-  }  
+	# Drop simulations outside of 'confidence bounds'
+	if (qi != "Hazard Rate"){
+		SubVar <- "Xj"
+	} else if (qi == "Hazard Rate"){
+		SubVar <- c("time", "Xj")
+	}
+
+	if (!isTRUE(spin)){
+	Bottom <- (1 - ci)/2
+	Top <- 1 - Bottom
+	SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < quantile(HR,", 
+	  Bottom, 
+	  "))"
+	)))
+	SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > quantile(HR,", 
+	  Top, 
+	  "))"
+	)))
+	}
+
+	# Drop simulations outside of the shortest probability interval
+	else if (isTRUE(spin)){
+	SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", LowUp = 1))" )))
+	SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", LowUp = 2))" )))
+	}
+
+	SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
+
 
   # Final clean up
   class(SimbPerc) <- "simspline"

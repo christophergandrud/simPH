@@ -59,9 +59,14 @@
   values}
 
   \item{ci}{the proportion of middle simulations to keep.
-  The default is \code{ci = "95"}, i.e. keep the middle 95
-  percent. Other possibilities include: \code{"90"},
-  \code{"99"}, \code{"all"}.}
+  The default is \code{ci = 0.95}, i.e. keep the middle 95
+  percent. If \code{spin = TRUE} then \code{ci} is the
+  convidence level of the shortest probability interval.
+  Any value from 0 through 1 may be used.}
+
+  \item{spin}{logical, whether or not to keep only the
+  shortest proability interval rather than the middle
+  simulations.}
 }
 \value{
   a simtvc object
@@ -138,20 +143,20 @@ M1 <- coxph(Surv(begin, end, event) ~
 # Create simtvc object for Relative Hazard
 Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
                    tfun = "log", from = 80, to = 2000,
-                   by = 15, ci = "99")
+                   by = 15, ci = 0.99)
 
 # Create simtvc object for First Difference
 Sim2 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
                   qi = "First Difference",
                   tfun = "log", from = 80, to = 2000,
-                  by = 15, ci = "99")
+                  by = 15, ci = 0.95)
 
 # Create simtvc object for Hazard Ratio
 Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
                   qi = "Hazard Ratio", Xj = c(191, 229),
                   Xl = c(0, 0),
                   tfun = "log", from = 80, to = 2000,
-                  by = 15, ci = "99")
+                  by = 15, ci = 0.5, spin = TRUE)
 }
 \references{
   Golub, Jonathan, and Bernard Steunenberg. 2007. “How Time
@@ -166,6 +171,10 @@ Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
   “Making the Most of Statistical Analyses: Improving
   Interpretation and Presentation.” American Journal of
   Political Science 44(2): 347–61.
+
+  Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
+  “Simulation-Efficient Shortest Probablility Intervals.”
+  Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 }
 \seealso{
   \code{\link{ggtvc}}, \code{\link{rmultinorm}},

@@ -14,7 +14,8 @@
 #' @param from point in time from when to begin simulating coefficient values
 #' @param to point in time to stop simulating coefficient values
 #' @param by time intervals by which to simulate coefficient values
-#' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
+#' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
+#' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
 #'
 #' @return a simtvc object
 #' @details Simulates time-varying relative hazards, first differences, and hazard ratios using parameter estimates from \code{coxph} models. Can also simulate hazard rates for multiple strata.
@@ -67,20 +68,20 @@
 #' # Create simtvc object for Relative Hazard
 #' Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
 #'                    tfun = "log", from = 80, to = 2000, 
-#'                    by = 15, ci = "99")
+#'                    by = 15, ci = 0.99)
 #' 
 #' # Create simtvc object for First Difference  
 #' Sim2 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
 #'                   qi = "First Difference", 
 #'                   tfun = "log", from = 80, to = 2000, 
-#'                   by = 15, ci = "99")
+#'                   by = 15, ci = 0.95)
 #' 
 #' # Create simtvc object for Hazard Ratio  
 #' Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
 #'                   qi = "Hazard Ratio", Xj = c(191, 229), 
 #'                   Xl = c(0, 0),
 #'                   tfun = "log", from = 80, to = 2000, 
-#'                   by = 15, ci = "99")
+#'                   by = 15, ci = 0.5, spin = TRUE)
 #'
 
 #' @seealso \code{\link{ggtvc}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
@@ -94,6 +95,9 @@
 #' Licht, Amanda A. 2011. “Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.” Political Analysis 19: 227–43.
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
+#'
+#' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. “Simulation-Efficient Shortest Probablility Intervals.” Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
+
 
 coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, means = FALSE, newdata = NULL, nsim = 1000, from, to, by, ci = "95")
 {
@@ -206,22 +210,28 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   }
 
   # Drop simulations outside of 'confidence bounds'
-  TVSim <- TVSim[order(TVSim$time),]
-  if (ci == "all"){
-    TVSimPerc <- TVSim 
-  } else if (ci == "90"){
-    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, c(0.05)))
-    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, c(0.95)))
-  } else if (ci == "95"){
-    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, c(0.025)))
-    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, c(0.975)))
-  } else if (ci == "99"){
-    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, c(0.005)))
-    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, c(0.995)))
+  SubVar <- c("time", "Xj")
+  
+  if (!isTRUE(spin)){
+    Bottom <- (1 - ci)/2
+    Top <- 1 - Bottom
+    TVSimPerc <- eval(parse(text = paste0("ddply(TVSim, SubVar, mutate, Lower = HR < quantile(HR,", 
+      Bottom, 
+      "))"
+    )))
+    TVSimPerc <- eval(parse(text = paste0("ddply(TVSimPerc, SubVar, mutate, Upper = HR > quantile(HR,", 
+      Top, 
+      "))"
+    )))
   }
-  if (ci != "all"){
-    TVSimPerc <- subset(TVSimPerc, Lower == FALSE & Upper == FALSE)
+
+  # Drop simulations outside of the shortest probability interval
+  else if (isTRUE(spin)){
+    TVSimPerc <- eval(parse(text = paste0("ddply(TVSim, SubVar, mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", LowUp = 1))" )))
+    TVSimPerc <- eval(parse(text = paste0("ddply(TVSimPerc, SubVar, mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", LowUp = 2))" )))
   }
+
+  TVSimPerc <- subset(TVSimPerc, Lower == FALSE & Upper == FALSE)
 
   # Create real time variable
   if (tfun == "linear"){

@@ -3,7 +3,7 @@
 \title{Simulated quantities of interest for penalised splines from \code{coxph} models.}
 \usage{
   coxsimSpline(obj, bspline, bdata, qi = "Relative Hazard",
-    Xj = 1, Xl = 0, nsim = 1000, ci = "95")
+    Xj = 1, Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE)
 }
 \arguments{
   \item{obj}{a \code{coxph} fitted model object with a
@@ -34,9 +34,14 @@
   X. Default is \code{nsim = 1000}.}
 
   \item{ci}{the proportion of middle simulations to keep.
-  The default is \code{ci = "95"}, i.e. keep the middle 95
-  percent. Other possibilities include: \code{"90"},
-  \code{"99"}, \code{"all"}.}
+  The default is \code{ci = 0.95}, i.e. keep the middle 95
+  percent. If \code{spin = TRUE} then \code{ci} is the
+  convidence level of the shortest probability interval.
+  Any value from 0 through 1 may be used.}
+
+  \item{spin}{logical, whether or not to keep only the
+  shortest proability interval rather than the middle
+  simulations.}
 }
 \value{
   a simspline object
@@ -89,6 +94,10 @@ Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
   “Making the Most of Statistical Analyses: Improving
   Interpretation and Presentation.” American Journal of
   Political Science 44(2): 347–61.
+
+  Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
+  “Simulation-Efficient Shortest Probablility Intervals.”
+  Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 }
 \seealso{
   \code{\link{gg}}, \code{\link{pspline}},

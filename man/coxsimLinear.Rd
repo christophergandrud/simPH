@@ -35,7 +35,9 @@
 
   \item{ci}{the proportion of middle simulations to keep.
   The default is \code{ci = 0.95}, i.e. keep the middle 95
-  percent. Any value from 0 through 1 may be used.}
+  percent. If \code{spin = TRUE} then \code{ci} is the
+  convidence level of the shortest probability interval.
+  Any value from 0 through 1 may be used.}
 
   \item{spin}{logical, whether or not to keep only the
   shortest proability interval rather than the middle

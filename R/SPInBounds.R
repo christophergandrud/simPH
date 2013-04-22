@@ -6,7 +6,7 @@
 #' @param conf numeric confidence level 
 #' @param LowUp numeric specifying if you want to find the lower or upper bound of the interval. Possible options include \code{1} (Low) or \code{2} (High).
 #'
-#' @source Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. “Simulation-Efficient Shortest Probablility Intervals.” Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
+#' @references Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. “Simulation-Efficient Shortest Probablility Intervals.” Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 #' 
 #' @import quadprog
 #' @export

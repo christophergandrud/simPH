@@ -3,7 +3,8 @@
 \title{Simulate quantities of interest for linear multiplicative interactions from \code{coxph} models.}
 \usage{
   coxsimInteract(obj, b1, b2, qi = "Marginal Effect",
-    X1 = NULL, X2 = NULL, nsim = 1000, ci = "95")
+    X1 = NULL, X2 = NULL, nsim = 1000, ci = 0.95,
+    spin = FALSE)
 }
 \arguments{
   \item{obj}{a \code{coxph} fitted model object with a
@@ -37,9 +38,14 @@
   X. Default is \code{nsim = 1000}.}
 
   \item{ci}{the proportion of middle simulations to keep.
-  The default is \code{ci = "95"}, i.e. keep the middle 95
-  percent. Other possibilities include: \code{"90"},
-  \code{"99"}, \code{"all"}.}
+  The default is \code{ci = 0.95}, i.e. keep the middle 95
+  percent. If \code{spin = TRUE} then \code{ci} is the
+  convidence level of the shortest probability interval.
+  Any value from 0 through 1 may be used.}
+
+  \item{spin}{logical, whether or not to keep only the
+  shortest proability interval rather than the middle
+  simulations.}
 }
 \value{
   a siminteract class object
@@ -75,7 +81,7 @@ library(survival)
 M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
 
 # Simulate Marginal Effect of lethal for multiple values of prevgenx
-Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2))
+Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2), spin = TRUE)
 }
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.
@@ -86,6 +92,10 @@ Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by =
   “Making the Most of Statistical Analyses: Improving
   Interpretation and Presentation.” American Journal of
   Political Science 44(2): 347–61.
+
+  Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
+  “Simulation-Efficient Shortest Probablility Intervals.”
+  Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 }
 \seealso{
   \code{\link{gginteract}}, \code{\link{survival}},

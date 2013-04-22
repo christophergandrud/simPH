@@ -6,7 +6,9 @@
 #' @param pow numeric polynomial used in \code{coxph}.  
 #' @param X numeric vector of values of X to simulate relative hazards for.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
-#' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
+#' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
+#' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
+#'
 #' @return a simpoly class object.
 #' @description Simulates relative hazards for polynomial covariate effects.
 #'
@@ -33,7 +35,7 @@
 #' @importFrom MSBVAR rmultnorm
 #' @export 
 
-coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95") 
+coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = 0.95, spin = FALSE) 
 {
 	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
@@ -78,21 +80,27 @@ coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95")
   	CombinedDF$RH <- exp(rowSums(CombinedDF[, VNames]))
 
   	# Drop simulations outside of 'confidence bounds'
-	if (ci == "all"){
-	    PolySimPerc <- CombinedDF 
-	  } else if (ci == "95"){
-	    PolySimPerc <- ddply(CombinedDF, .(X), transform, Lower = RH < quantile(RH, c(0.025)))
-	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, c(0.975)))
-	  } else if (ci == "90"){
-	    PolySimPerc <- ddply(CombinedDF, .(X), transform, Lower = RH < quantile(RH, c(0.05)))
-	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, c(0.95)))
-	  } else if (ci == "99"){
-	    PolySimPerc <- ddply(CombinedDF, .(X), transform, Lower = RH < quantile(RH, c(0.005)))
-	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, c(0.995)))
-	  }
-  	if (ci != "all"){
-    	PolySimPerc <- subset(PolySimPerc, Lower == FALSE & Upper == FALSE)
-  	}
+
+	if (!isTRUE(spin)){
+	Bottom <- (1 - ci)/2
+	Top <- 1 - Bottom
+	PolySimPerc <- eval(parse(text = paste0("ddply(CombinedDF, .(X), mutate, Lower = HR < quantile(HR,", 
+	  Bottom, 
+	  "))"
+	)))
+	PolySimPerc <- eval(parse(text = paste0("ddply(PolySimPerc, .(X), mutate, Upper = HR > quantile(HR,", 
+	  Top, 
+	  "))"
+	)))
+	}
+
+	# Drop simulations outside of the shortest probability interval
+	else if (isTRUE(spin)){
+	PolySimPerc <- eval(parse(text = paste0("ddply(CombinedDF, .(X), mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", LowUp = 1))" )))
+	PolySimPerc <- eval(parse(text = paste0("ddply(PolySimPerc, .(X), mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", LowUp = 2))" )))
+	}
+
+	PolySimPerc <- subset(PolySimPerc, Lower == FALSE & Upper == FALSE)
 
 	# Clean up
 	PolySimPerc <- PolySimPerc[, c("ID", "X", "RH")]

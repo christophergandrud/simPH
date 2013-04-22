@@ -8,7 +8,8 @@
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set. If you want to plot the results, \code{X1} should have more than one value.
 #' @param X2 numeric vector of fitted values of \code{b2} to simulate for. 
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
-#' @param ci the proportion of middle simulations to keep. The default is \code{ci = "95"}, i.e. keep the middle 95 percent. Other possibilities include: \code{"90"}, \code{"99"}, \code{"all"}.
+#' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
+#' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
 #'
 #' @details Simulates marginal effects, first differences, hazard ratios, and hazard rates for linear multiplicative interactions. 
 #' Marginal effects are calculated as in Brambor et al. (2006) with the addition that we take the exponent, so that it resembles a hazard ratio. For an interaction between variables \eqn{X} and \eqn{Z} then the marginal effect for \eqn{X} is:
@@ -27,11 +28,13 @@
 #' M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
 #' 
 #' # Simulate Marginal Effect of lethal for multiple values of prevgenx
-#' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2))
+#' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2), spin = TRUE)
 #'
 #' @references Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. “Understanding Interaction Models: Improving Empirical Analyses.” Political Analysis 14(1): 63–82.
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
+#'
+#' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. “Simulation-Efficient Shortest Probablility Intervals.” Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 #'
 #' @seealso \code{\link{gginteract}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}},
 #' @return a siminteract class object
@@ -39,7 +42,7 @@
 #' @importFrom MSBVAR rmultnorm
 #' @export
 
-coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, nsim = 1000, ci = "95")
+coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, nsim = 1000, ci = 0.95, spin = FALSE)
 {
 	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
@@ -116,21 +119,26 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	}else if (qi == "Hazard Rate"){
 		SubVar <- "time"
 	}
-	if (ci == "all"){
-	SimbPerc <- Simb 
-	} else if (ci == "90"){
-	SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.05)))
-	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.95)))
-	} else if (ci == "95"){
-	SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.025)))
-	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.975)))
-	} else if (ci == "99"){
-	SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.005)))
-	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.995)))
+	if (!isTRUE(spin)){
+	    Bottom <- (1 - ci)/2
+	    Top <- 1 - Bottom
+	    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < quantile(HR,", 
+	      Bottom, 
+	      "))"
+	    )))
+	    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > quantile(HR,", 
+	      Top, 
+	      "))"
+	    )))
 	}
-	if (ci != "all"){
+
+	# Drop simulations outside of the shortest probability interval
+	else if (isTRUE(spin)){
+	    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", LowUp = 1))" )))
+	    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", LowUp = 2))" )))
+	}
+
 	SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
-	}  
 
 	# Final clean up
 	class(SimbPerc) <- "siminteract"
