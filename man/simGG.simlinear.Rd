@@ -1,21 +1,21 @@
-\name{gginteract}
-\alias{gginteract}
-\title{Plot simulated linear multiplicative interactions.}
+\name{simGG.simlinear}
+\alias{simGG.simlinear}
+\title{Plot simulated linear time-constant hazards.}
 \usage{
-  gginteract(obj, qi = "Marginal Effect", from = NULL,
-    to = NULL, xlab = NULL, ylab = NULL, title = NULL,
-    smoother = "auto", spalette = "Set1", leg.name = "",
-    lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
-    psize = 1, palpha = 0.1, ...)
+  \method{simGG}{simlinear} (obj, qi = "Relative Hazard",
+    from = NULL, to = NULL, xlab = NULL, ylab = NULL,
+    title = NULL, smoother = "auto", spalette = "Set1",
+    leg.name = "", lcolour = "#2B8CBE", lsize = 2,
+    pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
 }
 \arguments{
   \item{obj}{a simlinear object}
 
   \item{qi}{character string indicating what quantity of
   interest you would like to calculate. Can be
-  \code{'Marginal Effect'}, \code{'First Difference'},
+  \code{'Relative Hazard'}, \code{'First Difference'},
   \code{'Hazard Ratio'}, or \code{'Hazard Rate'}. Default
-  is \code{qi = 'Marginal Effect'}.}
+  is \code{qi = 'Relative Hazard'}.}
 
   \item{xlab}{a label for the plot's x-axis.}
 
@@ -33,17 +33,17 @@
   \item{smoother}{what type of smoothing line to use to
   summarize the plotted coefficient}
 
-  \item{spalette}{colour palette. Not relevant for \code{qi
-  = "Marginal Effect"}. Default palette is \code{"Set1"}.
-  See \code{\link{scale_colour_brewer}}.}
+  \item{spalette}{colour palette for use in \code{qi =
+  "Hazard Rate"}. Default palette is \code{"Set1"}. See
+  \code{\link{scale_colour_brewer}}.}
 
   \item{leg.name}{name of the stratified hazard rates
   legend. Only relevant if \code{qi = "Hazard Rate"}.}
 
   \item{lcolour}{character string colour of the smoothing
   line. The default is hexadecimal colour \code{lcolour =
-  '#2B8CBE'}. Only relevant if \code{qi = "Marginal
-  Effect"}.}
+  '#2B8CBE'}. Only relevant if \code{qi = "Relative
+  Hazard"} or \code{qi = "First Difference"}.}
 
   \item{lsize}{size of the smoothing line. Default is 2.
   See \code{\link{ggplot2}}.}
@@ -51,7 +51,8 @@
   \item{pcolour}{character string colour of the simulated
   points for relative hazards. Default is hexadecimal
   colour \code{pcolour = '#A6CEE3'}. Only relevant if
-  \code{qi = "Marginal Effect"}.}
+  \code{qi = "Relative Hazard"} or \code{qi = "First
+  Difference"}.}
 
   \item{psize}{size of the plotted simulation points.
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
@@ -66,46 +67,41 @@
 }
 \description{
   Uses ggplot2 to plot the quantities of interest from
-  \code{siminteract} objects, including marginal effects,
+  \code{simlinear} objects, including relative hazards,
   first differences, hazard ratios, and hazard rates. If
   there are multiple strata, the quantities of interest
   will be plotted in a grid by strata. Note: A dotted line
   is created at y = 1 (0 for first difference), i.e. no
   effect, for time-varying hazard ratio graphs. No line is
   created for hazard rates.
-
-  Note: if \code{qi = "Hazard Ratio"} or \code{qi = "First
-  Difference"} then you need to have choosen more than one
-  fitted value for \code{X1} in
-  \code{\link{coxsimInteract}}.
 }
 \details{
-  \code{gginteract} uses ggplot2 to plot the quantities of
-  interest from \code{siminteract} objects, including
-  marginal effects, first differences, hazard ratios, and
-  hazard rates.
+  \code{simGG.simlinear} uses ggplot2 to plot the
+  quantities of interest from \code{simlinear} objects,
+  including relative hazards, first differences, hazard
+  ratios, and hazard rates.
 }
 \examples{
+# Load survival package
+library(survival)
 # Load Carpenter (2002) data
 data("CarpenterFdaData")
 
-# Load survival package
-library(survival)
+# Estimate survival model
+M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
 
-# Run basic model
-M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
+# Simulate and plot Hazard Ratios for stafcder variable
+Sim1 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Ratio", Xj = seq(1237, 1600, by = 2))
+simGG(Sim1, qi = "Hazard Ratio")
 
-# Simulate Marginal Effect of lethal for multiple values of prevgenx
-Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2))
-
-# Plot Marginal Effects
-gginteract(Sim1, qi = "Marginal Effect", xlab = "\\nprevgenx", ylab = "Marginal Effect of lethal\\n")
+# Simulate and plot Hazard Rate for stafcder variable
+Sim2 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Rate", Xj = c(1237, 1600))
+simGG(Sim2, qi = "Hazard Rate")
 }
 \references{
-  Brambor, Thomas, William Roberts Clark, and Matt Golder.
-  2006. “Understanding Interaction Models: Improving
-  Empirical Analyses.” Political Analysis 14(1): 63–82.
-
+  Licht, Amanda A. 2011. “Change Comes with Time:
+  Substantive Interpretation of Nonproportional Hazards in
+  Event History Analysis.” Political Analysis 19: 227–43.
   Keele, Luke. 2010. “Proportionally Difficult: Testing for
   Nonproportional Hazards in Cox Models.” Political
   Analysis 18(2): 189–205.
@@ -115,7 +111,7 @@ gginteract(Sim1, qi = "Marginal Effect", xlab = "\\nprevgenx", ylab = "Marginal 
   of Political Science 46(3): 490–505.
 }
 \seealso{
-  \code{\link{coxsimInteract}}, \code{\link{gglinear}}, and
+  \code{\link{coxsimLinear}}, \code{\link{ggtvc}}, and
   \code{\link{ggplot2}}
 }
 

@@ -3,7 +3,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 0.04.6
+### Version 0.05
 
 ### Note: **simPH** is in beta. Please report any bugs at <https://github.com/christophergandrud/simPH/issues>.
 
@@ -29,15 +29,19 @@ The package includes the following functions:
 
 #### Plotting Functions
 
-- `gglinear`: plots simulated linear time-constant hazards using [ggplot2](http://ggplot2.org/).
+**Important Change:** From **simPH** version 0.05 you can now use the method `simGG` for plotting all simulations rather than the old sim model object specific commands. In practical terms this means that you can now just use the command `simGG` rather than the old gg. . . commands. The old commands are deprecated and will no longer work.
 
-- `ggtvc`: uses **ggplot2** to graph the simulated time-varying relative hazards, first differences, hazard ratios or stratified hazard rates.
+The syntax and capabilities of `simGG` varies depending on the sim object class you are using:
 
-- `ggspline`: uses **ggplot2** and `scatter3d` (from the [car](http://cran.r-project.org/web/packages/car/index.html) package) to plot quantities of interest from `simspline` objects, including relative hazards, first differences, hazard ratios, and hazard rates.
+- `simGG.simlinear`: plots simulated linear time-constant hazards using [ggplot2](http://ggplot2.org/).
 
-- `ggpoly`: uses **ggplot2** to graph the simulated polynomial relative hazards.
+- `simGG.simtvc`: uses **ggplot2** to graph the simulated time-varying relative hazards, first differences, hazard ratios or stratified hazard rates.
 
-- `gginteract`: uses **ggplot2** to graph linear multiplicative interactions
+- `simGG.simspline`: uses **ggplot2** and `scatter3d` (from the [car](http://cran.r-project.org/web/packages/car/index.html) package) to plot quantities of interest from `simspline` objects, including relative hazards, first differences, hazard ratios, and hazard rates.
+
+- `simGG.simpoly`: uses **ggplot2** to graph the simulated polynomial relative hazards.
+
+- `simGG.siminteract`: uses **ggplot2** to graph linear multiplicative interactions
 
 #### Misc.
 
@@ -47,7 +51,7 @@ The package includes the following functions:
 
 ## Installation
 
-Use the [devtools](https://github.com/hadley/devtools) command `install_github` to install **simPH** in R. Here is the exact code for installing version:
+Use the [devtools](https://github.com/hadley/devtools) command `install_github` to install **simPH** in R. Here is the exact code for installing the most recent development version:
 
 ```r
 devtools::install_github("simPH", "christophergandrud")

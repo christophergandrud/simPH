@@ -82,9 +82,13 @@
 #'                   tfun = "log", from = 80, to = 2000, 
 #'                   by = 15, ci = "99")
 #'
-#' @seealso \code{\link{ggtvc}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, \code{\link{survfit.coxph}}, and \code{\link{coxph}}
-#' @import MSBVAR plyr reshape2 survival data.table
+
+#' @seealso \code{\link{ggtvc}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
+#'
+#' @import plyr reshape2 survival data.table
+#' @importFrom MSBVAR rmultnorm
 #' @export
+#'
 #' @references Golub, Jonathan, and Bernard Steunenberg. 2007. “How Time Affects EU Decision-Making.” European Union Politics 8(4): 555–66.
 #'
 #' Licht, Amanda A. 2011. “Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.” Political Analysis 19: 227–43.
@@ -100,7 +104,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   # Create time function
   tfunOpts <- c("linear", "log", "power")
   TestforTOpts <- tfun %in% tfunOpts
-  if (TestforTOpts == FALSE){
+  if (!isTRUE(TestforTOpts)){
     stop("Must specify tfun as 'linear', 'log', or 'power'")
   }
     
@@ -206,14 +210,14 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   if (ci == "all"){
     TVSimPerc <- TVSim 
   } else if (ci == "90"){
-    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, 0.05))
-    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, 0.95))
+    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, c(0.05)))
+    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, c(0.95)))
   } else if (ci == "95"){
-    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, 0.025))
-    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, 0.975))
+    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, c(0.025)))
+    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, c(0.975)))
   } else if (ci == "99"){
-    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, 0.005))
-    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, 0.995))
+    TVSimPerc <- ddply(TVSim, .(time, Xj), transform, Lower = HR < quantile(HR, c(0.005)))
+    TVSimPerc <- ddply(TVSimPerc, .(time, Xj), transform, Upper = HR > quantile(HR, c(0.995)))
   }
   if (ci != "all"){
     TVSimPerc <- subset(TVSimPerc, Lower == FALSE & Upper == FALSE)

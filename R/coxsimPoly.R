@@ -29,7 +29,8 @@
 #'
 #' Carpenter, Daniel P. 2002. “Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.” American Journal of Political Science 46(3): 490–505.
 #' @seealso \code{\link{ggpoly}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
-#' @import MSBVAR plyr reshape2 survival
+#' @import plyr reshape2 survival
+#' @importFrom MSBVAR rmultnorm
 #' @export 
 
 coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95") 
@@ -81,13 +82,13 @@ coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = "95")
 	    PolySimPerc <- CombinedDF 
 	  } else if (ci == "95"){
 	    PolySimPerc <- ddply(CombinedDF, .(X), transform, Lower = RH < quantile(RH, c(0.025)))
-	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, 0.975))
+	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, c(0.975)))
 	  } else if (ci == "90"){
 	    PolySimPerc <- ddply(CombinedDF, .(X), transform, Lower = RH < quantile(RH, c(0.05)))
-	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, 0.95))
+	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, c(0.95)))
 	  } else if (ci == "99"){
 	    PolySimPerc <- ddply(CombinedDF, .(X), transform, Lower = RH < quantile(RH, c(0.005)))
-	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, 0.995))
+	    PolySimPerc <- ddply(PolySimPerc, .(X), transform, Upper = RH > quantile(RH, c(0.995)))
 	  }
   	if (ci != "all"){
     	PolySimPerc <- subset(PolySimPerc, Lower == FALSE & Upper == FALSE)

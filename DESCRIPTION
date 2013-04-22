@@ -6,8 +6,8 @@ Description: The package simulates and plots quantities of interest (relative
     multiplicative interactions, polynomials, penalised splines, and
     non-proportional hazards, as well as stratified survial curves from Cox
     Proportional Hazard models.
-Version: 0.04.6
-Date: 2013-02-20
+Version: 0.06
+Date: 2013-04-22
 Author: Christopher Gandrud
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
 URL: http://christophergandrud.github.com/simPH/
@@ -16,7 +16,6 @@ Depends:
     R (>= 2.15.2)
 Imports:
     car,
-    MSBVAR,
     reshape2,
     plyr,
     stringr,
@@ -25,19 +24,21 @@ Imports:
     survival,
     gridExtra,
     SPIn
+    MSBVAR
 License: GPL (>= 2)
 Collate:
-    'tvc.R'
+    'CarpenterFdaData.R'
     'coxsimLinear.R'
     'coxsimtvc.R'
     'coxsimPoly.R'
     'coxsimInteract.R'
     'coxsimSpline.R'
     'ggfitStrata.R'
-    'gglinear.R'
-    'ggtvc.R'
-    'ggpoly.R'
-    'gginteract.R'
     'GolubEUPData.R'
-    'CarpenterFdaData.R'
-    'ggspline.R'
+    'simGG.r'
+    'simGG.simtvc.R'
+    'simGG.simpoly.R'
+    'simGG.siminteract.R'
+    'simGG.simspline.R'
+    'simGG.simlinear.R'
+    'tvc.R'

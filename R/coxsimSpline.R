@@ -47,7 +47,8 @@
 #' 
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. “Making the Most of Statistical Analyses: Improving Interpretation and Presentation.” American Journal of Political Science 44(2): 347–61.
 #' 
-#' @import MSBVAR stringr reshape2 data.table
+#' @import stringr reshape2 data.table
+#' @importFrom MSBVAR rmultnorm
 #' @export
 
 coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = "95")
@@ -195,13 +196,13 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
     SimbPerc <- Simb 
   } else if (ci == "90"){
     SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.05)))
-    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.95))
+    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.95)))
   } else if (ci == "95"){
     SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.025)))
-    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.975))
+    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.975)))
   } else if (ci == "99"){
     SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.005)))
-    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.995))
+    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.995)))
   }
   if (ci != "all"){
     SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)

@@ -35,7 +35,8 @@
 #' 
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. “Simulation-Efficient Shortest Probablility Intervals.” Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 #'
-#' @import MSBVAR plyr reshape2 survival data.table SPIn
+#' @import plyr reshape2 survival data.table SPIn
+#' @importFrom MSBVAR rmultnorm
 #' @export
 
 coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means = FALSE, newdata = NULL, nsim = 1000, ci = 0.95, spin = FALSE)
@@ -214,6 +215,18 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
 
     SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < SpinMakeL(HR))
     SimbPerc <- ddply(Simb, SubVar, transform, Upper = HR > SpinMakeH(HR))
+
+  if (ci == "all"){
+    SimbPerc <- Simb 
+  } else if (ci == "90"){
+    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.05)))
+    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.95)))
+  } else if (ci == "95"){
+    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.025)))
+    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.975)))
+  } else if (ci == "99"){
+    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.005)))
+    SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.995)))
   }
 
   if (ci != "all"){

@@ -35,7 +35,8 @@
 #'
 #' @seealso \code{\link{gginteract}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}},
 #' @return a siminteract class object
-#' @import MSBVAR plyr reshape2 survival data.table
+#' @import plyr reshape2 survival data.table
+#' @importFrom MSBVAR rmultnorm
 #' @export
 
 coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, nsim = 1000, ci = "95")
@@ -119,13 +120,13 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	SimbPerc <- Simb 
 	} else if (ci == "90"){
 	SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.05)))
-	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.95))
+	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.95)))
 	} else if (ci == "95"){
 	SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.025)))
-	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.975))
+	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.975)))
 	} else if (ci == "99"){
 	SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < quantile(HR, c(0.005)))
-	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, 0.995))
+	SimbPerc <- ddply(SimbPerc, SubVar, transform, Upper = HR > quantile(HR, c(0.995)))
 	}
 	if (ci != "all"){
 	SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)

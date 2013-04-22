@@ -26,7 +26,7 @@ tvc <- function(data, b, tvar, tfun = "linear", pow = NULL)
   
   tfunOpts <- c("linear", "log", "power")
   TestforTOpts <- tfun %in% tfunOpts
-  if (TestforTOpts == FALSE){
+  if (!isTRUE(TestforTOpts)){
     stop("Must specify tfun as 'linear', 'log', or 'power'")
   }
     
