@@ -98,7 +98,7 @@ Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by =
   Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 }
 \seealso{
-  \code{\link{gginteract}}, \code{\link{survival}},
+  \code{\link{simGG}}, \code{\link{survival}},
   \code{\link{strata}}, and \code{\link{coxph}},
 }
 

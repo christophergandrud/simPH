@@ -13,7 +13,7 @@
 #'
 #' @return a simspline object
 #'
-#' @description Simulates relative hazards, first differences, hazard ratios, and hazard rates for penalised splines from Cox Proportional Hazards models. These can be plotted with \code{\link{ggspline}}. 
+#' @description Simulates relative hazards, first differences, hazard ratios, and hazard rates for penalised splines from Cox Proportional Hazards models. These can be plotted with \code{\link{simGG}}. 
 #'
 #' Currently does not support simulating hazard rates form multiple stratified models.
 #'

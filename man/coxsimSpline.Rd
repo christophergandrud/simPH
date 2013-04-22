@@ -50,7 +50,7 @@
   Simulates relative hazards, first differences, hazard
   ratios, and hazard rates for penalised splines from Cox
   Proportional Hazards models. These can be plotted with
-  \code{\link{ggspline}}.
+  \code{\link{simGG}}.
 
   Currently does not support simulating hazard rates form
   multiple stratified models.

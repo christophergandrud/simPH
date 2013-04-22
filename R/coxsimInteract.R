@@ -36,7 +36,7 @@
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. “Simulation-Efficient Shortest Probablility Intervals.” Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 #'
-#' @seealso \code{\link{gginteract}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}},
+#' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}},
 #' @return a siminteract class object
 #' @import plyr reshape2 survival data.table
 #' @importFrom MSBVAR rmultnorm

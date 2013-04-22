@@ -33,7 +33,7 @@
 #'
 #' When simulating stratified time-varying hazard rates \eqn{H} for a given strata \eqn{k}, \code{coxsimtvc} uses:
 #' \deqn{H_{kxt} = \hat{\beta_{k0t}}\exp{\hat{\beta_{1}} + \beta_{2}f(t)}}
-#' The resulting simulation values can be plotted using \code{\link{ggtvc}}. 
+#' The resulting simulation values can be plotted using \code{\link{simGG}}. 
 #'
 #' @examples
 #' # Load Golub & Steunenberg (2007) Data
@@ -73,17 +73,17 @@
 #' Sim2 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
 #'                   qi = "First Difference", 
 #'                   tfun = "log", from = 80, to = 2000, 
-#'                   by = 15, ci = 0.95)
+#'                   by = 15, spin = TRUE)
 #' 
 #' # Create simtvc object for Hazard Ratio  
 #' Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
 #'                   qi = "Hazard Ratio", Xj = c(191, 229), 
 #'                   Xl = c(0, 0),
 #'                   tfun = "log", from = 80, to = 2000, 
-#'                   by = 15, ci = 0.5, spin = TRUE)
+#'                   by = 15, ci = 0.5)
 #'
 
-#' @seealso \code{\link{ggtvc}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
+#' @seealso \code{\link{simGG}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #'
 #' @import plyr reshape2 survival data.table
 #' @importFrom MSBVAR rmultnorm
@@ -98,7 +98,7 @@
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. “Simulation-Efficient Shortest Probablility Intervals.” Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 
 
-coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, means = FALSE, nsim = 1000, from, to, by, ci = "95")
+coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, means = FALSE, nsim = 1000, from, to, by, ci = 0.95, spin = FALSE)
 {
   # Create time function
   tfunOpts <- c("linear", "log", "power")

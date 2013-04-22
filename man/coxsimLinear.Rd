@@ -50,7 +50,7 @@
   Simulates relative hazards, first differences, hazard
   ratios, and hazard rates for linear time-constant
   covariates from Cox Proportional Hazard models. These can
-  be plotted with \code{\link{ggsplinear}}.
+  be plotted with \code{\link{simGG}}.
 }
 \details{
   \code{coxsimLinear} simulates relative hazards, first

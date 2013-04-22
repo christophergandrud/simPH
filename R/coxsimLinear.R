@@ -13,7 +13,7 @@
 #'
 #' @return a simlinear object
 #'
-#' @description Simulates relative hazards, first differences, hazard ratios, and hazard rates for linear time-constant covariates from Cox Proportional Hazard models. These can be plotted with \code{\link{ggsplinear}}.
+#' @description Simulates relative hazards, first differences, hazard ratios, and hazard rates for linear time-constant covariates from Cox Proportional Hazard models. These can be plotted with \code{\link{simGG}}.
 #'
 #'
 #' @examples

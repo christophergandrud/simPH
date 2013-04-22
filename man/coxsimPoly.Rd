@@ -67,7 +67,7 @@
   of Political Science 46(3): 490–505.
 }
 \seealso{
-  \code{\link{ggpoly}}, \code{\link{rmultinorm}},
+  \code{\link{simGG}}, \code{\link{rmultinorm}},
   \code{\link{survival}}, \code{\link{strata}}, and
   \code{\link{coxph}}
 }
