@@ -7,7 +7,6 @@
 #' @param Xj numeric vector of values of X to simulate for.
 #' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} or \code{code = "Hazard"} only \code{Xj} is relevant.
 #' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b}. 
-#' @param newdata a vector
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. Other possibilities include: \code{0.90}, \code{0.99}, \code{1}. If \code{spin = TRUE} then any value from 0 to 1 may be used.
 #' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
@@ -200,20 +199,8 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
 
   # Drop simulations outside of shortest probability interval
   else if (isTRUE(spin)){
-    SpinMakeL <- function(y) {
-      TempS <- SPIn(x = y, lb = 0, conf = ci)
-      LowSpin <- TempS$spin[[1]]
-      return(LowSpin) 
-    }
-
-    SpinMakeH <- function(y) {
-      TempS <- SPIn(x = y, lb = 0, conf = ci)
-      HighSpin <- TempS$spin[[2]]
-      return(HighSpin) 
-    }
-
-    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < SpinMakeL(HR))
-    SimbPerc <- ddply(Simb, SubVar, transform, Upper = HR > SpinMakeH(HR))
+    SimbPerc <- ddply(Simb, SubVar, transform, Lower = HR < SpinBounds(HR, conf = ci, LowUp = "Low"))
+    SimbPerc <- ddply(Simb, SubVar, transform, Upper = HR > SpinBounds(HR, conf = ci, LowUp = "Up"))
   }
 
   if (ci != "all"){

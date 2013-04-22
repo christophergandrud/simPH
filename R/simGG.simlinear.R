@@ -98,8 +98,6 @@ simGG.simlinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL,
 	        geom_point(alpha = I(palpha), size = psize) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 	        facet_grid(.~ Strata) +
-	        scale_y_continuous()+
-	        scale_x_continuous() +
 	        xlab(xlab) + ylab(ylab) +
 	        scale_colour_brewer(palette = spalette, name = leg.name) +
 	        ggtitle(title) +
@@ -109,10 +107,7 @@ simGG.simlinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL,
 	      	ggplot(objdf, aes(Time, HRate, colour = factor(HRValue))) +
 	        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-
 		        scale_colour_brewer(palette = spalette, name = leg.name) +
-		        scale_y_continuous()+
-		        scale_x_continuous() +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
@@ -123,8 +118,6 @@ simGG.simlinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL,
 		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 		    geom_hline(aes(yintercept = 1), linetype = "dotted") +
-		    scale_y_continuous() +
-			scale_x_continuous() +    
 		    xlab(xlab) + ylab(ylab) +
 		    ggtitle(title) +
 		    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
@@ -134,8 +127,6 @@ simGG.simlinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL,
         	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 	        geom_hline(aes(yintercept = 0), linetype = "dotted") +
-	        scale_y_continuous()+
-	        scale_x_continuous() +
 	        xlab(xlab) + ylab(ylab) +
 	        ggtitle(title) +
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
@@ -145,8 +136,6 @@ simGG.simlinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL,
 	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
-	        scale_y_continuous()+
-	        scale_x_continuous() +
 	        xlab(xlab) + ylab(ylab) +
 	        ggtitle(title) +
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +

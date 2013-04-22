@@ -1,0 +1,27 @@
+\name{SpinBound}
+\alias{SpinBound}
+\title{Internal function for finding the lower and upper bound of the shortest probability interval.}
+\source{
+  Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
+  “Simulation-Efficient Shortest Probablility Intervals.”
+  Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
+}
+\usage{
+  SpinBound(x, conf = ci, LowUp = NULL, bw = 0, lb = 0,
+    ub = Inf, l = NA, u = NA)
+}
+\arguments{
+  \item{x}{the name of the simulated quantities of interest
+  variable}
+
+  \item{conf}{numeric confidence level}
+
+  \item{LowUp}{character string specifying if you want to
+  find the lower or upper bound of the interval. Possible
+  options include \code{"Low"} or \code{"Up"}}
+}
+\description{
+  \code{SpinBounds} internal function for finding the lower
+  bound from SPIn
+}
+

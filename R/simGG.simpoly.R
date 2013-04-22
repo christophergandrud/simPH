@@ -52,8 +52,6 @@ simGG.simpoly <- function(obj, xlab = NULL, ylab = "Relative Hazard\n", title = 
         geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
         geom_smooth(method = smoother, colour = lcolour, size = lsize, se = FALSE) +
         geom_hline(aes(yintercept = 1), linetype = "dotted") +
-        scale_y_continuous()+
-        scale_x_continuous() +
         xlab(xlab) + ylab(ylab) +
         ggtitle(title) +
         guides(colour = guide_legend(override.aes = list(alpha = 1))) +

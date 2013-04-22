@@ -23,7 +23,7 @@ Imports:
     ggplot2,
     survival,
     gridExtra,
-    SPIn,
+    quadprog,
     MSBVAR
 License: GPL (>= 2)
 Collate:
@@ -42,3 +42,4 @@ Collate:
     'simGG.simspline.R'
     'simGG.simlinear.R'
     'tvc.R'
+    'SPInBounds.R'

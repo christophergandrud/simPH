@@ -30,8 +30,6 @@
   values to fit the hazard rate for covaraiates other than
   \code{b}.}
 
-  \item{newdata}{a vector}
-
   \item{nsim}{the number of simulations to run per value of
   X. Default is \code{nsim = 1000}.}
 

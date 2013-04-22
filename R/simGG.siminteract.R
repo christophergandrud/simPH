@@ -102,8 +102,6 @@ simGG.siminteract <- function(obj, qi = "Marginal Effect", from = NULL, to = NUL
 	        geom_point(alpha = I(palpha), size = psize) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 	        facet_grid(.~ Strata) +
-	        scale_y_continuous()+
-	        scale_x_continuous() +
 	        xlab(xlab) + ylab(ylab) +
 	        scale_colour_brewer(palette = spalette, name = leg.name) +
 	        ggtitle(title) +
@@ -125,9 +123,7 @@ simGG.siminteract <- function(obj, qi = "Marginal Effect", from = NULL, to = NUL
 	else if (qi == "Marginal Effect"){
 		ggplot(objdf, aes(X2, HR)) +
 		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-		    scale_y_continuous() +
-			scale_x_continuous() +    
+	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +   
 		    xlab(xlab) + ylab(ylab) +
 		    ggtitle(title) +
 		    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
@@ -142,8 +138,6 @@ simGG.siminteract <- function(obj, qi = "Marginal Effect", from = NULL, to = NUL
 		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
-		        scale_y_continuous()+
-		        scale_x_continuous() +
 		        scale_colour_brewer(palette = spalette, name = leg.name) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
@@ -160,8 +154,6 @@ simGG.siminteract <- function(obj, qi = "Marginal Effect", from = NULL, to = NUL
 		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
-		        scale_y_continuous()+
-		        scale_x_continuous() +
 		        scale_colour_brewer(palette = spalette, name = leg.name) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
