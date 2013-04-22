@@ -41,7 +41,11 @@ The syntax and capabilities of `simGG` varies depending on the sim object class 
 
 - `simGG.simpoly`: uses **ggplot2** to graph the simulated polynomial relative hazards.
 
-- `simGG.siminteract`: uses **ggplot2** to graph linear multiplicative interactions
+- `simGG.siminteract`: uses **ggplot2** to graph linear multiplicative interactions.
+
+##### Additional styling
+
+Because in almost all cases `simGG` returns a *ggplot2* object, you can add aditional aesthetic attributes in the normal *ggplot2* way. See the [ggplot2 documentation for more details](http://docs.ggplot2.org/current/). Here is a quick example:
 
 #### Misc.
 

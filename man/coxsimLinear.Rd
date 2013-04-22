@@ -3,8 +3,8 @@
 \title{Simulate hazards for linear time-constant covariates from Cox Proportional Hazards models.}
 \usage{
   coxsimLinear(obj, b, qi = "Relative Hazard", Xj = 1,
-    Xl = 0, means = FALSE, newdata = NULL, nsim = 1000,
-    ci = 0.95, spin = FALSE)
+    Xl = 0, means = FALSE, nsim = 1000, ci = 0.95,
+    spin = FALSE)
 }
 \arguments{
   \item{obj}{a coxph fitted model object.}
@@ -26,6 +26,12 @@
   to. Note if \code{qi = "Relative Hazard"} or \code{code =
   "Hazard"} only \code{Xj} is relevant.}
 
+  \item{means}{logical, whether or not to use the mean
+  values to fit the hazard rate for covaraiates other than
+  \code{b}.}
+
+  \item{newdata}{a vector}
+
   \item{nsim}{the number of simulations to run per value of
   X. Default is \code{nsim = 1000}.}
 
@@ -33,7 +39,7 @@
   The default is \code{ci = 0.95}, i.e. keep the middle 95
   percent. Other possibilities include: \code{0.90},
   \code{0.99}, \code{1}. If \code{spin = TRUE} then any
-  value from 0 to 1 may be used}
+  value from 0 to 1 may be used.}
 
   \item{spin}{logical, whether or not to keep only the
   shortest proability interval rather than the middle
@@ -65,7 +71,7 @@
 # M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
 
 # Simulate Hazard Ratios
-# Sim1 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Ratio", Xj = c(1237, 1600), Xl = c(1000, 1000), ci = "99")
+# Sim1 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Ratio", Xj = c(1237, 1600), Xl = c(1000, 1000), ci = 0.99)
 }
 \references{
   Licht, Amanda A. 2011. “Change Comes with Time:

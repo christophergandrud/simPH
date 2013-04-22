@@ -79,8 +79,8 @@ simGG.simlinear <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL,
   			objdf <- subset(objdf, Time <= to)
   		}
 	} else if (qi == "Hazard Ratio"){
-	  	objdf <- data.frame(obj$Xj, obj$HR, obj$Comparison)
-	  	names(objdf) <- c("Xj", "HR", "Comparison")
+	  	objdf <- data.frame(obj$Xj, obj$HR)
+	  	names(objdf) <- c("Xj", "HR")
 	} else if (qi == "Relative Hazard"){
 	  	spalette <- NULL
 	  	objdf <- data.frame(obj$Xj, obj$HR)

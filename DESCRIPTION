@@ -23,7 +23,7 @@ Imports:
     ggplot2,
     survival,
     gridExtra,
-    SPIn
+    SPIn,
     MSBVAR
 License: GPL (>= 2)
 Collate:

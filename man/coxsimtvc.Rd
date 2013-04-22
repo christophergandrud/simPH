@@ -169,7 +169,7 @@ Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
 }
 \seealso{
   \code{\link{ggtvc}}, \code{\link{rmultinorm}},
-  \code{\link{survival}}, \code{\link{strata}},
-  \code{\link{survfit.coxph}}, and \code{\link{coxph}}
+  \code{\link{survival}}, \code{\link{strata}}, and
+  \code{\link{coxph}}
 }
 
