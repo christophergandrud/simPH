@@ -1,3 +1,12 @@
+Version 0.06
+
+- Increased flexibility for setting confidence levels. Now they may be set at any numeric value from 0 through 1.
+
+- Choice of using confidence levels for the middle simulation values or the shortest probability interval. 
+
+	- Many thanks to Ying Liu. Code from his SPIn function is fundamental for making this possible.
+
+
 Version 0.05
 
 **Major update** to the way simPH plots simulated objects. Instead of using seperate commands for plotting objects of different sim classes it now uses the method `simGG`. 

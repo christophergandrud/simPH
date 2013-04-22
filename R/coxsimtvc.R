@@ -10,7 +10,6 @@
 #' @param nsim the number of simulations to run per point in time. Default is \code{nsim = 1000}.
 #' @param tfun function of time that btvc was multiplied by. Default is "linear". Can also be "log" (natural log) and "power". If \code{tfun = "power"} then the pow argument needs to be specified also.
 #' @param pow if \code{tfun = "power"}, then use pow to specify what power the time interaction was raised to.
-#' @param newdata a data frame with the same variable names as those that appear in the coxph formula. It is also valid to use a vector, if the data frame would consist of a single row. If \code{qi = 'Hazard Rate'} then you can set fit the values of all of the variables. 
 #' @param from point in time from when to begin simulating coefficient values
 #' @param to point in time to stop simulating coefficient values
 #' @param by time intervals by which to simulate coefficient values
@@ -99,12 +98,8 @@
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. “Simulation-Efficient Shortest Probablility Intervals.” Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 
 
-coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, means = FALSE, newdata = NULL, nsim = 1000, from, to, by, ci = "95")
+coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, means = FALSE, nsim = 1000, from, to, by, ci = "95")
 {
-  if (qi != "Hazard Rate" & newdata != NULL){
-    stop("newdata can only be set when qi = 'Hazard Rate'.")
-  }
-
   # Create time function
   tfunOpts <- c("linear", "log", "power")
   TestforTOpts <- tfun %in% tfunOpts
@@ -130,7 +125,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   dfn <- names(DrawnDF)
  
   # If all values aren't set for calculating the hazard rate
-  if (is.null(newdata) & !isTRUE(means)){
+  if (!isTRUE(means)){
 
     # Extract simulations for variables of interest
     bpos <- match(b, dfn)
@@ -202,12 +197,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   }
 
   # If new values for calculating the hazard rate are set
-  else if (!is.null(newdata) | isTRUE(means)){
-    if (!is.null(newdata) & isTRUE(means)) {
-      stop("Either means = TRUE or newdata != NULL, not both.")
-    }
 
-  }
 
   # Drop simulations outside of 'confidence bounds'
   SubVar <- c("time", "Xj")

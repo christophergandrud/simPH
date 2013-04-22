@@ -4,7 +4,7 @@
 \usage{
   coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = 1,
     Xl = 0, tfun = "linear", pow = NULL, means = FALSE,
-    newdata = NULL, nsim = 1000, from, to, by, ci = "95")
+    nsim = 1000, from, to, by, ci = "95")
 }
 \arguments{
   \item{obj}{a coxph fitted model object with a time
@@ -42,12 +42,6 @@
 
   \item{pow}{if \code{tfun = "power"}, then use pow to
   specify what power the time interaction was raised to.}
-
-  \item{newdata}{a data frame with the same variable names
-  as those that appear in the coxph formula. It is also
-  valid to use a vector, if the data frame would consist of
-  a single row. If \code{qi = 'Hazard Rate'} then you can
-  set fit the values of all of the variables.}
 
   \item{from}{point in time from when to begin simulating
   coefficient values}
