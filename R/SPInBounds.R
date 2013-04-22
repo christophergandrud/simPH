@@ -4,7 +4,7 @@
 #' 
 #' @param x the name of the simulated quantities of interest variable
 #' @param conf numeric confidence level 
-#' @param LowUp character string specifying if you want to find the lower or upper bound of the interval. Possible options include \code{"Low"} or \code{"Up"}
+#' @param LowUp numeric specifying if you want to find the lower or upper bound of the interval. Possible options include \code{1} (Low) or \code{2} (High).
 #'
 #' @source Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. “Simulation-Efficient Shortest Probablility Intervals.” Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 #' 
@@ -206,11 +206,11 @@ SpinBounds <- function (x, conf = 0.95, LowUp = NULL, bw = 0, lb = 0, ub = Inf, 
         w.u <- w.u$solution
         x2 <- w.u %*% x[u.l:u.u]
     }
-    if (LowUp == "Low"){
-    	hpd <- x1
+    if (LowUp == 1){
+    	hpd <- as.numeric(x1)  
     } 
-    else if (LowUp == "Up"){
-    	hpd <- x2
+    else if (LowUp == 2){
+    	hpd <- as.numeric(x2)
     }
     return(hpd)
 }

@@ -8,7 +8,7 @@
 #' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} or \code{code = "Hazard"} only \code{Xj} is relevant.
 #' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b}. 
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
-#' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. Other possibilities include: \code{0.90}, \code{0.99}, \code{1}. If \code{spin = TRUE} then any value from 0 to 1 may be used.
+#' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. Any value from 0 through 1 may be used.
 #' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
 #'
 #' @return a simlinear object
@@ -181,27 +181,27 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
   } else if (qi == "Hazard Rate"){
   	SubVar <- c("time", "Xj")
   }
+
+  if (!isTRUE(spin)){
     Bottom <- (1 - ci)/2
     Top <- 1 - Bottom
-  if (!isTRUE(spin)){
-
-    Lowerdf <- do.call("rbind", as.list(by(Simb, df[c("time", "Xj")], transform, Lower = HR < quantile(HR, call(as.symbol(Bottom)) ))))
-
-    #SimbPerc1 <- ddply(Simb, SubVar, .fun = function(HR, BT){Lower <- HR < quantile(HR, BT)}, Bottom)
-    SimbPerc <- ddply(SimbPerc, SubVar, mutate, Upper = HR > quantile(HR, .Top))
+    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < quantile(HR,", 
+      Bottom, 
+      "))"
+    )))
+    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > quantile(HR,", 
+      Top, 
+      "))"
+    )))
   }
 
-
-
-  # Drop simulations outside of shortest probability interval
+  # Drop simulations outside of the shortest probability interval
   else if (isTRUE(spin)){
-    SimbPerc <- ddply(Simb, SubVar, mutate, Lower = HR < SpinBounds(HR, LowUp = "Low"))
-    SimbPerc <- ddply(Simb, SubVar, mutate, Upper = HR > SpinBounds(HR, LowUp = "Up"))
+    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", LowUp = 1))" )))
+    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", LowUp = 2))" )))
   }
 
-  if (ci != "all"){
-    SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
-  }  
+  SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
 
   # Final clean up
   class(SimbPerc) <- "simlinear"
