@@ -7,6 +7,8 @@
 \arguments{
   \item{obj}{an object created by one of simPH's simulation
   commands.}
+
+  \item{...}{arguments to be passed to methods.}
 }
 \description{
   A method for plotting simulation objects created by

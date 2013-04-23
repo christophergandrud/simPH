@@ -99,15 +99,15 @@ Sim2 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Rate", Xj = c(1237, 1600))
 simGG(Sim2, qi = "Hazard Rate")
 }
 \references{
-  Licht, Amanda A. 2011. “Change Comes with Time:
+  Licht, Amanda A. 2011. ''Change Comes with Time:
   Substantive Interpretation of Nonproportional Hazards in
-  Event History Analysis.” Political Analysis 19: 227–43.
-  Keele, Luke. 2010. “Proportionally Difficult: Testing for
-  Nonproportional Hazards in Cox Models.” Political
+  Event History Analysis.'' Political Analysis 19: 227–43.
+  Keele, Luke. 2010. ''Proportionally Difficult: Testing
+  for Nonproportional Hazards in Cox Models.'' Political
   Analysis 18(2): 189–205.
 
-  Carpenter, Daniel P. 2002. “Groups, the Media, Agency
-  Waiting Costs, and FDA Drug Approval.” American Journal
+  Carpenter, Daniel P. 2002. ''Groups, the Media, Agency
+  Waiting Costs, and FDA Drug Approval.'' American Journal
   of Political Science 46(3): 490–505.
 }
 \seealso{

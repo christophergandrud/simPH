@@ -134,8 +134,8 @@ simGG(Sim2, qi = "First Difference")
 simGG(Sim3, qi = "Hazard Ratio", leg.name = "Comparision", from = 1200)
 }
 \references{
-  Licht, Amanda A. 2011. “Change Comes with Time:
+  Licht, Amanda A. 2011. ''Change Comes with Time:
   Substantive Interpretation of Nonproportional Hazards in
-  Event History Analysis.” Political Analysis 19: 227–43.
+  Event History Analysis.'' Political Analysis 19: 227–43.
 }
 

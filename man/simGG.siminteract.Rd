@@ -103,15 +103,15 @@ simGG(Sim1, qi = "Marginal Effect", xlab = "\\nprevgenx", ylab = "Marginal Effec
 }
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.
-  2006. “Understanding Interaction Models: Improving
-  Empirical Analyses.” Political Analysis 14(1): 63–82.
+  2006. ''Understanding Interaction Models: Improving
+  Empirical Analyses.'' Political Analysis 14(1): 63–82.
 
-  Keele, Luke. 2010. “Proportionally Difficult: Testing for
-  Nonproportional Hazards in Cox Models.” Political
+  Keele, Luke. 2010. ''Proportionally Difficult: Testing
+  for Nonproportional Hazards in Cox Models.'' Political
   Analysis 18(2): 189–205.
 
-  Carpenter, Daniel P. 2002. “Groups, the Media, Agency
-  Waiting Costs, and FDA Drug Approval.” American Journal
+  Carpenter, Daniel P. 2002. ''Groups, the Media, Agency
+  Waiting Costs, and FDA Drug Approval.'' American Journal
   of Political Science 46(3): 490–505.
 }
 \seealso{
