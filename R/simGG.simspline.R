@@ -79,7 +79,7 @@
 #' simGG(Sim3, qi = "Hazard Ratio", 
 #'         xlab = "\nFDA Drug Review Staff", palpha = 0.2)
 #' 
-#' @seealso \code{\link{coxsimLinear}}, \code{\link{ggtvc}},  \code{\link{ggplot2}}, and \code{\link{scatter3d}} 
+#' @seealso \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},  \code{\link{ggplot2}}, and \code{\link{scatter3d}} 
 #' 
 #' 
 #' 

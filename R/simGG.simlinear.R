@@ -44,7 +44,7 @@
 #' @method simGG simlinear
 #' @S3method simGG simlinear
 #'
-#' @seealso \code{\link{coxsimLinear}}, \code{\link{ggtvc}}, and \code{\link{ggplot2}}
+#' @seealso \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}}, and \code{\link{ggplot2}}
 #' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227–43.
 #' Keele, Luke. 2010. ''Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.'' Political Analysis 18(2): 189–205.
 #'

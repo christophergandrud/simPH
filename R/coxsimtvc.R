@@ -83,7 +83,7 @@
 #'                   by = 15, ci = 0.5)
 #'
 
-#' @seealso \code{\link{simGG}}, \code{\link{rmultinorm}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
+#' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #'
 #' @import plyr reshape2 survival data.table
 #' @importFrom MSBVAR rmultnorm

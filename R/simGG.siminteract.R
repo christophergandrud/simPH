@@ -46,7 +46,7 @@
 #' @method simGG siminteract
 #' @S3method simGG siminteract
 #' 
-#' @seealso \code{\link{coxsimInteract}}, \code{\link{gglinear}}, and \code{\link{ggplot2}}
+#' @seealso \code{\link{coxsimInteract}}, \code{\link{simGG.simlinear}}, and \code{\link{ggplot2}}
 #' @references Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. ''Understanding Interaction Models: Improving Empirical Analyses.'' Political Analysis 14(1): 63–82.
 #'
 #' Keele, Luke. 2010. ''Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.'' Political Analysis 18(2): 189–205.

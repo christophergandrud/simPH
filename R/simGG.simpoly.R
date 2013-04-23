@@ -33,7 +33,7 @@
 #' # Plot simulations
 #' # simGG(Sim1)
 #'
-#' @seealso \code{\link{coxsimpoly}} and \code{\link{ggplot2}}
+#' @seealso \code{\link{coxsimPoly}} and \code{\link{ggplot2}}
 #'
 #' @return a ggplot2 object.
 #'
