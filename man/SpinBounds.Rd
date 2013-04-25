@@ -23,7 +23,9 @@
   distribution. If specified, a pseudo-sample point equal
   to the corresponding bound will be added. By default,
   \code{lb = 0} as this is the relevant lower bound for
-  quantities of interest from survival models.}
+  quantities of interest from survival models.
+  \code{\link{coxsimInteract}} modifies \code{lb} to
+  \code{-Inf} if \code{qi = "Marginal Effect"}.}
 
   \item{l,u}{scalars, weighting centers (if provided).}
 }

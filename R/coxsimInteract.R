@@ -136,8 +136,13 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 
 	# Drop simulations outside of the shortest probability interval
 	else if (isTRUE(spin)){
-	    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", LowUp = 1))" )))
-	    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", LowUp = 2))" )))
+		if (qi != "Marginal Effect"){
+			lb <- 0
+		} else if (qi == "Marginal Effect"){
+			lb <- -Inf
+		}
+	    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", lb = ", lb, ", LowUp = 1))" )))
+	    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", lb = ", lb, ", LowUp = 2))" )))
 	}
 
 	SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
