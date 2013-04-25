@@ -2,22 +2,15 @@
 \alias{simGG.simspline}
 \title{Plot simulated penalised spline hazards.}
 \usage{
-  \method{simGG}{simspline} (obj, qi = "Relative Hazard",
-    FacetTime = NULL, from = NULL, to = NULL, xlab = NULL,
-    ylab = NULL, zlab = NULL, title = NULL,
-    smoother = "auto", spalette = "Set1", leg.name = "",
-    lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
-    psize = 1, palpha = 0.1, surface = TRUE,
-    fit = "linear", ...)
+  \method{simGG}{simspline} (obj, FacetTime = NULL,
+    from = NULL, to = NULL, xlab = NULL, ylab = NULL,
+    zlab = NULL, title = NULL, smoother = "auto",
+    spalette = "Set1", leg.name = "", lcolour = "#2B8CBE",
+    lsize = 2, pcolour = "#A6CEE3", psize = 1,
+    palpha = 0.1, surface = TRUE, fit = "linear", ...)
 }
 \arguments{
   \item{obj}{a simspline object}
-
-  \item{qi}{character string indicating what quantity of
-  interest you would like to calculate. Can be
-  \code{'Relative Hazard'}, \code{'First Difference'},
-  \code{'Hazard Ratio'}, or \code{'Hazard Rate'}. Default
-  is \code{qi = 'Relative Hazard'}.}
 
   \item{FacetTime}{a numeric vector of points in time where
   you would like to plot Hazard Rates in a facet grid. Only
@@ -139,7 +132,7 @@ Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
 simGG(Sim1, xlab = "\\n orderent", palpha = 1)
 
 # 3D plot hazard rate
-simGG(Sim2, qi = "Hazard Rate", zlab = "orderent", fit = "quadratic")
+simGG(Sim2, zlab = "orderent", fit = "quadratic")
 
 # Create a time grid plot
 # Find all points in time where baseline hazard was found
@@ -149,7 +142,7 @@ unique(Sim2$time)
 Sim2$time <- round(Sim2$time, digits = 2)
 
 # Create plot
-simGG(Sim2, qi = "Hazard Rate", FacetTime = c(6.21, 25.68, 100.64, 202.36))
+simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36))
 
 # Simulated Fitted Values of stafcder
 Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
@@ -159,11 +152,10 @@ Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
                     Xl = seq(1099, 1699, by = 10), ci = 0.90)
 
 # Plot simulated Hazard Ratios
-simGG(Sim3, qi = "Hazard Ratio",
-        xlab = "\\nFDA Drug Review Staff", palpha = 0.2)
+simGG(Sim3, xlab = "\\nFDA Drug Review Staff", palpha = 0.2)
 }
 \seealso{
-  \code{\link{coxsimLinear}}, \code{\link{ggtvc}},
+  \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},
   \code{\link{ggplot2}}, and \code{\link{scatter3d}}
 }
 

@@ -6,12 +6,12 @@
 \source{
   Carpenter, Daniel P. 2002. ''Groups, the Media, Agency
   Waiting Costs, and FDA Drug Approval.'' American Journal
-  of Political Science 46(3): 490–505.
+  of Political Science 46(3): 490-505.
 
   Luke Keele, "Replication data for: Proportionally
   Difficult: Testing for Nonproportional Hazards In Cox
   Models", \url{http://hdl.handle.net/1902.1/17068} V1
-  [Version]
+  [Version]]
 }
 \description{
   A data set from Carpenter (2002).

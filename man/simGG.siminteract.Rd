@@ -2,20 +2,14 @@
 \alias{simGG.siminteract}
 \title{Plot simulated linear multiplicative interactions.}
 \usage{
-  \method{simGG}{siminteract} (obj, qi = "Marginal Effect",
-    from = NULL, to = NULL, xlab = NULL, ylab = NULL,
-    title = NULL, smoother = "auto", spalette = "Set1",
-    leg.name = "", lcolour = "#2B8CBE", lsize = 2,
-    pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
+  \method{simGG}{siminteract} (obj, from = NULL, to = NULL,
+    xlab = NULL, ylab = NULL, title = NULL,
+    smoother = "auto", spalette = "Set1", leg.name = "",
+    lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
+    psize = 1, palpha = 0.1, ...)
 }
 \arguments{
   \item{obj}{a simlinear object}
-
-  \item{qi}{character string indicating what quantity of
-  interest you would like to calculate. Can be
-  \code{'Marginal Effect'}, \code{'First Difference'},
-  \code{'Hazard Ratio'}, or \code{'Hazard Rate'}. Default
-  is \code{qi = 'Marginal Effect'}.}
 
   \item{xlab}{a label for the plot's x-axis.}
 
@@ -99,7 +93,7 @@ M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
 Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2))
 
 # Plot Marginal Effects
-simGG(Sim1, qi = "Marginal Effect", xlab = "\\nprevgenx", ylab = "Marginal Effect of lethal\\n")
+simGG(Sim1, xlab = "\\nprevgenx", ylab = "Marginal Effect of lethal\\n")
 }
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.
@@ -115,7 +109,7 @@ simGG(Sim1, qi = "Marginal Effect", xlab = "\\nprevgenx", ylab = "Marginal Effec
   of Political Science 46(3): 490–505.
 }
 \seealso{
-  \code{\link{coxsimInteract}}, \code{\link{gglinear}}, and
-  \code{\link{ggplot2}}
+  \code{\link{coxsimInteract}},
+  \code{\link{simGG.simlinear}}, and \code{\link{ggplot2}}
 }
 

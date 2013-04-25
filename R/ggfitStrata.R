@@ -26,7 +26,8 @@
 #' ggfitStrata(M1Fit, byStrata = TRUE)
 #'
 #' @seealso \code{\link{survfit}}, \code{\link{ggplot2}} and \code{\link{strata}} 
-#' @import ggplot2 gridExtra
+#' @import ggplot2 
+#' @importFrom gridExtra grid.arrange
 #' @export 
 
 ggfitStrata <- function(obj, byStrata = FALSE, xlab = "", ylab = "", title = "", lcolour = "#2C7FB8", rcolour = "#2C7FB8")

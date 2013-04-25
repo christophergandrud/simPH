@@ -100,8 +100,7 @@ Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
   Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 }
 \seealso{
-  \code{\link{gg}}, \code{\link{pspline}},
-  \code{\link{survival}}, \code{\link{strata}}, and
-  \code{\link{coxph}}
+  \code{\link{simGG}}, \code{\link{survival}},
+  \code{\link{strata}}, and \code{\link{coxph}}
 }
 

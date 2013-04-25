@@ -36,7 +36,9 @@
 #' 
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probablility Intervals.'' Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 #'
-#' @import plyr reshape2 survival data.table quadprog
+#' @import data.table
+#' @importFrom plyr ddply
+#' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export
 
@@ -204,6 +206,6 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
   SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
 
   # Final clean up
-  class(SimbPerc) <- "simlinear"
+  class(SimbPerc) <- c("simlinear", qi)
   SimbPerc
 }

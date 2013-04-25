@@ -6,6 +6,8 @@ Version 0.06
 
 	- Many thanks to Ying Liu. Code from his SPIn function is fundamental for making this possible.
 
+- `qi` now automatically determined by `simGG`.
+
 - Minor bug fixes and documentation updates.
 
 

@@ -3,7 +3,6 @@
 #' \code{simGG.simspline} uses ggplot2 and scatter3d to plot quantities of interest from \code{simspline} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
 #'
 #' @param obj a simspline object
-#' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, or \code{'Hazard Rate'}. Default is \code{qi = 'Relative Hazard'}. 
 #' @param FacetTime a numeric vector of points in time where you would like to plot Hazard Rates in a facet grid. Only relevant if \code{qi == 'Hazard Rate'}. Note: the values of Facet Time must exactly match values of the \code{time} element of \code{obj}.
 #' @param xlab a label for the plot's x-axis.
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
@@ -56,7 +55,7 @@
 #' simGG(Sim1, xlab = "\n orderent", palpha = 1)
 #' 
 #' # 3D plot hazard rate
-#' simGG(Sim2, qi = "Hazard Rate", zlab = "orderent", fit = "quadratic")
+#' simGG(Sim2, zlab = "orderent", fit = "quadratic")
 #'
 #' # Create a time grid plot
 #' # Find all points in time where baseline hazard was found
@@ -66,7 +65,7 @@
 #' Sim2$time <- round(Sim2$time, digits = 2)
 #' 
 #' # Create plot
-#' simGG(Sim2, qi = "Hazard Rate", FacetTime = c(6.21, 25.68, 100.64, 202.36))
+#' simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36))
 #'
 #' # Simulated Fitted Values of stafcder
 #' Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)", 
@@ -76,23 +75,26 @@
 #'                     Xl = seq(1099, 1699, by = 10), ci = 0.90)
 #'
 #' # Plot simulated Hazard Ratios
-#' simGG(Sim3, qi = "Hazard Ratio", 
-#'         xlab = "\nFDA Drug Review Staff", palpha = 0.2)
+#' simGG(Sim3, xlab = "\nFDA Drug Review Staff", palpha = 0.2)
 #' 
 #' @seealso \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},  \code{\link{ggplot2}}, and \code{\link{scatter3d}} 
 #' 
 #' 
 #' 
 #' 
-#' @import ggplot2 car
+#' @import ggplot2 
+#' @importFrom car scatter3d
 #' @method simGG simspline
 #' @S3method simGG simspline
 
-simGG.simspline <- function(obj, qi = "Relative Hazard", FacetTime = NULL, from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, surface = TRUE, fit = "linear", ...)
+simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, surface = TRUE, fit = "linear", ...)
 {
 	if (!inherits(obj, "simspline")){
     	stop("must be a simspline object")
     }
+    # Find quantity of interest
+    qi <- class(obj)[[2]]
+
     # Create y-axis label
     if (is.null(ylab)){
     	ylab <- paste(qi, "\n")

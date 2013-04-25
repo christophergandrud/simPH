@@ -38,7 +38,9 @@
 #'
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}},
 #' @return a siminteract class object
-#' @import plyr reshape2 survival data.table
+#' @import data.table
+#' @importFrom plyr ddply
+#' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export
 
@@ -141,6 +143,6 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
 
 	# Final clean up
-	class(SimbPerc) <- "siminteract"
+	class(SimbPerc) <- c("siminteract", qi)
 	SimbPerc
 }

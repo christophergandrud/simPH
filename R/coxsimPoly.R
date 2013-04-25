@@ -31,7 +31,7 @@
 #'
 #' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.'' American Journal of Political Science 46(3): 490–505.
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
-#' @import plyr reshape2 survival
+#' @importFrom plyr ddply
 #' @importFrom MSBVAR rmultnorm
 #' @export 
 

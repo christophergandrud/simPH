@@ -41,7 +41,7 @@ data("GolubEUPData")
 GolubEUPData$Lqmv <- tvc(GolubEUPData, b = "qmv", tvar = "end", tfun = "log")
 }
 \seealso{
-  \code{\link{ggtvc}}, \code{coxsimtvc},
+  \code{\link{simGG.simtvc}}, \code{coxsimtvc},
   \code{\link{survival}}, and \code{\link{coxph}}
 }
 

@@ -68,6 +68,6 @@ library(survival)
 # simGG(Sim1)
 }
 \seealso{
-  \code{\link{coxsimpoly}} and \code{\link{ggplot2}}
+  \code{\link{coxsimPoly}} and \code{\link{ggplot2}}
 }
 

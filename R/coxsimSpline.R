@@ -50,7 +50,10 @@
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probablility Intervals.'' Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 #' 
-#' @import stringr reshape2 data.table
+#' @import data.table
+#' @importFrom stringr word str_match str_replace
+#' @importFrom plyr ddply
+#' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export
 
@@ -219,6 +222,6 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 
 
   # Final clean up
-  class(SimbPerc) <- "simspline"
+  class(SimbPerc) <- c("simspline", qi)
   SimbPerc
 }

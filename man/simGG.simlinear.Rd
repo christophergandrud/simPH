@@ -2,20 +2,14 @@
 \alias{simGG.simlinear}
 \title{Plot simulated linear time-constant hazards.}
 \usage{
-  \method{simGG}{simlinear} (obj, qi = "Relative Hazard",
-    from = NULL, to = NULL, xlab = NULL, ylab = NULL,
-    title = NULL, smoother = "auto", spalette = "Set1",
-    leg.name = "", lcolour = "#2B8CBE", lsize = 2,
-    pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
+  \method{simGG}{simlinear} (obj, from = NULL, to = NULL,
+    xlab = NULL, ylab = NULL, title = NULL,
+    smoother = "auto", spalette = "Set1", leg.name = "",
+    lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
+    psize = 1, palpha = 0.1, ...)
 }
 \arguments{
   \item{obj}{a simlinear object}
-
-  \item{qi}{character string indicating what quantity of
-  interest you would like to calculate. Can be
-  \code{'Relative Hazard'}, \code{'First Difference'},
-  \code{'Hazard Ratio'}, or \code{'Hazard Rate'}. Default
-  is \code{qi = 'Relative Hazard'}.}
 
   \item{xlab}{a label for the plot's x-axis.}
 
@@ -92,11 +86,11 @@ M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + ho
 
 # Simulate and plot Hazard Ratios for stafcder variable
 Sim1 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Ratio", Xj = seq(1237, 1600, by = 2))
-simGG(Sim1, qi = "Hazard Ratio")
+simGG(Sim1)
 
 # Simulate and plot Hazard Rate for stafcder variable
 Sim2 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Rate", Xj = c(1237, 1600))
-simGG(Sim2, qi = "Hazard Rate")
+simGG(Sim2)
 }
 \references{
   Licht, Amanda A. 2011. ''Change Comes with Time:
@@ -111,7 +105,7 @@ simGG(Sim2, qi = "Hazard Rate")
   of Political Science 46(3): 490–505.
 }
 \seealso{
-  \code{\link{coxsimLinear}}, \code{\link{ggtvc}}, and
-  \code{\link{ggplot2}}
+  \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},
+  and \code{\link{ggplot2}}
 }
 

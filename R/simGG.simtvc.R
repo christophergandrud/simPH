@@ -2,7 +2,6 @@
 #' 
 #' \code{simGG.simtvc} uses ggplot2 to plot the simulated hazards from a \code{simtvc} class object using ggplot2. 
 #' @param obj a simtvc class object
-#' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, or \code{'Hazard Rate'}.he default is \code{qi = "Relative Hazard"}. If \code{qi = 'Hazard Rate'} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param from numeric time to start the plot from.
 #' @param to numeric time to plot to.
 #' @param xlab a label for the plot's x-axis.
@@ -68,9 +67,9 @@
 #'                   by = 15, ci = 0.99)
 #'                   
 #' # Create plots
-#' simGG(Sim1, qi = "Relative Hazard")
-#' simGG(Sim2, qi = "First Difference")
-#' simGG(Sim3, qi = "Hazard Ratio", leg.name = "Comparision", from = 1200)
+#' simGG(Sim1)
+#' simGG(Sim2)
+#' simGG(Sim3, leg.name = "Comparision", from = 1200)
 
 #' @import ggplot2
 #' @export
@@ -79,11 +78,14 @@
 #'
 #' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227–43.
 
-simGG.simtvc <- function(obj, qi = "Relative Hazard", from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
+simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
 {
   if (!inherits(obj, "simtvc")){
     stop("must be a simtvc object")
   }
+
+  # Find quantity of interest
+  qi <- class(obj)[[2]]
 
   # Create y-axis label
   if (is.null(ylab)){

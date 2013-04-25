@@ -3,7 +3,6 @@
 #' \code{simGG.siminteract} uses ggplot2 to plot the quantities of interest from \code{siminteract} objects, including marginal effects, first differences, hazard ratios, and hazard rates.
 #'
 #' @param obj a simlinear object
-#' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Marginal Effect'}, \code{'First Difference'}, \code{'Hazard Ratio'}, or \code{'Hazard Rate'}. Default is \code{qi = 'Marginal Effect'}. 
 #' @param xlab a label for the plot's x-axis.
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
 #' @param from numeric time to start the plot from. Only relevant if \code{qi = "Hazard Rate"}.
@@ -34,7 +33,7 @@
 #' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2))
 #' 
 #' # Plot Marginal Effects
-#' simGG(Sim1, qi = "Marginal Effect", xlab = "\nprevgenx", ylab = "Marginal Effect of lethal\n")
+#' simGG(Sim1, xlab = "\nprevgenx", ylab = "Marginal Effect of lethal\n")
 #'
 #' @description Uses ggplot2 to plot the quantities of interest from \code{siminteract} objects, including marginal effects, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
@@ -53,11 +52,14 @@
 #'
 #' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.'' American Journal of Political Science 46(3): 490–505.
 
-simGG.siminteract <- function(obj, qi = "Marginal Effect", from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
+simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
 {
 	if (!inherits(obj, "siminteract")){
     	stop("must be a siminteract object")
     }
+    # Find quantity of interest
+    qi <- class(obj)[[2]]
+
     # Create y-axis label
     if (is.null(ylab)){
     	ylab <- paste(qi, "\n")

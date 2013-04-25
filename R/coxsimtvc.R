@@ -85,7 +85,9 @@
 
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #'
-#' @import plyr reshape2 survival data.table
+#' @import data.table
+#' @importFrom plyr ddply
+#' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export
 #'
@@ -233,6 +235,6 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
   }
   
   # Final clean up
-  class(TVSimPerc) <- "simtvc"
+  class(TVSimPerc) <- c("simtvc", qi)
   TVSimPerc
 }

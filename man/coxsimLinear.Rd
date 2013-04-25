@@ -86,7 +86,7 @@
   Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 }
 \seealso{
-  \code{\link{gglinear}}, \code{\link{survival}},
+  \code{\link{simGG}}, \code{\link{survival}},
   \code{\link{strata}}, and \code{\link{coxph}}
 }
 
