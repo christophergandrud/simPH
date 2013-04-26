@@ -7,7 +7,7 @@
 #' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Relative Hazard"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set. If you want to plot the results, \code{X1} should have more than one value.
 #' @param X2 numeric vector of fitted values of \code{b2} to simulate for. 
-#' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1}. 
+#' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1} \code{b2} and \code{b1*b2}. 
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
 #' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
@@ -71,6 +71,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	if (!isTRUE(TestqiOpts)){
 		stop("Invalid qi type. qi must be Marginal Effect, First Difference, Relative Hazard, or Hazard Rate")
 	}
+	MeansMessage <- NULL
 	if (isTRUE(means) & length(obj$coefficients) == 3){
 		means <- FALSE
 		MeansMessage <- FALSE
@@ -138,7 +139,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 				stop("For Hazard Rates, both X1 and X2 should be specified.")
 			}
 			if (isTRUE(MeansMessage)){
-			  	message("All variables' values other than b1 and b2 are fitted at 0.") 
+			  	message("All variables' values other than b1, b2, and b1*b2 are fitted at 0.") 
 			}
 			Xs <- data.frame(X1, X2)
 			Xs$HRValue <- paste0(Xs$X1, ", ", Xs$X2)
@@ -166,7 +167,6 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		if (length(X1) != 1 | length(X2) != 1){
 			stop("For coxsimInteract only one value of X1 and one value of X2 can be specified.")
 		}
-	  	message("All variables' values other than b1 and b2 fitted at 0.") 
 
 	  	Xs <- data.frame(X1, X2)
 		Xs$HRValue <- paste0(Xs$X1, ", ", Xs$X2)
@@ -190,22 +190,19 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		  Temp <- Temp[, -1]
 		  return(Temp)
 		}
-		FittedComb <- FittedMeans(NotB) 
+		FittedComb <- data.frame(FittedMeans(NotB)) 
 		ExpandFC <- do.call(rbind, rep(list(FittedComb), nrow(Xs)))
 
 		# Set fitted values for X1 and X2
-		bpos <- match(NamesInt, dfn)
-		Simb <- data.frame(DrawnDF[, bpos])
-
-		Simb <- merge(Simb, Xs)
+		Simb <- data.frame(DrawnDF[, NamesInt])
 
 	    Simb <- merge(Simb, Xs)
 		Simb$PreHR <- (Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3])
 
 		Simb <- cbind(Simb, ExpandFC)
-		Simb$Sum <- rowSums(Simb[, c(-1, -2)])
+		Simb$Sum <- rowSums(Simb[, c(7, 8)])
 		Simb$HR <- exp(Simb$Sum)
-		Simb <- Simb[, c("HRValue", "HR", "Xj")]
+		Simb <- Simb[, c("HRValue", "HR")]
 
 		bfit <- basehaz(obj)
 		bfit$FakeID <- 1

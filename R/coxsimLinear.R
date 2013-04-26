@@ -156,7 +156,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
       Temp <- Temp[, -1]
       return(Temp)
     }
-    FittedComb <- FittedMeans(NotB) 
+    FittedComb <- data.frame(FittedMeans(NotB)) 
     ExpandFC <- do.call(rbind, rep(list(FittedComb), length(Xj)))
 
     # Set fitted values for Xj

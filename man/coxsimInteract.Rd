@@ -36,7 +36,7 @@
 
   \item{means}{logical, whether or not to use the mean
   values to fit the hazard rate for covaraiates other than
-  \code{b1}.}
+  \code{b1} \code{b2} and \code{b1*b2}.}
 
   \item{nsim}{the number of simulations to run per value of
   X. Default is \code{nsim = 1000}.}
