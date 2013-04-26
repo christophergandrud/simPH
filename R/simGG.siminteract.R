@@ -34,24 +34,18 @@
 #' # Change the order of the covariates to make a more easily
 #' # interpretable hazard ratio graph.
 #' M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal, data = CarpenterFdaData)
-#' 
-#' # Simulate Hazard Rate of lethal for multiple values of prevgenx
+#'
+#' # Simulate Relative Hazard of lethal for multiple values of prevgenx
 #' Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
-#'                       X1 = seq(2, 115, by = 2),
-#'                       X2 = c(0, 1),
-#'                       qi = "Hazard Ratio", ci = 0.9)
-#'
-#' # Simulate first difference
+#'                     X1 = seq(2, 115, by = 2),
+#'                     X2 = c(0, 1),
+#'                     qi = "Relative Hazard", ci = 0.9)
+#'                     
+#' # Simulate First Difference
 #' Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
-#'                       X1 = seq(2, 115, by = 2),
-#'                       X2 = c(0, 1),
-#'                       qi = "First Difference", spin = TRUE)
-#'
-#' # Simulate Relative Hazards
-#' Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
-#'                       X1 = seq(2, 115, by = 2),
-#'                       X2 = c(0, 1),
-#'                       qi = "Relative Hazard", spin = TRUE)
+#'                        X1 = seq(2, 115, by = 2),
+#'                        X2 = c(0, 1),
+#'                        qi = "First Difference", spin = TRUE)
 #'                        
 #' # Plot Marginal Effects
 #' simGG(Sim1, xlab = "\nprevgenx", ylab = "Marginal Effect of lethal\n")
@@ -137,8 +131,6 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 	        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 		        scale_colour_brewer(palette = spalette, name = leg.name) +
-		        scale_y_continuous()+
-		        scale_x_continuous() +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
@@ -163,8 +155,6 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
-		        scale_y_continuous()+
-		        scale_x_continuous() +
 		        scale_colour_brewer(palette = spalette, name = leg.name) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
@@ -181,8 +171,6 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
-		        scale_y_continuous()+
-		        scale_x_continuous() +
 		        scale_colour_brewer(palette = spalette, name = leg.name) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +

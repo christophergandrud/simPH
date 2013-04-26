@@ -107,10 +107,12 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 		if (is.null(obj$strata)){
 			objdf <- data.frame(obj$time, obj$HRate, obj$Xj)
 			names(objdf) <- c("Time", "HRate", "Xj")
-		} else if (!is.null(obj$strata)) {
-		objdf <- data.frame(obj$time, obj$HRate, obj$strata, obj$Xj)
-		names(objdf) <- c("Time", "HRate", "Strata", "Xj")
-		}
+		} 
+		# Currently does not support strata
+		#else if (!is.null(obj$strata)) {
+		#objdf <- data.frame(obj$time, obj$HRate, obj$strata, obj$Xj)
+		#names(objdf) <- c("Time", "HRate", "Strata", "Xj")
+		#}
 		if (!is.null(from)){
 			objdf <- subset(objdf, Time >= from)
   		}

@@ -37,7 +37,8 @@
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probablility Intervals.'' Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 #'
 #' @import data.table
-#' @importFrom plyr ddply
+#' @importFrom reshape2 melt
+#' @importFrom plyr ddply mutate
 #' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export
@@ -53,6 +54,13 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
   TestqiOpts <- qi %in% qiOpts
   if (!isTRUE(TestqiOpts)){
     stop("Invalid qi type. qi must be Relative Hazard, First Difference, Hazard Rate, or Hazard Ratio")
+  }
+  if (isTRUE(means) & length(obj$coefficients) == 3){
+    means <- FALSE
+    MeansMessage <- FALSE
+    message("Note: means reset to FALSE. The model only includes the interaction variables.")
+  } else if (isTRUE(means) & length(obj$coefficients) > 3){
+    MeansMessage <- TRUE
   }
 
   # Parameter estimates & Variance/Covariance matrix
@@ -108,7 +116,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
     }
     else if (qi == "Hazard Rate"){
         Xl <- NULL
-        message("Xl is ignored. All variables values other than b fitted at 0.") 
+        message("Xl is ignored. All variables values other than b are fitted at 0.") 
       	Xs <- data.frame(Xj)
       	Xs$HRValue <- paste(Xs[, 1])
   	    Simb <- merge(Simb, Xs)

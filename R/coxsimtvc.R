@@ -86,7 +86,8 @@
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #'
 #' @import data.table
-#' @importFrom plyr ddply
+#' @importFrom reshape2 melt
+#' @importFrom plyr ddply mutate
 #' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export

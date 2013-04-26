@@ -57,7 +57,8 @@
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}},
 #' @return a siminteract class object
 #' @import data.table
-#' @importFrom plyr ddply
+#' @importFrom reshape2 melt
+#' @importFrom plyr ddply mutate
 #' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export
@@ -70,6 +71,13 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	if (!isTRUE(TestqiOpts)){
 		stop("Invalid qi type. qi must be Marginal Effect, First Difference, Relative Hazard, or Hazard Rate")
 	}
+	if (isTRUE(means) & length(obj$coefficients) == 3){
+		means <- FALSE
+		MeansMessage <- FALSE
+		message("Note: means reset to FALSE. The model only includes the interaction variables.")
+	} else if (isTRUE(means) & length(obj$coefficients) > 3){
+		MeansMessage <- TRUE
+	}
 
 	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
@@ -80,15 +88,16 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	DrawnDF <- data.frame(Drawn)
 	dfn <- names(DrawnDF)
 
+	bs <- c(b1, b2) 
+	bpos <- match(bs, dfn)
+	binter <- paste0(bs[[1]], ".", bs[[2]])
+	binter <- match(binter, dfn)
+	NamesInt <- c(bpos, binter)
+
 	# If all values aren't set for calculating the hazard rate
 	if (!isTRUE(means)){
 
 		# Subset data frame to only include interaction constitutive terms and
-		bs <- c(b1, b2) 
-		bpos <- match(bs, dfn)
-		binter <- paste0(bs[[1]], ".", bs[[2]])
-		binter <- match(binter, dfn)
-		NamesInt <- c(bpos, binter)
 		Simb <- data.frame(Drawn[, NamesInt])
 
 		# Find quantity of interest
@@ -126,19 +135,24 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		}
 		else if (qi == "Hazard Rate"){
 			if (is.null(X1) | is.null(X2)){
-				stop("For Hazard Rates, both X1 and X2 ")
+				stop("For Hazard Rates, both X1 and X2 should be specified.")
 			}
-		  	message("All variables values other than b1 and b2 fitted at 0.") 
-			Xs <- data.frame(Xj)
-			Xs$HRValue <- paste(Xs[, 1])
+			if (isTRUE(MeansMessage)){
+			  	message("All variables' values other than b1 and b2 are fitted at 0.") 
+			}
+			Xs <- data.frame(X1, X2)
+			Xs$HRValue <- paste0(Xs$X1, ", ", Xs$X2)
+		   
 		    Simb <- merge(Simb, Xs)
 			Simb$HR <- exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]))	 
+		  	
 		  	bfit <- basehaz(obj)
 		  	bfit$FakeID <- 1
 		  	Simb$FakeID <- 1
 			bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
 			SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
 			SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
+	        Simb <- data.frame(SimbCombDT)
 		  	Simb$HRate <- Simb$hazard * Simb$HR 
 		  	Simb <- Simb[, -1]
 		}
@@ -146,11 +160,20 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 
   # If the user wants to calculate Hazard Rates using means for fitting all covariates other than b.
 	else if (isTRUE(means)){
-		Xl <- NULL
-		message("Xl ignored")
+		if (is.null(X1) | is.null(X2)){
+			stop("For Hazard Rates, both X1 and X2 should be specified.")
+		}
+		if (length(X1) != 1 | length(X2) != 1){
+			stop("For coxsimInteract only one value of X1 and one value of X2 can be specified.")
+		}
+	  	message("All variables' values other than b1 and b2 fitted at 0.") 
+
+	  	Xs <- data.frame(X1, X2)
+		Xs$HRValue <- paste0(Xs$X1, ", ", Xs$X2)
 
 		# Set all values of b at means for data used in the analysis
-		NotB <- setdiff(names(obj$means), b)
+		bInterColon <- paste0(b1, ":", b2)
+		NotB <- setdiff(names(obj$means), c(b1, b2, bInterColon))
 		MeanValues <- data.frame(obj$means)
 		FittedMeans <- function(Z){
 		  ID <- 1:nsim
@@ -168,18 +191,16 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		  return(Temp)
 		}
 		FittedComb <- FittedMeans(NotB) 
-		ExpandFC <- do.call(rbind, rep(list(FittedComb), length(Xj)))
+		ExpandFC <- do.call(rbind, rep(list(FittedComb), nrow(Xs)))
 
-		# Set fitted values for Xj
-		bpos <- match(b, dfn)
+		# Set fitted values for X1 and X2
+		bpos <- match(NamesInt, dfn)
 		Simb <- data.frame(DrawnDF[, bpos])
 
-		Xs <- data.frame(Xj)
-		Xs$HRValue <- paste(Xs[, 1])
-
 		Simb <- merge(Simb, Xs)
-		Simb$CombB <- Simb[, 1] * Simb[, 2]
-		Simb <- Simb[, 2:4]
+
+	    Simb <- merge(Simb, Xs)
+		Simb$PreHR <- (Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3])
 
 		Simb <- cbind(Simb, ExpandFC)
 		Simb$Sum <- rowSums(Simb[, c(-1, -2)])

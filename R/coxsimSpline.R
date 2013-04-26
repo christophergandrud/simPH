@@ -52,7 +52,8 @@
 #' 
 #' @import data.table
 #' @importFrom stringr word str_match str_replace
-#' @importFrom plyr ddply
+#' @importFrom reshape2 melt
+#' @importFrom plyr ddply mutate
 #' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export
@@ -67,7 +68,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	}
 
 	if (nsim > 10 & qi == "Hazard Rate"){
-		message(paste0("Warning: finding Hazard Rates with ", nsim, " simulations may take awhile.  Consider changing the number of simulations with nsim."))
+		message(paste0("Warning: finding Hazard Rates with ", nsim, " simulations may take awhile.  Consider decreasing the number of simulations with nsim."))
 	}
 	# Find term number
 	TermNum <- names(obj$pterms)
@@ -180,7 +181,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	}
 	else if (qi == "Hazard Rate"){
 		Xl <- NULL
-      message("Xl is ignored. All variables values other than b fitted at 0.") 
+      message("Xl is ignored. All variables' values other than b fitted at 0.") 
 		Simb <- MergeX(Xj)
 	    names(Simb) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
 	 	Simb$HR <- exp(Simb$Xj * Simb$Coef)
