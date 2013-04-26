@@ -3,7 +3,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 0.05
+### Version 0.6
 
 ### Note: **simPH** is in beta. Please report any bugs at <https://github.com/christophergandrud/simPH/issues>.
 
@@ -77,11 +77,15 @@ For more information about stratified Cox PH models (and frailties, which I am w
 
 Box-Steffensmeier, Janet M, and Suzanna De Boef. 2006. [“Repeated Events Survival Models: the Conditional Frailty Model.”](http://onlinelibrary.wiley.com/doi/10.1002/sim.2434/abstract;jsessionid=28218243DD3D6E01A3D10EEE75D96675.d01t02) Statistics in Medicine 25(20): 3518–33.
 
+To learn more about shortest probability intervals (and also for the source of the code that made this possible in **simPH**) see:
+
+Liu, Y., Gelman, A., & Zheng, T. (2013). Simulation-efficient Shortest Probablility Intervals. Arvix. <http://arxiv.org/pdf/1302.2142v1.pdf>.
+
 For more information about interpreting interaction terms:
 
 Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. “Understanding Interaction Models: Improving Empirical Analyses.” Political Analysis 14(1): 63–82.
 
-For an example of how non-proportional hazard results were often presented before `simPH` see (some of the problems I encountered in this paper were a major part of why I'm developing this package): 
+For an example ofhow non-proportional hazard results were often presented before **simPH** see (some of the problems I encountered in this paper were a major part of why I'm developing this package): 
 
 Gandrud, Christopher. 2012. [“The Diffusion of Financial Supervisory Governance Ideas.”](http://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362) Review of International Political Economy.
 

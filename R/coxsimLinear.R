@@ -45,8 +45,15 @@
 coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
 {	
   if (qi != "Hazard Ratio" & isTRUE(means)){
-    stop("means can only be set when qi = 'Hazard Rate'.")
-  }	
+    stop("means can only be TRUE when qi = 'Hazard Rate'.")
+  }
+
+  # Ensure that qi is valid
+  qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
+  TestqiOpts <- qi %in% qiOpts
+  if (!isTRUE(TestqiOpts)){
+    stop("Invalid qi type. qi must be Relative Hazard, First Difference, Hazard Rate, or Hazard Ratio")
+  }
 
   # Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
@@ -172,10 +179,6 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
     # Remove unnecessary
     Simb <- Simb[, c("HRValue", "HR", "Xj", "hazard", "time", "HRate")]
   }
-  else if (!is.null(newdata)){
-    Xj <- Xl <- NULL
-    message("Xj and Xl ignored.")
-  }  
 
   # Drop simulations outside of 'confidence bounds'
   if (qi != "Hazard Rate"){

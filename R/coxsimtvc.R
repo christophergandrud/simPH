@@ -102,6 +102,13 @@
 
 coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, means = FALSE, nsim = 1000, from, to, by, ci = 0.95, spin = FALSE)
 {
+  # Ensure that qi is valid
+  qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
+  TestqiOpts <- qi %in% qiOpts
+  if (!isTRUE(TestqiOpts)){
+    stop("Invalid qi type. qi must be Relative Hazard, First Difference, Hazard Rate, or Hazard Ratio")
+  }
+
   # Create time function
   tfunOpts <- c("linear", "log", "power")
   TestforTOpts <- tfun %in% tfunOpts

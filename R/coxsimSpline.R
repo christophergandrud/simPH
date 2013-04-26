@@ -59,6 +59,13 @@
 
 coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE)
 { 
+	# Ensure that qi is valid
+	qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
+	TestqiOpts <- qi %in% qiOpts
+	if (!isTRUE(TestqiOpts)){
+		stop("Invalid qi type. qi must be Relative Hazard, First Difference, Hazard Rate, or Hazard Ratio")
+	}
+
 	if (nsim > 10 & qi == "Hazard Rate"){
 		message(paste0("Warning: finding Hazard Rates with ", nsim, " simulations may take awhile.  Consider changing the number of simulations with nsim."))
 	}

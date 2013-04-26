@@ -3,8 +3,8 @@
 \title{Simulate quantities of interest for linear multiplicative interactions from \code{coxph} models.}
 \usage{
   coxsimInteract(obj, b1, b2, qi = "Marginal Effect",
-    X1 = NULL, X2 = NULL, nsim = 1000, ci = 0.95,
-    spin = FALSE)
+    X1 = NULL, X2 = NULL, means = FALSE, nsim = 1000,
+    ci = 0.95, spin = FALSE)
 }
 \arguments{
   \item{obj}{a \code{coxph} fitted model object with a
@@ -19,9 +19,8 @@
   variable's name.}
 
   \item{qi}{quantities of interest to simulate. Values can
-  be \code{"Marginal Effect"}, \code{"First Difference"},
-  \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The
-  default is \code{qi = "Relative Hazard"}. If \code{qi =
+  be \code{"Marginal Effect"} and \code{"Hazard Rate"}. The
+  default is \code{qi = "Marginal Effect"}. If \code{qi =
   "Hazard Rate"} and the \code{coxph} model has strata,
   then hazard rates for each strata will also be
   calculated.}
@@ -33,6 +32,10 @@
 
   \item{X2}{numeric vector of fitted values of \code{b2} to
   simulate for.}
+
+  \item{means}{logical, whether or not to use the mean
+  values to fit the hazard rate for covaraiates other than
+  \code{b1}.}
 
   \item{nsim}{the number of simulations to run per value of
   X. Default is \code{nsim = 1000}.}
@@ -64,11 +67,6 @@
   interaction between variables \eqn{X} and \eqn{Z} then
   the marginal effect for \eqn{X} is: \deqn{ME_{X} =
   exp(\beta_{X} + \beta_{XZ}Z)}
-
-  Unlike in \code{\link{coxsimtvc}} and
-  \code{\link{coxsimLinear}} Hazard Ratios and First
-  Differences can only be calculated by comparing a
-  specified value of \code{X1} and \code{X2} to 0.
 }
 \examples{
 # Load Carpenter (2002) data
@@ -81,7 +79,13 @@ library(survival)
 M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
 
 # Simulate Marginal Effect of lethal for multiple values of prevgenx
-Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2), spin = TRUE)
+Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
+						  X2 = seq(2, 115, by = 2), spin = TRUE)
+
+# Simulate Hazard Rate of lethal for multiple values of prevgenx
+Sim2 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
+						  X2 = seq(2, 115, by = 2),
+						  qi = "Hazard Rate", spin = TRUE)
 }
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.

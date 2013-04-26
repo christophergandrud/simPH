@@ -6,14 +6,14 @@ Description: The package simulates and plots quantities of interest (relative
     multiplicative interactions, polynomials, penalised splines, and
     non-proportional hazards, as well as stratified survial curves from Cox
     Proportional Hazard models.
-Version: 0.06
-Date: 2013-04-22
+Version: 0.6
+Date: 2013-04-26
 Author: Christopher Gandrud
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
 URL: http://christophergandrud.github.com/simPH/
 BugReports: https://github.com/christophergandrud/SimPH/issues
 Depends:
-    R (>= 2.15.2)
+    R (>= 3.0.0)
 Imports:
     car,
     reshape2,

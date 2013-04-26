@@ -4,9 +4,10 @@
 #' @param obj a \code{coxph} fitted model object with a linear multiplicative interaction.
 #' @param b1 character string of the first constitutive variable's name. Note \code{b1} and \code{b2} must be entered in the order in which they are entered into the \code{coxph} model.
 #' @param b2 character string of the second constitutive variable's name.
-#' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
+#' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"} and \code{"Hazard Rate"}. The default is \code{qi = "Marginal Effect"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set. If you want to plot the results, \code{X1} should have more than one value.
 #' @param X2 numeric vector of fitted values of \code{b2} to simulate for. 
+#' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1}. 
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
 #' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
@@ -14,8 +15,6 @@
 #' @details Simulates marginal effects, first differences, hazard ratios, and hazard rates for linear multiplicative interactions. 
 #' Marginal effects are calculated as in Brambor et al. (2006) with the addition that we take the exponent, so that it resembles a hazard ratio. For an interaction between variables \eqn{X} and \eqn{Z} then the marginal effect for \eqn{X} is:
 #' \deqn{ME_{X} = exp(\beta_{X} + \beta_{XZ}Z)}
-#'
-#' Unlike in \code{\link{coxsimtvc}} and \code{\link{coxsimLinear}} Hazard Ratios and First Differences can only be calculated by comparing a specified value of \code{X1} and \code{X2} to 0.
 #'
 #' @examples 
 #' # Load Carpenter (2002) data
@@ -28,7 +27,14 @@
 #' M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
 #' 
 #' # Simulate Marginal Effect of lethal for multiple values of prevgenx
-#' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2), spin = TRUE)
+#' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
+#'						  X2 = seq(2, 115, by = 2), spin = TRUE)
+#'
+#' # Simulate Hazard Rate of lethal for multiple values of prevgenx
+#' Sim2 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
+#'						  X2 = seq(2, 115, by = 2), 
+#' 						  qi = "Hazard Rate", spin = TRUE)
+
 #'
 #' @references Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. ''Understanding Interaction Models: Improving Empirical Analyses.'' Political Analysis 14(1): 63–82.
 #'
@@ -44,8 +50,15 @@
 #' @importFrom MSBVAR rmultnorm
 #' @export
 
-coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, nsim = 1000, ci = 0.95, spin = FALSE)
+coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
 {
+	# Ensure that qi is valid
+	qiOpts <- c("Marginal Effect", "Hazard Rate")
+	TestqiOpts <- qi %in% qiOpts
+	if (!isTRUE(TestqiOpts)){
+		stop("Invalid qi type. qi must be Marginal Effect or Hazard Rate")
+	}
+
 	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
 	VC <- vcov(obj)
@@ -55,68 +68,105 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	DrawnDF <- data.frame(Drawn)
 	dfn <- names(DrawnDF)
 
-	# Subset data frame to only include interaction constitutive terms and
-	bs <- c(b1, b2) 
-	bpos <- match(bs, dfn)
-	binter <- paste0(bs[[1]], ".", bs[[2]])
-	binter <- match(binter, dfn)
-	NamesInt <- c(bpos, binter)
-	Simb <- data.frame(Drawn[, NamesInt])
+	# If all values aren't set for calculating the hazard rate
+	if (!isTRUE(means)){
 
-  # Find quantity of interest
-	if (qi == "Marginal Effect"){
-		if (!is.null(X1)){
-			stop("For Marginal Effects only X2 should be specified.")
-		} else{
-			X2df <- data.frame(X2)
-			names(X2df) <- c("X2")
-			Simb <- merge(Simb, X2df)
-			Simb$HR <- exp(Simb[, 1] + (Simb[, 3] * Simb[, 4])) 
+		# Subset data frame to only include interaction constitutive terms and
+		bs <- c(b1, b2) 
+		bpos <- match(bs, dfn)
+		binter <- paste0(bs[[1]], ".", bs[[2]])
+		binter <- match(binter, dfn)
+		NamesInt <- c(bpos, binter)
+		Simb <- data.frame(Drawn[, NamesInt])
+
+		# Find quantity of interest
+		if (qi == "Marginal Effect"){
+			if (!is.null(X1)){
+				stop("For Marginal Effects only X2 should be specified.")
+			} else{
+				X2df <- data.frame(X2)
+				names(X2df) <- c("X2")
+				Simb <- merge(Simb, X2df)
+				Simb$HR <- exp(Simb[, 1] + (Simb[, 3] * Simb[, 4])) 
+			}
+		}
+		else if (qi == "Hazard Rate"){
+			Xl <- NULL
+		  message("Xl is ignored. All variables values other than b fitted at 0.") 
+			Xs <- data.frame(Xj)
+			Xs$HRValue <- paste(Xs[, 1])
+		    Simb <- merge(Simb, Xs)
+			Simb$HR <- exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]))	 
+		  	bfit <- basehaz(obj)
+		  	bfit$FakeID <- 1
+		  	Simb$FakeID <- 1
+			bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+			SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+			SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
+		  	Simb$HRate <- Simb$hazard * Simb$HR 
+		  	Simb <- Simb[, -1]
 		}
 	}
-	else if (qi == "First Difference"){
-	  if (is.null(X1) | is.null(X2)){
-	    stop("For First Differences both X1 and X2 should be specified.")
-	  } else{
-		Xs <- merge(X1, X2)
-		names(Xs) <- c("X1", "X2")
-		Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
-	    Simb <- merge(Simb, Xs)
-		Simb$HR <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]) - 1) * 100)	
-	  }
-	}
-	else if (qi == "Hazard Ratio"){
-	  if (is.null(X1) | is.null(X2)){
-	    stop("For Hazard Ratios both X1 and X2 should be specified.")
-	  } else {
-		Xs <- merge(X1, X2)
-		names(Xs) <- c("X1", "X2")
-		Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
-	    Simb <- merge(Simb, Xs)
-		Simb$HR <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]) - 1) * 100)
-	  }
-	}
-	else if (qi == "Hazard Rate"){
+
+  # If the user wants to calculate Hazard Rates using means for fitting all covariates other than b.
+	else if (isTRUE(means)){
 		Xl <- NULL
-      message("Xl is ignored. All variables values other than b fitted at 0.") 
+		message("Xl ignored")
+
+		# Set all values of b at means for data used in the analysis
+		NotB <- setdiff(names(obj$means), b)
+		MeanValues <- data.frame(obj$means)
+		FittedMeans <- function(Z){
+		  ID <- 1:nsim
+		  Temp <- data.frame(ID)
+		  for (i in Z){
+		    BarValue <- MeanValues[i, ]
+		    DrawnCoef <- DrawnDF[, i]
+		    FittedCoef <- outer(DrawnCoef, BarValue)
+		    FCMolten <- data.frame(melt(FittedCoef))
+		    Temp <- cbind(Temp, FCMolten[,3])
+		  }
+		  Names <- c("ID", Z)
+		  names(Temp) <- Names
+		  Temp <- Temp[, -1]
+		  return(Temp)
+		}
+		FittedComb <- FittedMeans(NotB) 
+		ExpandFC <- do.call(rbind, rep(list(FittedComb), length(Xj)))
+
+		# Set fitted values for Xj
+		bpos <- match(b, dfn)
+		Simb <- data.frame(DrawnDF[, bpos])
+
 		Xs <- data.frame(Xj)
 		Xs$HRValue <- paste(Xs[, 1])
-	    Simb <- merge(Simb, Xs)
-		Simb$HR <- exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]))	 
-	  	bfit <- basehaz(obj)
-	  	bfit$FakeID <- 1
-	  	Simb$FakeID <- 1
+
+		Simb <- merge(Simb, Xs)
+		Simb$CombB <- Simb[, 1] * Simb[, 2]
+		Simb <- Simb[, 2:4]
+
+		Simb <- cbind(Simb, ExpandFC)
+		Simb$Sum <- rowSums(Simb[, c(-1, -2)])
+		Simb$HR <- exp(Simb$Sum)
+		Simb <- Simb[, c("HRValue", "HR", "Xj")]
+
+		bfit <- basehaz(obj)
+		bfit$FakeID <- 1
+		Simb$FakeID <- 1
 		bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
 		SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
-		SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
-	  	Simb$HRate <- Simb$hazard * Simb$HR 
-	  	Simb <- Simb[, -1]
+		SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
+		Simb <- data.frame(SimbCombDT)
+		Simb$HRate <- Simb$hazard * Simb$HR 
+
+		# Remove unnecessary
+		Simb <- Simb[, c("HRValue", "HR", "Xj", "hazard", "time", "HRate")]
 	}
 
+
+
 	# Drop simulations outside of 'confidence bounds'
-	if (qi == "Relative Hazard" | qi == "First Difference" | qi == "Hazard Ratio"){
-		SubVar <- "X1"
-	} else if (qi == "Marginal Effect"){
+	if (qi == "Marginal Effect"){
 		SubVar <- "X2"
 	}else if (qi == "Hazard Rate"){
 		SubVar <- "time"
