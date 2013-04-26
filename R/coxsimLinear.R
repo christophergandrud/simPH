@@ -79,7 +79,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
       names(Xs) <- c("Xj")
       Xs$Comparison <- paste(Xs[, 1])
       Simb <- merge(Simb, Xs)
-    	Simb$HR <- exp((Simb$Xj - Simb$Xl) * Simb$Coef)	
+    	Simb$HR <- exp(Simb$Xj * Simb$Coef)	
     } 
     else if (qi == "First Difference"){
     	if (length(Xj) != length(Xl)){

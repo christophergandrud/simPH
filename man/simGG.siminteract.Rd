@@ -68,9 +68,9 @@
   effect, for time-varying hazard ratio graphs. No line is
   created for hazard rates.
 
-  Note: if \code{qi = "Hazard Ratio"} or \code{qi = "First
-  Difference"} then you need to have choosen more than one
-  fitted value for \code{X1} in
+  Note: if \code{qi = "Relative Hazard"} or \code{qi =
+  "First Difference"} then you need to have choosen more
+  than one fitted value for \code{X1} in
   \code{\link{coxsimInteract}}.
 }
 \details{
@@ -91,9 +91,32 @@ M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
 
 # Simulate Marginal Effect of lethal for multiple values of prevgenx
 Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2))
+# Change the order of the covariates to make a more easily
+# interpretable hazard ratio graph.
+M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal, data = CarpenterFdaData)
+
+# Simulate Hazard Rate of lethal for multiple values of prevgenx
+Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
+                      X1 = seq(2, 115, by = 2),
+                      X2 = c(0, 1),
+                      qi = "Hazard Ratio", ci = 0.9)
+
+# Simulate first difference
+Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
+                      X1 = seq(2, 115, by = 2),
+                      X2 = c(0, 1),
+                      qi = "First Difference", spin = TRUE)
+
+# Simulate Relative Hazards
+Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
+                      X1 = seq(2, 115, by = 2),
+                      X2 = c(0, 1),
+                      qi = "Relative Hazard", spin = TRUE)
 
 # Plot Marginal Effects
 simGG(Sim1, xlab = "\\nprevgenx", ylab = "Marginal Effect of lethal\\n")
+simGG(Sim2)
+simGG(Sim3)
 }
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.

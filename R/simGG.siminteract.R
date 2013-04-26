@@ -31,15 +31,38 @@
 #' 
 #' # Simulate Marginal Effect of lethal for multiple values of prevgenx
 #' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by = 2))
+#' # Change the order of the covariates to make a more easily
+#' # interpretable hazard ratio graph.
+#' M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal, data = CarpenterFdaData)
 #' 
+#' # Simulate Hazard Rate of lethal for multiple values of prevgenx
+#' Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
+#'                       X1 = seq(2, 115, by = 2),
+#'                       X2 = c(0, 1),
+#'                       qi = "Hazard Ratio", ci = 0.9)
+#'
+#' # Simulate first difference
+#' Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
+#'                       X1 = seq(2, 115, by = 2),
+#'                       X2 = c(0, 1),
+#'                       qi = "First Difference", spin = TRUE)
+#'
+#' # Simulate Relative Hazards
+#' Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
+#'                       X1 = seq(2, 115, by = 2),
+#'                       X2 = c(0, 1),
+#'                       qi = "Relative Hazard", spin = TRUE)
+#'                        
 #' # Plot Marginal Effects
 #' simGG(Sim1, xlab = "\nprevgenx", ylab = "Marginal Effect of lethal\n")
+#' simGG(Sim2)
+#' simGG(Sim3)
 #'
 #' @description Uses ggplot2 to plot the quantities of interest from \code{siminteract} objects, including marginal effects, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
 #'
 #'
-#' Note: if \code{qi = "Hazard Ratio"} or \code{qi = "First Difference"} then you need to have choosen more than one fitted value for \code{X1} in \code{\link{coxsimInteract}}. 
+#' Note: if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"} then you need to have choosen more than one fitted value for \code{X1} in \code{\link{coxsimInteract}}. 
 #'
 #' @import ggplot2
 #' @method simGG siminteract
@@ -83,10 +106,18 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
   		if (!is.null(to)){
   			objdf <- subset(objdf, Time <= to)
   		}
+	} else if (qi == "Relative Hazard"){
+		colour <- NULL
+	  	objdf <- data.frame(obj$X1, obj$X2, obj$HR, obj$Comparison)
+	  	names(objdf) <- c("X1", "X2", "HR", "Comparison")
 	} else if (qi == "Marginal Effect"){
 	  	spalette <- NULL
 	  	objdf <- data.frame(obj$X2, obj$HR)
 	  	names(objdf) <- c("X2", "HR")
+	} else if (qi == "First Difference"){
+		colour <- NULL
+		objdf <- data.frame(obj$X1, obj$X2, obj$HR)
+		names(objdf) <- c("X1", "X2", "FirstDiff")
 	}
 
 	# Plot
@@ -113,7 +144,8 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
 		}
-	} else if (qi == "Marginal Effect"){
+	} 
+	else if (qi == "Marginal Effect"){
 		ggplot(objdf, aes(X2, HR)) +
 		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +   
@@ -122,4 +154,40 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		    theme_bw(base_size = 15)
 	} 
+	else if (qi == "First Difference"){
+		X1Unique <- objdf[!duplicated(objdf[, "X1"]), ]
+		if (nrow(X1Unique) <= 1){
+			message("X1 must have more than one fitted value.")
+		} else {
+			ggplot(objdf, aes(X1, FirstDiff, colour = factor(X2), group = factor(X2))) +
+		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
+		        scale_y_continuous()+
+		        scale_x_continuous() +
+		        scale_colour_brewer(palette = spalette, name = leg.name) +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+	    }
+	} 
+	else if (qi == "Relative Hazard"){
+		X1Unique <- objdf[!duplicated(objdf[, "X1"]), ]
+		if (nrow(X1Unique) <= 1){
+			message("X1 must have more than one fitted value.")
+		} else {
+			ggplot(objdf, aes(X1, HR, colour = factor(X2), group = factor(X2))) +
+		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+		        scale_y_continuous()+
+		        scale_x_continuous() +
+		        scale_colour_brewer(palette = spalette, name = leg.name) +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+	    }
+    }
 }

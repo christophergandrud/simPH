@@ -19,8 +19,9 @@
   variable's name.}
 
   \item{qi}{quantities of interest to simulate. Values can
-  be \code{"Marginal Effect"} and \code{"Hazard Rate"}. The
-  default is \code{qi = "Marginal Effect"}. If \code{qi =
+  be \code{"Marginal Effect"}, \code{"First Difference"},
+  \code{"Relative Hazard"}, and \code{"Hazard Rate"}. The
+  default is \code{qi = "Relative Hazard"}. If \code{qi =
   "Hazard Rate"} and the \code{coxph} model has strata,
   then hazard rates for each strata will also be
   calculated.}
@@ -66,7 +67,11 @@
   exponent, so that it resembles a hazard ratio. For an
   interaction between variables \eqn{X} and \eqn{Z} then
   the marginal effect for \eqn{X} is: \deqn{ME_{X} =
-  exp(\beta_{X} + \beta_{XZ}Z)}
+  exp(\beta_{X} + \beta_{XZ}Z).}
+
+  Note that for First Differences the comparison is not
+  between two values of the same variable but two values of
+  the constitute variable and 0.
 }
 \examples{
 # Load Carpenter (2002) data
@@ -82,10 +87,21 @@ M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
 Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
 						  X2 = seq(2, 115, by = 2), spin = TRUE)
 
-# Simulate Hazard Rate of lethal for multiple values of prevgenx
-Sim2 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
-						  X2 = seq(2, 115, by = 2),
-						  qi = "Hazard Rate", spin = TRUE)
+# Change the order of the covariates to make a more easily
+# interpretable relative hazard graph.
+M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal, data = CarpenterFdaData)
+
+# Simulate Relative Hazard of lethal for multiple values of prevgenx
+Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
+                    X1 = seq(2, 115, by = 2),
+                    X2 = c(0, 1),
+                    qi = "Relative Hazard", ci = 0.9)
+
+# Simulate First Difference
+Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
+                       X1 = seq(2, 115, by = 2),
+                       X2 = c(0, 1),
+                       qi = "First Difference", spin = TRUE)
 }
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.

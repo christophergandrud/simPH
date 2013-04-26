@@ -4,7 +4,7 @@
 #' @param obj a \code{coxph} fitted model object with a linear multiplicative interaction.
 #' @param b1 character string of the first constitutive variable's name. Note \code{b1} and \code{b2} must be entered in the order in which they are entered into the \code{coxph} model.
 #' @param b2 character string of the second constitutive variable's name.
-#' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"} and \code{"Hazard Rate"}. The default is \code{qi = "Marginal Effect"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
+#' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Relative Hazard"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set. If you want to plot the results, \code{X1} should have more than one value.
 #' @param X2 numeric vector of fitted values of \code{b2} to simulate for. 
 #' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1}. 
@@ -14,7 +14,9 @@
 #'
 #' @details Simulates marginal effects, first differences, hazard ratios, and hazard rates for linear multiplicative interactions. 
 #' Marginal effects are calculated as in Brambor et al. (2006) with the addition that we take the exponent, so that it resembles a hazard ratio. For an interaction between variables \eqn{X} and \eqn{Z} then the marginal effect for \eqn{X} is:
-#' \deqn{ME_{X} = exp(\beta_{X} + \beta_{XZ}Z)}
+#' \deqn{ME_{X} = exp(\beta_{X} + \beta_{XZ}Z).}
+#'
+#' Note that for First Differences the comparison is not between two values of the same variable but two values of the constitute variable and 0.
 #'
 #' @examples 
 #' # Load Carpenter (2002) data
@@ -30,11 +32,21 @@
 #' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
 #'						  X2 = seq(2, 115, by = 2), spin = TRUE)
 #'
-#' # Simulate Hazard Rate of lethal for multiple values of prevgenx
-#' Sim2 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
-#'						  X2 = seq(2, 115, by = 2), 
-#' 						  qi = "Hazard Rate", spin = TRUE)
-
+#' # Change the order of the covariates to make a more easily
+#' # interpretable relative hazard graph. 
+#' M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal, data = CarpenterFdaData)
+#'
+#' # Simulate Relative Hazard of lethal for multiple values of prevgenx
+#' Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
+#'                     X1 = seq(2, 115, by = 2),
+#'                     X2 = c(0, 1),
+#'                     qi = "Relative Hazard", ci = 0.9)
+#'                     
+#' # Simulate First Difference
+#' Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
+#'                        X1 = seq(2, 115, by = 2),
+#'                        X2 = c(0, 1),
+#'                        qi = "First Difference", spin = TRUE)
 #'
 #' @references Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. ''Understanding Interaction Models: Improving Empirical Analyses.'' Political Analysis 14(1): 63–82.
 #'
@@ -53,10 +65,10 @@
 coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
 {
 	# Ensure that qi is valid
-	qiOpts <- c("Marginal Effect", "Hazard Rate")
+	qiOpts <- c("Marginal Effect", "First Difference", "Relative Hazard", "Hazard Rate")
 	TestqiOpts <- qi %in% qiOpts
 	if (!isTRUE(TestqiOpts)){
-		stop("Invalid qi type. qi must be Marginal Effect or Hazard Rate")
+		stop("Invalid qi type. qi must be Marginal Effect, First Difference, Relative Hazard, or Hazard Rate")
 	}
 
 	# Parameter estimates & Variance/Covariance matrix
@@ -90,9 +102,33 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 				Simb$HR <- exp(Simb[, 1] + (Simb[, 3] * Simb[, 4])) 
 			}
 		}
+		else if (qi == "First Difference"){
+		  if (is.null(X1) | is.null(X2)){
+		    stop("For First Differences both X1 and X2 should be specified.")
+		  } else{
+			Xs <- merge(X1, X2)
+			names(Xs) <- c("X1", "X2")
+			Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
+		    Simb <- merge(Simb, Xs)
+			Simb$HR <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]) - 1) * 100)	
+		  }
+		}
+		else if (qi == "Relative Hazard"){
+		  if (is.null(X1) | is.null(X2)){
+		    stop("For Relative Hazards both X1 and X2 should be specified.")
+		  } else {
+			Xs <- merge(X1, X2)
+			names(Xs) <- c("X1", "X2")
+			Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
+		    Simb <- merge(Simb, Xs)
+			Simb$HR <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3])))
+		  }
+		}
 		else if (qi == "Hazard Rate"){
-			Xl <- NULL
-		  message("Xl is ignored. All variables values other than b fitted at 0.") 
+			if (is.null(X1) | is.null(X2)){
+				stop("For Hazard Rates, both X1 and X2 ")
+			}
+		  	message("All variables values other than b1 and b2 fitted at 0.") 
 			Xs <- data.frame(Xj)
 			Xs$HRValue <- paste(Xs[, 1])
 		    Simb <- merge(Simb, Xs)
@@ -158,19 +194,18 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
 		Simb <- data.frame(SimbCombDT)
 		Simb$HRate <- Simb$hazard * Simb$HR 
-
-		# Remove unnecessary
-		Simb <- Simb[, c("HRValue", "HR", "Xj", "hazard", "time", "HRate")]
 	}
-
-
 
 	# Drop simulations outside of 'confidence bounds'
-	if (qi == "Marginal Effect"){
+	if (qi == "First Difference" | qi == "Relative Hazard"){
+		SubVar <- "X1"
+	} else if (qi == "Marginal Effect"){
 		SubVar <- "X2"
-	}else if (qi == "Hazard Rate"){
+	} else if (qi == "Hazard Rate"){
 		SubVar <- "time"
 	}
+
+	# Drop simulations outside of the middle
 	if (!isTRUE(spin)){
 	    Bottom <- (1 - ci)/2
 	    Top <- 1 - Bottom
