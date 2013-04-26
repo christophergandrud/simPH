@@ -2,7 +2,7 @@
 #'
 #' \code{coxsimSpline} simulates quantities of interest from penalised splines using multivariate normal distributions.
 #' @param obj a \code{coxph} fitted model object with a penalised spline.
-#' @param bspline a character string of the full \code{\link{psline}} call used in \code{obj}.
+#' @param bspline a character string of the full \code{\link{pspline}} call used in \code{obj}.
 #' @param bdata a numeric vector of splined variable's values.
 #' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. Think carefully before using \code{qi = "Hazard Rate"}. You may be creating very many simulated values which can be very computationally intensive to do. Adjust the number of simulations per fitted value with \code{nsim}.
 #' @param Xj numeric vector of values of X to simulate for.
@@ -64,7 +64,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
 	TestqiOpts <- qi %in% qiOpts
 	if (!isTRUE(TestqiOpts)){
-		stop("Invalid qi type. qi must be Relative Hazard, First Difference, Hazard Rate, or Hazard Ratio")
+		stop("Invalid qi type. qi must be 'Relative Hazard', 'First Difference', 'Hazard Rate', or 'Hazard Ratio'")
 	}
 
 	if (nsim > 10 & qi == "Hazard Rate"){

@@ -7,7 +7,7 @@
 #' @param Xj numeric vector of values of X to simulate for.
 #' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} or \code{code = "Hazard"} only \code{Xj} is relevant.
 #' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b}. 
-#' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
+#' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}. Note: it does not currently support models that include polynomials created by \code{\link{I}}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
 #' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
 #'
@@ -18,16 +18,30 @@
 #'
 #' @examples
 #' # Load Carpenter (2002) data
-#' # data("CarpenterFdaData")
+#' data("CarpenterFdaData")
 #'
 #' # Load survival package
-#' # library(survival)
+#' library(survival)
 #'
 #' # Run basic model
-#' # M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
+#' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
+#'             deathrt1 + acutediz + hosp01  + hhosleng +
+#'             mandiz01 + femdiz01 + peddiz01 + orphdum +
+#'             vandavg3 + wpnoavg3 + condavg3 + orderent +
+#'             stafcder, data = CarpenterFdaData)
 #'
 #' # Simulate Hazard Ratios
-#' # Sim1 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Ratio", Xj = c(1237, 1600), Xl = c(1000, 1000), ci = 0.99)
+#' Sim1 <- coxsimLinear(M1, b = "stafcder", 
+#'                        qi = "Hazard Ratio", 
+#'                        Xj = c(1237, 1600), 
+#'                        Xl = c(1000, 1000), 
+#'                        spin = TRUE, ci = 0.99)
+#'
+#' # Simulate Hazard Rates
+#' Sim2 <- coxsimLinear(M1, b = "stafcder", 
+#'                        qi = "Hazard Rate", 
+#'                        Xj = 1237, 
+#'                        ci = 0.99, means = TRUE)
 #'
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227–43.
@@ -45,7 +59,7 @@
 
 coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
 {	
-  if (qi != "Hazard Ratio" & isTRUE(means)){
+  if (qi != "Hazard Rate" & isTRUE(means)){
     stop("means can only be TRUE when qi = 'Hazard Rate'.")
   }
 
@@ -53,8 +67,9 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
   qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
   TestqiOpts <- qi %in% qiOpts
   if (!isTRUE(TestqiOpts)){
-    stop("Invalid qi type. qi must be Relative Hazard, First Difference, Hazard Rate, or Hazard Ratio")
+    stop("Invalid qi type. qi must be 'Relative Hazard', 'First Difference', 'Hazard Rate', or 'Hazard Ratio'")
   }
+  MeansMessage <- NULL
   if (isTRUE(means) & length(obj$coefficients) == 3){
     means <- FALSE
     MeansMessage <- FALSE
@@ -116,7 +131,11 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
     }
     else if (qi == "Hazard Rate"){
         Xl <- NULL
-        message("Xl is ignored. All variables values other than b are fitted at 0.") 
+        message("Xl is ignored.")
+
+        if (isTRUE(MeansMessage)){
+          message("All variables values other than b are fitted at 0.")
+        } 
       	Xs <- data.frame(Xj)
       	Xs$HRValue <- paste(Xs[, 1])
   	    Simb <- merge(Simb, Xs)
@@ -139,7 +158,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
     message("Xl ignored")
 
     # Set all values of b at means for data used in the analysis
-    NotB <- setdiff(names(obj$means), b)
+    NotB <- setdiff(names(DrawnDF), b)
     MeanValues <- data.frame(obj$means)
     FittedMeans <- function(Z){
       ID <- 1:nsim
@@ -156,7 +175,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
       Temp <- Temp[, -1]
       return(Temp)
     }
-    FittedComb <- data.frame(FittedMeans(NotB)) 
+    FittedComb <- FittedMeans(NotB) 
     ExpandFC <- do.call(rbind, rep(list(FittedComb), length(Xj)))
 
     # Set fitted values for Xj

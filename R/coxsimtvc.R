@@ -101,13 +101,25 @@
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probablility Intervals.'' Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 
 
-coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, means = FALSE, nsim = 1000, from, to, by, ci = 0.95, spin = FALSE)
+coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, nsim = 1000, from, to, by, ci = 0.95, spin = FALSE)
 {
+  ############ Means Not Supported Yet for coxsimtvc ########
+  #### means code is a place holder for future versions #####
+  means <- FALSE
   # Ensure that qi is valid
   qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
   TestqiOpts <- qi %in% qiOpts
   if (!isTRUE(TestqiOpts)){
-    stop("Invalid qi type. qi must be Relative Hazard, First Difference, Hazard Rate, or Hazard Ratio")
+    stop("Invalid qi type. qi must be 'Relative Hazard', 'First Difference', 'Hazard Rate', or 'Hazard Ratio'")
+  }
+
+  MeansMessage <- NULL
+  if (isTRUE(means) & length(obj$coefficients) == 3){
+    means <- FALSE
+    MeansMessage <- FALSE
+    message("Note: means reset to FALSE. The model only includes the interaction variables.")
+  } else if (isTRUE(means) & length(obj$coefficients) > 3){
+    MeansMessage <- TRUE
   }
 
   # Create time function
@@ -189,7 +201,11 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
       }
     } else if (qi == "Hazard Rate"){
         Xl <- NULL
-        message("Xl is ignored. All variables values other than b fitted at 0.") 
+        message("Xl is ignored.")
+
+        if (isTRUE(MeansMessage)){
+          message("All variables values other than b are fitted at 0.")
+        } 
         Xs <- data.frame(Xj)
         Xs$HRValue <- paste(Xs[, 1])
         Simb <- merge(TVSim, Xs)
@@ -204,6 +220,61 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
         Simb$HRate <- Simb$hazard * Simb$HR 
         TVSim <- Simb[, -1]
     }
+  }
+
+  # If the user wants to calculate Hazard Rates using means for fitting all covariates other than b.
+  else if (isTRUE(means)){
+    Xl <- NULL
+    message("Xl ignored")
+
+    # Set all values of b at means for data used in the analysis
+    NotB <- setdiff(names(obj$means), b)
+    MeanValues <- data.frame(obj$means)
+    FittedMeans <- function(Z){
+      ID <- 1:nsim
+      Temp <- data.frame(ID)
+      for (i in Z){
+        BarValue <- MeanValues[i, ]
+        DrawnCoef <- DrawnDF[, i]
+        FittedCoef <- outer(DrawnCoef, BarValue)
+        FCMolten <- data.frame(melt(FittedCoef))
+        Temp <- cbind(Temp, FCMolten[,3])
+      }
+      Names <- c("ID", Z)
+      names(Temp) <- Names
+      Temp <- Temp[, -1]
+      return(Temp)
+    }
+    FittedComb <- data.frame(FittedMeans(NotB)) 
+    ExpandFC <- do.call(rbind, rep(list(FittedComb), length(Xj)))
+
+    # Set fitted values for Xj
+    bpos <- match(b, dfn)
+    Simb <- data.frame(DrawnDF[, bpos])
+
+    Xs <- data.frame(Xj)
+    Xs$HRValue <- paste(Xs[, 1])
+
+    Simb <- merge(Simb, Xs)
+    Simb$CombB <- Simb[, 1] * Simb[, 2]
+    Simb <- Simb[, 2:4]
+
+    Simb <- cbind(Simb, ExpandFC)
+    Simb$Sum <- rowSums(Simb[, c(-1, -2)])
+    Simb$HR <- exp(Simb$Sum)
+    Simb <- Simb[, c("HRValue", "HR", "Xj")]
+
+    bfit <- basehaz(obj)
+    bfit$FakeID <- 1
+    Simb$FakeID <- 1
+    bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+    SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+    SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
+    Simb <- data.frame(SimbCombDT)
+    Simb$HRate <- Simb$hazard * Simb$HR 
+
+    # Remove unnecessary
+    Simb <- Simb[, c("HRValue", "HR", "Xj", "hazard", "time", "HRate")]
   }
 
   # If new values for calculating the hazard rate are set

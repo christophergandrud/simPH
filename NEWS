@@ -8,6 +8,10 @@ Version 0.06
 
 - `qi` now automatically determined by `simGG`.
 
+- `means` argument added to `coxsimLinear` and coxsimInteract`. This allows the user to choose if they would like Hazard Rates to be fitted using the variables (other than the variables of interest) set to their means rather than 0. Note: it does not currently support models that include polynomials created by `I`. 
+	
+	- `means` will be added to the other simulation commands in future versions.
+
 - Minor bug fixes and documentation updates.
 
 

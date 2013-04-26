@@ -36,7 +36,9 @@
 
   \item{means}{logical, whether or not to use the mean
   values to fit the hazard rate for covaraiates other than
-  \code{b1} \code{b2} and \code{b1*b2}.}
+  \code{b1} \code{b2} and \code{b1*b2}. Note: it does not
+  currently support models that include polynomials created
+  by \code{\link{I}}.}
 
   \item{nsim}{the number of simulations to run per value of
   X. Default is \code{nsim = 1000}.}
@@ -89,7 +91,9 @@ Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
 
 # Change the order of the covariates to make a more easily
 # interpretable relative hazard graph.
-M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal, data = CarpenterFdaData)
+M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal +
+             orphdum,
+             data = CarpenterFdaData)
 
 # Simulate Relative Hazard of lethal for multiple values of prevgenx
 Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
@@ -102,6 +106,11 @@ Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
                        X1 = seq(2, 115, by = 2),
                        X2 = c(0, 1),
                        qi = "First Difference", spin = TRUE)
+
+# Simulate Hazard Rate
+Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
+                       X1 = c(90), X2 = c(1), qi = "Hazard Rate",
+                       means = TRUE)
 }
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.

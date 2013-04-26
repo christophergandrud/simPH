@@ -10,7 +10,7 @@
   penalised spline.}
 
   \item{bspline}{a character string of the full
-  \code{\link{psline}} call used in \code{obj}.}
+  \code{\link{pspline}} call used in \code{obj}.}
 
   \item{bdata}{a numeric vector of splined variable's
   values.}

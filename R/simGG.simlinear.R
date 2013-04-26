@@ -29,11 +29,14 @@
 #' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
 #' 
 #' # Simulate and plot Hazard Ratios for stafcder variable
-#' Sim1 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Ratio", Xj = seq(1237, 1600, by = 2))
+#' Sim1 <- coxsimLinear(M1, b = "stafcder", 
+#' 						qi = "Hazard Ratio", 
+#' 						Xj = seq(1237, 1600, by = 2))
 #' simGG(Sim1)
 #' 
 #' # Simulate and plot Hazard Rate for stafcder variable
-#' Sim2 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Rate", Xj = c(1237, 1600))
+#' Sim2 <- coxsimLinear(M1, b = "stafcder", 
+#'						qi = "Hazard Rate", Xj = c(1237, 1600))
 #' simGG(Sim2)
 #'
 #' @description Uses ggplot2 to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.

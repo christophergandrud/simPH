@@ -7,7 +7,7 @@
 #' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Relative Hazard"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set. If you want to plot the results, \code{X1} should have more than one value.
 #' @param X2 numeric vector of fitted values of \code{b2} to simulate for. 
-#' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1} \code{b2} and \code{b1*b2}. 
+#' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1} \code{b2} and \code{b1*b2}. Note: it does not currently support models that include polynomials created by \code{\link{I}}.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
 #' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
@@ -34,7 +34,9 @@
 #'
 #' # Change the order of the covariates to make a more easily
 #' # interpretable relative hazard graph. 
-#' M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal, data = CarpenterFdaData)
+#' M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal + 
+#'              orphdum,
+#'              data = CarpenterFdaData)
 #'
 #' # Simulate Relative Hazard of lethal for multiple values of prevgenx
 #' Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
@@ -47,6 +49,12 @@
 #'                        X1 = seq(2, 115, by = 2),
 #'                        X2 = c(0, 1),
 #'                        qi = "First Difference", spin = TRUE)
+#'                        
+#' # Simulate Hazard Rate
+#' Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
+#'                        X1 = c(90), X2 = c(1), qi = "Hazard Rate",
+#'                        means = TRUE)
+#' 
 #'
 #' @references Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. ''Understanding Interaction Models: Improving Empirical Analyses.'' Political Analysis 14(1): 63–82.
 #'
@@ -65,11 +73,14 @@
 
 coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
 {
+	if (qi != "Hazard Rate" & isTRUE(means)){
+		stop("means can only be TRUE when qi = 'Hazard Rate'.")
+	}
 	# Ensure that qi is valid
 	qiOpts <- c("Marginal Effect", "First Difference", "Relative Hazard", "Hazard Rate")
 	TestqiOpts <- qi %in% qiOpts
 	if (!isTRUE(TestqiOpts)){
-		stop("Invalid qi type. qi must be Marginal Effect, First Difference, Relative Hazard, or Hazard Rate")
+		stop("Invalid qi type. qi must be 'Marginal Effect', 'First Difference', 'Relative Hazard', or 'Hazard Rate'")
 	}
 	MeansMessage <- NULL
 	if (isTRUE(means) & length(obj$coefficients) == 3){
@@ -172,8 +183,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		Xs$HRValue <- paste0(Xs$X1, ", ", Xs$X2)
 
 		# Set all values of b at means for data used in the analysis
-		bInterColon <- paste0(b1, ":", b2)
-		NotB <- setdiff(names(obj$means), c(b1, b2, bInterColon))
+		NotB <- setdiff(names(DrawnDF), c(b1, b2, binter))
 		MeanValues <- data.frame(obj$means)
 		FittedMeans <- function(Z){
 		  ID <- 1:nsim

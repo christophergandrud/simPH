@@ -31,7 +31,9 @@
   \code{b}.}
 
   \item{nsim}{the number of simulations to run per value of
-  X. Default is \code{nsim = 1000}.}
+  X. Default is \code{nsim = 1000}. Note: it does not
+  currently support models that include polynomials created
+  by \code{\link{I}}.}
 
   \item{ci}{the proportion of middle simulations to keep.
   The default is \code{ci = 0.95}, i.e. keep the middle 95
@@ -60,16 +62,30 @@
 }
 \examples{
 # Load Carpenter (2002) data
-# data("CarpenterFdaData")
+data("CarpenterFdaData")
 
 # Load survival package
-# library(survival)
+library(survival)
 
 # Run basic model
-# M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
+M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
+            deathrt1 + acutediz + hosp01  + hhosleng +
+            mandiz01 + femdiz01 + peddiz01 + orphdum +
+            vandavg3 + wpnoavg3 + condavg3 + orderent +
+            stafcder, data = CarpenterFdaData)
 
 # Simulate Hazard Ratios
-# Sim1 <- coxsimLinear(M1, b = "stafcder", qi = "Hazard Ratio", Xj = c(1237, 1600), Xl = c(1000, 1000), ci = 0.99)
+Sim1 <- coxsimLinear(M1, b = "stafcder",
+                       qi = "Hazard Ratio",
+                       Xj = c(1237, 1600),
+                       Xl = c(1000, 1000),
+                       spin = TRUE, ci = 0.99)
+
+# Simulate Hazard Rates
+Sim2 <- coxsimLinear(M1, b = "stafcder",
+                       qi = "Hazard Rate",
+                       Xj = 1237,
+                       ci = 0.99, means = TRUE)
 }
 \references{
   Licht, Amanda A. 2011. ''Change Comes with Time:
