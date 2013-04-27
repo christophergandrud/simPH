@@ -87,6 +87,8 @@ To learn more about shortest probability intervals (and also for the source of t
 
 Liu, Y., Gelman, A., & Zheng, T. (2013). ["Simulation-efficient Shortest Probablility Intervals."](http://arxiv.org/pdf/1302.2142v1.pdf) Arvix. 
 
+**Also good:** Hyndman, R. J. (1996). ["Computing and Graphing Highest Density Regions."](http://www.jstor.org/stable/10.2307/2684423) The American Statistician, 50(2), 120–126.
+
 ### Interpreting Interactions
 
 For more information about interpreting interaction terms:
@@ -99,6 +101,7 @@ For an example of how non-proportional hazard results were often presented befor
 
 Gandrud, Christopher. 2012. [“The Diffusion of Financial Supervisory Governance Ideas.”](http://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362) Review of International Political Economy.
 
+---
 
 ## Future Plans
 This package is in the **early stages** of development. I intend to expand the quantities of interest that can be simulated and graphed for Cox PH models. I am also currently working on functions that can simulate and graph hazard ratios estimated from [Fine and Gray competing risks models](http://www.jstor.org/stable/2670170). 
