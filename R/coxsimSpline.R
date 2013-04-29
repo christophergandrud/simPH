@@ -78,6 +78,8 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	}
 
 	# Extract boundary knots for default Boundary.knots = range(x) & number of knots
+	#### Note: these can also be found with get("cbase", environment(obj$printfun[[1]])) # (replace 1 with the spline term number
+	#### From: http://r.789695.n4.nabble.com/help-on-pspline-in-coxph-td3431829.html 
 	OA <- obj$assign
 	ListKnots <- OA[bterm]
 	NumKnots <- length(unlist(ListKnots))
