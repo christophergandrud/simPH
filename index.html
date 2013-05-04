@@ -6,7 +6,6 @@
     <title>simPH by christophergandrud</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -27,6 +26,8 @@
           <li><a href="https://github.com/christophergandrud/simPH">View On <strong>GitHub</strong></a></li>
         </ul>
       </header>
+
+<!--------------------- End Header ------------------->
       <section>
         <h1>simPH</h1>
 
@@ -34,7 +35,10 @@
 
 <h3>Version 0.6</h3>
 
-<h3>Note: <strong>simPH</strong> is in beta. Please report any bugs at <a href="https://github.com/christophergandrud/simPH/issues">https://github.com/christophergandrud/simPH/issues</a>.</h3>
+<h4><strong>simPH</strong> is in beta. Please report any bugs at: <a href="https://github.com/christophergandrud/simPH/issues">https://github.com/christophergandrud/simPH/issues</a>.</h4>
+
+<hr>
+<img src="img/Graphs/banner.png" height="50" width="1000" />
 
 <hr><p>An R package for simulating and plotting quantities of interest (relative hazards, first differences, and hazard ratios)for linear coefficients, multiplicative interactions, polynomials, penalised splines, and non-proportional hazards, as well as stratified survival curves from Cox Proportional Hazard models.</p>
 
@@ -75,8 +79,7 @@
 
 <p>Use the <a href="https://github.com/hadley/devtools">devtools</a> command <code>install_github</code> to install <strong>simPH</strong> in R. Here is the exact code for installing the most recent development version:</p>
 
-<div class="highlight"><pre><span class="c">devtools::install_github("simPH", "christophergandrud")</span>
-</pre></div>
+<div><pre><code class="R">devtools::install_github("simPH", "christophergandrud")</code></div>
 
 <h2>Tip</h2>
 
@@ -124,11 +127,16 @@
 
 <p>I am also working on a way to graph hazard ratios with frailties. </p>
       </section>
+
+<!-------- Footer -------------------->
       <footer>
-        <p>This project is maintained by <a href="https://github.com/christophergandrud">christophergandrud</a></p>
+        <p><a href="http://christophergandrud.blogspot.kr/p/biocontact.html">&copy; Christopher Gandrud (2013)</a></p>
+        <p>
+          <a href="https://twitter.com/ChrisGandrud"><img src="img/twitter-bird-Logo.png" alt="@ChrisGandrud" height="30" width="30"></a>
+          <a href="https://github.com/christophergandrud"><img src="img/Octocat.png" alt="Gandrud GitHub page" height="30" width="30"></a>
+        </p>
         <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
-    </div>
     <script src="javascripts/scale.fix.js"></script>
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
@@ -140,6 +148,10 @@
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
+    <!-- Code syntax highlight -->
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/7.3/styles/solarized_light.min.css">
+    <script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 
   </body>
 </html>
