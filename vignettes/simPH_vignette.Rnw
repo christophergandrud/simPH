@@ -2,7 +2,8 @@
 
 \usepackage[utf8]{inputenc} 
 
-%\VignetteEngine{knitr::knitr}
+%\VignetteEngine{knitr}
+%\VignetteIndexEntry{simPH Vignette}
 
 %%%% Set up
 <<include=FALSE>>=

@@ -7,7 +7,7 @@ Description: The package simulates and plots quantities of interest (relative
     non-proportional hazards, as well as stratified survial curves from Cox
     Proportional Hazard models.
 Version: 0.6.1
-Date: 2013-04-26
+Date: 2013-05-05
 Author: Christopher Gandrud
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
 URL: http://christophergandrud.github.com/simPH/
@@ -25,6 +25,7 @@ Imports:
     gridExtra,
     quadprog,
     MSBVAR
+Suggests: knitr
 License: GPL (>= 2)
 Collate:
     'CarpenterFdaData.R'
@@ -43,3 +44,4 @@ Collate:
     'simGG.simlinear.R'
     'tvc.R'
     'SPInBounds.R'
+VignetteBuilder: knitr
