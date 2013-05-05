@@ -1,6 +1,4 @@
-\documentclass{article}
-
-\usepackage[utf8]{inputenc} 
+\documentclass[nojss,draft]{jss}
 
 %\VignetteEngine{knitr}
 %\VignetteIndexEntry{simPH Vignette}
@@ -30,20 +28,43 @@ opts_chunk$set(fig.align='center', dev='png')
 
 %%%%%%%%%% Title Page Information 
 
-\title{simPH: Tools for simulating and graphing quantities of interest extimated from Cox Proportional Hazards Models}
+\title{\pkg{simPH}: Tools for Simulating and Plotting Quantities of Interest from Cox Proportional Hazards Models}
+\author{Christopher Ganrud\\Yonsei University}
 
-\author{Christopher Ganrud}
+%%%%%%%% Pretty Print
+\Plainauthor{Christopher Gandrud}
+\Plaintitle{\pkg{simPH}: Tools for Simulating and Graphing Quantities of Interest from Cox Proportional Hazards Models}
+\Shorttitle{\pkg{simPH}: Simulating and Plotting Cox PH Quantities of Interest}
+
+%%%%%% Abstract
+\Abstract{
+	I describe an \proglang{R} package \pkg{simPH} for simulating and plotting quantities of interest estimated from Cox Proportional Hazards models. The quantities of interest include hazard ratios, relative hazards, first differences, marginal effects, and hazard rates for linear, linear interactive, time-varying, polynomial, and penalized spline estimated effects. The quantities of interest calculated from parameters drawn from the posterior, sampling distribution. The draws are then plotted using a methods that utilize the popular \pkg{ggplot2} package. The package is illustrated using epidemiological and political science data.
+}
+
+\Keywords{cox proportional hazards, uncertainty, posterior distribution}
+
+%%%%%%%%%% Address
+\Address{
+	Christopher Gandrud \\
+	Department of International Relations \\
+	Yonsei University \\
+	208 Jeongui Hall \\
+	1 Yonseidae-gil \\
+	Wonju, Gangwon-do \\
+	220-710, Republic of Korea \\
+	E-mail: \email{gandrud@yonsei.ac.kr} \\
+	URL: \url{http://christophergandrud.blogspot.com}
+}
 
 
+%%%%%%%% Begin Document
 \begin{document}
-
-\maketitle
 
 Results estimated from Cox Proportional Hazards (PH) models are often reported with coefficient point estimates or hazard ratios--exponentiated coefficients--and confidence intervals. However, this approach can (a) obscure the functional form of the estimate, especially over time and when it is non-linear or interactive and (b) give an inadequate sense of the uncertainty surrounding the estimates. The \pkg{simPH} \proglang{R} package aims to make it much easier for researchers to show their Cox PH results. 
 
 Drawing directly from approaches taken by \cite{King2000} and \cite{Licht2011} \pkg{simPH} simulates parameter from estimated Cox PH models by drawing them from their posterior distribution. Then it calculates quantities of interests, such as hazard ratios, first differences, relative hazards, marginal effects (for interactions), and hazard ratios. Finally, it plots the distributions of these simulated quantities of interest.
 
-In this paper I discuss and provide examples of how to use \pkg{simPH} to simulate and plot quantities of interest estimated from Cox PH models. First, I discuss the simulation approach in more detail. Then I discuss the general steps a researcher takes to use simPH. Finally, give step-by-step instructions for how to use \pkg{simPH} to show results from a variety of quantities of interest for a number of different kinds of estimated covariate relationships including linear, linear interactive, time-vaying interactive, polynomial nonlinear, and penalised spline nonlinear. 
+In this paper I discuss and provide examples of how to use \pkg{simPH} to simulate and plot quantities of interest estimated from Cox PH models. First, I discuss the simulation approach in more detail. Then I discuss the general steps a researcher takes to use simPH. Finally, give step-by-step instructions for how to use \pkg{simPH} to show results from a variety of quantities of interest for a number of different kinds of estimated covariate relationships including linear, linear interactive, time-varying interactive, polynomial nonlinear, and penalised spline nonlinear. 
 
 \section{Simulating Quantities of Interest}
 
@@ -58,7 +79,6 @@ In this paper I discuss and provide examples of how to use \pkg{simPH} to simula
 \section{Conclusion}
 
 % Bibliography
-\bibliographystyle{apsr}
 \bibliography{HRBibliography,HRPackages}
 
 \end{document}

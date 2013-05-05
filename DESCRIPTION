@@ -1,5 +1,5 @@
 Package: simPH
-Title: Tools for simulating and graphing quantities of interest estimated from
+Title: Tools for simulating and plotting quantities of interest estimated from
     Cox Proportional Hazards models.
 Description: The package simulates and plots quantities of interest (relative
     hazards, first differences, and hazard ratios)for linear coefficients,
