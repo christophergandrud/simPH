@@ -1,0 +1,49 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc} 
+
+%\VignetteEngine{knitr::knitr}
+
+%%%% Set up
+<<include=FALSE>>=
+#### Load Packages ####
+library(repmis)
+
+Packages <- c("car", "knitr", "repmis", "devtools", "MSBVAR", 
+              "simPH", "SPIn", "survival", "Zelig", "ggplot2")
+
+repmis::LoadandCite(Packages, file = "HRPackages.bib")
+
+#### Load data ####
+# Load Carpenter (2002) data 
+## The data is included with simPH
+data("CarpenterFdaData")
+
+# Load Golub & Steunenberg (2007) data
+## The data is included with simPH
+data("GolubEUPData")
+
+##### Set Chunk Options ####
+opts_chunk$set(fig.align='center', dev='png')
+@
+
+%%%%%%%%%% Title Page Information 
+
+\title{simPH: Tools for simulating and graphing quantities of interest extimated from Cox Proportional Hazards Models}
+
+\author{Christopher Ganrud}
+
+
+\begin{document}
+
+\maketitle
+
+Results estimated from Cox Proportional Hazards (PH) models are often reported with coefficient point estimates or hazard ratios--exponentiated point estiamtes--and confidence intervals.    
+
+
+
+% Bibliography
+\bibliographystyle{apsr}
+\bibliography{HRBibliography,HRPackages}
+
+\end{document}
