@@ -60,13 +60,24 @@ opts_chunk$set(fig.align='center', dev='png')
 %%%%%%%% Begin Document
 \begin{document}
 
-Results estimated from Cox Proportional Hazards (PH) models are often reported with coefficient point estimates or hazard ratios--exponentiated coefficients--and confidence intervals. However, this approach can (a) obscure the functional form of the estimate, especially over time and when it is non-linear or interactive and (b) give an inadequate sense of the uncertainty surrounding the estimates. The \pkg{simPH} \proglang{R} package aims to make it much easier for researchers to show their Cox PH results. 
+Results estimated from Cox Proportional Hazards (PH) models are often reported with coefficient point estimates or hazard ratios--exponentiated coefficients--and confidence intervals. However, this approach can (a) obscure the functional form of the estimate, especially over time and when it is non-linear or interactive and (b) give an inadequate sense of the uncertainty surrounding the estimates. There are currently limited capabilities in \proglang{R}\footnote{The \pkg{survival} \citep{R-survival} and Zelig \citep{R-Zelig} packages do included limited functions for presenting estimates from Cox PH models with uncertainty. However, they have very limited or nonexistent capabilities to show nonlinear and interactive estimates with associated uncertainty.} and popular statistical software such as Stata to present results in any other way. The \pkg{simPH} \proglang{R} package aims to make it much easier for researchers to show their Cox PH results. 
 
-Drawing directly from approaches taken by \cite{King2000} and \cite{Licht2011} \pkg{simPH} simulates parameter from estimated Cox PH models by drawing them from their posterior distribution. Then it calculates quantities of interests, such as hazard ratios, first differences, relative hazards, marginal effects (for interactions), and hazard ratios. Finally, it plots the distributions of these simulated quantities of interest.
+Drawing directly from approaches taken by \cite{King2000} and \cite{Licht2011} \pkg{simPH} simulates parameter from estimated Cox PH models by drawing them from their posterior distribution. Then it calculates quantities of interests, such as hazard ratios, first differences, relative hazards, marginal effects (for interactions), and hazard ratios. Finally, it plots the distributions of these simulated quantities of interest. The plots are generally created with the popular \proglang{R} package \pkg{ggplot2} \citep{R-ggplot2} and as such can easily be improved aesthetically in virtually any way allowed by the package.
 
-In this paper I discuss and provide examples of how to use \pkg{simPH} to simulate and plot quantities of interest estimated from Cox PH models. First, I discuss the simulation approach in more detail. Then I discuss the general steps a researcher takes to use simPH. Finally, give step-by-step instructions for how to use \pkg{simPH} to show results from a variety of quantities of interest for a number of different kinds of estimated covariate relationships including linear, linear interactive, time-varying interactive, polynomial nonlinear, and penalised spline nonlinear. 
+In this paper I discuss and provide examples of how to use \pkg{simPH} to simulate and plot quantities of interest estimated from Cox PH models. First, I discuss the simulation approach in more detail. Then I discuss the general steps a researcher takes to use simPH. Finally, give step-by-step instructions for how to use \pkg{simPH} to show results from a variety of quantities of interest for a number of different kinds of estimated covariate relationships including linear, linear interactive, time-varying interactive, polynomial nonlinear, and penalized spline nonlinear. 
 
 \section{Simulating Quantities of Interest}
+
+Results from Cox PH models, and indeed many other methods, are often conveyed using `train-timetables' of coefficient estimates and some measure of uncertainty such as standard errors or confidence intervals. This approach is inadequately informative, especially for effects that are estimated to vary over time, over values of the covariate, or in interaction with other covariates. The \pkg{simPH} package makes it easy to more fully present results from Cox PH models.
+
+
+\subsection{Draws from the Posterior Distribution}
+
+
+\subsection{Calculating Quantities of Interest}
+
+
+\subsection[Which Interval?]{Which Uncertainty Interval: The Central Interval or the Shortest Probability Interval}
 
 \section{The \pkg{simPH} Process}
 
