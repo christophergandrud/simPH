@@ -38,9 +38,23 @@ opts_chunk$set(fig.align='center', dev='png')
 
 \maketitle
 
-Results estimated from Cox Proportional Hazards (PH) models are often reported with coefficient point estimates or hazard ratios--exponentiated point estiamtes--and confidence intervals.    
+Results estimated from Cox Proportional Hazards (PH) models are often reported with coefficient point estimates or hazard ratios--exponentiated coefficients--and confidence intervals. However, this approach can (a) obscure the functional form of the estimate, especially over time and when it is non-linear or interactive and (b) give an inadequate sense of the uncertainty surrounding the estimates. The \pkg{simPH} \proglang{R} package aims to make it much easier for researchers to show their Cox PH results. 
+
+Drawing directly from approaches taken by \cite{King2000} and \cite{Licht2011} \pkg{simPH} simulates parameter from estimated Cox PH models by drawing them from their posterior distribution. Then it calculates quantities of interests, such as hazard ratios, first differences, relative hazards, marginal effects (for interactions), and hazard ratios. Finally, it plots the distributions of these simulated quantities of interest.
+
+In this paper I discuss and provide examples of how to use \pkg{simPH} to simulate and plot quantities of interest estimated from Cox PH models. First, I discuss the simulation approach in more detail. Then I discuss the general steps a researcher takes to use simPH. Finally, give step-by-step instructions for how to use \pkg{simPH} to show results from a variety of quantities of interest for a number of different kinds of estimated covariate relationships including linear, linear interactive, time-vaying interactive, polynomial nonlinear, and penalised spline nonlinear. 
+
+\section{Simulating Quantities of Interest}
+
+\section{The \pkg{simPH} Process}
+
+\section{Examples}
 
 
+
+
+
+\section{Conclusion}
 
 % Bibliography
 \bibliographystyle{apsr}
