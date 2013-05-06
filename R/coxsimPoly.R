@@ -1,31 +1,39 @@
-#' Simulate non-linear hazards for a range of values
+#' Simulate quantities of interest for a range of values for a polynomial nonlinear effect from Cox Proportional Hazards models.
 #'
-#' \code{coxsimPoly} simulates hazards for polynomial covariate effects.
+#' \code{coxsimPoly} simulates quantities of interest for polynomial covariate effects estimated from Cox Proportional Hazards models.
 #' @param obj a coxph fitted model object with a polynomial coefficient.
 #' @param b character string name of the coefficient you would like to simulate.
+#' @param qi quantity of interest to simulate. Values can be \code{"Hazard Ratio"}, \code{"First Difference"}, and \code{"Hazard Rate"}. The default is \code{qi = "Hazard Ratio"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param pow numeric polynomial used in \code{coxph}.  
+#' @param Xj numeric vector of values of X to simulate for.
+#' @param Xl numeric vector of values to compare \code{Xj} to.
 #' @param X numeric vector of values of X to simulate relative hazards for.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
 #' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
 #'
 #' @return a simpoly class object.
-#' @description Simulates relative hazards for polynomial covariate effects.
+#' @description Simulates quantities of interest for polynomial covariate effects.
 #'
 #' Note, you must use \code{\link{I}} to create the polynomials.
 #' 
 #' @examples
 #' # Load Carpenter (2002) data
-#' # data("CarpenterFdaData")
+#' data("CarpenterFdaData")
 #'
 #' # Load survival package
-#' # library(survival)
+#' library(survival)
 #'
 #' # Run basic model
-#' # M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
+#' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
 #' 
-#' # Simulate simpoly class object
-#' # Sim1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
+#' # Simulate simpoly First Difference
+#' Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference, 
+#'						pow = 3, X = seq(1, 150, by = 5))
+#'
+#' # Simulate simpoly Hazard Ratio with spin probibility interval
+#' Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio" 
+#'						pow = 3, X = seq(1, 150, by = 5), spin = TRUE)
 #' 
 #' @references Keele, Luke. 2010. ''Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.'' Political Analysis 18(2): 189–205.
 #'
@@ -34,10 +42,30 @@
 #' @importFrom reshape2 melt
 #' @importFrom plyr ddply mutate
 #' @importFrom MSBVAR rmultnorm
+#' @importFrom survival basehaz
 #' @export 
 
-coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = 0.95, spin = FALSE) 
+coxsimPoly <- function(obj, b, qi = "Hazard Ratio", pow = 2, Xj = NULL, Xl = NULL, nsim = 1000, ci = 0.95, spin = FALSE) 
 {
+  	# Ensure that qi is valid
+  	qiOpts <- c("First Difference", "Hazard Rate", "Hazard Ratio")
+  	TestqiOpts <- qi %in% qiOpts
+  	if (!isTRUE(TestqiOpts)){
+    	stop("Invalid qi type. qi must be 'Hazard Rate', 'First Difference', or 'Hazard Ratio'")
+  	}
+
+	# Find X_{jl}
+	if (length(Xj) != length(Xl) & !is.null(Xl)){
+		stop("Xj and Xl must be the same length.")
+	}
+	if (is.null(Xl)) {
+		message("Xl set at 0")
+		Xjl <- Xj
+	} else {
+	Xbound <- cbind(Xj, Xl)
+	Xjl <- Xbound[, 1] - Xbound[, 2]
+	}
+
 	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
 	VC <- vcov(obj)
@@ -69,27 +97,50 @@ coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = 0.95, spin = FALSE)
   		TempDF
   	}
 
-  	# Create combined relative hazards
-    CombinedDF <- data.frame()
-  	for (i in X){
+    Simb <- data.frame()
+  	for (i in Xjl){
   		TempComb <- mapply(Fitted, VN = VNames, x = i, p = powFull)
   		TempComb <- data.frame(TempComb)
-  		TempComb$X <- i
+  		TempComb$Xjl <- i
   		TempComb$ID <- 1:nsim
-  		CombinedDF <- rbind(CombinedDF, TempComb)
+  		Simb <- rbind(Simb, TempComb)
   	}
-  	CombinedDF$RH <- exp(rowSums(CombinedDF[, VNames]))
+
+   	# Create combined hazard ratios
+  	if (qi == "Hazard Ratio"){
+  		Simb$QI <- exp(rowSums(Simb[, VNames]))
+  	}
+  	else if (qi == "First Difference"){
+  		Simb$QI <- (exp(rowSums(Simb[, VNames])) - 1) * 100
+  	}
+  	else if (qi == "Hazard Rate"){
+  		Simb$HR <- exp(rowSums(Simb[, VNames]))
+  	  	bfit <- basehaz(obj)
+  	  	bfit$FakeID <- 1
+  	  	Simb$FakeID <- 1
+        bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+        SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+        SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
+        Simb <- data.frame(SimbCombDT)
+  	  	Simb$QI <- Simb$hazard * Simb$HR 
+  	  	Simb <- Simb[, -1]
+  	}
 
   	# Drop simulations outside of 'confidence bounds'
+	if (qi != "Hazard Rate"){
+		SubVar <- "Xjl"
+	} else if (qi == "Hazard Rate"){
+		SubVar <- c("time", "Xj")
+	}
 
 	if (!isTRUE(spin)){
 	Bottom <- (1 - ci)/2
 	Top <- 1 - Bottom
-	PolySimPerc <- eval(parse(text = paste0("ddply(CombinedDF, .(X), mutate, Lower = HR < quantile(HR,", 
+	PolySimPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = QI < quantile(QI,", 
 	  Bottom, 
 	  "))"
 	)))
-	PolySimPerc <- eval(parse(text = paste0("ddply(PolySimPerc, .(X), mutate, Upper = HR > quantile(HR,", 
+	PolySimPerc <- eval(parse(text = paste0("ddply(PolySimPerc, SubVar, mutate, Upper = QI > quantile(QI,", 
 	  Top, 
 	  "))"
 	)))
@@ -97,15 +148,15 @@ coxsimPoly <- function(obj, b, pow = 2, X, nsim = 1000, ci = 0.95, spin = FALSE)
 
 	# Drop simulations outside of the shortest probability interval
 	else if (isTRUE(spin)){
-	PolySimPerc <- eval(parse(text = paste0("ddply(CombinedDF, .(X), mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", LowUp = 1))" )))
-	PolySimPerc <- eval(parse(text = paste0("ddply(PolySimPerc, .(X), mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", LowUp = 2))" )))
+	PolySimPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = QI < SpinBounds(QI, conf = ", ci, ", LowUp = 1))" )))
+	PolySimPerc <- eval(parse(text = paste0("ddply(PolySimPerc, SubVar, mutate, Upper = QI > SpinBounds(QI, conf = ", ci, ", LowUp = 2))" )))
 	}
 
 	PolySimPerc <- subset(PolySimPerc, Lower == FALSE & Upper == FALSE)
 
 	# Clean up
-	PolySimPerc <- PolySimPerc[, c("ID", "X", "RH")]
-	class(PolySimPerc) <- "simpoly"
+	PolySimPerc <- PolySimPerc[, c("ID", "Xjl", "QI")]
+	class(PolySimPerc) <- c("simpoly", qi)
 	PolySimPerc
 }
 

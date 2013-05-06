@@ -1,6 +1,12 @@
-Version 0.6.1
+Version 0.6.5
 
-Added package vignette.
+- Added package vignette.
+
+- Expanded `coxsimPoly` so that it is capable of simulating other quantities of interest. Also, bug fixes.
+
+- 'Relative Hazard' no longer an accepted value for the `qi` argument in `coxsimLinear`, because it produced trivial graphs.
+
+- Documentation improvements
 
 Version 0.6
 

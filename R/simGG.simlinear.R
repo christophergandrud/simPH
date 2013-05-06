@@ -11,9 +11,9 @@
 #' @param smoother what type of smoothing line to use to summarize the plotted coefficient
 #' @param spalette colour palette for use in \code{qi = "Hazard Rate"}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
 #' @param leg.name name of the stratified hazard rates legend. Only relevant if \code{qi = "Hazard Rate"}.
-#' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
+#' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "First Difference"}.
 #' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
-#' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
+#' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "First Difference"}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
 #' @param ... other arguments passed to specific methods
@@ -86,10 +86,6 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 	} else if (qi == "Hazard Ratio"){
 	  	objdf <- data.frame(obj$Xj, obj$HR)
 	  	names(objdf) <- c("Xj", "HR")
-	} else if (qi == "Relative Hazard"){
-	  	spalette <- NULL
-	  	objdf <- data.frame(obj$Xj, obj$HR)
-	  	names(objdf) <- c("Xj", "HR")
 	} else if (qi == "First Difference"){
 		spalette <- NULL
 		objdf <- data.frame(obj$Xj, obj$HR, obj$Comparison)
@@ -118,15 +114,6 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
 		}
-	} else if (qi == "Relative Hazard"){
-		ggplot(objdf, aes(Xj, HR)) +
-		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-		    geom_hline(aes(yintercept = 1), linetype = "dotted") +
-		    xlab(xlab) + ylab(ylab) +
-		    ggtitle(title) +
-		    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-		    theme_bw(base_size = 15)
 	} else if (qi == "First Difference"){
     	ggplot(objdf, aes(Xj, FirstDiff, group = Comparison)) +
         	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +

@@ -1,4 +1,4 @@
-#' Simulate time-varying hazards from coxph fitted model objects
+#' Simulate time-varying quantities of interest from coxph fitted model objects
 #' 
 #' \code{coxsimtvc} simulates time-varying relative hazards, first differences, and hazard ratios from models estimated with \code{\link{coxph}} using the multivariate normal distribution.
 #' @param obj a coxph fitted model object with a time interaction. 
