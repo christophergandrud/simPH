@@ -2,9 +2,9 @@
 \alias{coxsimtvc}
 \title{Simulate time-varying quantities of interest from coxph fitted model objects}
 \usage{
-  coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = 1,
-    Xl = 0, tfun = "linear", pow = NULL, nsim = 1000, from,
-    to, by, ci = 0.95, spin = FALSE)
+  coxsimtvc(obj, b, btvc, qi = "Relative Hazard",
+    Xj = NULL, Xl = NULL, tfun = "linear", pow = NULL,
+    nsim = 1000, from, to, by, ci = 0.95, spin = FALSE)
 }
 \arguments{
   \item{obj}{a coxph fitted model object with a time
@@ -23,14 +23,12 @@
   set \code{Xj} and \code{Xl}.}
 
   \item{Xj}{numeric vector of fitted values for Xj. Must be
-  the same length as Xl. Default is \code{Xj = 1}. Only
-  applies if \code{qi = 'First Difference'} or \code{qi =
-  'Hazard Ratio'}.}
+  the same length as \code{Xl} or \code{Xl} must be
+  \code{NULL}.}
 
   \item{Xl}{numeric vector of fitted values for Xl. Must be
-  the same length as Xj. Default is \code{Xl = 0}. Only
-  applies if \code{qi = 'First Difference'} or \code{qi =
-  'Hazard Ratio'}.}
+  the same length as Xj. Only applies if \code{qi = 'First
+  Difference'} or \code{qi = 'Hazard Ratio'}.}
 
   \item{nsim}{the number of simulations to run per point in
   time. Default is \code{nsim = 1000}.}

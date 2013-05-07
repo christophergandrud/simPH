@@ -2,7 +2,7 @@
 #'
 #' \code{simGG.simlinear} uses ggplot2 to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
 #'
-#' @param obj a simlinear object
+#' @param obj a simlinear object.
 #' @param xlab a label for the plot's x-axis.
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
 #' @param from numeric time to start the plot from. Only relevant if \code{qi = "Hazard Rate"}.
@@ -16,7 +16,7 @@
 #' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "First Difference"}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
-#' @param ... other arguments passed to specific methods
+#'
 #' @return a ggplot2 object
 #'
 #' @examples

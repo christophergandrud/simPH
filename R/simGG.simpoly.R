@@ -1,17 +1,20 @@
-#' Plot simulated polynomial hazards.
+#' Plot simulated polynomial quantities of interest from Cox Proportional Hazards Models.
 #'
-#' \code{simGG.simpoly} uses ggplot2 to plot simulated relative hazards from a \code{simpoly} class object.
-#' @param obj a simpoly object
+#' \code{simGG.simpoly} uses ggplot2 to plot simulated relative quantities of interest from a \code{simpoly} class object.
+#' @param obj a simpoly object.
 #' @param xlab a label for the plot's x-axis.
-#' @param ylab a label of the plot's y-axis. The default is \code{ylab = "Relative Hazard \n"}.
+#' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
+#' @param from numeric time to start the plot from. Only relevant if \code{qi = "Hazard Rate"}.
+#' @param to numeric time to plot to. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param title the plot's main title
-#' @param smoother what type of smoothing line to use to summarize the plotted coefficient.
-#' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Works if \code{strata = FALSE}.
-#' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. 
+#' @param smoother what type of smoothing line to use to summarize the plotted coefficient
+#' @param spalette colour palette for use in \code{qi = "Hazard Rate"}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
+#' @param leg.name name of the stratified hazard rates legend. Only relevant if \code{qi = "Hazard Rate"}.
+#' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "First Difference"}.
 #' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
+#' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "First Difference"}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
-#' @param ... other arguments passed to specific methods
 #'
 #' @examples
 #' # Load Carpenter (2002) data

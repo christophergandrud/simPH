@@ -75,8 +75,6 @@
   supported – e.g., \code{c("lin", "quad")}. Only relevant
   if \code{qi == 'Relative Hazard'} and \code{FacetTime =
   Null}.}
-
-  \item{...}{other arguments passed to specific methods}
 }
 \value{
   a ggplot2 object. See \code{\link{scatter3d}} for values

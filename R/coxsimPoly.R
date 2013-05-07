@@ -137,8 +137,8 @@ coxsimPoly <- function(obj, b, qi = "Hazard Ratio", pow = 2, Xj = NULL, Xl = NUL
 		SubVar <- c("time", "HRValue")
 	}
 
-	SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, 
-					spin = spin, ci = ci)
+  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi,
+                                QI = QI, spin = spin, ci = ci)
 
 	# Clean up
 	class(SimbPerc) <- c("simpoly", qi)

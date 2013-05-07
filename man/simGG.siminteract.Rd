@@ -52,8 +52,6 @@
 
   \item{palpha}{point alpha (e.g. transparency). Default is
   \code{palpha = 0.05}. See \code{\link{ggplot2}}.}
-
-  \item{...}{other arguments passed to specific methods}
 }
 \value{
   a ggplot2 object

@@ -9,7 +9,7 @@
     psize = 1, palpha = 0.1, ...)
 }
 \arguments{
-  \item{obj}{a simlinear object}
+  \item{obj}{a simlinear object.}
 
   \item{xlab}{a label for the plot's x-axis.}
 
@@ -52,8 +52,6 @@
 
   \item{palpha}{point alpha (e.g. transparency). Default is
   \code{palpha = 0.05}. See \code{\link{ggplot2}}.}
-
-  \item{...}{other arguments passed to specific methods}
 }
 \value{
   a ggplot2 object
