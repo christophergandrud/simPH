@@ -45,6 +45,7 @@
 #' @importFrom reshape2 melt
 #' @importFrom MSBVAR rmultnorm
 #' @importFrom survival basehaz
+#' @importFrom plyr rename
 #' @export 
 
 coxsimPoly <- function(obj, b, qi = "Hazard Ratio", pow = 2, Xj = NULL, Xl = NULL, nsim = 1000, ci = 0.95, spin = FALSE) 
@@ -110,9 +111,6 @@ coxsimPoly <- function(obj, b, qi = "Hazard Ratio", pow = 2, Xj = NULL, Xl = NUL
 
    	# Create combined hazard ratios
   	if (qi == "Hazard Ratio"){
-  	    Xs <- data.frame(Xj, Xl)
-  	    Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-  	    Simb <- merge(Simb, Xs)
   		Simb$QI <- exp(rowSums(Simb[, VNames]))
   	}
   	else if (qi == "First Difference"){
@@ -133,16 +131,16 @@ coxsimPoly <- function(obj, b, qi = "Hazard Ratio", pow = 2, Xj = NULL, Xl = NUL
 
   	# Drop simulations outside of 'confidence bounds'
 	if (qi != "Hazard Rate"){
-		SubVar <- "Xj"
+		SubVar <- "Xjl"
 	} else if (qi == "Hazard Rate"){
-		SubVar <- c("time", "Xj")
+		Simb <- rename(Simb, replace = c("Xjl" = "HRValue"))
+		SubVar <- c("time", "HRValue")
 	}
 
 	SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, 
 					spin = spin, ci = ci)
 
 	# Clean up
-	SimbPerc <- SimbPerc[, c("ID", "Xjl", "QI")]
 	class(SimbPerc) <- c("simpoly", qi)
 	SimbPerc
 }

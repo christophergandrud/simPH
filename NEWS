@@ -1,4 +1,4 @@
-Version 0.6.5
+Version 0.7
 
 - Added package vignette.
 
@@ -8,7 +8,11 @@ Version 0.6.5
 
 - More consistently used the term "Relative Hazard".
 
-- Documentation improvements
+- No longer produces a legend for Xj and Xl comparisons for First Differences.
+
+- Documentation improvements.
+
+- Bug fixes, particularly with the SPIn lower bound for different quantities of interest.
 
 Version 0.6
 

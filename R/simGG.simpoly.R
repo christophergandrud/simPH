@@ -41,14 +41,14 @@
 #' @method simGG simpoly
 #' @S3method simGG simpoly
 
-simGG.simpoly <- function(obj, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", lcolour = "#2B8CBE", pcolour = "#A6CEE3",lsize = 2, psize = 1, palpha = 0.1, ...)
+simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
 {
   if (!inherits(obj, "simpoly")){
-  	stop("must be a simpoly object")
-  }
+      stop("must be a simpoly object")
+    }
     # Find quantity of interest
     qi <- class(obj)[[2]]
-
+    
     # Create y-axis label
     if (is.null(ylab)){
       ylab <- paste(qi, "\n")
@@ -56,14 +56,70 @@ simGG.simpoly <- function(obj, xlab = NULL, ylab = NULL, title = NULL, smoother 
       ylab <- ylab
     }
 
-  objdf <- data.frame(obj$Xjl, obj$QI)
-  names(objdf) <- c("Xjl", "QI")
-  ggplot(objdf, aes(Xjl, QI)) +
-        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-        geom_smooth(method = smoother, colour = lcolour, size = lsize, se = FALSE) +
-        geom_hline(aes(yintercept = 1), linetype = "dotted") +
-        xlab(xlab) + ylab(ylab) +
-        ggtitle(title) +
-        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-        theme_bw(base_size = 15)
+    # Subset simlinear object & create a data frame of important variables
+  if (qi == "Hazard Rate"){
+    colour <- NULL
+    if (is.null(obj$strata)){
+      objdf <- data.frame(obj$time, obj$QI, obj$HRValue)
+      names(objdf) <- c("Time", "HRate", "HRValue")
+    } else if (!is.null(obj$strata)) {
+    objdf <- data.frame(obj$time, obj$QI, obj$strata, obj$HRValue)
+    names(objdf) <- c("Time", "HRate", "Strata", "HRValue")
+    }
+    if (!is.null(from)){
+      objdf <- subset(objdf, Time >= from)
+      }
+      if (!is.null(to)){
+        objdf <- subset(objdf, Time <= to)
+      }
+  } else if (qi == "Hazard Ratio"){
+      objdf <- data.frame(obj$Xj, obj$QI)
+      names(objdf) <- c("Xj", "QI")
+  } else if (qi == "First Difference"){
+    spalette <- NULL
+    objdf <- data.frame(obj$Xj, obj$QI)
+    names(objdf) <- c("Xj", "QI")
+  }
+
+  # Plot
+    if (qi == "Hazard Rate"){
+      if (!is.null(obj$strata)) {
+        ggplot(objdf, aes(x = Time, y = HRate, colour = factor(HRValue))) +
+          geom_point(alpha = I(palpha), size = psize) +
+          geom_smooth(method = smoother, size = lsize, se = FALSE) +
+          facet_grid(.~ Strata) +
+          xlab(xlab) + ylab(ylab) +
+          scale_colour_brewer(palette = spalette, name = leg.name) +
+          ggtitle(title) +
+          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          theme_bw(base_size = 15)
+      } else if (is.null(obj$strata)){
+          ggplot(objdf, aes(Time, HRate, colour = factor(HRValue))) +
+            geom_point(shape = 21, alpha = I(palpha), size = psize) +
+            geom_smooth(method = smoother, size = lsize, se = FALSE) +
+            scale_colour_brewer(palette = spalette, name = leg.name) +
+            xlab(xlab) + ylab(ylab) +
+            ggtitle(title) +
+            guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+            theme_bw(base_size = 15)
+    }
+  } else if (qi == "First Difference"){
+      ggplot(objdf, aes(Xj, QI)) +
+          geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+          geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+          geom_hline(aes(yintercept = 0), linetype = "dotted") +
+          xlab(xlab) + ylab(ylab) +
+          ggtitle(title) +
+          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          theme_bw(base_size = 15)
+  } else if (qi == "Hazard Ratio"){
+    ggplot(objdf, aes(Xj, QI)) +
+          geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+          geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+          geom_hline(aes(yintercept = 1), linetype = "dotted") +
+          xlab(xlab) + ylab(ylab) +
+          ggtitle(title) +
+          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          theme_bw(base_size = 15)
+    }
 }

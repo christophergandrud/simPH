@@ -2,10 +2,11 @@
 \alias{simGG.simpoly}
 \title{Plot simulated polynomial hazards.}
 \usage{
-  \method{simGG}{simpoly} (obj, xlab = NULL, ylab = NULL,
-    title = NULL, smoother = "auto", lcolour = "#2B8CBE",
-    pcolour = "#A6CEE3", lsize = 2, psize = 1,
-    palpha = 0.1, ...)
+  \method{simGG}{simpoly} (obj, from = NULL, to = NULL,
+    xlab = NULL, ylab = NULL, title = NULL,
+    smoother = "auto", spalette = "Set1", leg.name = "",
+    lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
+    psize = 1, palpha = 0.1, ...)
 }
 \arguments{
   \item{obj}{a simpoly object}

@@ -129,9 +129,6 @@ coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = NULL, Xl = NULL, mean
         Simb <- data.frame(SimbCombDT)
   	  	Simb$HRate <- Simb$hazard * Simb$HR
   	  	Simb <- Simb[, -1]
-
-        # Remove unnecessary
-        Simb <- Simb[, c("HRValue", "QI", "Xj", "hazard", "time")]
     }
   }
 
@@ -185,9 +182,6 @@ coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = NULL, Xl = NULL, mean
     SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
     Simb <- data.frame(SimbCombDT)
     Simb$QI <- Simb$hazard * Simb$HR
-
-    # Remove unnecessary
-    Simb <- Simb[, c("HRValue", "QI", "Xj", "hazard", "time")]
   }
 
   # Drop simulations outside of 'confidence bounds'

@@ -35,8 +35,8 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, sp
 	# Drop simulations outside of the shortest probability interval
 	else if (isTRUE(spin))
 	{
-		SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = QI < SpinBounds(QI, conf = ", ci, "lb = ", lb, ", LowUp = 1))" )))
-		SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = QI > SpinBounds(QI, conf = ", ci, "lb = ", lb, ", LowUp = 2))" )))
+		SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = QI < SpinBounds(QI, conf = ", ci, ", lb = ", lb, ", LowUp = 1))" )))
+		SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = QI > SpinBounds(QI, conf = ", ci, ", lb = ", lb, ", LowUp = 2))" )))
 	}
 
 	SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
