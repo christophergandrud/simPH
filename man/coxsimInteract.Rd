@@ -20,8 +20,8 @@
 
   \item{qi}{quantities of interest to simulate. Values can
   be \code{"Marginal Effect"}, \code{"First Difference"},
-  \code{"Relative Hazard"}, and \code{"Hazard Rate"}. The
-  default is \code{qi = "Relative Hazard"}. If \code{qi =
+  \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The
+  default is \code{qi = "Hazard Ratio"}. If \code{qi =
   "Hazard Rate"} and the \code{coxph} model has strata,
   then hazard rates for each strata will also be
   calculated.}
@@ -95,11 +95,11 @@ M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal +
              orphdum,
              data = CarpenterFdaData)
 
-# Simulate Relative Hazard of lethal for multiple values of prevgenx
+# Simulate Hazard Ratio of lethal for multiple values of prevgenx
 Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
                     X1 = seq(2, 115, by = 2),
                     X2 = c(0, 1),
-                    qi = "Relative Hazard", ci = 0.9)
+                    qi = "Hazard Ratio", ci = 0.9)
 
 # Simulate First Difference
 Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",

@@ -56,10 +56,14 @@
 #' @importFrom MSBVAR rmultnorm
 #' @export
 
-coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = 1, Xl = 0, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
+coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = NULL, Xl = NULL, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
 {	
   if (qi != "Hazard Rate" & isTRUE(means)){
     stop("means can only be TRUE when qi = 'Hazard Rate'.")
+  }
+
+  if (is.null(Xl)){
+    Xl <- rep(0, length(Xj))
   }
 
   # Ensure that qi is valid
@@ -96,29 +100,14 @@ coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = 1, Xl = 0, means = FA
 
     # Find quantity of interest
     if (qi == "First Difference"){
-    	if (length(Xj) != length(Xl)){
-        stop("Xj and Xl must be the same length.")
-      } 
-      else {
-  	    Xs <- data.frame(Xj, Xl)
-  	    Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-  	    Simb <- merge(Simb, Xs)
-  	    Simb$HR <- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
-    	}
+	    Xs <- data.frame(Xj, Xl)
+	    Simb <- merge(Simb, Xs)
+	    Simb$QI<- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
     }
     else if (qi == "Hazard Ratio"){
-      if (length(Xl) > 1 & length(Xj) != length(Xl)){
-        stop("Xj and Xl must be the same length.")
-      }
-      else {
-      	if (length(Xj) > 1 & length(Xl) == 1){
-      		Xl <- rep(0, length(Xj))
-      	}
-      	Xs <- data.frame(Xj, Xl)
-      	Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-  	    Simb <- merge(Simb, Xs)
-    	  Simb$HR <- exp((Simb$Xj - Simb$Xl) * Simb$Coef)	
-      } 
+    	Xs <- data.frame(Xj, Xl)
+	    Simb <- merge(Simb, Xs)
+  	  Simb$QI<- exp((Simb$Xj - Simb$Xl) * Simb$Coef)	
     }
     else if (qi == "Hazard Rate"){
         Xl <- NULL
@@ -138,8 +127,11 @@ coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = 1, Xl = 0, means = FA
         SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
         SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
         Simb <- data.frame(SimbCombDT)
-  	  	Simb$HRate <- Simb$hazard * Simb$HR 
+  	  	Simb$HRate <- Simb$hazard * Simb$HR
   	  	Simb <- Simb[, -1]
+
+        # Remove unnecessary
+        Simb <- Simb[, c("HRValue", "QI", "Xj", "hazard", "time")]
     }
   }
 
@@ -183,7 +175,7 @@ coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = 1, Xl = 0, means = FA
     Simb <- cbind(Simb, ExpandFC)
     Simb$Sum <- rowSums(Simb[, c(-1, -2)])
     Simb$HR <- exp(Simb$Sum)
-    Simb <- Simb[, c("HRValue", "HR", "Xj")]
+    Simb <- Simb[, c("HRValue", "QI", "Xj")]
 
     bfit <- basehaz(obj)
     bfit$FakeID <- 1
@@ -192,10 +184,10 @@ coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = 1, Xl = 0, means = FA
     SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
     SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
     Simb <- data.frame(SimbCombDT)
-    Simb$HRate <- Simb$hazard * Simb$HR 
+    Simb$QI <- Simb$hazard * Simb$HR
 
     # Remove unnecessary
-    Simb <- Simb[, c("HRValue", "HR", "Xj", "hazard", "time", "HRate")]
+    Simb <- Simb[, c("HRValue", "QI", "Xj", "hazard", "time")]
   }
 
   # Drop simulations outside of 'confidence bounds'
@@ -205,26 +197,8 @@ coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = 1, Xl = 0, means = FA
   	SubVar <- c("time", "Xj")
   }
 
-  if (!isTRUE(spin)){
-    Bottom <- (1 - ci)/2
-    Top <- 1 - Bottom
-    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < quantile(HR,", 
-      Bottom, 
-      "))"
-    )))
-    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > quantile(HR,", 
-      Top, 
-      "))"
-    )))
-  }
-
-  # Drop simulations outside of the shortest probability interval
-  else if (isTRUE(spin)){
-    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", LowUp = 1))" )))
-    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", LowUp = 2))" )))
-  }
-
-  SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
+  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi,
+          QI = QI, spin = spin, ci = ci)
 
   # Final clean up
   class(SimbPerc) <- c("simlinear", qi)

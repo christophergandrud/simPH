@@ -2,9 +2,8 @@
 \alias{simGG.simpoly}
 \title{Plot simulated polynomial hazards.}
 \usage{
-  \method{simGG}{simpoly} (obj, xlab = NULL,
-    ylab = "Relative Hazard\n", title = NULL,
-    smoother = "auto", lcolour = "#2B8CBE",
+  \method{simGG}{simpoly} (obj, xlab = NULL, ylab = NULL,
+    title = NULL, smoother = "auto", lcolour = "#2B8CBE",
     pcolour = "#A6CEE3", lsize = 2, psize = 1,
     palpha = 0.1, ...)
 }

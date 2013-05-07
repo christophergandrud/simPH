@@ -1,6 +1,6 @@
 \name{coxsimtvc}
 \alias{coxsimtvc}
-\title{Simulate time-varying hazards from coxph fitted model objects}
+\title{Simulate time-varying quantities of interest from coxph fitted model objects}
 \usage{
   coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = 1,
     Xl = 0, tfun = "linear", pow = NULL, nsim = 1000, from,

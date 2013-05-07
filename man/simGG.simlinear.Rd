@@ -36,8 +36,8 @@
 
   \item{lcolour}{character string colour of the smoothing
   line. The default is hexadecimal colour \code{lcolour =
-  '#2B8CBE'}. Only relevant if \code{qi = "Relative
-  Hazard"} or \code{qi = "First Difference"}.}
+  '#2B8CBE'}. Only relevant if \code{qi = "First
+  Difference"}.}
 
   \item{lsize}{size of the smoothing line. Default is 2.
   See \code{\link{ggplot2}}.}
@@ -45,8 +45,7 @@
   \item{pcolour}{character string colour of the simulated
   points for relative hazards. Default is hexadecimal
   colour \code{pcolour = '#A6CEE3'}. Only relevant if
-  \code{qi = "Relative Hazard"} or \code{qi = "First
-  Difference"}.}
+  \code{qi = "First Difference"}.}
 
   \item{psize}{size of the plotted simulation points.
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
@@ -82,12 +81,16 @@ library(survival)
 data("CarpenterFdaData")
 
 # Estimate survival model
-M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
+M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
+            deathrt1 + acutediz + hosp01  + hhosleng +
+            mandiz01 + femdiz01 + peddiz01 + orphdum +
+            vandavg3 + wpnoavg3 + condavg3 + orderent +
+            stafcder, data = CarpenterFdaData)
 
 # Simulate and plot Hazard Ratios for stafcder variable
 Sim1 <- coxsimLinear(M1, b = "stafcder",
 						qi = "Hazard Ratio",
-						Xj = seq(1237, 1600, by = 2))
+						Xj = seq(1237, 1600, by = 2), spin = TRUE)
 simGG(Sim1)
 
 # Simulate and plot Hazard Rate for stafcder variable

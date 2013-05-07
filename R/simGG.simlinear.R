@@ -26,12 +26,16 @@
 #' data("CarpenterFdaData")
 #' 
 #' # Estimate survival model
-#' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
+#' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
+#'             deathrt1 + acutediz + hosp01  + hhosleng +
+#'             mandiz01 + femdiz01 + peddiz01 + orphdum +
+#'             vandavg3 + wpnoavg3 + condavg3 + orderent +
+#'             stafcder, data = CarpenterFdaData)
 #' 
 #' # Simulate and plot Hazard Ratios for stafcder variable
 #' Sim1 <- coxsimLinear(M1, b = "stafcder", 
 #' 						qi = "Hazard Ratio", 
-#' 						Xj = seq(1237, 1600, by = 2))
+#' 						Xj = seq(1237, 1600, by = 2), spin = TRUE)
 #' simGG(Sim1)
 #' 
 #' # Simulate and plot Hazard Rate for stafcder variable
@@ -71,10 +75,10 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 	if (qi == "Hazard Rate"){
 		colour <- NULL
 		if (is.null(obj$strata)){
-			objdf <- data.frame(obj$time, obj$HRate, obj$HRValue)
+			objdf <- data.frame(obj$time, obj$QI, obj$HRValue)
 			names(objdf) <- c("Time", "HRate", "HRValue")
 		} else if (!is.null(obj$strata)) {
-		objdf <- data.frame(obj$time, obj$HRate, obj$strata, obj$HRValue)
+		objdf <- data.frame(obj$time, obj$QI, obj$strata, obj$HRValue)
 		names(objdf) <- c("Time", "HRate", "Strata", "HRValue")
 		}
 		if (!is.null(from)){
@@ -84,12 +88,12 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
   			objdf <- subset(objdf, Time <= to)
   		}
 	} else if (qi == "Hazard Ratio"){
-	  	objdf <- data.frame(obj$Xj, obj$HR)
-	  	names(objdf) <- c("Xj", "HR")
+	  	objdf <- data.frame(obj$Xj, obj$QI)
+	  	names(objdf) <- c("Xj", "QI")
 	} else if (qi == "First Difference"){
 		spalette <- NULL
-		objdf <- data.frame(obj$Xj, obj$HR, obj$Comparison)
-		names(objdf) <- c("Xj", "FirstDiff", "Comparison")
+		objdf <- data.frame(obj$Xj, obj$QI)
+		names(objdf) <- c("Xj", "QI")
 	}
 
 	# Plot
@@ -115,7 +119,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 		        theme_bw(base_size = 15)
 		}
 	} else if (qi == "First Difference"){
-    	ggplot(objdf, aes(Xj, FirstDiff, group = Comparison)) +
+    	ggplot(objdf, aes(Xj, QI)) +
         	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 	        geom_hline(aes(yintercept = 0), linetype = "dotted") +
@@ -124,7 +128,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 	        theme_bw(base_size = 15)
 	} else if (qi == "Hazard Ratio"){
-		ggplot(objdf, aes(Xj, HR)) +
+		ggplot(objdf, aes(Xj, QI)) +
 	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 	        geom_hline(aes(yintercept = 1), linetype = "dotted") +

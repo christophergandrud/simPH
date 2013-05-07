@@ -25,22 +25,24 @@
 #' library(survival)
 #'
 #' # Run basic model
-#' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
+#' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz +
+#' 				hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum + 
+#' 				natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + 
+#'				condavg3 + orderent + stafcder, data = CarpenterFdaData)
 #' 
 #' # Simulate simpoly First Difference
-#' Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference, 
-#'						pow = 3, X = seq(1, 150, by = 5))
+#' Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference", 
+#'						pow = 3, Xj = seq(1, 150, by = 5))
 #'
 #' # Simulate simpoly Hazard Ratio with spin probibility interval
 #' Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio" 
-#'						pow = 3, X = seq(1, 150, by = 5), spin = TRUE)
+#'						pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
 #' 
 #' @references Keele, Luke. 2010. ''Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.'' Political Analysis 18(2): 189–205.
 #'
 #' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.'' American Journal of Political Science 46(3): 490–505.
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #' @importFrom reshape2 melt
-#' @importFrom plyr ddply mutate
 #' @importFrom MSBVAR rmultnorm
 #' @importFrom survival basehaz
 #' @export 
@@ -108,6 +110,9 @@ coxsimPoly <- function(obj, b, qi = "Hazard Ratio", pow = 2, Xj = NULL, Xl = NUL
 
    	# Create combined hazard ratios
   	if (qi == "Hazard Ratio"){
+  	    Xs <- data.frame(Xj, Xl)
+  	    Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
+  	    Simb <- merge(Simb, Xs)
   		Simb$QI <- exp(rowSums(Simb[, VNames]))
   	}
   	else if (qi == "First Difference"){
@@ -128,39 +133,16 @@ coxsimPoly <- function(obj, b, qi = "Hazard Ratio", pow = 2, Xj = NULL, Xl = NUL
 
   	# Drop simulations outside of 'confidence bounds'
 	if (qi != "Hazard Rate"){
-		SubVar <- "Xjl"
+		SubVar <- "Xj"
 	} else if (qi == "Hazard Rate"){
 		SubVar <- c("time", "Xj")
 	}
 
-	if (!isTRUE(spin)){
-	Bottom <- (1 - ci)/2
-	Top <- 1 - Bottom
-	PolySimPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = QI < quantile(QI,", 
-	  Bottom, 
-	  "))"
-	)))
-	PolySimPerc <- eval(parse(text = paste0("ddply(PolySimPerc, SubVar, mutate, Upper = QI > quantile(QI,", 
-	  Top, 
-	  "))"
-	)))
-	}
-
-	# Drop simulations outside of the shortest probability interval
-	else if (isTRUE(spin)){
-	PolySimPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = QI < SpinBounds(QI, conf = ", ci, ", LowUp = 1))" )))
-	PolySimPerc <- eval(parse(text = paste0("ddply(PolySimPerc, SubVar, mutate, Upper = QI > SpinBounds(QI, conf = ", ci, ", LowUp = 2))" )))
-	}
-
-	PolySimPerc <- subset(PolySimPerc, Lower == FALSE & Upper == FALSE)
+	SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, 
+					spin = spin, ci = ci)
 
 	# Clean up
-	PolySimPerc <- PolySimPerc[, c("ID", "Xjl", "QI")]
-	class(PolySimPerc) <- c("simpoly", qi)
-	PolySimPerc
+	SimbPerc <- SimbPerc[, c("ID", "Xjl", "QI")]
+	class(SimbPerc) <- c("simpoly", qi)
+	SimbPerc
 }
-
-
-
-
-

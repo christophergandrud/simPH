@@ -1,9 +1,9 @@
 \name{coxsimLinear}
 \alias{coxsimLinear}
-\title{Simulate hazards for linear time-constant covariates from Cox Proportional Hazards models.}
+\title{Simulate quntities of interest for linear time-constant covariates from Cox Proportional Hazards models.}
 \usage{
-  coxsimLinear(obj, b, qi = "Relative Hazard", Xj = 1,
-    Xl = 0, means = FALSE, nsim = 1000, ci = 0.95,
+  coxsimLinear(obj, b, qi = "Hazard Ratio", Xj = NULL,
+    Xl = NULL, means = FALSE, nsim = 1000, ci = 0.95,
     spin = FALSE)
 }
 \arguments{
@@ -13,18 +13,17 @@
   would like to simulate.}
 
   \item{qi}{quantity of interest to simulate. Values can be
-  \code{"Relative Hazard"}, \code{"First Difference"},
-  \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The
-  default is \code{qi = "Relative Hazard"}. If \code{qi =
-  "Hazard Rate"} and the \code{coxph} model has strata,
-  then hazard rates for each strata will also be
-  calculated.}
+  \code{"Hazard Ratio"}, \code{"First Difference"}, and
+  \code{"Hazard Rate"}. The default is \code{qi = "Hazard
+  Ratio"}. If \code{qi = "Hazard Rate"} and the
+  \code{coxph} model has strata, then hazard rates for each
+  strata will also be calculated.}
 
   \item{Xj}{numeric vector of values of X to simulate for.}
 
   \item{Xl}{numeric vector of values to compare \code{Xj}
-  to. Note if \code{qi = "Relative Hazard"} or \code{code =
-  "Hazard"} only \code{Xj} is relevant.}
+  to. Note if \code{code = "Hazard Rate"} only \code{Xj} is
+  relevant.}
 
   \item{means}{logical, whether or not to use the mean
   values to fit the hazard rate for covaraiates other than
@@ -76,7 +75,6 @@ M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
 
 # Simulate Hazard Ratios
 Sim1 <- coxsimLinear(M1, b = "stafcder",
-                       qi = "Hazard Ratio",
                        Xj = c(1237, 1600),
                        Xl = c(1000, 1000),
                        spin = TRUE, ci = 0.99)
