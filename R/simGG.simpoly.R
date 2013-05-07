@@ -41,15 +41,24 @@
 #' @method simGG simpoly
 #' @S3method simGG simpoly
 
-simGG.simpoly <- function(obj, xlab = NULL, ylab = "Relative Hazard\n", title = NULL, smoother = "auto", lcolour = "#2B8CBE", pcolour = "#A6CEE3",lsize = 2, psize = 1, palpha = 0.1, ...)
+simGG.simpoly <- function(obj, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", lcolour = "#2B8CBE", pcolour = "#A6CEE3",lsize = 2, psize = 1, palpha = 0.1, ...)
 {
   if (!inherits(obj, "simpoly")){
   	stop("must be a simpoly object")
   }
+    # Find quantity of interest
+    qi <- class(obj)[[2]]
 
-  objdf <- data.frame(obj$X, obj$RH)
-  names(objdf) <- c("X", "RH")
-  ggplot(objdf, aes(X, RH)) +
+    # Create y-axis label
+    if (is.null(ylab)){
+      ylab <- paste(qi, "\n")
+    } else {
+      ylab <- ylab
+    }
+
+  objdf <- data.frame(obj$Xjl, obj$QI)
+  names(objdf) <- c("Xjl", "QI")
+  ggplot(objdf, aes(Xjl, QI)) +
         geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
         geom_smooth(method = smoother, colour = lcolour, size = lsize, se = FALSE) +
         geom_hline(aes(yintercept = 1), linetype = "dotted") +

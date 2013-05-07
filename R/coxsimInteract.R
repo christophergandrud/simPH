@@ -4,7 +4,7 @@
 #' @param obj a \code{coxph} fitted model object with a linear multiplicative interaction.
 #' @param b1 character string of the first constitutive variable's name. Note \code{b1} and \code{b2} must be entered in the order in which they are entered into the \code{coxph} model.
 #' @param b2 character string of the second constitutive variable's name.
-#' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Relative Hazard"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
+#' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Hazard Ratio"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set. If you want to plot the results, \code{X1} should have more than one value.
 #' @param X2 numeric vector of fitted values of \code{b2} to simulate for. 
 #' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1} \code{b2} and \code{b1*b2}. Note: it does not currently support models that include polynomials created by \code{\link{I}}.
@@ -38,11 +38,11 @@
 #'              orphdum,
 #'              data = CarpenterFdaData)
 #'
-#' # Simulate Relative Hazard of lethal for multiple values of prevgenx
+#' # Simulate Hazard Ratio of lethal for multiple values of prevgenx
 #' Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
 #'                     X1 = seq(2, 115, by = 2),
 #'                     X2 = c(0, 1),
-#'                     qi = "Relative Hazard", ci = 0.9)
+#'                     qi = "Hazard Ratio", ci = 0.9)
 #'                     
 #' # Simulate First Difference
 #' Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
@@ -77,10 +77,10 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		stop("means can only be TRUE when qi = 'Hazard Rate'.")
 	}
 	# Ensure that qi is valid
-	qiOpts <- c("Marginal Effect", "First Difference", "Relative Hazard", "Hazard Rate")
+	qiOpts <- c("Marginal Effect", "First Difference", "Hazard Ratio", "Hazard Rate")
 	TestqiOpts <- qi %in% qiOpts
 	if (!isTRUE(TestqiOpts)){
-		stop("Invalid qi type. qi must be 'Marginal Effect', 'First Difference', 'Relative Hazard', or 'Hazard Rate'")
+		stop("Invalid qi type. qi must be 'Marginal Effect', 'First Difference', 'Hazard Ratio', or 'Hazard Rate'")
 	}
 	MeansMessage <- NULL
 	if (isTRUE(means) & length(obj$coefficients) == 3){
@@ -134,9 +134,9 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			Simb$HR <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]) - 1) * 100)	
 		  }
 		}
-		else if (qi == "Relative Hazard"){
+		else if (qi == "Hazard Ratio"){
 		  if (is.null(X1) | is.null(X2)){
-		    stop("For Relative Hazards both X1 and X2 should be specified.")
+		    stop("For Hazard Ratios both X1 and X2 should be specified.")
 		  } else {
 			Xs <- merge(X1, X2)
 			names(Xs) <- c("X1", "X2")
@@ -225,7 +225,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	}
 
 	# Drop simulations outside of 'confidence bounds'
-	if (qi == "First Difference" | qi == "Relative Hazard"){
+	if (qi == "First Difference" | qi == "Hazard Ratio"){
 		SubVar <- "X1"
 	} else if (qi == "Marginal Effect"){
 		SubVar <- "X2"

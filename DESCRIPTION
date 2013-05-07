@@ -44,4 +44,5 @@ Collate:
     'simGG.simlinear.R'
     'tvc.R'
     'SPInBounds.R'
+    'IntervalConstrict.R'
 VignetteBuilder: knitr

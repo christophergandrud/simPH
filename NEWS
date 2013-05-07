@@ -6,6 +6,8 @@ Version 0.6.5
 
 - 'Relative Hazard' no longer an accepted value for the `qi` argument in `coxsimLinear`, because it produced trivial graphs.
 
+- More consistently used the term "Relative Hazard".
+
 - Documentation improvements
 
 Version 0.6
