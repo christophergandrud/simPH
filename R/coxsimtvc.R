@@ -67,13 +67,13 @@
 #' # Create simtvc object for Relative Hazard
 #' Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
 #'                    tfun = "log", from = 80, to = 2000, 
-#'                    by = 15, ci = 0.99)
+#'                    Xj = 1, by = 15, ci = 0.99)
 #' 
 #' # Create simtvc object for First Difference  
 #' Sim2 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
 #'                   qi = "First Difference", 
 #'                   tfun = "log", from = 80, to = 2000, 
-#'                   by = 15, spin = TRUE)
+#'                   Xj = 1, by = 15, spin = TRUE)
 #' 
 #' # Create simtvc object for Hazard Ratio  
 #' Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",

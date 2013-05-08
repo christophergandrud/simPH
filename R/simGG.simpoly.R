@@ -34,7 +34,7 @@
 #'            pow = 3, Xj = seq(1, 150, by = 5))
 #'
 #' # Simulate simpoly Hazard Ratio with spin probibility interval
-#' Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio" 
+#' Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio", 
 #'            pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
 #' 
 #' # Plot simulations

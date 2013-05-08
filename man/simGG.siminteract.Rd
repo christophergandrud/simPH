@@ -105,10 +105,11 @@ Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
                        X2 = c(0, 1),
                        qi = "First Difference", spin = TRUE)
 
-# Plot Marginal Effects
+# Plot quantities of interest
 simGG(Sim1, xlab = "\\nprevgenx", ylab = "Marginal Effect of lethal\\n")
 simGG(Sim2)
 simGG(Sim3)
+simGG(Sim4)
 }
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.

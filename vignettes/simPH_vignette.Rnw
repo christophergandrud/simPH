@@ -109,7 +109,7 @@ where $x_{j-l}$ is $x_{j} - x_{l}$. There are analogous relative hazards and fir
 
 \paragraph{Linear Interactions}
 
-In cases where 
+A linear interaction between two variables $x$ and $z$ for unit $i$ is the combined effect of $\beta_{1}x_{i} + \beta_{2}z_{i} + \beta_{3}x_{i}z_{i}$. We can easily express this as as a hazard ratio 
 
 
 
