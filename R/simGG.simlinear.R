@@ -63,6 +63,12 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
     }
     # Find quantity of interest
     qi <- class(obj)[[2]]
+
+    # Create horizontal line (NULL value)
+    HL <- 1
+    if (qi == "First Difference"){
+      HL <- 0
+    } 
     
     # Create y-axis label
     if (is.null(ylab)){
@@ -87,13 +93,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
   		if (!is.null(to)){
   			objdf <- subset(objdf, Time <= to)
   		}
-	} else if (qi == "Hazard Ratio"){
+	} else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | qi == "First Difference"){
 	  	objdf <- data.frame(obj$Xj, obj$QI)
 	  	names(objdf) <- c("Xj", "QI")
-	} else if (qi == "First Difference"){
-		spalette <- NULL
-		objdf <- data.frame(obj$Xj, obj$QI)
-		names(objdf) <- c("Xj", "QI")
 	}
 
 	# Plot
@@ -118,20 +120,11 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
 		}
-	} else if (qi == "First Difference"){
-    	ggplot(objdf, aes(Xj, QI)) +
-        	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-	        geom_hline(aes(yintercept = 0), linetype = "dotted") +
-	        xlab(xlab) + ylab(ylab) +
-	        ggtitle(title) +
-	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-	        theme_bw(base_size = 15)
-	} else if (qi == "Hazard Ratio"){
+	} else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | qi == "First Difference"){
 		ggplot(objdf, aes(Xj, QI)) +
 	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+	        geom_hline(aes(yintercept = HL), linetype = "dotted") +
 	        xlab(xlab) + ylab(ylab) +
 	        ggtitle(title) +
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +

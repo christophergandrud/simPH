@@ -87,7 +87,7 @@ Researchers are often interested in how a given covariate $x$ affects the hazard
 	\frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{\beta\prime(x_{j} - x_{l})}.
 \end{equation}
 
-In the special case where $x_{j}$ is one and $x_{l}$ is zero, we are calculating what has been called the ``relative hazard" \cite[see][]{Golub2007,Licht2011}. We can also express these quantities as a percentage change in the hazard rate between two values of $x$ at a time ($t$):
+In the special case where $x_{j} \neq 0$ and $x_{l} = 0$, we are calculating what has been called the ``relative hazard" \cite[see][]{Golub2007,Licht2011}. We can also express these quantities as a percentage change in the hazard rate between two values of $x$ at a time ($t$):
 %
 \begin{equation}
 	\%\triangle h_{i}(t) = (e^{\beta\prime(x_{j} - x_{l})} - 1) * 100.

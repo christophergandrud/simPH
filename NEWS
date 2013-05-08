@@ -6,8 +6,6 @@ Version 0.7
 
 - 'Relative Hazard' no longer an accepted value for the `qi` argument in `coxsimLinear`, because it produced trivial graphs.
 
-- More consistently used the term "Relative Hazard".
-
 - No longer produces a legend for Xj and Xl comparisons for First Differences.
 
 - Documentation improvements.

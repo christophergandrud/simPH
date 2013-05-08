@@ -87,7 +87,6 @@
 #'
 #' @import data.table
 #' @importFrom reshape2 melt
-#' @importFrom plyr ddply mutate
 #' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export
@@ -122,8 +121,9 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
     MeansMessage <- TRUE
   }
 
-  if (is.null(Xl)){
+  if (is.null(Xl) & qi != "Hazard Rate"){
     Xl <- rep(0, length(Xj))
+    message("All Xl set to 0.")
   }
 
   # Create time function
@@ -174,7 +174,6 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
 
     # Find quantity of interest
     if (qi == "Relative Hazard"){
-        message("All Xl set to 0.")
         Xs <- data.frame(Xj)
         names(Xs) <- c("Xj")
         Xs$Comparison <- paste(Xs[, 1])

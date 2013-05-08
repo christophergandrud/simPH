@@ -3,9 +3,9 @@
 #' \code{coxsimLinear} simulates relative hazards, first differences, and hazard ratios for time-constant covariates from models estimated with \code{\link{coxph}} using the multivariate normal distribution.
 #' @param obj a coxph fitted model object.
 #' @param b character string name of the coefficient you would like to simulate.
-#' @param qi quantity of interest to simulate. Values can be \code{"Hazard Ratio"}, \code{"First Difference"}, and \code{"Hazard Rate"}. The default is \code{qi = "Hazard Ratio"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
+#' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param Xj numeric vector of values of X to simulate for.
-#' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{code = "Hazard Rate"} only \code{Xj} is relevant.
+#' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{code = "Relative Hazard"} only \code{Xj} is relevant.
 #' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b}. 
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}. Note: it does not currently support models that include polynomials created by \code{\link{I}}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
@@ -51,26 +51,26 @@
 #'
 #' @import data.table
 #' @importFrom reshape2 melt
-#' @importFrom plyr ddply mutate
 #' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export
 
-coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = NULL, Xl = NULL, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
+coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
 {	
   if (qi != "Hazard Rate" & isTRUE(means)){
     stop("means can only be TRUE when qi = 'Hazard Rate'.")
   }
 
-  if (is.null(Xl)){
+  if (is.null(Xl) & qi != "Hazard Rate"){
     Xl <- rep(0, length(Xj))
+    message("All Xl set to 0.")
   }
 
   # Ensure that qi is valid
-  qiOpts <- c("First Difference", "Hazard Rate", "Hazard Ratio")
+  qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
   TestqiOpts <- qi %in% qiOpts
   if (!isTRUE(TestqiOpts)){
-    stop("Invalid qi type. qi must be 'Hazard Rate', 'First Difference', or 'Hazard Ratio'")
+    stop("Invalid qi type. qi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'")
   }
   MeansMessage <- NULL
   if (isTRUE(means) & length(obj$coefficients) == 3){
@@ -99,7 +99,13 @@ coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = NULL, Xl = NULL, mean
   	names(Simb) <- "Coef"
 
     # Find quantity of interest
-    if (qi == "First Difference"){
+    if (qi == "Relative Hazard"){
+      Xs <- data.frame(Xj)
+      names(Xs) <- c("Xj")
+      Xs$Comparison <- paste(Xs[, 1])
+      Simb <- merge(Simb, Xs)
+      Simb$QI <- exp(Simb$Xj * Simb$Coef) 
+    } else if (qi == "First Difference"){
 	    Xs <- data.frame(Xj, Xl)
 	    Simb <- merge(Simb, Xs)
 	    Simb$QI<- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
@@ -127,7 +133,7 @@ coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = NULL, Xl = NULL, mean
         SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
         SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
         Simb <- data.frame(SimbCombDT)
-  	  	Simb$HRate <- Simb$hazard * Simb$HR
+  	  	Simb$QI <- Simb$hazard * Simb$HR
   	  	Simb <- Simb[, -1]
     }
   }
@@ -172,7 +178,6 @@ coxsimLinear <- function(obj, b, qi = "Hazard Ratio", Xj = NULL, Xl = NULL, mean
     Simb <- cbind(Simb, ExpandFC)
     Simb$Sum <- rowSums(Simb[, c(-1, -2)])
     Simb$HR <- exp(Simb$Sum)
-    Simb <- Simb[, c("HRValue", "QI", "Xj")]
 
     bfit <- basehaz(obj)
     bfit$FakeID <- 1

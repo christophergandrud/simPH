@@ -31,7 +31,7 @@
   "Hazard"} only \code{Xj} is relevant.}
 
   \item{nsim}{the number of simulations to run per value of
-  X. Default is \code{nsim = 1000}.}
+  \code{Xj}. Default is \code{nsim = 1000}.}
 
   \item{ci}{the proportion of middle simulations to keep.
   The default is \code{ci = 0.95}, i.e. keep the middle 95

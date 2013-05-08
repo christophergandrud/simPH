@@ -63,23 +63,28 @@
 }
 \examples{
 # Load Carpenter (2002) data
-# data("CarpenterFdaData")
+data("CarpenterFdaData")
 
 # Load survival package
 library(survival)
 
 # Run basic model
-# M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 +
-  #           acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 +
-  #           peddiz01 + orphdum + natreg + I(natreg^2) + vandavg3 +
-  #           wpnoavg3 + condavg3 + orderent + stafcder,
-  #          data = CarpenterFdaData)
+M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz +
+       hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +
+       natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 +
+       condavg3 + orderent + stafcder, data = CarpenterFdaData)
 
-# Simulate simpoly class object
-# Sim1 <- coxsimPoly(M1, b = "natreg", pow = 3, X = seq(1, 150, by = 5))
+# Simulate simpoly First Difference
+Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference",
+           pow = 3, Xj = seq(1, 150, by = 5))
+
+# Simulate simpoly Hazard Ratio with spin probibility interval
+Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio"
+           pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
 
 # Plot simulations
-# simGG(Sim1)
+simGG(Sim1)
+simGG(Sim2)
 }
 \seealso{
   \code{\link{coxsimPoly}} and \code{\link{ggplot2}}

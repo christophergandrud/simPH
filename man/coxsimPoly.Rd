@@ -2,7 +2,7 @@
 \alias{coxsimPoly}
 \title{Simulate quantities of interest for a range of values for a polynomial nonlinear effect from Cox Proportional Hazards models.}
 \usage{
-  coxsimPoly(obj, b, qi = "Hazard Ratio", pow = 2,
+  coxsimPoly(obj, b, qi = "Relative Hazard", pow = 2,
     Xj = NULL, Xl = NULL, nsim = 1000, ci = 0.95,
     spin = FALSE)
 }
@@ -14,11 +14,12 @@
   would like to simulate.}
 
   \item{qi}{quantity of interest to simulate. Values can be
-  \code{"Hazard Ratio"}, \code{"First Difference"}, and
-  \code{"Hazard Rate"}. The default is \code{qi = "Hazard
-  Ratio"}. If \code{qi = "Hazard Rate"} and the
-  \code{coxph} model has strata, then hazard rates for each
-  strata will also be calculated.}
+  \code{"Relative Hazard"}, \code{"First Difference"},
+  \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The
+  default is \code{qi = "Relative Hazard"}. If \code{qi =
+  "Hazard Rate"} and the \code{coxph} model has strata,
+  then hazard rates for each strata will also be
+  calculated.}
 
   \item{pow}{numeric polynomial used in \code{coxph}.}
 
@@ -73,7 +74,7 @@ Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference",
 						pow = 3, Xj = seq(1, 150, by = 5))
 
 # Simulate simpoly Hazard Ratio with spin probibility interval
-Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio"
+Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio",
 						pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
 }
 \references{

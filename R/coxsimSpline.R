@@ -7,7 +7,7 @@
 #' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. Think carefully before using \code{qi = "Hazard Rate"}. You may be creating very many simulated values which can be very computationally intensive to do. Adjust the number of simulations per fitted value with \code{nsim}.
 #' @param Xj numeric vector of values of X to simulate for.
 #' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} or \code{code = "Hazard"} only \code{Xj} is relevant.
-#' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
+#' @param nsim the number of simulations to run per value of \code{Xj}. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
 #' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
 #'
@@ -61,10 +61,10 @@
 coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE)
 { 
 	# Ensure that qi is valid
-	qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
+	qiOpts <- c("First Difference", "Hazard Rate", "Hazard Ratio")
 	TestqiOpts <- qi %in% qiOpts
 	if (!isTRUE(TestqiOpts)){
-		stop("Invalid qi type. qi must be 'Relative Hazard', 'First Difference', 'Hazard Rate', or 'Hazard Ratio'")
+		stop("Invalid qi type. qi must be 'Hazard Rate', 'First Difference', or 'Hazard Ratio'")
 	}
 
 	if (nsim > 10 & qi == "Hazard Rate"){
