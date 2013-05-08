@@ -67,14 +67,14 @@
 
   \item{surface}{plot surface. Default is \code{surface =
   TRUE}. Only relevant if \code{qi == 'Relative Hazard'}
-  and \code{FacetTime = Null}.}
+  and \code{FacetTime = NULL}.}
 
   \item{fit}{one or more of \code{"linear"},
   \code{"quadratic"}, \code{"smooth"}, \code{"additive"};
   to display fitted surface(s); partial matching is
-  supported – e.g., \code{c("lin", "quad")}. Only relevant
-  if \code{qi == 'Relative Hazard'} and \code{FacetTime =
-  Null}.}
+  supported e.g., \code{c("lin", "quad")}. Only relevant if
+  \code{qi == 'Relative Hazard'} and \code{FacetTime =
+  NULL}.}
 }
 \value{
   a ggplot2 object. See \code{\link{scatter3d}} for values

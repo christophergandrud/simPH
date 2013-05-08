@@ -70,10 +70,10 @@
 #'                    Xj = 1, by = 15, ci = 0.99)
 #' 
 #' # Create simtvc object for First Difference  
-#' Sim2 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
-#'                   qi = "First Difference", 
-#'                   tfun = "log", from = 80, to = 2000, 
-#'                   Xj = 1, by = 15, spin = TRUE)
+#'Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
+#'                  qi = "First Difference", Xj = 1,
+#'                  tfun = "log", from = 80, to = 2000,
+#'                  by = 15, ci = 0.95)
 #' 
 #' # Create simtvc object for Hazard Ratio  
 #' Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
@@ -189,7 +189,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
         Xs <- data.frame(Xj, Xl)
         Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
         Simb <- merge(TVSim, Xs)
-        Simb$FirstDiff <- (exp((Simb$Xj - Simb$Xl) * Simb$CombCoef) - 1) * 100
+        Simb$QI <- (exp((Simb$Xj - Simb$Xl) * Simb$CombCoef) - 1) * 100
       }
     } else if (qi == "Hazard Ratio"){
        if (length(Xj) != length(Xl)){

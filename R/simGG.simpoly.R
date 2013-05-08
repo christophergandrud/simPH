@@ -116,7 +116,6 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
           ggtitle(title) +
           guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
-  } 
   } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
       ggplot(objdf, aes(Xj, QI)) +
           geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +

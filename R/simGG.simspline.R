@@ -18,8 +18,8 @@
 #' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
-#' @param surface plot surface. Default is \code{surface = TRUE}. Only relevant if \code{qi == 'Relative Hazard'} and \code{FacetTime = Null}.
-#' @param fit one or more of \code{"linear"}, \code{"quadratic"}, \code{"smooth"}, \code{"additive"}; to display fitted surface(s); partial matching is supported – e.g., \code{c("lin", "quad")}. Only relevant if \code{qi == 'Relative Hazard'} and \code{FacetTime = Null}.
+#' @param surface plot surface. Default is \code{surface = TRUE}. Only relevant if \code{qi == 'Relative Hazard'} and \code{FacetTime = NULL}.
+#' @param fit one or more of \code{"linear"}, \code{"quadratic"}, \code{"smooth"}, \code{"additive"}; to display fitted surface(s); partial matching is supported e.g., \code{c("lin", "quad")}. Only relevant if \code{qi == 'Relative Hazard'} and \code{FacetTime = NULL}.
 #' @return a ggplot2 object. See \code{\link{scatter3d}} for values from \code{scatter3d} calls.
 #'  
 #' @description Uses \code{ggplot2} and \code{scatter3d} to plot the quantities of interest from \code{simspline} objects, including relative hazards, first differences, hazard ratios, and hazard rates. If currently does not support hazard rates for multiple strata.
