@@ -120,7 +120,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 				X2df <- data.frame(X2)
 				names(X2df) <- c("X2")
 				Simb <- merge(Simb, X2df)
-				Simb$HR <- exp(Simb[, 1] + (Simb[, 3] * Simb[, 4])) 
+				Simb$QI <- exp(Simb[, 1] + (Simb[, 3] * Simb[, 4])) 
 			}
 		}
 		else if (qi == "First Difference"){
@@ -131,7 +131,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			names(Xs) <- c("X1", "X2")
 			Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
 		    Simb <- merge(Simb, Xs)
-			Simb$HR <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]) - 1) * 100)	
+			Simb$QI <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]) - 1) * 100)	
 		  }
 		}
 		else if (qi == "Hazard Ratio"){
@@ -142,7 +142,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			names(Xs) <- c("X1", "X2")
 			Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
 		    Simb <- merge(Simb, Xs)
-			Simb$HR <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3])))
+			Simb$QI <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3])))
 		  }
 		}
 		else if (qi == "Hazard Rate"){
@@ -165,7 +165,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
 			SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
 	        Simb <- data.frame(SimbCombDT)
-		  	Simb$HRate <- Simb$hazard * Simb$HR 
+		  	Simb$QI <- Simb$hazard * Simb$HR 
 		  	Simb <- Simb[, -1]
 		}
 	}
@@ -221,7 +221,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
 		SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
 		Simb <- data.frame(SimbCombDT)
-		Simb$HRate <- Simb$hazard * Simb$HR 
+		Simb$QI <- Simb$hazard * Simb$HR 
 	}
 
 	# Drop simulations outside of 'confidence bounds'
@@ -234,31 +234,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	}
 
 	# Drop simulations outside of the middle
-	if (!isTRUE(spin)){
-	    Bottom <- (1 - ci)/2
-	    Top <- 1 - Bottom
-	    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < quantile(HR,", 
-	      Bottom, 
-	      "))"
-	    )))
-	    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > quantile(HR,", 
-	      Top, 
-	      "))"
-	    )))
-	}
-
-	# Drop simulations outside of the shortest probability interval
-	else if (isTRUE(spin)){
-		if (qi != "Marginal Effect"){
-			lb <- 0
-		} else if (qi == "Marginal Effect"){
-			lb <- -Inf
-		}
-	    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", lb = ", lb, ", LowUp = 1))" )))
-	    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", lb = ", lb, ", LowUp = 2))" )))
-	}
-
-	SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
+	SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi,
+									QI = QI, spin = spin, ci = ci)	
 
 	# Final clean up
 	class(SimbPerc) <- c("siminteract", qi)

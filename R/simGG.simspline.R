@@ -104,8 +104,8 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 	if (qi == "Hazard Rate"){
 		spallette <- NULL
 		if (is.null(obj$strata)){
-			objdf <- data.frame(obj$time, obj$HRate, obj$Xj)
-			names(objdf) <- c("Time", "HRate", "Xj")
+			objdf <- data.frame(obj$time, obj$QI, obj$Xj)
+			names(objdf) <- c("Time", "QI", "Xj")
 		} 
 		# Currently does not support strata
 		#else if (!is.null(obj$strata)) {
@@ -119,21 +119,21 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
   			objdf <- subset(objdf, Time <= to)
   		}
 	} else if (qi == "Hazard Ratio"){
-	  	objdf <- data.frame(obj$Xj, obj$HR, obj$Comparison)
-	  	names(objdf) <- c("Xj", "HR", "Comparison")
+	  	objdf <- data.frame(obj$Xj, obj$QI, obj$Comparison)
+	  	names(objdf) <- c("Xj", "QI", "Comparison")
 	} else if (qi == "Relative Hazard"){
 	  	spalette <- NULL
-	  	objdf <- data.frame(obj$Xj, obj$HR)
-	  	names(objdf) <- c("Xj", "HR")
+	  	objdf <- data.frame(obj$Xj, obj$QI)
+	  	names(objdf) <- c("Xj", "QI")
 	} else if (qi == "First Difference"){
 		spalette <- NULL
-		objdf <- data.frame(obj$Xj, obj$HR, obj$Comparison)
-		names(objdf) <- c("Xj", "FirstDiff", "Comparison")
+		objdf <- data.frame(obj$Xj, obj$QI, obj$Comparison)
+		names(objdf) <- c("Xj", "QI", "Comparison")
 	}
 
 	# Plots
 	if (qi == "Relative Hazard"){
-		ggplot(objdf, aes(Xj, HR)) +
+		ggplot(objdf, aes(Xj, QI)) +
 		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 		    geom_hline(aes(yintercept = 1), linetype = "dotted") +
@@ -142,7 +142,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 		    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		    theme_bw(base_size = 15)
 	} else if (qi == "First Difference"){
-    	ggplot(objdf, aes(Xj, FirstDiff)) +
+    	ggplot(objdf, aes(Xj, QI)) +
         	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 	        geom_hline(aes(yintercept = 0), linetype = "dotted") +
@@ -151,7 +151,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 	        theme_bw(base_size = 15)
 	} else if (qi == "Hazard Ratio"){
-		ggplot(objdf, aes(Xj, HR)) +
+		ggplot(objdf, aes(Xj, QI)) +
 	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
@@ -160,7 +160,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 	        theme_bw(base_size = 15)
     } else if (qi == "Hazard Rate" & is.null(FacetTime)){
-    	with(objdf, scatter3d(x = Time, y = HRate, z = Xj,
+    	with(objdf, scatter3d(x = Time, y = QI, z = Xj,
     						  xlab = xlab, ylab = ylab, zlab = zlab,
     						  surface = surface,
     						  fit = fit))
@@ -175,7 +175,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 		  CombObjdf
 		}
 		objdfSub <- SubsetTime(FacetTime)
-		ggplot(objdfSub, aes(Xj, HRate)) +
+		ggplot(objdfSub, aes(Xj, QI)) +
 	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 	        facet_grid(.~Time) +

@@ -124,6 +124,8 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
   if (is.null(Xl) & qi != "Hazard Rate"){
     Xl <- rep(0, length(Xj))
     message("All Xl set to 0.")
+  } else if (!is.null(Xl) & qi == "Relative Hazard") {
+    message("All Xl set to 0.")
   }
 
   # Create time function

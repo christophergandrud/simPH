@@ -27,8 +27,8 @@
   \item{Xj}{numeric vector of values of X to simulate for.}
 
   \item{Xl}{numeric vector of values to compare \code{Xj}
-  to. Note if \code{qi = "Relative Hazard"} or \code{code =
-  "Hazard"} only \code{Xj} is relevant.}
+  to. Note if \code{qi = "Relative Hazard"} or
+  \code{"Hazard Rate"} only \code{Xj} is relevant.}
 
   \item{nsim}{the number of simulations to run per value of
   \code{Xj}. Default is \code{nsim = 1000}.}
@@ -69,7 +69,12 @@ library(survival)
 
 # Run basic model
 # From Keele (2010) replication data
-M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + acutediz + hosp01  + pspline(hospdisc, df = 4) + pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 + pspline(condavg3, df = 4) + pspline(orderent, df = 4) + pspline(stafcder, df = 4), data = CarpenterFdaData)
+M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 +
+				acutediz + hosp01  + pspline(hospdisc, df = 4) +
+				pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 +
+				orphdum + natreg + vandavg3 + wpnoavg3 +
+				pspline(condavg3, df = 4) + pspline(orderent, df = 4) +
+				pspline(stafcder, df = 4), data = CarpenterFdaData)
 
 # Simulate Relative Hazards for orderent
 Sim1 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",

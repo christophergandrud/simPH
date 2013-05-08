@@ -46,10 +46,11 @@
 #'                        X2 = c(0, 1),
 #'                        qi = "First Difference", spin = TRUE)
 #'                        
-#' # Plot Marginal Effects
+#' # Plot quantities of interest
 #' simGG(Sim1, xlab = "\nprevgenx", ylab = "Marginal Effect of lethal\n")
 #' simGG(Sim2)
 #' simGG(Sim3)
+#' simGG(Sim4)
 #'
 #' @description Uses ggplot2 to plot the quantities of interest from \code{siminteract} objects, including marginal effects, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
@@ -87,11 +88,11 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 	if (qi == "Hazard Rate"){
 		colour <- NULL
 		if (is.null(obj$strata)){
-			objdf <- data.frame(obj$time, obj$HRate, obj$HRValue)
-			names(objdf) <- c("Time", "HRate", "HRValue")
+			objdf <- data.frame(obj$time, obj$QI, obj$HRValue)
+			names(objdf) <- c("Time", "QI", "HRValue")
 		} else if (!is.null(obj$strata)) {
-		objdf <- data.frame(obj$time, obj$HRate, obj$strata, obj$HRValue)
-		names(objdf) <- c("Time", "HRate", "Strata", "HRValue")
+		objdf <- data.frame(obj$time, obj$QI, obj$strata, obj$HRValue)
+		names(objdf) <- c("Time", "QI", "Strata", "HRValue")
 		}
 		if (!is.null(from)){
 			objdf <- subset(objdf, Time >= from)
@@ -101,22 +102,22 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
   		}
 	} else if (qi == "Hazard Ratio"){
 		colour <- NULL
-	  	objdf <- data.frame(obj$X1, obj$X2, obj$HR, obj$Comparison)
-	  	names(objdf) <- c("X1", "X2", "HR", "Comparison")
+	  	objdf <- data.frame(obj$X1, obj$X2, obj$QI, obj$Comparison)
+	  	names(objdf) <- c("X1", "X2", "QI", "Comparison")
 	} else if (qi == "Marginal Effect"){
 	  	spalette <- NULL
-	  	objdf <- data.frame(obj$X2, obj$HR)
-	  	names(objdf) <- c("X2", "HR")
+	  	objdf <- data.frame(obj$X2, obj$QI)
+	  	names(objdf) <- c("X2", "QI")
 	} else if (qi == "First Difference"){
 		colour <- NULL
-		objdf <- data.frame(obj$X1, obj$X2, obj$HR)
-		names(objdf) <- c("X1", "X2", "FirstDiff")
+		objdf <- data.frame(obj$X1, obj$X2, obj$QI)
+		names(objdf) <- c("X1", "X2", "QI")
 	}
 
 	# Plot
 	if (qi == "Hazard Rate"){
 	  	if (!is.null(obj$strata)) {
-	      ggplot(objdf, aes(x = Time, y = HRate, colour = factor(HRValue))) +
+	      ggplot(objdf, aes(x = Time, y = QI, colour = factor(HRValue))) +
 	        geom_point(alpha = I(palpha), size = psize) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 	        facet_grid(.~ Strata) +
@@ -126,7 +127,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 	        theme_bw(base_size = 15)
     	} else if (is.null(obj$strata)){
-	      	ggplot(objdf, aes(Time, HRate, colour = factor(HRValue))) +
+	      	ggplot(objdf, aes(Time, QI, colour = factor(HRValue))) +
 	        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 		        scale_colour_brewer(palette = spalette, name = leg.name) +
@@ -137,7 +138,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		}
 	} 
 	else if (qi == "Marginal Effect"){
-		ggplot(objdf, aes(X2, HR)) +
+		ggplot(objdf, aes(X2, QI)) +
 		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +   
 		    xlab(xlab) + ylab(ylab) +
@@ -150,7 +151,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		if (nrow(X1Unique) <= 1){
 			message("X1 must have more than one fitted value.")
 		} else {
-			ggplot(objdf, aes(X1, FirstDiff, colour = factor(X2), group = factor(X2))) +
+			ggplot(objdf, aes(X1, QI, colour = factor(X2), group = factor(X2))) +
 		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
@@ -166,7 +167,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		if (nrow(X1Unique) <= 1){
 			message("X1 must have more than one fitted value.")
 		} else {
-			ggplot(objdf, aes(X1, HR, colour = factor(X2), group = factor(X2))) +
+			ggplot(objdf, aes(X1, QI, colour = factor(X2), group = factor(X2))) +
 		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
