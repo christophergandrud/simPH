@@ -80,11 +80,11 @@ Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio",
 \references{
   Keele, Luke. 2010. ''Proportionally Difficult: Testing
   for Nonproportional Hazards in Cox Models.'' Political
-  Analysis 18(2): 189–205.
+  Analysis 18(2): 189-205.
 
   Carpenter, Daniel P. 2002. ''Groups, the Media, Agency
   Waiting Costs, and FDA Drug Approval.'' American Journal
-  of Political Science 46(3): 490–505.
+  of Political Science 46(3): 490-505.
 }
 \seealso{
   \code{\link{simGG}}, \code{\link{survival}},

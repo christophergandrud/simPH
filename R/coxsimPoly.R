@@ -37,9 +37,10 @@
 #' Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio", 
 #'						pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
 #' 
-#' @references Keele, Luke. 2010. ''Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.'' Political Analysis 18(2): 189–205.
+#' @references Keele, Luke. 2010. ''Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.'' Political Analysis 18(2): 189-205.
 #'
-#' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.'' American Journal of Political Science 46(3): 490–505.
+#' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
+#'
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #' @importFrom reshape2 melt
 #' @importFrom MSBVAR rmultnorm

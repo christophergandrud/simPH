@@ -1,4 +1,4 @@
-#' Plot simulated linear time-constant hazards.
+#' Plot simulated linear time-constant quantities of interest.
 #'
 #' \code{simGG.simlinear} uses ggplot2 to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
 #'
@@ -39,7 +39,7 @@
 #' simGG(Sim1)
 #' 
 #' # Simulate and plot Hazard Rate for stafcder variable
-#' Sim2 <- coxsimLinear(M1, b = "stafcder", 
+#' Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
 #'						qi = "Hazard Rate", Xj = c(1237, 1600))
 #' simGG(Sim2)
 #'
@@ -51,24 +51,19 @@
 #' @S3method simGG simlinear
 #'
 #' @seealso \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}}, and \code{\link{ggplot2}}
-#' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227–43.
-#' Keele, Luke. 2010. ''Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.'' Political Analysis 18(2): 189–205.
+#' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227-43.
 #'
-#' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.'' American Journal of Political Science 46(3): 490–505.
+#' Keele, Luke. 2010. ''Proportionally Difficult: Testing for Nonproportional Hazards in Cox Models.'' Political Analysis 18(2): 189-205.
+#'
+#' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
 
-simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
+simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1)
 {
 	if (!inherits(obj, "simlinear")){
     	stop("must be a simlinear object")
     }
     # Find quantity of interest
-    qi <- class(obj)[[2]]
-
-    # Create horizontal line (NULL value)
-    HL <- 1
-    if (qi == "First Difference"){
-      HL <- 0
-    } 
+    qi <- class(obj)[[2]]  
     
     # Create y-axis label
     if (is.null(ylab)){
@@ -120,11 +115,20 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
 		}
-	} else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | qi == "First Difference"){
+	} else if (qi == "First Difference"){
 		ggplot(objdf, aes(Xj, QI)) +
 	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-	        geom_hline(aes(yintercept = HL), linetype = "dotted") +
+	        geom_hline(aes(yintercept = 0), linetype = "dotted") +
+	        xlab(xlab) + ylab(ylab) +
+	        ggtitle(title) +
+	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+	        theme_bw(base_size = 15)
+    	} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
+		ggplot(objdf, aes(Xj, QI)) +
+	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        xlab(xlab) + ylab(ylab) +
 	        ggtitle(title) +
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +

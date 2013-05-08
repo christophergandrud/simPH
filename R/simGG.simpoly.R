@@ -49,19 +49,14 @@
 #' @method simGG simpoly
 #' @S3method simGG simpoly
 
-simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
+simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1)
 {
   if (!inherits(obj, "simpoly")){
       stop("must be a simpoly object")
     }
     # Find quantity of interest
     qi <- class(obj)[[2]]
-
-    # Create horizontal line (NULL value)
-    HL <- 1
-    if (qi == "First Difference"){
-      HL <- 0
-    }    
+ 
     # Create y-axis label
     if (is.null(ylab)){
       ylab <- paste(qi, "\n")
@@ -112,11 +107,21 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
             guides(colour = guide_legend(override.aes = list(alpha = 1))) +
             theme_bw(base_size = 15)
     }
-  } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | qi == "First Difference"){
+  } else if (qi == "First Difference"){
       ggplot(objdf, aes(Xj, QI)) +
           geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
           geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-          geom_hline(aes(yintercept = HL), linetype = "dotted") +
+          geom_hline(aes(yintercept = 0), linetype = "dotted") +
+          xlab(xlab) + ylab(ylab) +
+          ggtitle(title) +
+          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          theme_bw(base_size = 15)
+  } 
+  } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
+      ggplot(objdf, aes(Xj, QI)) +
+          geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+          geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+          geom_hline(aes(yintercept = 1), linetype = "dotted") +
           xlab(xlab) + ylab(ylab) +
           ggtitle(title) +
           guides(colour = guide_legend(override.aes = list(alpha = 1))) +

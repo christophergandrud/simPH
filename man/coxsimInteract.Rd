@@ -115,12 +115,12 @@ Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.
   2006. ''Understanding Interaction Models: Improving
-  Empirical Analyses.'' Political Analysis 14(1): 63–82.
+  Empirical Analyses.'' Political Analysis 14(1): 63-82.
 
   King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
   ''Making the Most of Statistical Analyses: Improving
   Interpretation and Presentation.'' American Journal of
-  Political Science 44(2): 347–61.
+  Political Science 44(2): 347-61.
 
   Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
   ''Simulation-Efficient Shortest Probablility Intervals.''

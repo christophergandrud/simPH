@@ -37,7 +37,7 @@
 }
 \references{
   Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
-  ''Simulation-Efficient Short`est Probablility
-  Intervals.'' Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
+  ''Simulation-Efficient Shortest Probablility Intervals.''
+  Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 }
 

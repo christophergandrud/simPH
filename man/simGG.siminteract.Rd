@@ -6,7 +6,7 @@
     xlab = NULL, ylab = NULL, title = NULL,
     smoother = "auto", spalette = "Set1", leg.name = "",
     lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
-    psize = 1, palpha = 0.1, ...)
+    psize = 1, palpha = 0.1)
 }
 \arguments{
   \item{obj}{a simlinear object}
@@ -109,20 +109,19 @@ Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
 simGG(Sim1, xlab = "\\nprevgenx", ylab = "Marginal Effect of lethal\\n")
 simGG(Sim2)
 simGG(Sim3)
-simGG(Sim4)
 }
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.
   2006. ''Understanding Interaction Models: Improving
-  Empirical Analyses.'' Political Analysis 14(1): 63–82.
+  Empirical Analyses.'' Political Analysis 14(1): 63-82.
 
   Keele, Luke. 2010. ''Proportionally Difficult: Testing
   for Nonproportional Hazards in Cox Models.'' Political
-  Analysis 18(2): 189–205.
+  Analysis 18(2): 189-205.
 
   Carpenter, Daniel P. 2002. ''Groups, the Media, Agency
   Waiting Costs, and FDA Drug Approval.'' American Journal
-  of Political Science 46(3): 490–505.
+  of Political Science 46(3): 490-505.
 }
 \seealso{
   \code{\link{coxsimInteract}},

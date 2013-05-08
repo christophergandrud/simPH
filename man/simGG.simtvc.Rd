@@ -6,7 +6,7 @@
     xlab = NULL, ylab = NULL, title = NULL,
     smoother = "auto", spalette = "Set1", leg.name = "",
     lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
-    psize = 1, palpha = 0.1, ...)
+    psize = 1, palpha = 0.1)
 }
 \arguments{
   \item{obj}{a simtvc class object}
@@ -126,6 +126,6 @@ simGG(Sim3, leg.name = "Comparision", from = 1200)
 \references{
   Licht, Amanda A. 2011. ''Change Comes with Time:
   Substantive Interpretation of Nonproportional Hazards in
-  Event History Analysis.'' Political Analysis 19: 227–43.
+  Event History Analysis.'' Political Analysis 19: 227-43.
 }
 

@@ -98,7 +98,7 @@ Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
   King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
   ''Making the Most of Statistical Analyses: Improving
   Interpretation and Presentation.'' American Journal of
-  Political Science 44(2): 347–61.
+  Political Science 44(2): 347-61.
 
   Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
   ''Simulation-Efficient Shortest Probablility Intervals.''

@@ -7,7 +7,7 @@
     zlab = NULL, title = NULL, smoother = "auto",
     spalette = "Set1", leg.name = "", lcolour = "#2B8CBE",
     lsize = 2, pcolour = "#A6CEE3", psize = 1,
-    palpha = 0.1, surface = TRUE, fit = "linear", ...)
+    palpha = 0.1, surface = TRUE, fit = "linear")
 }
 \arguments{
   \item{obj}{a simspline object}
@@ -92,10 +92,11 @@
   Rate, and the value of Xj. You can also choose to plot
   hazard rates for a range of values of Xj in two
   dimensional plots at specific points in time. Each plot
-  is arranged in a facet grid. Note: A dotted line is
-  created at y = 1 (0 for first difference), i.e. no
-  effect, for time-varying hazard ratio graphs. No line is
-  created for hazard rates.
+  is arranged in a facet grid.
+
+  Note: A dotted line is created at y = 1 (0 for first
+  difference), i.e. no effect, for time-varying hazard
+  ratio graphs. No line is created for hazard rates.
 }
 \details{
   \code{simGG.simspline} uses ggplot2 and scatter3d to plot
@@ -112,7 +113,12 @@ library(survival)
 
 # Run basic model
 # From Keele (2010) replication data
-M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + acutediz + hosp01  + pspline(hospdisc, df = 4) + pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 + pspline(condavg3, df = 4) + pspline(orderent, df = 4) + pspline(stafcder, df = 4), data = CarpenterFdaData)
+M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 +
+				acutediz + hosp01  + pspline(hospdisc, df = 4) +
+				pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 +
+				orphdum + natreg + vandavg3 + wpnoavg3 +
+				pspline(condavg3, df = 4) + pspline(orderent, df = 4) +
+				pspline(stafcder, df = 4), data = CarpenterFdaData)
 
 # Simulate Relative Hazards for orderent
 Sim1 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",

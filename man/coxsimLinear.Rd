@@ -89,12 +89,12 @@ Sim2 <- coxsimLinear(M1, b = "stafcder",
 \references{
   Licht, Amanda A. 2011. ''Change Comes with Time:
   Substantive Interpretation of Nonproportional Hazards in
-  Event History Analysis.'' Political Analysis 19: 227–43.
+  Event History Analysis.'' Political Analysis 19: 227-43.
 
   King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
   ''Making the Most of Statistical Analyses: Improving
   Interpretation and Presentation.'' American Journal of
-  Political Science 44(2): 347–61.
+  Political Science 44(2): 347-61.
 
   Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
   ''Simulation-Efficient Shortest Probablility Intervals.''
