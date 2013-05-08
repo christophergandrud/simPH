@@ -122,6 +122,10 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
     MeansMessage <- TRUE
   }
 
+  if (is.null(Xl)){
+    Xl <- rep(0, length(Xj))
+  }
+
   # Create time function
   tfunOpts <- c("linear", "log", "power")
   TestforTOpts <- tfun %in% tfunOpts
@@ -170,7 +174,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
 
     # Find quantity of interest
     if (qi == "Relative Hazard"){
-        message("All Xl ignored.")
+        message("All Xl set to 0.")
         Xs <- data.frame(Xj)
         names(Xs) <- c("Xj")
         Xs$Comparison <- paste(Xs[, 1])
@@ -187,13 +191,9 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
         Simb$FirstDiff <- (exp((Simb$Xj - Simb$Xl) * Simb$CombCoef) - 1) * 100
       }
     } else if (qi == "Hazard Ratio"){
-      if (length(Xl) > 1 & length(Xj) != length(Xl)){
+       if (length(Xj) != length(Xl)){
         stop("Xj and Xl must be the same length.")
-      }
-      else {
-        if (length(Xj) > 1 & length(Xl) == 1){
-          Xl <- rep(0, length(Xj))
-        }
+      } else {
         Xs <- data.frame(Xj, Xl)
         Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
         Simb <- merge(TVSim, Xs)

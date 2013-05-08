@@ -6,9 +6,8 @@
 #' @param qi quantity of interest to simulate. Values can be \code{"Hazard Ratio"}, \code{"First Difference"}, and \code{"Hazard Rate"}. The default is \code{qi = "Hazard Ratio"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param pow numeric polynomial used in \code{coxph}.  
 #' @param Xj numeric vector of values of X to simulate for.
-#' @param Xl numeric vector of values to compare \code{Xj} to.
-#' @param X numeric vector of values of X to simulate relative hazards for.
-#' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
+#' @param Xl numeric vector of values to compare \code{Xj} to. If \code{NULL}, then it is authomatically set to 0.
+#' @param nsim the number of simulations to run per value of \code{Xj}. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
 #' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
 #'

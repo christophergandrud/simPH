@@ -25,13 +25,10 @@
   \item{Xj}{numeric vector of values of X to simulate for.}
 
   \item{Xl}{numeric vector of values to compare \code{Xj}
-  to.}
-
-  \item{X}{numeric vector of values of X to simulate
-  relative hazards for.}
+  to. If \code{NULL}, then it is authomatically set to 0.}
 
   \item{nsim}{the number of simulations to run per value of
-  X. Default is \code{nsim = 1000}.}
+  \code{Xj}. Default is \code{nsim = 1000}.}
 
   \item{ci}{the proportion of middle simulations to keep.
   The default is \code{ci = 0.95}, i.e. keep the middle 95
