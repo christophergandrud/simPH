@@ -97,6 +97,7 @@ This is referred to as the first difference.
 
 So far we have only considered linear additive relationships. We can easily extend these quantities of interest to express interactive and nonlinear effects.
 
+%%%%%%%%%%%%%% Polynomial
 \paragraph{Polynomial Nonlinear}
 
 The $n$th degree polynomial nonlinear effect is given by $\beta_{1}x_{i} + \beta_{2}x_{i}^{2} + \dots + \beta_{n}x_{i}^{n}$. So the hazard rate for units $x_{j}$ and $x_{l}$ would simply be:
@@ -107,9 +108,38 @@ The $n$th degree polynomial nonlinear effect is given by $\beta_{1}x_{i} + \beta
 %
 where $x_{j-l}$ is $x_{j} - x_{l}$. There are analogous relative hazards and first differences.
 
-\paragraph{Linear Interactions}
 
-A linear interaction between two variables $x$ and $z$ for unit $i$ is the combined effect of $\beta_{1}x_{i} + \beta_{2}z_{i} + \beta_{3}x_{i}z_{i}$. We can easily express this as as a hazard ratio 
+%%%%%%%%%%%%%% Splines
+
+\paragraph{Penalized Splines} Another useful and more flexible way of modeling nonlinearity \citep[see][]{Keele2008} are penalized splines.
+
+FINISH
+
+
+%%%%%%%%%%%%%% Linear interactions 
+\paragraph{Linear Multiplicative Interactions}
+
+A linear multiplicative interaction between two variables $x$ and $z$ for unit $i$ is the combined effect of $\beta_{1}x_{i} + \beta_{2}z_{i} + \beta_{3}x_{i}z_{i}$. We can easily express this as a hazard ratio:
+%
+\begin{equation}
+	\frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{(\beta_{1}x_{j-l} + \beta_{2}z_{j-l} + \beta_{3}x_{j-l}z_{j-l})}.
+\end{equation}
+%
+Again relatives and first differences can be easily found by extension.
+
+\cite{Brambor2006} argue that multiplicative interactions are more easily communicated as marginal effects. For Cox PH models the marginal effect ($ME_{x}$) of $x$ on the hazard rate for different values of $z_{i}$ is given by:
+%
+\begin{equation}
+	ME_{x} = \mathrm{e}^{(\beta_{1} + \beta_{3}z_{i})},
+\end{equation}
+% 
+using the same notation as the previous equation.
+
+%%%%%%%%%%%%%%% Time Interactions
+\paragraph{Time Interactions}
+
+
+FINISH
 
 
 
