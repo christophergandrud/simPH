@@ -115,7 +115,7 @@ The $n$th degree polynomial nonlinear effect is given by $\beta_{1}x_{i} + \beta
 	\frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{(\beta_{1}x_{j-l} + \beta_{2}x_{j-l}^{2} + \dots + \beta_{n}x_{j-l}^{n})}.
 \end{equation}
 %
-where $x_{j-l}$ is $x_{j} - x_{l}$. There are analogous relative hazards and first differences.
+where $x_{j-l} = x_{j} - x_{l}$. There are analogous relative hazards and first differences.
 
 
 %%%%%%%%%%%%%% Splines
@@ -139,8 +139,8 @@ where $n$ is the number of knots. $x_{c+}$ for a given $\beta_{k_{c}}$ is:
     \left \{
     \begin{array}{ll}
         x & \quad \text{if} \: k_{c-1} < x \leq k_{c} \\
-        x & \quad \text{if} \: x \leq k_{1} \: \text{and} \: k = k_{1} \\
-        x & \quad \text{if} \: x \geq k_{n} \: \text{and} \: k = k_{n} \\
+        x & \quad \text{if} \: x \leq k_{1} \: \text{and} \: k_{c} = k_{1} \\
+        x & \quad \text{if} \: x \geq k_{n} \: \text{and} \: k_{c} = k_{n} \\
         0 & \quad \text{otherwise,}
     \end{array}
     \right.
@@ -161,10 +161,10 @@ We can similarly find first differences and relative hazards.
 A linear multiplicative interaction between two variables $x$ and $z$ for unit $i$ is the combined effect of $\beta_{1}x_{i} + \beta_{2}z_{i} + \beta_{3}x_{i}z_{i}$. We can easily express this as a hazard ratio:
 %
 \begin{equation}
-	\frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{(\beta_{1}x_{j-l} + \beta_{2}z_{j-l} + \beta_{3}x_{j-l}z_{j-l})}.
+	\frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{(\beta_{1}x_{j-l} + \beta_{2}z_{j-l} + \beta_{3}x_{j-l}z_{j-l})},
 \end{equation}
 %
-Again relatives and first differences can be easily found by extension.
+Again relative hazards and first differences can be easily found by extension.
 
 \cite{Brambor2006} argue that multiplicative interactions are more easily communicated as marginal effects. For Cox PH models the marginal effect of $x$ ($ME_{x}$) on the hazard rate for different values of $z_{i}$ is given by:
 %

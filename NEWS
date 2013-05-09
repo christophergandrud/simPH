@@ -12,7 +12,9 @@ Version 0.7
 
 - Documentation improvements.
 
-- Bug fixes, particularly with the SPIn lower bound for different quantities of interest.
+- Bug fixes, including: 
+  - SPIn lower bound for different quantities of interest.
+  - Fixed an error in the calculation of quantities of interest from Splines.
 
 Version 0.6
 

@@ -34,13 +34,14 @@
 #'				pspline(stafcder, df = 4), data = CarpenterFdaData)
 #'
 #' # Simulate Relative Hazards for orderent
-#' Sim1 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
-#'                        bdata = CarpenterFdaData$orderent,
-#'                        qi = "Relative Hazard",
-#'                        Xj = seq(2, 30, by = 3))
+#' Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)", 
+#'                     bdata = CarpenterFdaData$stafcder,
+#'                     qi = "Hazard Ratio",
+#'                     Xj = seq(1100, 1700, by = 10), 
+#'                     Xl = seq(1099, 1699, by = 10), spin = TRUE)
 #'  
 #' # Simulate Hazard Rates for orderent
-#' Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
+#' Sim2 <- coxssimSpline(M1, bspline = "pspline(orderent, df = 4)",
 #'                        bdata = CarpenterFdaData$orderent,
 #'                        qi = "Hazard Rate",
 #'                        Xj = seq(2, 53, by = 3),
@@ -76,9 +77,10 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	}
 
 	if (is.null(Xl) & qi != "Hazard Rate"){
-	Xl <- rep(0, length(Xj))
+		Xl <- rep(0, length(Xj))
 		message("All Xl set to 0.")
 	} else if (!is.null(Xl) & qi == "Relative Hazard") {
+		Xl <- rep(0, length(Xj))
 		message("All Xl set to 0.")
 	}
 	# Find term number
@@ -106,7 +108,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	dfn <- names(DrawnDF)
 
 	# Subset data frame to only spline variable coefficients.
-	bword <-word(bspline, 1)
+	bword <- word(bspline, 1)
 	b <- str_replace(bword, "pspline\\(", "")
 	b <- str_replace(b, ",", "")
 
@@ -159,36 +161,42 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	}
 
 	# Find quantities of interest
-	if (qi == "Relative Hazard"){
-		Simb <- MergeX(Xj)
-	    names(Simb) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
-	    Simb$QI <- exp(Simb$Xj * Simb$Coef)	
+	if (qi == "Relative Hazard" | qi == "Hazard Ratio"){
+	  	if (length(Xj) != length(Xl)){
+	      stop("Xj and Xl must be the same length.")
+	    } 
+
+		Simbj <- MergeX(Xj)
+	    names(Simbj) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
+		Simbl <- MergeX(Xl)
+	    names(Simbl) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xl")
+
+		if (qi == "Hazard Ratio"){
+		 	Xs <- data.frame(Xj, Xl)   	
+		    Simbj <- merge(Simbj, Xs, by = "Xj")
+		    Simbj$Comparison <- paste(Simbj$Xj, "vs.", Simbj$Xl)
+		}
+
+	    Simbj$QI <- exp((Simbj$Xj * Simbj$Coef) - (Simbl$Xl * Simbl$Coef))
+	    Simb <- Simbj
 	}
 	else if (qi == "First Difference"){
 	  	if (length(Xj) != length(Xl)){
 	      stop("Xj and Xl must be the same length.")
 	    } 
 	    else {
+			Simbj <- MergeX(Xj)
+		    names(Simbj) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
+			Simbl <- MergeX(Xl)
+		    names(Simbl) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xl")
+		 	
 		 	Xs <- data.frame(Xj, Xl)   	
-			CombinedDF <- MergeX(Xj)
-		    names(CombinedDF) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
-		    Simb <- merge(CombinedDF, Xs, by = "Xj")
-		 	Simb$QI <- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
-		    Simb$Comparison <- paste(Simb$Xj, "vs.", Simb$Xl)
+		    Simbj <- merge(Simbj, Xs, by = "Xj")
+		    Simbj$Comparison <- paste(Simbj$Xj, "vs.", Simbj$Xl)
+
+		 	Simbj$QI <- (exp((Simbj$Xj * Simbj$Coef) - (Simbl$Xl * Simbl$Coef)) - 1) * 100
+			Simb <- Simbj
 		}
-	}
-	else if (qi == "Hazard Ratio"){
-	  	if (length(Xj) != length(Xl)){
-	      stop("Xj and Xl must be the same length.")
-	    } 
-	    else {
-		 	Xs <- data.frame(Xj, Xl)   	
-			CombinedDF <- MergeX(Xj)
-		    names(CombinedDF) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
-		    Simb <- merge(CombinedDF, Xs, by = "Xj")
-		 	Simb$QI <- exp((Simb$Xj - Simb$Xl) * Simb$Coef)
-		    Simb$Comparison <- paste(Simb$Xj, "vs.", Simb$Xl)
-	   	}
 	}
 	else if (qi == "Hazard Rate"){
 		Xl <- NULL
@@ -218,8 +226,17 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 		SubVar <- c("time", "Xj")
 	}
 
+  if (Inf %in% Simb$QI){
+  	if (isTRUE(spin)){
+		stop("spin cannot be TRUE when there are infinite values for your quantitiy of interest.")
+  	} else {
+	  	message("Warning infinite values calculated for your quantity of interest. Consider changing the difference between Xj and Xl.")
+  	}
+  }
+
   SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi,
           QI = QI, spin = spin, ci = ci)	
+
 
   # Final clean up
   class(SimbPerc) <- c("simspline", qi)

@@ -121,10 +121,12 @@ M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 +
 				pspline(stafcder, df = 4), data = CarpenterFdaData)
 
 # Simulate Relative Hazards for orderent
-Sim1 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
-                       bdata = CarpenterFdaData$orderent,
-                       qi = "Relative Hazard",
-                       Xj = seq(1, 30, by = .1), ci = 0.9)
+# Simulate Relative Hazards for orderent
+Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
+                    bdata = CarpenterFdaData$stafcder,
+                    qi = "Hazard Ratio",
+                    Xj = seq(1100, 1700, by = 10),
+                    Xl = seq(1099, 1699, by = 10), spin = TRUE)
 
 # Simulate Hazard Rate for orderent
 Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
@@ -133,7 +135,7 @@ Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
                     Xj = seq(1, 30, by = 2), ci = 0.9, nsim = 10)
 
 # Plot relative hazard
-simGG(Sim1, xlab = "\\n orderent", palpha = 1)
+simGG(Sim1, palpha = 1)
 
 # 3D plot hazard rate
 simGG(Sim2, zlab = "orderent", fit = "quadratic")
