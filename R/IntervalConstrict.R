@@ -14,7 +14,7 @@
 
 IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, spin = FALSE, ci = 0.95)
 {
-	if (qi != "First Difference" |qi != "Marginal Effect"){
+	if (qi == "Relative Hazard" |qi == "Hazard Ratio" | qi == "Hazard Ratio"){
 		lb <- 0
 	} 
 	else if (qi == "First Difference"){

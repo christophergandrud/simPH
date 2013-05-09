@@ -30,6 +30,19 @@
   \item{l,u}{scalars, weighting centers (if provided).}
 }
 \description{
+  \code{SpinBounds} is an internal function used by
+  \code{simPH}'s simulation commands to find the shortest
+  probability interval. It is largely drawn from Liu's
+  (2013) \code{SPIn} command (version 1.1), with two
+  modifications. First it returns just the lower or upper
+  bound of the interval, rather than the whole SPIn object.
+  Second, if there is no variation in the interval (as the
+  hazard ratio for a fitted value of 0, e.g. all simulation
+  values are 1) it takes the "central interval" of the
+  simulations. Effectively it reduces the number of
+  simulations by \code{nsim} * \code{ci}.
+}
+\details{
   \code{SpinBounds} internal function for finding the lower
   bound from SPIn. This function and documentation is
   largely based directly on the original \code{SPIn}

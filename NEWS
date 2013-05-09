@@ -8,6 +8,8 @@ Version 0.7
 
 - No longer produces a legend for Xj and Xl comparisons for First Differences.
 
+- `spin = TRUE` works for quantities of interest when Xj - Xl = 0, i.e. in situations when all of the simulated quantities are 1 (or 0 for First Differences).
+
 - Documentation improvements.
 
 - Bug fixes, particularly with the SPIn lower bound for different quantities of interest.
