@@ -90,16 +90,16 @@ First let's look at the types of quantities of interest researchers are often in
 %
 $h(t|\mathbf{X}_{i})$ is the hazard rate for a unit $i$ at time $t$, i.e. the rate at which an event of interest--e.g. cancer remission, a war breaks out--happens. $h_{0}(t)$ is the baseline hazard at time $t$, i.e. the hazard when all covariates are 0. $\mathbf{\beta}$ is a vector of coefficients. $\mathbf{X}_{i}$ is a vector of covariates for unit $i$.
 
-Researchers are often interested in how a given covariate $x$ affects the hazard rate $h(t)$. The simplest approach is to simply report the coefficient $\beta$ for the covariate. It is more common to report the hazard ratio in its simplest form is $\mathrm{e}^{\beta}$. It is a ratio in that it represents the ratio of the hazards of units with two levels of the covariate--all else equal--at a given point in time $(t)$. For units $j$ and $l$ the hazard ratio is:
+Researchers are often interested in how a given covariate $x$ affects the hazard rate $h(t)$. The simplest approach is to simply report the coefficient $\beta$ for the covariate. It is more common to report the hazard ratio in its simplest form is $\mathrm{e}^{\beta}$. It is a ratio in that it represents the ratio of the hazards of units with two levels of the covariate--all else equal--at a given point in time $(t)$. In the case of $\mathrm{e}^{\beta}$, the ratio is between a unit $j$ with $x = 1$ compared to a unit $l$ with $x = 0$. Generically for units $j$ and $l$ the hazard ratio is:
 %
 \begin{equation}
-	\frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{\beta\prime(x_{j} - x_{l})}.
+	\frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{\beta(x_{j} - x_{l})}.
 \end{equation}
 
 In the special case where $x_{j} \neq 0$ and $x_{l} = 0$, we are calculating what has been called the ``relative hazard" \cite[see][]{Golub2007,Licht2011}. We can also express these quantities as a percentage change in the hazard rate between two values of $x$ at a time ($t$):
 %
 \begin{equation}
-	\%\triangle h_{i}(t) = (e^{\beta\prime(x_{j} - x_{l})} - 1) * 100.
+	\%\triangle h_{i}(t) = (e^{\beta(x_{j} - x_{l})} - 1) * 100.
 \end{equation}
 % 
 This is referred to as the first difference.
@@ -178,7 +178,7 @@ using the same notation as the previous equation.
 \paragraph{Time Interactions}
 
 
-FINISH
+
 
 
 
