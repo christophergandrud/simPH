@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%
 % simPH package vignette
 % Christopher Gandrud
-% 9 May 2013
+% 10 May 2013
 %%%%%%%%%%%%%%%%%%
 
 
@@ -69,7 +69,7 @@ opts_chunk$set(fig.align='center', dev='png')
 %%%%%%%% Begin Document
 \begin{document}
 
-Results estimated from Cox Proportional Hazards (PH) models are often reported with coefficient point estimates or hazard ratios--exponentiated coefficients--and confidence intervals. However, this approach can (a) obscure the functional form of the estimate, especially over time and when it is non-linear or interactive and (b) give an inadequate sense of the uncertainty surrounding the estimates. There are currently limited capabilities in \proglang{R}\footnote{The \pkg{survival} \citep{R-survival} and Zelig \citep{R-Zelig} packages do included limited functions for presenting estimates from Cox PH models with uncertainty. However, they have very limited or nonexistent capabilities to show nonlinear and interactive estimates with associated uncertainty.} and popular statistical software such as Stata to present results in any other way. The \pkg{simPH} \citep{R-simPH} \proglang{R} package aims to make it much easier for researchers to show their Cox PH results. 
+Results estimated from Cox Proportional Hazards (PH) models are often reported with coefficient point estimates or hazard ratios--exponentiated coefficients--and confidence intervals. However, this approach can (a) obscure the functional form of the estimate, especially over time and when it is non-linear or interactive and (b) give an inadequate sense of the uncertainty surrounding the estimates. There are currently limited capabilities in \proglang{R}\footnote{The \pkg{survival} \citep{R-survival} and \pkg{Zelig} \citep{R-Zelig} packages do included limited functions for presenting estimates from Cox PH models with uncertainty. However, they have very limited or nonexistent capabilities to show nonlinear and interactive estimates with associated uncertainty.} and popular statistical software such as Stata to present results in any other way. The \pkg{simPH} \citep{R-simPH} \proglang{R} package aims to make it much easier for researchers to show their Cox PH results. 
 
 Drawing directly from approaches taken by \cite{King2000} and \cite{Licht2011} \pkg{simPH} simulates parameter from estimated Cox PH models by drawing them from their posterior distribution. Then it calculates quantities of interests, such as hazard ratios, first differences, relative hazards, marginal effects (for interactions), and hazard ratios. Finally, it plots the distributions of these simulated quantities of interest with visual-weighting \citep{Hsiang2012}. The plots are generally created with the popular \proglang{R} package \pkg{ggplot2} \citep{R-ggplot2} and as such can be aesthetically improved in virtually any way allowed by the package.
 
@@ -120,16 +120,16 @@ where $x_{j-l} = x_{j} - x_{l}$. There are analogous relative hazards and first 
 
 %%%%%%%%%%%%%% Splines
 
-\paragraph{Penalized Splines} Another useful and more flexible way of modeling nonlinearity in Cox PH models are penalized splines \citep[see][]{Gray1992,Keele2008}. Penalized splines (P-splines) are essentially ``linear combinations of B-spline basis functions'' \cite[][5]{Strasak2009} with joins at observed values of $x$ known as ``knots'' ($k$) \cite[50]{Keele2008}. The knots are equally spaced over the range of observed $x$. If $f(x)$ is the P-spline function then a Cox PH model with P-splines is given by:
+\paragraph{Penalized Splines} Another useful and more flexible way of modeling nonlinearity in Cox PH models are penalized splines \citep[see][]{Gray1992,Keele2008}. Penalized splines (P-splines) are essentially ``linear combinations of B-spline basis functions'' \cite[][5]{Strasak2009} with joins at observed values of $x$ known as ``knots'' ($k$) \cite[50]{Keele2008}. The knots are equally spaced over the range of observed $x$. If $g(x)$ is the P-spline function then a Cox PH model with P-splines is given by:
 %
 \begin{equation}
-	h(t|\mathbf{X}_{i})=h_{0}(t)\mathrm{e}^{f(x)}.
+	h(t|\mathbf{X}_{i})=h_{0}(t)\mathrm{e}^{g(x)}.
 \end{equation}
 % 
-For the purposes of post-estimation simulations $f(x)$ is a series of linear combined coefficients: 
+For the purposes of post-estimation simulations $g(x)$ is a series of linear combined coefficients: 
 %
 \begin{equation}
-    f(x) = \beta_{k_{1}}(x)_{1+} + \beta_{k_{2}}(x)_{2+} + \beta_{k_{3}}(x)_{3+} + \ldots + \beta_{k_{n}}(x)_{n+},
+    g(x) = \beta_{k_{1}}(x)_{1+} + \beta_{k_{2}}(x)_{2+} + \beta_{k_{3}}(x)_{3+} + \ldots + \beta_{k_{n}}(x)_{n+},
 \end{equation}  
 %
 where $n$ is the number of knots. $x_{c+}$ for a given $\beta_{k_{c}}$ is:
@@ -149,7 +149,7 @@ where $n$ is the number of knots. $x_{c+}$ for a given $\beta_{k_{c}}$ is:
 where $x$ is within the observed range data. So, the hazard ratio between $x_{j}$ and $x_{l}$:\footnote{For an extension with time-varying effects see \cite{Strasak2009}.} 
 %
 \begin{equation}
-	\frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{f(x_{j}) - f(x_{l})}.
+	\frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{g(x_{j}) - g(x_{l})}.
 \end{equation}
 %
 We can similarly find first differences and relative hazards.
@@ -177,19 +177,50 @@ using the same notation as the previous equation.
 %%%%%%%%%%%%%%% Time Interactions
 \paragraph{Time Interactions}
 
-
-
-
-
+In cases where the effect of a covariate $x$ on the hazard rate changes over time, it can be useful to explicitly model this as an interaction between $x$ and some function of time \cite{Licht2011,BoxSteffensmeier2003,boxsteffensmeier2004}. If $f(t)$ is a function of time, such as log-time, then a Cox PH model with one time-interaction is represented by:
+%
+\begin{equation}
+	h_{i}(t|\mathbf{x}_{i})=h_{0}(t)\mathrm{e}^{(\beta_{1}x_{i} + \beta_{2}f(t)x_{i})}.
+\end{equation}
+%
+A hazard ration between units $j$ and $l$ is given by:
+%
+\begin{equation}
+	\frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{(x_{j} - x_{l})(\beta_{1} + \beta_{2}f(t))},
+\end{equation} 
+%
+with obvious relative hazard and first difference extensions.
 
 \subsection{Draws from the Posterior Distribution}
 
-In all of these cases, to estimates 
+To explore and communicate the uncertainty we have about quantities of interest calculated from point estimates $\mathrm{\hat{\beta}}$ of the Cox PH model we can simulate values of these quantities of interest. One way to do this is by drawing estimates of the coefficients $\mathrm{\hat{\beta}}$ from the multivariate normal distribution with a mean of the estimated parameter and parameter-covariance estimates \citep{King2000,Licht2011}.\footnote{\cite{King2000} discuss alternatives approaches to finding similar information such as fully Bayesian Markov-Chain Monte Carlo estimation and bootstrapping. They are all similar and differ largely in the way the parameters are draw.} This a relatively easy way to find information about the parameters' probability distribution. 
 
+Once we have the simulated parameters we can use the appropriate formula discussed above to calculate the quantities of interest for each pair of $x_{j}$ and $x_{l}$ and, in the case of time interactions, each time $t$. We can then graphically communicate the distribution of the simulated quantities of interest by, for example, simply plotting the simulated values as points on a figure. This will give you an your reader an easy to read way of understanding your results.
 
 \subsection[Which Interval?]{Which Uncertainty Interval: The Central Interval or the Shortest Probability Interval}
 
+Before illustrating how \pkg{simPH} can be used to simulate and graph quantities of interest. Let's look at two issues related to how to communicating the quantities' probability distribution. The first issue is what interval should we focus on; some constricted central interval, e.g. the middle 95 percent of the simulations or the highest density region? In the next subsection we will look at how to use visual-weighting to emphasis parts of the distribution with the highest probability.
+
+Many researchers choose to communicate uncertainty about their estimates and quantities of interest using standard errors or confidence intervals. \cite{Licht2011} chose to graphically communicate the uncertainty about the simulated time interactions from her models with lines delimiting the simulated quantity of interest's 2.5 and 97.5 percentiles: the central 95 percent interval. 
+
+Another approach to showing uncertainty from a simulated distribution is to use the highest density regions \citep{Box1973,Hyndman1996}. These are the parts of the distribution with the highest concentration of a given percentage of simulations. If the simulations are unimodal, \cite{Liu2013} recommend finding the shortest probability interval (SPIn) or the shortest interval with a given probability coverage.
+
+If the simulations are normally distributed, the central interval and the SPIn will be equivalent. However, if the distribution is bounded asymmetric then the SPIn is preferable because the central interval ``can be much longer and have the awkward property [of] cutting off a narrow high-posterior slice that happens to be near the the boundary, thus ruling out a part of the distribution that is actually strongly supported bu the inference'' \cite[2]{Liu2013}.
+
+This is important for us because the quantities of interest we are estimating are on an exponential scale and bounded. Hazard ratios and relative hazards are bounded at 0 and first differences are bounded at -100. So in many cases the SPIn will be a more appropriate way of showing the likely values we can infer from our analysis. 
+
+
+\subsection{Visual Weighting}
+
+Whether representing a given central or shortest probability interval, it is common to use lines to represent the edges on a graph. The only other information given to the reader is typically a third line for some measure of central tendency. Some graphs shade the region between the interval's edges. This approach over emphasizes the edges, the areas of lowest probability. Uniform shading suggest to the reader a uniform distribution between the edges. Both of these characteristics give misleading information about the quantities of interest probability distribution.
+
+Visual weighting presents a solution to these problems. Hsiang calls visual weight ``the amount of a viewer's attention that a graphical object or display region attracts, based on visual properties'' \cite[3]{Hsiang2012}. More visual weight can be created with more ``graphical ink" \citep{Tufte2001}. Visual weight is decreased by removing graphical ink. The simplest way to automatically increase or decrease graphical ink with our simulations is to simply plot each point with some transparency. Areas of the distribution with many simulations will be darker. Areas with fewer simulations, often near the edges will be lighter. 
+
+
 \section{The \pkg{simPH} Process}
+
+The \pkg{simPH} package makes it so that in three steps users can simulate quantities of interest from Cox PH models and graph the results in the ways described above.
+
 
 \section{Examples}
 
