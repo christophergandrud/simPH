@@ -221,12 +221,22 @@ Visual weighting presents a solution to these problems. Hsiang calls visual weig
 
 The \pkg{simPH} package makes it so that in three steps users can simulate quantities of interest from Cox PH models and graph the results in the ways described above.
 
+\begin{itemize}
+	\item Use \pkg{survival}'s \code{coxph} command to estimate a Cox PH model.
+	\item Simulate parameters estimates, calculate quantities of interest, and keep simulations in a specified interval with \pkg{simPH}'s simulation commands.
+	\item Plot the results with \pkg{simPH}'s plotting method \code{simGG}.
+\end{itemize}
+
+\noindent As we will see you can add further aesthetic attributes to your \code{simGG} plots using \pkg{ggplot2}.
 
 \section{Examples}
 
+The following examples illustrate \pkg{simPH}'s capabilities for effects estimated using linear coefficients, polynomials, P-splines, linear multiplicative interactions, and time interactions using data from epidemiology and political science.
 
-\subsection[Aesthetic Extensions]{Aesthetic Extensions with \pkg{ggplot2}}
 
+\subsection{Linear Effects}
+
+Because quantities of interest 
 
 
 
