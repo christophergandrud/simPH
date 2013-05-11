@@ -1,13 +1,14 @@
 %%%%%%%%%%%%%%%%%%
 % simPH package vignette
 % Christopher Gandrud
-% 10 May 2013
+% 11 May 2013
 %%%%%%%%%%%%%%%%%%
 
 
-\documentclass[nojss,draft]{jss}
+\documentclass[nojss]{jss}
 
 \usepackage{amsmath}
+\usepackage{graphicx}
 
 %\VignetteEngine{knitr}
 %\VignetteIndexEntry{simPH Vignette}
@@ -17,7 +18,7 @@
 #### Load Packages ####
 library(repmis)
 
-Packages <- c("car", "knitr", "repmis", "devtools", "MSBVAR", 
+Packages <- c("car", "knitr", "repmis", "devtools", "mgcv", "MSBVAR", 
               "simPH", "SPIn", "survival", "Zelig", "ggplot2")
 
 repmis::LoadandCite(Packages, file = "HRPackages.bib")
@@ -32,7 +33,7 @@ data("CarpenterFdaData")
 data("GolubEUPData")
 
 ##### Set Chunk Options ####
-opts_chunk$set(fig.align='center', dev='png')
+opts_chunk$set(fig.align='center', dev='png', tidy=FALSE)
 @
 
 %%%%%%%%%% Title Page Information 
@@ -217,7 +218,7 @@ Whether representing a given central or shortest probability interval, it is com
 Visual weighting presents a solution to these problems. Hsiang calls visual weight ``the amount of a viewer's attention that a graphical object or display region attracts, based on visual properties'' \cite[3]{Hsiang2012}. More visual weight can be created with more ``graphical ink" \citep{Tufte2001}. Visual weight is decreased by removing graphical ink. The simplest way to automatically increase or decrease graphical ink with our simulations is to simply plot each point with some transparency. Areas of the distribution with many simulations will be darker. Areas with fewer simulations, often near the edges will be lighter. 
 
 
-\section{The \pkg{simPH} Process}
+\section{The simPH Process}
 
 The \pkg{simPH} package makes it so that in three steps users can simulate quantities of interest from Cox PH models and graph the results in the ways described above.
 
@@ -233,10 +234,69 @@ The \pkg{simPH} package makes it so that in three steps users can simulate quant
 
 The following examples illustrate \pkg{simPH}'s capabilities for effects estimated using linear coefficients, polynomials, P-splines, linear multiplicative interactions, and time interactions using data from epidemiology and political science.
 
-
 \subsection{Linear Effects}
 
-Because quantities of interest 
+Our first example illustrating how to simulate and plot a linear effect is based on data from the University of Massachusetts AIDS Research Unit IMPACT Study (UIS) \cite[see][10]{HosmerEtAl2008}. The data is accessible in CSV format via UCLA's Institute for Digital Research and Education.\footnote{\url{http://www.ats.ucla.edu/stat/r/examples/asa/uis.csv}} The initial Cox PH model is from \cite{HosmerEtAl2008} and examples compiled by the \cite{UIS2013}. The study looked at the effects of randomly assigned drug treatment programs on the time it took for patients to return to drug use. 
+
+Let's first set up and run the model using the \pkg{survival} package. 
+
+<<Linear1>>=
+# Load survival package
+library(survival)
+
+# Download data 
+uis <- read.csv("http://www.ats.ucla.edu/stat/r/examples/asa/uis.csv")
+
+# Clean up variables for analysis
+attach(uis)
+	drug <- (ivhx == 1)
+	agec <- age - 30
+	ndrugtxc <- ndrugtx - 3
+
+	# Estimate the model
+	M1 <- coxph(Surv(time, censor) ~ treat + 
+				agec + drug + ndrugtxc, 
+				method="breslow")
+detach(uis)
+@
+
+\noindent For this example we'll focus on the variable \code{agec}. It is the subjects' age at their time of enrollment in the study. We centered it at age 30. When we summarize the results we can see that age is estimated to have a negative relationship with return to drug use.
+
+{\small{
+<<Linear2>>=
+summary(M1)
+@
+}}
+
+Now let's use \pkg{simPH} to help us get a sense of the magnitude of the estimated effect and our uncertainty about the estimates. Zero has a meaningful value for \code{agec}, i.e. it is age 30, so the relative hazard has a meaningful interpretation. It represents the ratio of the hazards between someone who entered the trial at an age other than 30 and someone who entered at 30. First use \code{coxsimLinear} to simulated the relative hazard for fitted values of \code{agec} between -10 and 26 (the range of values):\footnote{In \proglang{R} we can use the \code{seq} command to create a vector with a given sequence of values.}
+
+<<Linear3, message=FALSE>>=
+# Load simPH
+library(simPH)
+
+# Simulate relative hazards for agec
+Sim1 <- coxsimLinear(M1, b = "agec", 
+                     Xj = seq(-10, 26, by = 1))
+@
+
+\noindent By default, \code{coxsimPH} finds the relative hazard and the central 95 percent interval of the simulations. Now we plot the results to create Figure \ref{Linear1}:
+
+<<Linear4, eval=FALSE>>=
+simGG(Sim1)
+@
+
+\begin{figure}
+	\caption{Simulated relative hazards for \code{agec}, Central 95\% Interval}
+	\label{Linear1}
+	\vspace{0.3cm}
+<<Linear4.1, out.width='0.7\\textwidth', out.height='0.35\\textheight', echo=FALSE, message=FALSE>>=
+simGG(Sim1)
+@
+\end{figure}
+
+A generalized additive model with integrated smoothness estimation \citep[see][]{R-mgcv} was automatically chosen to create a line that summarizes the simulations' central tendency across the range of fitted values. This can be changed in \code{simGG} with the \code{smoother} argument to any method allowed by \pkg{ggplot2}. 
+
+If we would instead like to present the results as the percentage change in the hazard between a given age and 30, we could set the \code{qi} argument to \code{'First Difference'}:
 
 
 
