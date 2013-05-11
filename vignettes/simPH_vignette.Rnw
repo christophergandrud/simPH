@@ -268,7 +268,7 @@ summary(M1)
 @
 }}
 
-Now let's use \pkg{simPH} to help us get a sense of the magnitude of the estimated effect and our uncertainty about the estimates. Zero has a meaningful value for \code{agec}, i.e. it is age 30, so the relative hazard has a meaningful interpretation. It represents the ratio of the hazards between someone who entered the trial at an age other than 30 and someone who entered at 30. First use \code{coxsimLinear} to simulated the relative hazard for fitted values of \code{agec} between -10 and 26 (the range of values):\footnote{In \proglang{R} we can use the \code{seq} command to create a vector with a given sequence of values.}
+Now let's use \pkg{simPH} to help us get a sense of the magnitude of the estimated effect and our uncertainty about the estimates. Zero has a meaningful value for \code{agec}, i.e. it is age 30, so the relative hazard has a meaningful interpretation. It represents the ratio of the hazards between someone who entered the trial at an age other than 30 and someone who entered at 30. First use \code{coxsimLinear} to simulated the relative hazard for fitted values of \code{agec} between -10 and 26 (the range of values):\footnote{In \proglang{R} we can use the \code{seq} command to create a vector with a given sequence of values. In this example we create a sequence with increments of 0.5. The small the increments relative to the width of the interval, the smoother the graph will look, though the more increments will require more computing power to simulate.}
 
 <<Linear3, message=FALSE>>=
 # Load simPH
@@ -276,7 +276,7 @@ library(simPH)
 
 # Simulate relative hazards for agec
 Sim1 <- coxsimLinear(M1, b = "agec", 
-                     Xj = seq(-10, 26, by = 1))
+                     Xj = seq(-10, 26, by = 0.5))
 @
 
 \noindent By default, \code{coxsimPH} finds the relative hazard and the central 95 percent interval of the simulations. Now we plot the results to create Figure \ref{Linear1}:
@@ -286,7 +286,7 @@ simGG(Sim1)
 @
 
 \begin{figure}
-	\caption{Simulated relative hazards for \code{agec}, Central 95\% Interval}
+	\caption{Simulated relative hazards for Fitted Values of \code{agec}, Central 95\% Interval}
 	\label{Linear1}
 	\vspace{0.3cm}
 <<Linear4.1, out.width='0.7\\textwidth', out.height='0.35\\textheight', echo=FALSE, message=FALSE>>=
@@ -296,11 +296,30 @@ simGG(Sim1)
 
 A generalized additive model with integrated smoothness estimation \citep[see][]{R-mgcv} was automatically chosen to create a line that summarizes the simulations' central tendency across the range of fitted values. This can be changed in \code{simGG} with the \code{smoother} argument to any method allowed by \pkg{ggplot2}. 
 
-If we would instead like to present the results as the percentage change in the hazard between a given age and 30, we could set the \code{qi} argument to \code{'First Difference'}:
+If we would instead like to present the results as the percentage change in the hazard between a given age and 30, we could set the \code{coxsimLinear} \code{qi} argument to \code{'First Difference'} as in Figure \ref{Linear2}.
 
+<<Linear5, eval=FALSE>>=
+# Simulate relative hazards for agec
+Sim2 <- coxsimLinear(M1, b = "agec", 
+					 qi = "First Difference",
+                     Xj = seq(-12, 26, by = 0.5))
 
+# Plot the results
+simGG(Sim2)
+@
 
-
+\begin{figure}
+	\caption{Simulated First Differences for Fitted Values of \code{agec}, Central 95\% Interval}
+	\label{Linear2}
+	\vspace{0.3cm}
+<<Linear5.1, out.width='0.7\\textwidth', out.height='0.35\\textheight', echo=FALSE, message=FALSE>>=
+# Simulate relative hazards for agec
+Sim2 <- coxsimLinear(M1, b = "agec", 
+					 qi = "First Difference",
+                     Xj = seq(-12, 26, by = 0.5))
+simGG(Sim2)
+@
+\end{figure}
 \section{Conclusion}
 
 % Bibliography

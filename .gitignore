@@ -13,6 +13,7 @@ vignettes/jsslogo.jpg
 *.log
 *.aux
 *.out
+*.blg
 vignettes/simPH_vignette-concordance.tex
 vignettes/simPH_vignette.pdf
 vignettes/simPH_vignette.tex
