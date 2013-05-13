@@ -3,3 +3,18 @@
 .RData
 *.Rproj
 .DS_Store
+
+# Vignette
+*.synctex.gz
+*.bst
+*.cls
+vignettes/jsslogo.jpg
+*.bbl
+*.log
+*.aux
+*.out
+*.blg
+vignettes/simPH_vignette-concordance.tex
+vignettes/simPH_vignette.pdf
+vignettes/simPH_vignette.tex
+vignettes/figure

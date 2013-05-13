@@ -1,10 +1,10 @@
 \name{coxsimtvc}
 \alias{coxsimtvc}
-\title{Simulate time-varying hazards from coxph fitted model objects}
+\title{Simulate time-varying quantities of interest from coxph fitted model objects}
 \usage{
-  coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = 1,
-    Xl = 0, tfun = "linear", pow = NULL, nsim = 1000, from,
-    to, by, ci = 0.95, spin = FALSE)
+  coxsimtvc(obj, b, btvc, qi = "Relative Hazard",
+    Xj = NULL, Xl = NULL, tfun = "linear", pow = NULL,
+    nsim = 1000, from, to, by, ci = 0.95, spin = FALSE)
 }
 \arguments{
   \item{obj}{a coxph fitted model object with a time
@@ -23,14 +23,12 @@
   set \code{Xj} and \code{Xl}.}
 
   \item{Xj}{numeric vector of fitted values for Xj. Must be
-  the same length as Xl. Default is \code{Xj = 1}. Only
-  applies if \code{qi = 'First Difference'} or \code{qi =
-  'Hazard Ratio'}.}
+  the same length as \code{Xl} or \code{Xl} must be
+  \code{NULL}.}
 
   \item{Xl}{numeric vector of fitted values for Xl. Must be
-  the same length as Xj. Default is \code{Xl = 0}. Only
-  applies if \code{qi = 'First Difference'} or \code{qi =
-  'Hazard Ratio'}.}
+  the same length as Xj. Only applies if \code{qi = 'First
+  Difference'} or \code{qi = 'Hazard Ratio'}.}
 
   \item{nsim}{the number of simulations to run per point in
   time. Default is \code{nsim = 1000}.}
@@ -137,13 +135,13 @@ M1 <- coxph(Surv(begin, end, event) ~
 # Create simtvc object for Relative Hazard
 Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
                    tfun = "log", from = 80, to = 2000,
-                   by = 15, ci = 0.99)
+                   Xj = 1, by = 15, ci = 0.99)
 
 # Create simtvc object for First Difference
-Sim2 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
-                  qi = "First Difference",
-                  tfun = "log", from = 80, to = 2000,
-                  by = 15, spin = TRUE)
+Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
+                 qi = "First Difference", Xj = 1,
+                 tfun = "log", from = 80, to = 2000,
+                 by = 15, ci = 0.95)
 
 # Create simtvc object for Hazard Ratio
 Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
@@ -155,16 +153,16 @@ Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
 \references{
   Golub, Jonathan, and Bernard Steunenberg. 2007. ''How
   Time Affects EU Decision-Making.'' European Union
-  Politics 8(4): 555–66.
+  Politics 8(4): 555-66.
 
   Licht, Amanda A. 2011. ''Change Comes with Time:
   Substantive Interpretation of Nonproportional Hazards in
-  Event History Analysis.'' Political Analysis 19: 227–43.
+  Event History Analysis.'' Political Analysis 19: 227-43.
 
   King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
   ''Making the Most of Statistical Analyses: Improving
   Interpretation and Presentation.'' American Journal of
-  Political Science 44(2): 347–61.
+  Political Science 44(2): 347-61.
 
   Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
   ''Simulation-Efficient Shortest Probablility Intervals.''

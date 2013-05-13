@@ -1,9 +1,9 @@
 \name{coxsimLinear}
 \alias{coxsimLinear}
-\title{Simulate hazards for linear time-constant covariates from Cox Proportional Hazards models.}
+\title{Simulate quntities of interest for linear time-constant covariates from Cox Proportional Hazards models.}
 \usage{
-  coxsimLinear(obj, b, qi = "Relative Hazard", Xj = 1,
-    Xl = 0, means = FALSE, nsim = 1000, ci = 0.95,
+  coxsimLinear(obj, b, qi = "Relative Hazard", Xj = NULL,
+    Xl = NULL, means = FALSE, nsim = 1000, ci = 0.95,
     spin = FALSE)
 }
 \arguments{
@@ -23,8 +23,8 @@
   \item{Xj}{numeric vector of values of X to simulate for.}
 
   \item{Xl}{numeric vector of values to compare \code{Xj}
-  to. Note if \code{qi = "Relative Hazard"} or \code{code =
-  "Hazard"} only \code{Xj} is relevant.}
+  to. Note if \code{code = "Relative Hazard"} only
+  \code{Xj} is relevant.}
 
   \item{means}{logical, whether or not to use the mean
   values to fit the hazard rate for covaraiates other than
@@ -76,7 +76,6 @@ M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
 
 # Simulate Hazard Ratios
 Sim1 <- coxsimLinear(M1, b = "stafcder",
-                       qi = "Hazard Ratio",
                        Xj = c(1237, 1600),
                        Xl = c(1000, 1000),
                        spin = TRUE, ci = 0.99)
@@ -90,12 +89,12 @@ Sim2 <- coxsimLinear(M1, b = "stafcder",
 \references{
   Licht, Amanda A. 2011. ''Change Comes with Time:
   Substantive Interpretation of Nonproportional Hazards in
-  Event History Analysis.'' Political Analysis 19: 227–43.
+  Event History Analysis.'' Political Analysis 19: 227-43.
 
   King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
   ''Making the Most of Statistical Analyses: Improving
   Interpretation and Presentation.'' American Journal of
-  Political Science 44(2): 347–61.
+  Political Science 44(2): 347-61.
 
   Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
   ''Simulation-Efficient Shortest Probablility Intervals.''

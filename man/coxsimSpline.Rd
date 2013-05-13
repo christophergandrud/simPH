@@ -27,11 +27,11 @@
   \item{Xj}{numeric vector of values of X to simulate for.}
 
   \item{Xl}{numeric vector of values to compare \code{Xj}
-  to. Note if \code{qi = "Relative Hazard"} or \code{code =
-  "Hazard"} only \code{Xj} is relevant.}
+  to. Note if \code{qi = "Relative Hazard"} or
+  \code{"Hazard Rate"} only \code{Xj} is relevant.}
 
   \item{nsim}{the number of simulations to run per value of
-  X. Default is \code{nsim = 1000}.}
+  \code{Xj}. Default is \code{nsim = 1000}.}
 
   \item{ci}{the proportion of middle simulations to keep.
   The default is \code{ci = 0.95}, i.e. keep the middle 95
@@ -69,13 +69,19 @@ library(survival)
 
 # Run basic model
 # From Keele (2010) replication data
-M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + acutediz + hosp01  + pspline(hospdisc, df = 4) + pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 + pspline(condavg3, df = 4) + pspline(orderent, df = 4) + pspline(stafcder, df = 4), data = CarpenterFdaData)
+M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 +
+				acutediz + hosp01  + pspline(hospdisc, df = 4) +
+				pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 +
+				orphdum + natreg + vandavg3 + wpnoavg3 +
+				pspline(condavg3, df = 4) + pspline(orderent, df = 4) +
+				pspline(stafcder, df = 4), data = CarpenterFdaData)
 
 # Simulate Relative Hazards for orderent
-Sim1 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
-                       bdata = CarpenterFdaData$orderent,
-                       qi = "Relative Hazard",
-                       Xj = seq(2, 30, by = 3))
+Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
+                    bdata = CarpenterFdaData$stafcder,
+                    qi = "Hazard Ratio",
+                    Xj = seq(1100, 1700, by = 10),
+                    Xl = seq(1099, 1699, by = 10), spin = TRUE)
 
 # Simulate Hazard Rates for orderent
 Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
@@ -93,7 +99,7 @@ Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
   King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
   ''Making the Most of Statistical Analyses: Improving
   Interpretation and Presentation.'' American Journal of
-  Political Science 44(2): 347–61.
+  Political Science 44(2): 347-61.
 
   Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
   ''Simulation-Efficient Shortest Probablility Intervals.''

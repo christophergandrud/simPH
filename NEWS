@@ -1,4 +1,18 @@
-Version 0.06
+Version 0.7
+
+- Added package vignette (partially completed).
+
+- Expanded `coxsimPoly` so that it is capable of simulating other quantities of interest. Also, bug fixes.
+
+- `spin = TRUE` works for quantities of interest when Xj - Xl = 0, i.e. in situations when all of the simulated quantities are 1 (or 0 for First Differences).
+
+- Documentation improvements.
+
+- Bug fixes, including: 
+  - SPIn lower bound for different quantities of interest.
+  - Fixed an error in the calculation of quantities of interest from Splines.
+
+Version 0.6
 
 - Increased flexibility for setting confidence levels. Now they may be set at any numeric value from 0 through 1.
 

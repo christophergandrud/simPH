@@ -1,11 +1,11 @@
-#' Simulate hazards for linear time-constant covariates from Cox Proportional Hazards models.
+#' Simulate quntities of interest for linear time-constant covariates from Cox Proportional Hazards models.
 #'
 #' \code{coxsimLinear} simulates relative hazards, first differences, and hazard ratios for time-constant covariates from models estimated with \code{\link{coxph}} using the multivariate normal distribution.
 #' @param obj a coxph fitted model object.
 #' @param b character string name of the coefficient you would like to simulate.
 #' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param Xj numeric vector of values of X to simulate for.
-#' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} or \code{code = "Hazard"} only \code{Xj} is relevant.
+#' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{code = "Relative Hazard"} only \code{Xj} is relevant.
 #' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b}. 
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}. Note: it does not currently support models that include polynomials created by \code{\link{I}}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
@@ -32,7 +32,6 @@
 #'
 #' # Simulate Hazard Ratios
 #' Sim1 <- coxsimLinear(M1, b = "stafcder", 
-#'                        qi = "Hazard Ratio", 
 #'                        Xj = c(1237, 1600), 
 #'                        Xl = c(1000, 1000), 
 #'                        spin = TRUE, ci = 0.99)
@@ -44,30 +43,36 @@
 #'                        ci = 0.99, means = TRUE)
 #'
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
-#' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227–43.
+#' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227-43.
 #'
-#' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of Statistical Analyses: Improving Interpretation and Presentation.'' American Journal of Political Science 44(2): 347–61.
+#' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of Statistical Analyses: Improving Interpretation and Presentation.'' American Journal of Political Science 44(2): 347-61.
 #' 
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probablility Intervals.'' Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 #'
 #' @import data.table
 #' @importFrom reshape2 melt
-#' @importFrom plyr ddply mutate
 #' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export
 
-coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
+coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
 {	
   if (qi != "Hazard Rate" & isTRUE(means)){
     stop("means can only be TRUE when qi = 'Hazard Rate'.")
+  }
+
+  if (is.null(Xl) & qi != "Hazard Rate"){
+    Xl <- rep(0, length(Xj))
+    message("All Xl set to 0.")
+  } else if (!is.null(Xl) & qi == "Relative Hazard") {
+    message("All Xl set to 0.")
   }
 
   # Ensure that qi is valid
   qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
   TestqiOpts <- qi %in% qiOpts
   if (!isTRUE(TestqiOpts)){
-    stop("Invalid qi type. qi must be 'Relative Hazard', 'First Difference', 'Hazard Rate', or 'Hazard Ratio'")
+    stop("Invalid qi type. qi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'")
   }
   MeansMessage <- NULL
   if (isTRUE(means) & length(obj$coefficients) == 3){
@@ -97,37 +102,20 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
 
     # Find quantity of interest
     if (qi == "Relative Hazard"){
-      message("All Xl ignored.")
       Xs <- data.frame(Xj)
       names(Xs) <- c("Xj")
       Xs$Comparison <- paste(Xs[, 1])
       Simb <- merge(Simb, Xs)
-    	Simb$HR <- exp(Simb$Xj * Simb$Coef)	
-    } 
-    else if (qi == "First Difference"){
-    	if (length(Xj) != length(Xl)){
-        stop("Xj and Xl must be the same length.")
-      } 
-      else {
-  	    Xs <- data.frame(Xj, Xl)
-  	    Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-  	    Simb <- merge(Simb, Xs)
-  	    Simb$HR <- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
-    	}
+      Simb$QI <- exp(Simb$Xj * Simb$Coef) 
+    } else if (qi == "First Difference"){
+	    Xs <- data.frame(Xj, Xl)
+	    Simb <- merge(Simb, Xs)
+	    Simb$QI<- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
     }
     else if (qi == "Hazard Ratio"){
-      if (length(Xl) > 1 & length(Xj) != length(Xl)){
-        stop("Xj and Xl must be the same length.")
-      }
-      else {
-      	if (length(Xj) > 1 & length(Xl) == 1){
-      		Xl <- rep(0, length(Xj))
-      	}
-      	Xs <- data.frame(Xj, Xl)
-      	Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-  	    Simb <- merge(Simb, Xs)
-    	  Simb$HR <- exp((Simb$Xj - Simb$Xl) * Simb$Coef)	
-      } 
+    	Xs <- data.frame(Xj, Xl)
+	    Simb <- merge(Simb, Xs)
+  	  Simb$QI<- exp((Simb$Xj - Simb$Xl) * Simb$Coef)	
     }
     else if (qi == "Hazard Rate"){
         Xl <- NULL
@@ -147,7 +135,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
         SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
         SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
         Simb <- data.frame(SimbCombDT)
-  	  	Simb$HRate <- Simb$hazard * Simb$HR 
+  	  	Simb$QI <- Simb$hazard * Simb$HR
   	  	Simb <- Simb[, -1]
     }
   }
@@ -192,7 +180,6 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
     Simb <- cbind(Simb, ExpandFC)
     Simb$Sum <- rowSums(Simb[, c(-1, -2)])
     Simb$HR <- exp(Simb$Sum)
-    Simb <- Simb[, c("HRValue", "HR", "Xj")]
 
     bfit <- basehaz(obj)
     bfit$FakeID <- 1
@@ -201,10 +188,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
     SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
     SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
     Simb <- data.frame(SimbCombDT)
-    Simb$HRate <- Simb$hazard * Simb$HR 
-
-    # Remove unnecessary
-    Simb <- Simb[, c("HRValue", "HR", "Xj", "hazard", "time", "HRate")]
+    Simb$QI <- Simb$hazard * Simb$HR
   }
 
   # Drop simulations outside of 'confidence bounds'
@@ -214,26 +198,8 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = 1, Xl = 0, means =
   	SubVar <- c("time", "Xj")
   }
 
-  if (!isTRUE(spin)){
-    Bottom <- (1 - ci)/2
-    Top <- 1 - Bottom
-    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < quantile(HR,", 
-      Bottom, 
-      "))"
-    )))
-    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > quantile(HR,", 
-      Top, 
-      "))"
-    )))
-  }
-
-  # Drop simulations outside of the shortest probability interval
-  else if (isTRUE(spin)){
-    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", LowUp = 1))" )))
-    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", LowUp = 2))" )))
-  }
-
-  SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
+  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi,
+                                QI = QI, spin = spin, ci = ci)
 
   # Final clean up
   class(SimbPerc) <- c("simlinear", qi)

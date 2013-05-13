@@ -4,7 +4,7 @@
 #' @param obj a \code{coxph} fitted model object with a linear multiplicative interaction.
 #' @param b1 character string of the first constitutive variable's name. Note \code{b1} and \code{b2} must be entered in the order in which they are entered into the \code{coxph} model.
 #' @param b2 character string of the second constitutive variable's name.
-#' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Relative Hazard"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
+#' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Hazard Ratio"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set. If you want to plot the results, \code{X1} should have more than one value.
 #' @param X2 numeric vector of fitted values of \code{b2} to simulate for. 
 #' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1} \code{b2} and \code{b1*b2}. Note: it does not currently support models that include polynomials created by \code{\link{I}}.
@@ -38,11 +38,11 @@
 #'              orphdum,
 #'              data = CarpenterFdaData)
 #'
-#' # Simulate Relative Hazard of lethal for multiple values of prevgenx
+#' # Simulate Hazard Ratio of lethal for multiple values of prevgenx
 #' Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
 #'                     X1 = seq(2, 115, by = 2),
 #'                     X2 = c(0, 1),
-#'                     qi = "Relative Hazard", ci = 0.9)
+#'                     qi = "Hazard Ratio", ci = 0.9)
 #'                     
 #' # Simulate First Difference
 #' Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
@@ -56,9 +56,9 @@
 #'                        means = TRUE)
 #' 
 #'
-#' @references Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. ''Understanding Interaction Models: Improving Empirical Analyses.'' Political Analysis 14(1): 63–82.
+#' @references Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. ''Understanding Interaction Models: Improving Empirical Analyses.'' Political Analysis 14(1): 63-82.
 #'
-#' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of Statistical Analyses: Improving Interpretation and Presentation.'' American Journal of Political Science 44(2): 347–61.
+#' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of Statistical Analyses: Improving Interpretation and Presentation.'' American Journal of Political Science 44(2): 347-61.
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probablility Intervals.'' Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 #'
@@ -77,10 +77,10 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		stop("means can only be TRUE when qi = 'Hazard Rate'.")
 	}
 	# Ensure that qi is valid
-	qiOpts <- c("Marginal Effect", "First Difference", "Relative Hazard", "Hazard Rate")
+	qiOpts <- c("Marginal Effect", "First Difference", "Hazard Ratio", "Hazard Rate")
 	TestqiOpts <- qi %in% qiOpts
 	if (!isTRUE(TestqiOpts)){
-		stop("Invalid qi type. qi must be 'Marginal Effect', 'First Difference', 'Relative Hazard', or 'Hazard Rate'")
+		stop("Invalid qi type. qi must be 'Marginal Effect', 'First Difference', 'Hazard Ratio', or 'Hazard Rate'")
 	}
 	MeansMessage <- NULL
 	if (isTRUE(means) & length(obj$coefficients) == 3){
@@ -120,7 +120,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 				X2df <- data.frame(X2)
 				names(X2df) <- c("X2")
 				Simb <- merge(Simb, X2df)
-				Simb$HR <- exp(Simb[, 1] + (Simb[, 3] * Simb[, 4])) 
+				Simb$QI <- exp(Simb[, 1] + (Simb[, 3] * Simb[, 4])) 
 			}
 		}
 		else if (qi == "First Difference"){
@@ -131,18 +131,18 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			names(Xs) <- c("X1", "X2")
 			Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
 		    Simb <- merge(Simb, Xs)
-			Simb$HR <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]) - 1) * 100)	
+			Simb$QI <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]) - 1) * 100)	
 		  }
 		}
-		else if (qi == "Relative Hazard"){
+		else if (qi == "Hazard Ratio"){
 		  if (is.null(X1) | is.null(X2)){
-		    stop("For Relative Hazards both X1 and X2 should be specified.")
+		    stop("For Hazard Ratios both X1 and X2 should be specified.")
 		  } else {
 			Xs <- merge(X1, X2)
 			names(Xs) <- c("X1", "X2")
 			Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
 		    Simb <- merge(Simb, Xs)
-			Simb$HR <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3])))
+			Simb$QI <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3])))
 		  }
 		}
 		else if (qi == "Hazard Rate"){
@@ -165,7 +165,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
 			SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
 	        Simb <- data.frame(SimbCombDT)
-		  	Simb$HRate <- Simb$hazard * Simb$HR 
+		  	Simb$QI <- Simb$hazard * Simb$HR 
 		  	Simb <- Simb[, -1]
 		}
 	}
@@ -221,11 +221,11 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
 		SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
 		Simb <- data.frame(SimbCombDT)
-		Simb$HRate <- Simb$hazard * Simb$HR 
+		Simb$QI <- Simb$hazard * Simb$HR 
 	}
 
 	# Drop simulations outside of 'confidence bounds'
-	if (qi == "First Difference" | qi == "Relative Hazard"){
+	if (qi == "First Difference" | qi == "Hazard Ratio"){
 		SubVar <- "X1"
 	} else if (qi == "Marginal Effect"){
 		SubVar <- "X2"
@@ -234,31 +234,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	}
 
 	# Drop simulations outside of the middle
-	if (!isTRUE(spin)){
-	    Bottom <- (1 - ci)/2
-	    Top <- 1 - Bottom
-	    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < quantile(HR,", 
-	      Bottom, 
-	      "))"
-	    )))
-	    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > quantile(HR,", 
-	      Top, 
-	      "))"
-	    )))
-	}
-
-	# Drop simulations outside of the shortest probability interval
-	else if (isTRUE(spin)){
-		if (qi != "Marginal Effect"){
-			lb <- 0
-		} else if (qi == "Marginal Effect"){
-			lb <- -Inf
-		}
-	    SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", lb = ", lb, ", LowUp = 1))" )))
-	    SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", lb = ", lb, ", LowUp = 2))" )))
-	}
-
-	SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
+	SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi,
+									QI = QI, spin = spin, ci = ci)	
 
 	# Final clean up
 	class(SimbPerc) <- c("siminteract", qi)

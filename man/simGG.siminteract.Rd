@@ -6,7 +6,7 @@
     xlab = NULL, ylab = NULL, title = NULL,
     smoother = "auto", spalette = "Set1", leg.name = "",
     lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
-    psize = 1, palpha = 0.1, ...)
+    psize = 1, palpha = 0.1)
 }
 \arguments{
   \item{obj}{a simlinear object}
@@ -52,8 +52,6 @@
 
   \item{palpha}{point alpha (e.g. transparency). Default is
   \code{palpha = 0.05}. See \code{\link{ggplot2}}.}
-
-  \item{...}{other arguments passed to specific methods}
 }
 \value{
   a ggplot2 object
@@ -68,9 +66,9 @@
   effect, for time-varying hazard ratio graphs. No line is
   created for hazard rates.
 
-  Note: if \code{qi = "Relative Hazard"} or \code{qi =
-  "First Difference"} then you need to have choosen more
-  than one fitted value for \code{X1} in
+  Note: if \code{qi = "Hazard Ratio"} or \code{qi = "First
+  Difference"} then you need to have choosen more than one
+  fitted value for \code{X1} in
   \code{\link{coxsimInteract}}.
 }
 \details{
@@ -95,11 +93,11 @@ Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", X2 = seq(2, 115, by =
 # interpretable hazard ratio graph.
 M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal, data = CarpenterFdaData)
 
-# Simulate Relative Hazard of lethal for multiple values of prevgenx
+# Simulate Hazard Ratio of lethal for multiple values of prevgenx
 Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
                     X1 = seq(2, 115, by = 2),
                     X2 = c(0, 1),
-                    qi = "Relative Hazard", ci = 0.9)
+                    qi = "Hazard Ratio", ci = 0.9)
 
 # Simulate First Difference
 Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
@@ -107,7 +105,7 @@ Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
                        X2 = c(0, 1),
                        qi = "First Difference", spin = TRUE)
 
-# Plot Marginal Effects
+# Plot quantities of interest
 simGG(Sim1, xlab = "\\nprevgenx", ylab = "Marginal Effect of lethal\\n")
 simGG(Sim2)
 simGG(Sim3)
@@ -115,15 +113,15 @@ simGG(Sim3)
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.
   2006. ''Understanding Interaction Models: Improving
-  Empirical Analyses.'' Political Analysis 14(1): 63–82.
+  Empirical Analyses.'' Political Analysis 14(1): 63-82.
 
   Keele, Luke. 2010. ''Proportionally Difficult: Testing
   for Nonproportional Hazards in Cox Models.'' Political
-  Analysis 18(2): 189–205.
+  Analysis 18(2): 189-205.
 
   Carpenter, Daniel P. 2002. ''Groups, the Media, Agency
   Waiting Costs, and FDA Drug Approval.'' American Journal
-  of Political Science 46(3): 490–505.
+  of Political Science 46(3): 490-505.
 }
 \seealso{
   \code{\link{coxsimInteract}},

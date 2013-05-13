@@ -3,7 +3,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 0.6
+### Version 0.7
 
 ### Note: **simPH** is in beta. Please report any bugs at <https://github.com/christophergandrud/simPH/issues>.
 
@@ -23,7 +23,7 @@ The package includes the following functions:
 
 - `coxsimSpline`: a function for simulating quantities of interest from penalised splines using multivariate normal distributions. Currently does not support simulating hazard rates from stratified models. **Note:** be extremely careful about the number of simulations you ask the function to find. It is very easy to ask for more than your computer can handle.
 
-- `coxsimPoly`: a function for simulating polynomial relative hazards.
+- `coxsimPoly`: a function for simulating quantities of interest for a range of values for a polynomial nonlinear effect from Cox Proportional Hazards models.
 
 - `coxsimInteract`: a function for simulating quantities of interest for linear multiplicative interactions, including marginal effects and hazard rates.
 
@@ -39,13 +39,16 @@ The syntax and capabilities of `simGG` varies depending on the sim object class 
 
 - `simGG.simspline`: uses **ggplot2** and `scatter3d` (from the [car](http://cran.r-project.org/web/packages/car/index.html) package) to plot quantities of interest from `simspline` objects, including relative hazards, first differences, hazard ratios, and hazard rates.
 
-- `simGG.simpoly`: uses **ggplot2** to graph the simulated polynomial relative hazards.
+- `simGG.simpoly`: uses **ggplot2** to graph the simulated polynomial quantities of interest.
 
 - `simGG.siminteract`: uses **ggplot2** to graph linear multiplicative interactions.
 
 ##### Additional styling
 
 Because in almost all cases `simGG` returns a *ggplot2* object, you can add aditional aesthetic attributes in the normal *ggplot2* way. See the [ggplot2 documentation for more details](http://docs.ggplot2.org/current/). Here is a quick example:
+
+
+---
 
 #### Misc.
 
@@ -64,6 +67,8 @@ devtools::install_github("simPH", "christophergandrud")
 ## Tip
 
 Before running the simulation and graph commands in this package carefully consider how many simulations you are about to make. Especially for hazard rates over long periods of time and with multiple strata, you can be asking **simPH** to run very many simulations. This will be computationally intensive. 
+
+---
 
 ## Sources
 

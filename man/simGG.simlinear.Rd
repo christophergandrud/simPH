@@ -1,15 +1,15 @@
 \name{simGG.simlinear}
 \alias{simGG.simlinear}
-\title{Plot simulated linear time-constant hazards.}
+\title{Plot simulated linear time-constant quantities of interest.}
 \usage{
   \method{simGG}{simlinear} (obj, from = NULL, to = NULL,
     xlab = NULL, ylab = NULL, title = NULL,
     smoother = "auto", spalette = "Set1", leg.name = "",
     lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
-    psize = 1, palpha = 0.1, ...)
+    psize = 1, palpha = 0.1)
 }
 \arguments{
-  \item{obj}{a simlinear object}
+  \item{obj}{a simlinear object.}
 
   \item{xlab}{a label for the plot's x-axis.}
 
@@ -36,8 +36,8 @@
 
   \item{lcolour}{character string colour of the smoothing
   line. The default is hexadecimal colour \code{lcolour =
-  '#2B8CBE'}. Only relevant if \code{qi = "Relative
-  Hazard"} or \code{qi = "First Difference"}.}
+  '#2B8CBE'}. Only relevant if \code{qi = "First
+  Difference"}.}
 
   \item{lsize}{size of the smoothing line. Default is 2.
   See \code{\link{ggplot2}}.}
@@ -45,16 +45,13 @@
   \item{pcolour}{character string colour of the simulated
   points for relative hazards. Default is hexadecimal
   colour \code{pcolour = '#A6CEE3'}. Only relevant if
-  \code{qi = "Relative Hazard"} or \code{qi = "First
-  Difference"}.}
+  \code{qi = "First Difference"}.}
 
   \item{psize}{size of the plotted simulation points.
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
 
   \item{palpha}{point alpha (e.g. transparency). Default is
   \code{palpha = 0.05}. See \code{\link{ggplot2}}.}
-
-  \item{...}{other arguments passed to specific methods}
 }
 \value{
   a ggplot2 object
@@ -82,30 +79,35 @@ library(survival)
 data("CarpenterFdaData")
 
 # Estimate survival model
-M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum + natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + condavg3 + orderent + stafcder, data = CarpenterFdaData)
+M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
+            deathrt1 + acutediz + hosp01  + hhosleng +
+            mandiz01 + femdiz01 + peddiz01 + orphdum +
+            vandavg3 + wpnoavg3 + condavg3 + orderent +
+            stafcder, data = CarpenterFdaData)
 
 # Simulate and plot Hazard Ratios for stafcder variable
 Sim1 <- coxsimLinear(M1, b = "stafcder",
 						qi = "Hazard Ratio",
-						Xj = seq(1237, 1600, by = 2))
+						Xj = seq(1237, 1600, by = 2), spin = TRUE)
 simGG(Sim1)
 
 # Simulate and plot Hazard Rate for stafcder variable
-Sim2 <- coxsimLinear(M1, b = "stafcder",
+Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
 						qi = "Hazard Rate", Xj = c(1237, 1600))
 simGG(Sim2)
 }
 \references{
   Licht, Amanda A. 2011. ''Change Comes with Time:
   Substantive Interpretation of Nonproportional Hazards in
-  Event History Analysis.'' Political Analysis 19: 227–43.
+  Event History Analysis.'' Political Analysis 19: 227-43.
+
   Keele, Luke. 2010. ''Proportionally Difficult: Testing
   for Nonproportional Hazards in Cox Models.'' Political
-  Analysis 18(2): 189–205.
+  Analysis 18(2): 189-205.
 
   Carpenter, Daniel P. 2002. ''Groups, the Media, Agency
   Waiting Costs, and FDA Drug Approval.'' American Journal
-  of Political Science 46(3): 490–505.
+  of Political Science 46(3): 490-505.
 }
 \seealso{
   \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},

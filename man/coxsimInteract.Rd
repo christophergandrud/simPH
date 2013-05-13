@@ -20,8 +20,8 @@
 
   \item{qi}{quantities of interest to simulate. Values can
   be \code{"Marginal Effect"}, \code{"First Difference"},
-  \code{"Relative Hazard"}, and \code{"Hazard Rate"}. The
-  default is \code{qi = "Relative Hazard"}. If \code{qi =
+  \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The
+  default is \code{qi = "Hazard Ratio"}. If \code{qi =
   "Hazard Rate"} and the \code{coxph} model has strata,
   then hazard rates for each strata will also be
   calculated.}
@@ -95,11 +95,11 @@ M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal +
              orphdum,
              data = CarpenterFdaData)
 
-# Simulate Relative Hazard of lethal for multiple values of prevgenx
+# Simulate Hazard Ratio of lethal for multiple values of prevgenx
 Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
                     X1 = seq(2, 115, by = 2),
                     X2 = c(0, 1),
-                    qi = "Relative Hazard", ci = 0.9)
+                    qi = "Hazard Ratio", ci = 0.9)
 
 # Simulate First Difference
 Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
@@ -115,12 +115,12 @@ Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.
   2006. ''Understanding Interaction Models: Improving
-  Empirical Analyses.'' Political Analysis 14(1): 63–82.
+  Empirical Analyses.'' Political Analysis 14(1): 63-82.
 
   King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
   ''Making the Most of Statistical Analyses: Improving
   Interpretation and Presentation.'' American Journal of
-  Political Science 44(2): 347–61.
+  Political Science 44(2): 347-61.
 
   Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
   ''Simulation-Efficient Shortest Probablility Intervals.''

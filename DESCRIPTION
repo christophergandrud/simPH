@@ -1,13 +1,13 @@
 Package: simPH
-Title: Tools for simulating and graphing quantities of interest estimated using
+Title: Tools for simulating and plotting quantities of interest estimated from
     Cox Proportional Hazards models.
 Description: The package simulates and plots quantities of interest (relative
     hazards, first differences, and hazard ratios)for linear coefficients,
     multiplicative interactions, polynomials, penalised splines, and
     non-proportional hazards, as well as stratified survial curves from Cox
     Proportional Hazard models.
-Version: 0.6
-Date: 2013-04-26
+Version: 0.7
+Date: 2013-05-08
 Author: Christopher Gandrud
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
 URL: http://christophergandrud.github.com/simPH/
@@ -25,6 +25,8 @@ Imports:
     gridExtra,
     quadprog,
     MSBVAR
+Suggests:
+    knitr
 License: GPL (>= 2)
 Collate:
     'CarpenterFdaData.R'
@@ -43,3 +45,5 @@ Collate:
     'simGG.simlinear.R'
     'tvc.R'
     'SPInBounds.R'
+    'IntervalConstrict.R'
+VignetteBuilder: knitr

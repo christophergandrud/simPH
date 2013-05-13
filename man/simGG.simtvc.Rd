@@ -6,7 +6,7 @@
     xlab = NULL, ylab = NULL, title = NULL,
     smoother = "auto", spalette = "Set1", leg.name = "",
     lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
-    psize = 1, palpha = 0.1, ...)
+    psize = 1, palpha = 0.1)
 }
 \arguments{
   \item{obj}{a simtvc class object}
@@ -51,8 +51,6 @@
 
   \item{palpha}{point alpha (e.g. transparency). Default is
   \code{palpha = 0.05}. See \code{\link{ggplot2}}.}
-
-  \item{...}{other arguments passed to specific methods}
 }
 \value{
   a ggplot2 object
@@ -105,13 +103,13 @@ M1 <- coxph(Surv(begin, end, event) ~
 # Create simtvc object for Relative Hazard
 Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
                    tfun = "log", from = 80, to = 2000,
-                   by = 15, ci = 0.99)
+                   Xj = 1, by = 15, ci = 0.99)
 
 # Create simtvc object for First Difference
-Sim2 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
-                  qi = "First Difference",
-                  tfun = "log", from = 80, to = 2000,
-                  by = 15, ci = 0.99, spin = TRUE)
+Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
+                 qi = "First Difference", Xj = 1,
+                 tfun = "log", from = 80, to = 2000,
+                 by = 15, ci = 0.95)
 
 # Create simtvc object for Hazard Ratio
 Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
@@ -128,6 +126,6 @@ simGG(Sim3, leg.name = "Comparision", from = 1200)
 \references{
   Licht, Amanda A. 2011. ''Change Comes with Time:
   Substantive Interpretation of Nonproportional Hazards in
-  Event History Analysis.'' Political Analysis 19: 227–43.
+  Event History Analysis.'' Political Analysis 19: 227-43.
 }
 

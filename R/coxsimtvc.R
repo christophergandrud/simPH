@@ -1,12 +1,12 @@
-#' Simulate time-varying hazards from coxph fitted model objects
+#' Simulate time-varying quantities of interest from coxph fitted model objects
 #' 
 #' \code{coxsimtvc} simulates time-varying relative hazards, first differences, and hazard ratios from models estimated with \code{\link{coxph}} using the multivariate normal distribution.
 #' @param obj a coxph fitted model object with a time interaction. 
 #' @param b the non-time interacted variable's name.
 #' @param btvc the time interacted variable's name.
 #' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, \code{'Hazard Rate'}. Default is \code{qi = 'Relative Hazard'}. If \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'} then you can set \code{Xj} and \code{Xl}.
-#' @param Xj numeric vector of fitted values for Xj. Must be the same length as Xl. Default is \code{Xj = 1}. Only applies if \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'}.
-#' @param Xl numeric vector of fitted values for Xl. Must be the same length as Xj. Default is \code{Xl = 0}. Only applies if \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'}.
+#' @param Xj numeric vector of fitted values for Xj. Must be the same length as \code{Xl} or \code{Xl} must be \code{NULL}. 
+#' @param Xl numeric vector of fitted values for Xl. Must be the same length as Xj. Only applies if \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'}.
 #' @param nsim the number of simulations to run per point in time. Default is \code{nsim = 1000}.
 #' @param tfun function of time that btvc was multiplied by. Default is "linear". Can also be "log" (natural log) and "power". If \code{tfun = "power"} then the pow argument needs to be specified also.
 #' @param pow if \code{tfun = "power"}, then use pow to specify what power the time interaction was raised to.
@@ -67,13 +67,13 @@
 #' # Create simtvc object for Relative Hazard
 #' Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
 #'                    tfun = "log", from = 80, to = 2000, 
-#'                    by = 15, ci = 0.99)
+#'                    Xj = 1, by = 15, ci = 0.99)
 #' 
 #' # Create simtvc object for First Difference  
-#' Sim2 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
-#'                   qi = "First Difference", 
-#'                   tfun = "log", from = 80, to = 2000, 
-#'                   by = 15, spin = TRUE)
+#'Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
+#'                  qi = "First Difference", Xj = 1,
+#'                  tfun = "log", from = 80, to = 2000,
+#'                  by = 15, ci = 0.95)
 #' 
 #' # Create simtvc object for Hazard Ratio  
 #' Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
@@ -87,21 +87,20 @@
 #'
 #' @import data.table
 #' @importFrom reshape2 melt
-#' @importFrom plyr ddply mutate
 #' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export
 #'
-#' @references Golub, Jonathan, and Bernard Steunenberg. 2007. ''How Time Affects EU Decision-Making.'' European Union Politics 8(4): 555–66.
+#' @references Golub, Jonathan, and Bernard Steunenberg. 2007. ''How Time Affects EU Decision-Making.'' European Union Politics 8(4): 555-66.
 #'
-#' Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227–43.
+#' Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227-43.
 #'
-#' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of Statistical Analyses: Improving Interpretation and Presentation.'' American Journal of Political Science 44(2): 347–61.
+#' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of Statistical Analyses: Improving Interpretation and Presentation.'' American Journal of Political Science 44(2): 347-61.
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probablility Intervals.'' Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
 
 
-coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun = "linear", pow = NULL, nsim = 1000, from, to, by, ci = 0.95, spin = FALSE)
+coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000, from, to, by, ci = 0.95, spin = FALSE)
 {
   ############ Means Not Supported Yet for coxsimtvc ########
   #### means code is a place holder for future versions #####
@@ -120,6 +119,13 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
     message("Note: means reset to FALSE. The model only includes the interaction variables.")
   } else if (isTRUE(means) & length(obj$coefficients) > 3){
     MeansMessage <- TRUE
+  }
+
+  if (is.null(Xl) & qi != "Hazard Rate"){
+    Xl <- rep(0, length(Xj))
+    message("All Xl set to 0.")
+  } else if (!is.null(Xl) & qi == "Relative Hazard") {
+    message("All Xl set to 0.")
   }
 
   # Create time function
@@ -170,34 +176,29 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
 
     # Find quantity of interest
     if (qi == "Relative Hazard"){
-        message("All Xl ignored.")
         Xs <- data.frame(Xj)
         names(Xs) <- c("Xj")
         Xs$Comparison <- paste(Xs[, 1])
-        TVSim <- merge(TVSim, Xs)
-        TVSim$HR <- exp(TVSim$CombCoef * TVSim$Xj)
+        Simb <- merge(TVSim, Xs)
+        Simb$QI <- exp(Simb$CombCoef * Simb$Xj)
     } else if (qi == "First Difference"){
       if (length(Xj) != length(Xl)){
         stop("Xj and Xl must be the same length.")
       } else {
-        TVSim$HR <- exp(TVSim$CombCoef)
+        TVSim$QI <- exp(TVSim$CombCoef)
         Xs <- data.frame(Xj, Xl)
         Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-        TVSim <- merge(TVSim, Xs)
-        TVSim$FirstDiff <- (exp((TVSim$Xj - TVSim$Xl) * TVSim$CombCoef) - 1) * 100
+        Simb <- merge(TVSim, Xs)
+        Simb$QI <- (exp((Simb$Xj - Simb$Xl) * Simb$CombCoef) - 1) * 100
       }
     } else if (qi == "Hazard Ratio"){
-      if (length(Xl) > 1 & length(Xj) != length(Xl)){
+       if (length(Xj) != length(Xl)){
         stop("Xj and Xl must be the same length.")
-      }
-      else {
-        if (length(Xj) > 1 & length(Xl) == 1){
-          Xl <- rep(0, length(Xj))
-        }
+      } else {
         Xs <- data.frame(Xj, Xl)
         Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-        TVSim <- merge(TVSim, Xs)
-        TVSim$HR <- exp((TVSim$Xj - TVSim$Xl) * TVSim$CombCoef)
+        Simb <- merge(TVSim, Xs)
+        Simb$QI <- exp((Simb$Xj - Simb$Xl) * Simb$CombCoef)
       }
     } else if (qi == "Hazard Rate"){
         Xl <- NULL
@@ -217,8 +218,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
         SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
         SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
         Simb <- data.frame(SimbCombDT)
-        Simb$HRate <- Simb$hazard * Simb$HR 
-        TVSim <- Simb[, -1]
+        Simb$QI <- Simb$hazard * Simb$HR 
     }
   }
 
@@ -271,49 +271,25 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = 1, Xl = 0, tfun
     SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
     SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
     Simb <- data.frame(SimbCombDT)
-    Simb$HRate <- Simb$hazard * Simb$HR 
-
-    # Remove unnecessary
-    Simb <- Simb[, c("HRValue", "HR", "Xj", "hazard", "time", "HRate")]
+    Simb$QI <- Simb$hazard * Simb$HR 
   }
-
-  # If new values for calculating the hazard rate are set
-
 
   # Drop simulations outside of 'confidence bounds'
   SubVar <- c("time", "Xj")
   
-  if (!isTRUE(spin)){
-    Bottom <- (1 - ci)/2
-    Top <- 1 - Bottom
-    TVSimPerc <- eval(parse(text = paste0("ddply(TVSim, SubVar, mutate, Lower = HR < quantile(HR,", 
-      Bottom, 
-      "))"
-    )))
-    TVSimPerc <- eval(parse(text = paste0("ddply(TVSimPerc, SubVar, mutate, Upper = HR > quantile(HR,", 
-      Top, 
-      "))"
-    )))
-  }
-
-  # Drop simulations outside of the shortest probability interval
-  else if (isTRUE(spin)){
-    TVSimPerc <- eval(parse(text = paste0("ddply(TVSim, SubVar, mutate, Lower = HR < SpinBounds(HR, conf = ", ci, ", LowUp = 1))" )))
-    TVSimPerc <- eval(parse(text = paste0("ddply(TVSimPerc, SubVar, mutate, Upper = HR > SpinBounds(HR, conf = ", ci, ", LowUp = 2))" )))
-  }
-
-  TVSimPerc <- subset(TVSimPerc, Lower == FALSE & Upper == FALSE)
+  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi,
+                                QI = QI, spin = spin, ci = ci)
 
   # Create real time variable
   if (tfun == "linear"){
-    TVSimPerc$RealTime <- TVSimPerc$tf
+    SimbPerc$RealTime <- SimbPerc$tf
   } else if (tfun == "log"){
-    TVSimPerc$RealTime <- exp(TVSimPerc$tf)
+    SimbPerc$RealTime <- exp(SimbPerc$tf)
   } else if (tfun == "power"){
-    TVSimPerc$RealTime <- TVSimPerc$tf^(1/pow)
+    SimbPerc$RealTime <- SimbPerc$tf^(1/pow)
   }
   
   # Final clean up
-  class(TVSimPerc) <- c("simtvc", qi)
-  TVSimPerc
+  class(SimbPerc) <- c("simtvc", qi)
+  SimbPerc
 }
