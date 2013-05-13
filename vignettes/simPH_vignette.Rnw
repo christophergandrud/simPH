@@ -282,7 +282,7 @@ Sim1 <- coxsimLinear(M1, b = "agec",
 \noindent By default, \code{coxsimPH} finds the relative hazard and the central 95 percent interval of the simulations. Now we plot the results to create Figure \ref{Linear1}:
 
 <<Linear4, eval=FALSE>>=
-simGG(Sim1)
+simGG(Sim1, xlab = "\n Age From 30")
 @
 
 \begin{figure}
@@ -290,7 +290,7 @@ simGG(Sim1)
 	\label{Linear1}
 	\vspace{0.3cm}
 <<Linear4.1, out.width='0.7\\textwidth', out.height='0.35\\textheight', echo=FALSE, message=FALSE>>=
-simGG(Sim1)
+simGG(Sim1, xlab = "\n Age From 30")
 @
 \end{figure}
 
@@ -305,7 +305,7 @@ Sim2 <- coxsimLinear(M1, b = "agec",
                      Xj = seq(-12, 26, by = 0.5))
 
 # Plot the results
-simGG(Sim2)
+simGG(Sim2, xlab = "\n Age From 30")
 @
 
 \begin{figure}
@@ -317,7 +317,7 @@ simGG(Sim2)
 Sim2 <- coxsimLinear(M1, b = "agec", 
 					 qi = "First Difference",
                      Xj = seq(-12, 26, by = 0.5))
-simGG(Sim2)
+simGG(Sim2, xlab = "\n Age From 30")
 @
 \end{figure}
 \section{Conclusion}
