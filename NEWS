@@ -1,12 +1,8 @@
 Version 0.7
 
-- Added package vignette.
+- Added package vignette (partially completed).
 
 - Expanded `coxsimPoly` so that it is capable of simulating other quantities of interest. Also, bug fixes.
-
-- 'Relative Hazard' no longer an accepted value for the `qi` argument in `coxsimLinear`, because it produced trivial graphs.
-
-- No longer produces a legend for Xj and Xl comparisons for First Differences.
 
 - `spin = TRUE` works for quantities of interest when Xj - Xl = 0, i.e. in situations when all of the simulated quantities are 1 (or 0 for First Differences).
 

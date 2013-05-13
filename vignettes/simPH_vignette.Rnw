@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%
 % simPH package vignette
 % Christopher Gandrud
-% 11 May 2013
+% 13 May 2013
 %%%%%%%%%%%%%%%%%%
 
 
@@ -321,6 +321,8 @@ simGG(Sim2, xlab = "\n Age From 30")
 @
 \end{figure}
 \section{Conclusion}
+
+NOTE: This vignette will be completed in coming versions of \pkg{simPH}.
 
 % Bibliography
 \bibliography{HRBibliography,HRPackages}
