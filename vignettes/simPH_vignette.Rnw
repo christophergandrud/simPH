@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%
 % simPH package vignette
 % Christopher Gandrud
-% 13 May 2013
+% 14 May 2013
 %%%%%%%%%%%%%%%%%%
 
 
