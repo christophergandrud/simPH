@@ -38,10 +38,14 @@
 <p>Results from Cox PH models, and indeed many other methods, are often conveyed using ‘train-timetables’ of coefficient estimates and some measure of uncertainty such as standard errors or confidence intervals. This approach is inadequately informative, especially for effects that are estimated to vary over time, over values of the covariate, or in interaction with other covariates. When researchers do visually communicate uncertainty they often rely on graphical features, such as confidence interval lines that emphasize edges–areas of low likelihood–rather than the center, i.e. estimates that are more strongly supported by the model. The simPH package makes it easy to more fully present results from Cox PH models.</p>
 <h2 id="calculating-quantities-of-interest">Calculating Quantities of Interest</h2>
 <p>First let’s look at the types of quantities of interest researchers are often interested in estimating from Cox Proportional Hazards models <span class="citation">([CSL BIBLIOGRAPHIC DATA ERROR: reference &quot;Cox1972&quot; not found.])</span>. A basic Cox PH model is given by:</p>
-<p><br /><span class="math"><em>h</em>(<em>t</em>∣<strong>X</strong><sub><em>i</em></sub>) = <em>h</em><sub>0</sub>(<em>t</em>)e<sup>(<strong>\beta X</strong><sub><em>i</em></sub>)</sup>. </span><br /></p>
+<p><br /><span class="math"><em>h</em>(<em>t</em>∣<strong>X</strong><sub><em>i</em></sub>) = <em>h</em><sub>0</sub>(<em>t</em>)e<sup>(<strong>β X</strong><sub><em>i</em></sub>)</sup>. </span><br /></p>
 <p><span class="math"><em>h</em>(<em>t</em>∣<strong>X</strong><sub><em>i</em></sub>)</span> is the hazard rate for a unit <span class="math"><em>i</em></span> at time <span class="math"><em>t</em></span>, i.e. the rate at which an event of interest–e.g. cancer remission, a war breaks out–happens. <span class="math"><em>h</em><sub>0</sub>(<em>t</em>)</span> is the baseline hazard at time <span class="math"><em>t</em></span>, i.e. the hazard when all covariates are 0. <span class="math"><strong>\beta</strong></span> is a vector of coefficients. <span class="math"><strong>X</strong><sub><em>i</em></sub></span> is a vector of covariates for unit <span class="math"><em>i</em></span>.</p>
 <p>Researchers are often interested in how a given covariate <span class="math"><em>x</em></span> affects the hazard rate <span class="math"><em>h</em>(<em>t</em>)</span>. The simplest approach is to simply report the coefficient <span class="math"><em>β</em></span> for the covariate. It is more common to report the hazard ratio in its simplest form is <span class="math">e<sup><em>β</em></sup></span>. It is a ratio in that it represents the ratio of the hazards of units with two levels of the covariate–all else equal–at a given point in time <span class="math">(<em>t</em>)</span>. In the case of <span class="math">e<sup><em>β</em></sup></span>, the ratio is between a unit <span class="math"><em>j</em></span> with <span class="math"><em>x</em> = 1</span> compared to a unit <span class="math"><em>l</em></span> with <span class="math"><em>x</em> = 0</span>. Generically for units <span class="math"><em>j</em></span> and <span class="math"><em>l</em></span> the hazard ratio is:</p>
-<p><br /><span class="math">$\frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{\beta(x_{j} - x_{l})}.$</span><br /></p>
+\[
+    \frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{\beta(x_{j} - x_{l})}.
+\]
+
+
 <p>In the special case where <span class="math"><em>x</em><sub><em>j</em></sub> ≠ 0</span> and <span class="math"><em>x</em><sub><em>l</em></sub> = 0</span>, we are calculating what has been called the ``relative hazard&quot; <span class="citation">(see Golub and Steunenberg 2007; Licht 2011)</span>. We can also express these quantities as a percentage change in the hazard rate between two values of <span class="math"><em>x</em></span> at a time (<span class="math"><em>t</em></span>):</p>
 <p><br /><span class="math">%△<em>h</em><sub><em>i</em></sub>(<em>t</em>) = (<em>e</em><sup><em>β</em>(<em>x</em><sub><em>j</em></sub> − <em>x</em><sub><em>l</em></sub>)</sup> − 1) * 100. </span><br /></p>
 <p>This is referred to as the first difference.</p>
@@ -106,62 +110,67 @@
 <h2 id="linear-effects">Linear Effects</h2>
 <p>Our first example illustrating how to simulate and plot a linear effect is based on data from the University of Massachusetts AIDS Research Unit IMPACT Study (UIS) <span class="citation">(see Hosmer Jr., Lemeshow, and May 2008, 10)</span>. The data is accessible in CSV format via UCLA’s Institute for Digital Research and Education.<sup><a href="#fn4" class="footnoteRef" id="fnref4">4</a></sup> The initial Cox PH model is from <span class="citation">(Hosmer Jr., Lemeshow, and May 2008)</span> and examples compiled by the <span class="citation">(Research and Education 2013)</span>. The study looked at the effects of randomly assigned drug treatment programs on the time it took for patients to return to drug use.</p>
 <p>Let’s first set up and run the model using the survival package.</p>
-<p>shadecolorrgb0.969, 0.969, 0.969fgcolor</p>
-<p># Load survival package library(survival)</p>
-<p># Download data uis &lt;- read.csv(&quot;http://www.ats.ucla.edu/stat/r/examples/asa/uis.csv&quot;)</p>
-<p># Clean up variables for analysis attach(uis) drug &lt;- (ivhx == 1) agec &lt;- age - 30 ndrugtxc &lt;- ndrugtx - 3</p>
-<p># Estimate the model M1 &lt;- coxph(Surv(time, censor)   treat + agec + drug + ndrugtxc, method=&quot;breslow&quot;) detach(uis)</p>
-<p>For this example we’ll focus on the variable agec. It is the subjects’ age at their time of enrollment in the study. We centered it at age 30. When we summarize the results we can see that age is estimated to have a negative relationship with return to drug use.</p>
-<p>shadecolorrgb0.969, 0.969, 0.969fgcolor</p>
-<p>summary(M1)</p>
-<pre><code>## Call:
-## coxph(formula = Surv(time, censor) ~ treat + agec + drug + ndrugtxc, 
-##     method = &quot;breslow&quot;)
-## 
-##   n= 593, number of events= 481 
-##    (35 observations deleted due to missingness)
-## 
-##              coef exp(coef) se(coef)     z Pr(&gt;|z|)    
-## treat    -0.22710   0.79684  0.09158 -2.48  0.01314 *  
-## agec     -0.03074   0.96972  0.00794 -3.87  0.00011 ***
-## drugTRUE -0.34258   0.70993  0.10426 -3.29  0.00102 ** 
-## ndrugtxc  0.03091   1.03139  0.00799  3.87  0.00011 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-##          exp(coef) exp(-coef) lower .95 upper .95
-## treat        0.797       1.25     0.666     0.954
-## agec         0.970       1.03     0.955     0.985
-## drugTRUE     0.710       1.41     0.579     0.871
-## ndrugtxc     1.031       0.97     1.015     1.048
-## 
-## Concordance= 0.589  (se = 0.014 )
-## Rsquare= 0.067   (max possible= 1 )
-## Likelihood ratio test= 41.1  on 4 df,   p=2.57e-08
-## Wald test            = 43.2  on 4 df,   p=9.26e-09
-## Score (logrank) test = 43.4  on 4 df,   p=8.38e-09</code></pre>
+
+<pre><code class="R">
+# Load survival package 
+library(survival)
+
+# Download data 
+URL &lt;- 'http://www.ats.ucla.edu/stat/r/examples/asa/uis.csv'
+uis &lt;- read.csv(URL)
+
+# Clean up variables for analysis 
+attach(uis) 
+
+drug &lt;- (ivhx == 1) 
+agec &lt;- age - 30 
+ndrugtxc &lt;- ndrugtx - 3
+
+# Estimate the model 
+M1 &lt;- coxph(Surv(time, censor)treat + agec + drug + ndrugtxc, 
+    method=&quot;breslow&quot;) 
+
+detach(uis)</code></pre>
+
+
+<p>For this example we’ll focus on the variable agec. It is the subjects’ age at their time of enrollment in the study. We centered it at age 30. When we summarize the results (not shown) we can see that age is estimated to have a negative relationship with return to drug use.</p>
+
 <p>Now let’s use simPH to help us get a sense of the magnitude of the estimated effect and our uncertainty about the estimates. Zero has a meaningful value for agec, i.e. it is age 30, so the relative hazard has a meaningful interpretation. It represents the ratio of the hazards between someone who entered the trial at an age other than 30 and someone who entered at 30. First use coxsimLinear to simulated the relative hazard for fitted values of agec between -10 and 26 (the range of values):<sup><a href="#fn5" class="footnoteRef" id="fnref5">5</a></sup></p>
-<p>shadecolorrgb0.969, 0.969, 0.969fgcolor</p>
-<p># Load simPH library(simPH)</p>
-<p># Simulate relative hazards for agec Sim1 &lt;- coxsimLinear(M1, b = &quot;agec&quot;, Xj = seq(-10, 26, by = 0.5))</p>
+
+<pre><code class="R"># Load simPH 
+library(simPH)
+
+# Simulate relative hazards for agec 
+Sim1 &lt;- coxsimLinear(M1, b = &quot;agec&quot;, 
+        Xj = seq(-10, 26, by = 0.5))
+</code></pre>
+
 <p>By default, coxsimPH finds the relative hazard and the central 95 percent interval of the simulations. Now we plot the results to create Figure [Linear1]:</p>
-<p>shadecolorrgb0.969, 0.969, 0.969fgcolor</p>
-<p>simGG(Sim1, xlab = &quot;\n Age From 30&quot;)</p>
-<p>Simulated relative hazards for Fitted Values of agec, Central 95% Interval [Linear1]</p>
-<p>shadecolorrgb0.969, 0.969, 0.969fgcolor</p>
+
+<pre><code class="R">simGG(Sim1, xlab = &quot;\n Age From 30&quot;)
+</code></pre>
+
+Simulated relative hazards for Fitted Values of agec, Central 95% Interval [Linear1]</p>
+
 <div class="figure">
-<img src="figure/Linear4_1.png" alt="image" /><p class="caption">image</p>
+<img src="figure/Linear4_1.png" alt="image" /><p class="caption"><strong>Simulated relative hazards for Fitted Values of agec, Central 95% Interval [Linear1]</strong></p>
 </div>
 <p>A generalized additive model with integrated smoothness estimation <span class="citation">(see Wood 2013)</span> was automatically chosen to create a line that summarizes the simulations’ central tendency across the range of fitted values. This can be changed in simGG with the smoother argument to any method allowed by ggplot2.</p>
 <p>If we would instead like to present the results as the percentage change in the hazard between a given age and 30, we could set the coxsimLinear qi argument to ’First Difference’ as in Figure [Linear2].</p>
-<p>shadecolorrgb0.969, 0.969, 0.969fgcolor</p>
-<p># Simulate relative hazards for agec Sim2 &lt;- coxsimLinear(M1, b = &quot;agec&quot;, qi = &quot;First Difference&quot;, Xj = seq(-12, 26, by = 0.5))</p>
-<p># Plot the results simGG(Sim2, xlab = &quot;\n Age From 30&quot;)</p>
-<p>Simulated First Differences for Fitted Values of agec, Central 95% Interval [Linear2]</p>
-<p>shadecolorrgb0.969, 0.969, 0.969fgcolor</p>
+
+<pre><code class="R"># Simulate relative hazards for agec 
+Sim2 &lt;- coxsimLinear(M1, b = &quot;agec&quot;, 
+                qi = &quot;First Difference&quot;, 
+                Xj = seq(-12, 26, by = 0.5))
+
+# Plot the results 
+simGG(Sim2, xlab = &quot;\n Age From 30&quot;)
+</code></pre>
+
 <div class="figure">
-<img src="figure/Linear5_1.png" alt="image" /><p class="caption">image</p>
+<img src="figure/Linear5_1.png" alt="image" /><p class="caption"><strong>Simulated First Differences for Fitted Values of agec, Central 95% Interval [Linear2]</strong></p>
 </div>
+
 <h1 id="conclusion">Conclusion</h1>
 <p>NOTE: This vignette will be completed in coming versions of simPH.</p>
 <p>Anon. “Cox1972 not found!”</p>
@@ -197,6 +206,25 @@
 </ol>
 </div>
 <!-------------- End Pandoc Created ------->
+
+<!------ Disquss Comments ------------>
+
+<hr>
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'simph'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
 </section>
 
