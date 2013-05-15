@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%
 % simPH package vignette
 % Christopher Gandrud
-% 14 May 2013
+% 15 May 2013
 %%%%%%%%%%%%%%%%%%
 
 
@@ -11,7 +11,7 @@
 \usepackage{graphicx}
 
 %\VignetteEngine{knitr}
-%\VignetteIndexEntry{simPH Vignette}
+%\VignetteIndexEntry{simPH}
 
 %%%% Set up
 <<include=FALSE>>=
