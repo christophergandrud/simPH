@@ -6,8 +6,6 @@
 
 # Vignette
 *.synctex.gz
-*.bst
-*.cls
 vignettes/jsslogo.jpg
 *.bbl
 *.log
