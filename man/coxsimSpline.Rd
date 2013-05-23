@@ -10,7 +10,10 @@
   penalised spline.}
 
   \item{bspline}{a character string of the full
-  \code{\link{pspline}} call used in \code{obj}.}
+  \code{\link{pspline}} call used in \code{obj}. It should
+  be exactly the same as how you entered it in
+  \code{\link{coxph}}. You also need to enter a white spece
+  before and after all equal (\code{=}) signs.}
 
   \item{bdata}{a numeric vector of splined variable's
   values.}

@@ -2,7 +2,7 @@
 #'
 #' \code{coxsimSpline} simulates quantities of interest from penalised splines using multivariate normal distributions.
 #' @param obj a \code{coxph} fitted model object with a penalised spline.
-#' @param bspline a character string of the full \code{\link{pspline}} call used in \code{obj}.
+#' @param bspline a character string of the full \code{\link{pspline}} call used in \code{obj}. It should be exactly the same as how you entered it in \code{\link{coxph}}. You also need to enter a white spece before and after all equal (\code{=}) signs.
 #' @param bdata a numeric vector of splined variable's values.
 #' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. Think carefully before using \code{qi = "Hazard Rate"}. You may be creating very many simulated values which can be very computationally intensive to do. Adjust the number of simulations per fitted value with \code{nsim}.
 #' @param Xj numeric vector of values of X to simulate for.
@@ -83,6 +83,15 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 		Xl <- rep(0, length(Xj))
 		message("All Xl set to 0.")
 	}
+
+	# Standardise pspline term with white space around '='
+	NoSpace1 <- grepl("[^ ]=", bspline)
+	NoSpace2 <- grepl("[^ ]=", bspline)
+	if (any(NoSpace1) | any(NoSpace2)){
+		stop(paste0("Place a white space before and after equal (=) signs in ", bspline, "."))
+	}
+
+
 	# Find term number
 	TermNum <- names(obj$pterms)
 	bterm <- match(bspline, TermNum)
