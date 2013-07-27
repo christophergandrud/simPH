@@ -6,7 +6,7 @@
     xlab = NULL, ylab = NULL, title = NULL,
     smoother = "auto", spalette = "Set1", leg.name = "",
     lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
-    psize = 1, palpha = 0.1)
+    psize = 1, palpha = 0.1, ...)
 }
 \arguments{
   \item{obj}{a simlinear object.}
@@ -52,6 +52,8 @@
 
   \item{palpha}{point alpha (e.g. transparency). Default is
   \code{palpha = 0.05}. See \code{\link{ggplot2}}.}
+
+  \item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
   a ggplot2 object

@@ -7,7 +7,7 @@
     zlab = NULL, title = NULL, smoother = "auto",
     leg.name = "", lcolour = "#2B8CBE", lsize = 2,
     pcolour = "#A6CEE3", psize = 1, palpha = 0.1,
-    surface = TRUE, fit = "linear")
+    surface = TRUE, fit = "linear", ...)
 }
 \arguments{
   \item{obj}{a simspline object}
@@ -71,6 +71,8 @@
   supported e.g., \code{c("lin", "quad")}. Only relevant if
   \code{qi == 'Relative Hazard'} and \code{FacetTime =
   NULL}.}
+
+  \item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
   a ggplot2 object. See \code{\link{scatter3d}} for values

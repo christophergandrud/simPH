@@ -33,7 +33,7 @@
 
 ggfitStrata <- function(obj, byStrata = FALSE, xlab = "", ylab = "", title = "", lcolour = "#2C7FB8", rcolour = "#2C7FB8")
 {
-  Strata <- Lower <- Upper <- StrataC <- NULL
+  Strata <- Lower <- Upper <- StrataC <- Time <- Survival <- NULL
   sFit <- obj
   time <- sFit$time
   lower <- sFit$lower
