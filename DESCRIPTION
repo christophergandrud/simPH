@@ -4,7 +4,7 @@ Title: Tools for simulating and plotting quantities of interest estimated from
 Description: The package simulates and plots quantities of interest (relative
     hazards, first differences, and hazard ratios)for linear coefficients,
     multiplicative interactions, polynomials, penalised splines, and
-    non-proportional hazards, as well as stratified survial curves from Cox
+    non-proportional hazards, as well as stratified survival curves from Cox
     Proportional Hazard models.
 Version: 0.7.2
 Date: 2013-07-27
@@ -23,6 +23,7 @@ Imports:
     MSBVAR,
     plyr,
     reshape2,
+    rgl,
     stringr,
     survival,
     quadprog
