@@ -102,6 +102,7 @@
 
 coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000, from, to, by, ci = 0.95, spin = FALSE)
 {
+  QI <- NULL
   ############ Means Not Supported Yet for coxsimtvc ########
   #### means code is a place holder for future versions #####
   means <- FALSE

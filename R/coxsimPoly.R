@@ -50,12 +50,13 @@
 
 coxsimPoly <- function(obj, b, qi = "Relative Hazard", pow = 2, Xj = NULL, Xl = NULL, nsim = 1000, ci = 0.95, spin = FALSE) 
 {
-  	# Ensure that qi is valid
-  	qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
-  	TestqiOpts <- qi %in% qiOpts
-  	if (!isTRUE(TestqiOpts)){
-    	stop("Invalid qi type. qi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'")
-  	}
+  QI <- NULL
+	# Ensure that qi is valid
+	qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
+	TestqiOpts <- qi %in% qiOpts
+	if (!isTRUE(TestqiOpts)){
+  	stop("Invalid qi type. qi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'")
+	}
 
 	# Find X_{jl}
 	if (length(Xj) != length(Xl) & !is.null(Xl)){

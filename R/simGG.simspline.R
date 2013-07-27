@@ -95,6 +95,7 @@
 
 simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL, title = NULL, smoother = "auto", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, surface = TRUE, fit = "linear")
 {
+	Time <- Xj <- QI <- NULL
 	if (!inherits(obj, "simspline")){
     	stop("must be a simspline object")
     }
@@ -171,6 +172,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
     						  fit = fit))
     } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
 		SubsetTime <- function(f){
+		  Time <- NULL
 		  CombObjdf <- data.frame()
 		  for (i in f){
 		    Temps <- objdf

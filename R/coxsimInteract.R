@@ -73,6 +73,7 @@
 
 coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
 {
+	QI <- NULL
 	if (qi != "Hazard Rate" & isTRUE(means)){
 		stop("means can only be TRUE when qi = 'Hazard Rate'.")
 	}

@@ -51,6 +51,7 @@
 
 simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1)
 {
+  Time <- HRValue <- HRate <- Xj <- QI <- NULL
   if (!inherits(obj, "simpoly")){
       stop("must be a simpoly object")
     }

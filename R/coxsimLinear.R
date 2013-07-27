@@ -57,6 +57,7 @@
 
 coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
 {	
+  QI <- NULL
   if (qi != "Hazard Rate" & isTRUE(means)){
     stop("means can only be TRUE when qi = 'Hazard Rate'.")
   }

@@ -80,6 +80,7 @@
 
 simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1)
 {
+  Time <- HRate <- HRValue <- QI <- Comparison <- Xj <- NULL
   if (!inherits(obj, "simtvc")){
     stop("must be a simtvc object")
   }

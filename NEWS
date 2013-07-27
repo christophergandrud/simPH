@@ -1,3 +1,7 @@
+Version 0.7.2 
+
+Clean up for CRAN.
+
 Version 0.7.1
 
 Added an error message to `coxsimSpline` if white spaces are not entered before and after equal (=) signs in the `bspline` argument.

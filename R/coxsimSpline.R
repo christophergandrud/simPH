@@ -65,6 +65,7 @@
 
 coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE)
 { 
+	QI <- NULL
 	# Ensure that qi is valid
 	qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
 	TestqiOpts <- qi %in% qiOpts
@@ -159,6 +160,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 
 	# Merge in fitted X values
 	MergeX <- function(f){
+		X <- NULL
 		CombinedDF <- data.frame()
 		for (i in f){
 		  Temps <- TempDF
