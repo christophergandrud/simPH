@@ -26,6 +26,8 @@ Imports:
     stringr,
     survival,
     quadprog
+Suggests:
+    knitr
 License: GPL (>= 3)
 Collate:
     'CarpenterFdaData.R'
@@ -45,3 +47,4 @@ Collate:
     'tvc.R'
     'SPInBounds.R'
     'IntervalConstrict.R'
+VignetteBuilder: knitr

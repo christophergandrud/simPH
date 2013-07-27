@@ -44,16 +44,17 @@
   with \code{\link{survfit}} using \link{ggplot2}.
 }
 \examples{
+#dontrun
 # Load survival
-library(survival)
+#library(survival)
 # Subset data
-bladder1 <- bladder[bladder$enum < 5, ]
+#bladder1 <- bladder[bladder$enum < 5, ]
 # Estimate coxph model
-M1 <- coxph(Surv(stop, event) ~ (rx + size + number) * strata(enum) + cluster(id), bladder1)
+#M1 <- coxph(Surv(stop, event) ~ (rx + size + number) * strata(enum) + cluster(id), bladder1)
 # Survfit
-M1Fit <- survfit(M1)
+#M1Fit <- survfit(M1)
 # Plot strata in a grid
-ggfitStrata(M1Fit, byStrata = TRUE)
+#ggfitStrata(M1Fit, byStrata = TRUE)
 }
 \seealso{
   \code{\link{survfit}}, \code{\link{ggplot2}} and
