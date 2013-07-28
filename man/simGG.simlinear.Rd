@@ -93,10 +93,11 @@ Sim1 <- coxsimLinear(M1, b = "stafcder",
 						Xj = seq(1237, 1600, by = 2), spin = TRUE)
 simGG(Sim1)
 
+## dontrun
 # Simulate and plot Hazard Rate for stafcder variable
-Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
-						qi = "Hazard Rate", Xj = c(1237, 1600))
-simGG(Sim2)
+# Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
+#						qi = "Hazard Rate", Xj = c(1237, 1600))
+# simGG(Sim2)
 }
 \references{
   Licht, Amanda A. 2011. ''Change Comes with Time:

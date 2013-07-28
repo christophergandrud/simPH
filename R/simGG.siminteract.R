@@ -36,22 +36,23 @@
 #' # interpretable hazard ratio graph.
 #' M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal, data = CarpenterFdaData)
 #'
+#' ## dontrun
 #' # Simulate Hazard Ratio of lethal for multiple values of prevgenx
-#' Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
-#'                     X1 = seq(2, 115, by = 2),
-#'                     X2 = c(0, 1),
-#'                     qi = "Hazard Ratio", ci = 0.9)
+#' # Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
+#' #                    X1 = seq(2, 115, by = 2),
+#' #                    X2 = c(0, 1),
+#' #                    qi = "Hazard Ratio", ci = 0.9)
 #'                     
 #' # Simulate First Difference
-#' Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
-#'                        X1 = seq(2, 115, by = 2),
-#'                        X2 = c(0, 1),
-#'                        qi = "First Difference", spin = TRUE)
+#' # Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
+#' #                       X1 = seq(2, 115, by = 2),
+#' #                       X2 = c(0, 1),
+#' #                       qi = "First Difference", spin = TRUE)
 #'                        
 #' # Plot quantities of interest
 #' simGG(Sim1, xlab = "\nprevgenx", ylab = "Marginal Effect of lethal\n")
-#' simGG(Sim2)
-#' simGG(Sim3)
+#' # simGG(Sim2)
+#' # simGG(Sim3)
 #'
 #' @description Uses ggplot2 to plot the quantities of interest from \code{siminteract} objects, including marginal effects, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.

@@ -53,25 +53,26 @@
 #' Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
 #'                    tfun = "log", from = 80, to = 2000, 
 #'                    Xj = 1, by = 15, ci = 0.99)
-#' 
+#'
+#' ## dontrun
 #' # Create simtvc object for First Difference  
-#'Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
-#'                  qi = "First Difference", Xj = 1,
-#'                  tfun = "log", from = 80, to = 2000,
-#'                  by = 15, ci = 0.95)
+#' # Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
+#' #                 qi = "First Difference", Xj = 1,
+#' #                 tfun = "log", from = 80, to = 2000,
+#' #                 by = 15, ci = 0.95)
 #' 
 #' # Create simtvc object for Hazard Ratio  
-#' Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
-#'                   qi = "Hazard Ratio", Xj = c(191, 229), 
-#'                   Xl = c(0, 0),
-#'                   tfun = "log", from = 80, to = 2000, 
-#'                   by = 15, ci = 0.99)
+#' # Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
+#' #                  qi = "Hazard Ratio", Xj = c(191, 229), 
+#' #                  Xl = c(0, 0),
+#' #                  tfun = "log", from = 80, to = 2000, 
+#' #                  by = 15, ci = 0.99)
 #'                   
 #' # Create plots
 #' simGG(Sim1)
-#' simGG(Sim2)
-#' simGG(Sim3, leg.name = "Comparision", from = 1200)
-
+#' # simGG(Sim2)
+#' # simGG(Sim3, leg.name = "Comparision", from = 1200)
+#'
 #' @import ggplot2
 #' @export
 #' @method simGG simtvc

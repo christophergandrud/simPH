@@ -119,44 +119,44 @@ M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 +
 				pspline(stafcder, df = 4), data = CarpenterFdaData)
 
 # Simulate Relative Hazards for orderent
-# Simulate Relative Hazards for orderent
 Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
                     bdata = CarpenterFdaData$stafcder,
                     qi = "Hazard Ratio",
                     Xj = seq(1100, 1700, by = 10),
                     Xl = seq(1099, 1699, by = 10), spin = TRUE)
 
+## dontrun
 # Simulate Hazard Rate for orderent
-Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
-                    bdata = CarpenterFdaData$orderent,
-                    qi = "Hazard Rate",
-                    Xj = seq(1, 30, by = 2), ci = 0.9, nsim = 10)
+# Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
+#                    bdata = CarpenterFdaData$orderent,
+#                    qi = "Hazard Rate",
+#                    Xj = seq(1, 30, by = 2), ci = 0.9, nsim = 10)
 
 # Plot relative hazard
-simGG(Sim1, palpha = 1)
+# simGG(Sim1, palpha = 1)
 
 # 3D plot hazard rate
-simGG(Sim2, zlab = "orderent", fit = "quadratic")
+# simGG(Sim2, zlab = "orderent", fit = "quadratic")
 
 # Create a time grid plot
 # Find all points in time where baseline hazard was found
-unique(Sim2$time)
+# unique(Sim2$time)
 
 # Round time values so they can be exactly matched with FacetTime
-Sim2$time <- round(Sim2$time, digits = 2)
+# Sim2$time <- round(Sim2$time, digits = 2)
 
 # Create plot
-simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36))
+# simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36))
 
 # Simulated Fitted Values of stafcder
-Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
-                    bdata = CarpenterFdaData$stafcder,
-                    qi = "Hazard Ratio",
-                    Xj = seq(1100, 1700, by = 10),
-                    Xl = seq(1099, 1699, by = 10), ci = 0.90)
+# Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
+#                    bdata = CarpenterFdaData$stafcder,
+#                    qi = "Hazard Ratio",
+#                    Xj = seq(1100, 1700, by = 10),
+#                    Xl = seq(1099, 1699, by = 10), ci = 0.90)
 
 # Plot simulated Hazard Ratios
-simGG(Sim3, xlab = "\\nFDA Drug Review Staff", palpha = 0.2)
+# simGG(Sim3, xlab = "\\nFDA Drug Review Staff", palpha = 0.2)
 }
 \seealso{
   \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},

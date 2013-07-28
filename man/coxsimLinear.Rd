@@ -80,11 +80,12 @@ Sim1 <- coxsimLinear(M1, b = "stafcder",
                        Xl = c(1000, 1000),
                        spin = TRUE, ci = 0.99)
 
+## dontrun
 # Simulate Hazard Rates
-Sim2 <- coxsimLinear(M1, b = "stafcder",
-                       qi = "Hazard Rate",
-                       Xj = 1237,
-                       ci = 0.99, means = TRUE)
+# Sim2 <- coxsimLinear(M1, b = "stafcder",
+#                       qi = "Hazard Rate",
+#                       Xj = 1237,
+#                       ci = 0.99, means = TRUE)
 }
 \references{
   Licht, Amanda A. 2011. ''Change Comes with Time:

@@ -39,13 +39,14 @@
 #'                     qi = "Hazard Ratio",
 #'                     Xj = seq(1100, 1700, by = 10), 
 #'                     Xl = seq(1099, 1699, by = 10), spin = TRUE)
-#'  
+#'
+#' ## dontrun  
 #' # Simulate Hazard Rates for orderent
-#' Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
-#'                        bdata = CarpenterFdaData$orderent,
-#'                        qi = "Hazard Rate",
-#'                        Xj = seq(2, 53, by = 3),
-#'                        nsim = 100)
+#' # Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
+#' #                       bdata = CarpenterFdaData$orderent,
+#' #                       qi = "Hazard Rate",
+#' #                       Xj = seq(2, 53, by = 3),
+#' #                       nsim = 100)
 #'
 #'
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}

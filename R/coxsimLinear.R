@@ -36,11 +36,12 @@
 #'                        Xl = c(1000, 1000), 
 #'                        spin = TRUE, ci = 0.99)
 #'
+#' ## dontrun
 #' # Simulate Hazard Rates
-#' Sim2 <- coxsimLinear(M1, b = "stafcder", 
-#'                        qi = "Hazard Rate", 
-#'                        Xj = 1237, 
-#'                        ci = 0.99, means = TRUE)
+#' # Sim2 <- coxsimLinear(M1, b = "stafcder", 
+#' #                       qi = "Hazard Rate", 
+#' #                       Xj = 1237, 
+#' #                       ci = 0.99, means = TRUE)
 #'
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227-43.
