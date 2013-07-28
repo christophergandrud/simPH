@@ -21,23 +21,25 @@
 #' @return a ggplot2 object
 #'
 #' @examples
+#'
+#' ## dontrun
 #' # Load survival package
-#' library(survival)
+#' # library(survival)
 #' # Load Carpenter (2002) data
-#' data("CarpenterFdaData")
+#' # data("CarpenterFdaData")
 #' 
 #' # Estimate survival model
-#' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
-#'             deathrt1 + acutediz + hosp01  + hhosleng +
-#'             mandiz01 + femdiz01 + peddiz01 + orphdum +
-#'             vandavg3 + wpnoavg3 + condavg3 + orderent +
-#'             stafcder, data = CarpenterFdaData)
+#' # M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
+#' #            deathrt1 + acutediz + hosp01  + hhosleng +
+#' #            mandiz01 + femdiz01 + peddiz01 + orphdum +
+#' #            vandavg3 + wpnoavg3 + condavg3 + orderent +
+#' #            stafcder, data = CarpenterFdaData)
 #' 
 #' # Simulate and plot Hazard Ratios for stafcder variable
-#' Sim1 <- coxsimLinear(M1, b = "stafcder", 
-#' 						qi = "Hazard Ratio", 
-#' 						Xj = seq(1237, 1600, by = 2), spin = TRUE)
-#' simGG(Sim1)
+#' # Sim1 <- coxsimLinear(M1, b = "stafcder", 
+#' #						qi = "Hazard Ratio", 
+#' #						Xj = seq(1237, 1600, by = 2), spin = TRUE)
+#' # simGG(Sim1)
 #' 
 #' ## dontrun
 #' # Simulate and plot Hazard Rate for stafcder variable

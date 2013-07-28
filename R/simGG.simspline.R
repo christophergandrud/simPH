@@ -30,29 +30,29 @@
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
 #'
 #' @examples
+#' ## dontrun
 #' # Load Carpenter (2002) data
-#' data("CarpenterFdaData")
+#' # data("CarpenterFdaData")
 #' 
 #' # Load survival package
-#' library(survival)
+#' # library(survival)
 #' 
 #' # Run basic model
 #' # From Keele (2010) replication data
-#' M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + 
-#' 				acutediz + hosp01  + pspline(hospdisc, df = 4) + 
-#'				pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 +
-#'				orphdum + natreg + vandavg3 + wpnoavg3 + 
-#' 				pspline(condavg3, df = 4) + pspline(orderent, df = 4) + 
-#'				pspline(stafcder, df = 4), data = CarpenterFdaData)
+#' # M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + 
+#' #				acutediz + hosp01  + pspline(hospdisc, df = 4) + 
+#' #				pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 +
+#' #				orphdum + natreg + vandavg3 + wpnoavg3 + 
+#' #				pspline(condavg3, df = 4) + pspline(orderent, df = 4) + 
+#' #				pspline(stafcder, df = 4), data = CarpenterFdaData)
 #'
 #' # Simulate Relative Hazards for orderent
-#' Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)", 
-#'                     bdata = CarpenterFdaData$stafcder,
-#'                     qi = "Hazard Ratio",
-#'                     Xj = seq(1100, 1700, by = 10), 
-#'                     Xl = seq(1099, 1699, by = 10), spin = TRUE)
+#' # Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)", 
+#' #                    bdata = CarpenterFdaData$stafcder,
+#' #                    qi = "Hazard Ratio",
+#' #                    Xj = seq(1100, 1700, by = 10), 
+#' #                    Xl = seq(1099, 1699, by = 10), spin = TRUE)
 #'
-#' ## dontrun
 #' # Simulate Hazard Rate for orderent
 #' # Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
 #' #                    bdata = CarpenterFdaData$orderent,

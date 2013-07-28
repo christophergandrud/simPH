@@ -74,40 +74,40 @@
   hazard ratio graphs. No line is created for hazard rates.
 }
 \examples{
+## dontrun
 # Load Golub & Steunenberg (2007) Data
-data("GolubEUPData")
+# data("GolubEUPData")
 
 # Load survival package
-library(survival)
+# library(survival)
 
 # Create natural log time interactions
-Golubtvc <- function(x){
-  assign(paste0("l", x), tvc(GolubEUPData, b = x, tvar = "end", tfun = "log"))
-}
+#Golubtvc <- function(x){
+#  assign(paste0("l", x), tvc(GolubEUPData, b = x, tvar = "end", tfun = "log"))
+# }
 
-GolubEUPData$Lcoop <-Golubtvc("coop")
-GolubEUPData$Lqmv <- Golubtvc("qmv")
-GolubEUPData$Lbacklog <- Golubtvc("backlog")
-GolubEUPData$Lcodec <- Golubtvc("codec")
-GolubEUPData$Lqmvpostsea <- Golubtvc("qmvpostsea")
-GolubEUPData$Lthatcher <- Golubtvc("thatcher")
+# GolubEUPData$Lcoop <-Golubtvc("coop")
+# GolubEUPData$Lqmv <- Golubtvc("qmv")
+# GolubEUPData$Lbacklog <- Golubtvc("backlog")
+# GolubEUPData$Lcodec <- Golubtvc("codec")
+# GolubEUPData$Lqmvpostsea <- Golubtvc("qmvpostsea")
+# GolubEUPData$Lthatcher <- Golubtvc("thatcher")
 
 # Run Cox PH Model
-M1 <- coxph(Surv(begin, end, event) ~
-            qmv + qmvpostsea + qmvpostteu +
-            coop + codec + eu9 + eu10 + eu12 +
-            eu15 + thatcher + agenda + backlog +
-            Lqmv + Lqmvpostsea + Lcoop + Lcodec +
-            Lthatcher + Lbacklog,
-         data = GolubEUPData,
-         ties = "efron")
+# M1 <- coxph(Surv(begin, end, event) ~
+#            qmv + qmvpostsea + qmvpostteu +
+#            coop + codec + eu9 + eu10 + eu12 +
+#            eu15 + thatcher + agenda + backlog +
+#            Lqmv + Lqmvpostsea + Lcoop + Lcodec +
+#            Lthatcher + Lbacklog,
+#         data = GolubEUPData,
+#         ties = "efron")
 
 # Create simtvc object for Relative Hazard
-Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
-                   tfun = "log", from = 80, to = 2000,
-                   Xj = 1, by = 15, ci = 0.99)
+# Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
+#                   tfun = "log", from = 80, to = 2000,
+#                   Xj = 1, by = 15, ci = 0.99)
 
-## dontrun
 # Create simtvc object for First Difference
 # Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
 #                 qi = "First Difference", Xj = 1,
@@ -122,7 +122,7 @@ Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
 #                  by = 15, ci = 0.99)
 
 # Create plots
-simGG(Sim1)
+# simGG(Sim1)
 # simGG(Sim2)
 # simGG(Sim3, leg.name = "Comparision", from = 1200)
 }

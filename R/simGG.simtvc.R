@@ -21,40 +21,40 @@
 #' @details Plots either a time varying hazard ratio or the hazard rates for multiple strata. Currently the strata legend labels need to be changed manually (see \code{\link{revalue}} in the \link{plyr} package) in the \code{simtvc} object with the \code{strata} component. Also, currently the x-axis tick marks and break labels must be adjusted manually for non-linear functions of time. 
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
 #' @examples
+#' ## dontrun
 #' # Load Golub & Steunenberg (2007) Data
-#' data("GolubEUPData")
+#' # data("GolubEUPData")
 #' 
 #' # Load survival package
-#' library(survival)
+#' # library(survival)
 #' 
 #' # Create natural log time interactions
-#' Golubtvc <- function(x){
-#'   assign(paste0("l", x), tvc(GolubEUPData, b = x, tvar = "end", tfun = "log"))
-#' }
+#' #Golubtvc <- function(x){
+#' #  assign(paste0("l", x), tvc(GolubEUPData, b = x, tvar = "end", tfun = "log"))
+#' # }
 #' 
-#' GolubEUPData$Lcoop <-Golubtvc("coop")
-#' GolubEUPData$Lqmv <- Golubtvc("qmv")
-#' GolubEUPData$Lbacklog <- Golubtvc("backlog")
-#' GolubEUPData$Lcodec <- Golubtvc("codec")
-#' GolubEUPData$Lqmvpostsea <- Golubtvc("qmvpostsea")
-#' GolubEUPData$Lthatcher <- Golubtvc("thatcher") 
+#' # GolubEUPData$Lcoop <-Golubtvc("coop")
+#' # GolubEUPData$Lqmv <- Golubtvc("qmv")
+#' # GolubEUPData$Lbacklog <- Golubtvc("backlog")
+#' # GolubEUPData$Lcodec <- Golubtvc("codec")
+#' # GolubEUPData$Lqmvpostsea <- Golubtvc("qmvpostsea")
+#' # GolubEUPData$Lthatcher <- Golubtvc("thatcher") 
 #' 
 #' # Run Cox PH Model
-#' M1 <- coxph(Surv(begin, end, event) ~ 
-#'             qmv + qmvpostsea + qmvpostteu + 
-#'             coop + codec + eu9 + eu10 + eu12 +
-#'             eu15 + thatcher + agenda + backlog +
-#'             Lqmv + Lqmvpostsea + Lcoop + Lcodec +
-#'             Lthatcher + Lbacklog, 
-#'          data = GolubEUPData,
-#'          ties = "efron")
+#' # M1 <- coxph(Surv(begin, end, event) ~ 
+#' #            qmv + qmvpostsea + qmvpostteu + 
+#' #            coop + codec + eu9 + eu10 + eu12 +
+#' #            eu15 + thatcher + agenda + backlog +
+#' #            Lqmv + Lqmvpostsea + Lcoop + Lcodec +
+#' #            Lthatcher + Lbacklog, 
+#' #         data = GolubEUPData,
+#' #         ties = "efron")
 #'          
 #' # Create simtvc object for Relative Hazard
-#' Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
-#'                    tfun = "log", from = 80, to = 2000, 
-#'                    Xj = 1, by = 15, ci = 0.99)
+#' # Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
+#' #                   tfun = "log", from = 80, to = 2000, 
+#' #                   Xj = 1, by = 15, ci = 0.99)
 #'
-#' ## dontrun
 #' # Create simtvc object for First Difference  
 #' # Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
 #' #                 qi = "First Difference", Xj = 1,
@@ -69,7 +69,7 @@
 #' #                  by = 15, ci = 0.99)
 #'                   
 #' # Create plots
-#' simGG(Sim1)
+#' # simGG(Sim1)
 #' # simGG(Sim2)
 #' # simGG(Sim3, leg.name = "Comparision", from = 1200)
 #'
