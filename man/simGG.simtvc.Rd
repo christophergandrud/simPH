@@ -1,6 +1,6 @@
 \name{simGG.simtvc}
 \alias{simGG.simtvc}
-\title{Plot simulated time-varying hazard ratios or stratified time-varying hazard rates from a simtvc class object using ggplot2}
+\title{Plot simulated time-varying hazard ratios or stratified time-varying hazard rates from Cox Proportional Hazards Models}
 \usage{
   \method{simGG}{simtvc} (obj, from = NULL, to = NULL,
     xlab = NULL, ylab = NULL, title = NULL,
@@ -9,7 +9,7 @@
     psize = 1, palpha = 0.1, ...)
 }
 \arguments{
-  \item{obj}{a simtvc class object}
+  \item{obj}{a \code{simtvc} class object}
 
   \item{from}{numeric time to start the plot from.}
 
@@ -20,10 +20,10 @@
   \item{ylab}{a label of the plot's y-axis. The default
   uses the value of \code{qi}.}
 
-  \item{title}{the plot's main title}
+  \item{title}{the plot's main title.}
 
   \item{smoother}{what type of smoothing line to use to
-  summarize the plotted coefficient}
+  summarize the plotted coefficient.}
 
   \item{spalette}{colour palette for use in \code{qi =
   "Hazard Rate"}. Default palette is \code{"Set1"}. See
@@ -55,11 +55,12 @@
   \item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
-  a ggplot2 object
+  a \code{gg} \code{ggplot} class object
 }
 \description{
-  \code{simGG.simtvc} uses ggplot2 to plot the simulated
-  hazards from a \code{simtvc} class object using ggplot2.
+  \code{simGG.simtvc} uses \link{ggplot2} to plot the
+  simulated hazards from a \code{simtvc} class object
+  created by \code{\link{coxsimtvc}} using \link{ggplot2}.
 }
 \details{
   Plots either a time varying hazard ratio or the hazard

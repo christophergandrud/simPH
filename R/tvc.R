@@ -15,6 +15,7 @@
 #' # Create natural log time interaction with the qmv variable
 #' GolubEUPData$Lqmv <- tvc(GolubEUPData, b = "qmv", tvar = "end", tfun = "log")
 #' @seealso \code{\link{simGG.simtvc}}, \code{coxsimtvc}, \code{\link{survival}}, and \code{\link{coxph}}
+#' @keywords utilities
 #' @export
 
 

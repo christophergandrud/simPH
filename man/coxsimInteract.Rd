@@ -1,14 +1,14 @@
 \name{coxsimInteract}
 \alias{coxsimInteract}
-\title{Simulate quantities of interest for linear multiplicative interactions from \code{coxph} models.}
+\title{Simulate quantities of interest for linear multiplicative interactions from Cox Proportional Hazards models}
 \usage{
   coxsimInteract(obj, b1, b2, qi = "Marginal Effect",
     X1 = NULL, X2 = NULL, means = FALSE, nsim = 1000,
     ci = 0.95, spin = FALSE)
 }
 \arguments{
-  \item{obj}{a \code{coxph} fitted model object with a
-  linear multiplicative interaction.}
+  \item{obj}{a \code{\link{coxph}} class fitted model
+  object with a linear multiplicative interaction.}
 
   \item{b1}{character string of the first constitutive
   variable's name. Note \code{b1} and \code{b2} must be
@@ -18,8 +18,8 @@
   \item{b2}{character string of the second constitutive
   variable's name.}
 
-  \item{qi}{quantities of interest to simulate. Values can
-  be \code{"Marginal Effect"}, \code{"First Difference"},
+  \item{qi}{quantity of interest to simulate. Values can be
+  \code{"Marginal Effect"}, \code{"First Difference"},
   \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The
   default is \code{qi = "Hazard Ratio"}. If \code{qi =
   "Hazard Rate"} and the \code{coxph} model has strata,
@@ -46,20 +46,21 @@
   \item{ci}{the proportion of middle simulations to keep.
   The default is \code{ci = 0.95}, i.e. keep the middle 95
   percent. If \code{spin = TRUE} then \code{ci} is the
-  convidence level of the shortest probability interval.
+  confidence level of the shortest probability interval.
   Any value from 0 through 1 may be used.}
 
   \item{spin}{logical, whether or not to keep only the
-  shortest proability interval rather than the middle
+  shortest probability interval rather than the middle
   simulations.}
 }
 \value{
-  a siminteract class object
+  a \code{siminteract} class object
 }
 \description{
   \code{coxsimInteract} simulates quantities of interest
   for linear multiplicative interactions using multivariate
-  normal distributions.
+  normal distributions. These can be plotted with
+  \code{\link{simGG}}.
 }
 \details{
   Simulates marginal effects, first differences, hazard
@@ -124,8 +125,8 @@ Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
   Political Science 44(2): 347-61.
 
   Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
-  ''Simulation-Efficient Shortest Probablility Intervals.''
-  Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
+  ''Simulation-Efficient Shortest Probability Intervals.''
+  Arvix. \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 }
 \seealso{
   \code{\link{simGG}}, \code{\link{survival}},

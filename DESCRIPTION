@@ -4,10 +4,10 @@ Title: Tools for simulating and plotting quantities of interest estimated from
 Description: The package simulates and plots quantities of interest (relative
     hazards, first differences, and hazard ratios) for linear coefficients,
     multiplicative interactions, polynomials, penalised splines, and
-    non-proportional hazards, as well as stratified survival curves from Cox
+    nonproportional hazards, as well as stratified survival curves from Cox
     Proportional Hazard models.
-Version: 0.7.2
-Date: 2013-07-27
+Version: 0.7.3
+Date: 2013-08-13
 Author: Christopher Gandrud
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
 URL: http://christophergandrud.github.io/simPH/

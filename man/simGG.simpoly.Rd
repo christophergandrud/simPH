@@ -1,6 +1,6 @@
 \name{simGG.simpoly}
 \alias{simGG.simpoly}
-\title{Plot simulated polynomial quantities of interest from Cox Proportional Hazards Models.}
+\title{Plot simulated polynomial quantities of interest from Cox Proportional Hazards Models}
 \usage{
   \method{simGG}{simpoly} (obj, from = NULL, to = NULL,
     xlab = NULL, ylab = NULL, title = NULL,
@@ -9,7 +9,7 @@
     psize = 1, palpha = 0.1, ...)
 }
 \arguments{
-  \item{obj}{a simpoly object.}
+  \item{obj}{a \code{simpoly} class object.}
 
   \item{xlab}{a label for the plot's x-axis.}
 
@@ -22,10 +22,10 @@
   \item{to}{numeric time to plot to. Only relevant if
   \code{qi = "Hazard Rate"}.}
 
-  \item{title}{the plot's main title}
+  \item{title}{the plot's main title.}
 
   \item{smoother}{what type of smoothing line to use to
-  summarize the plotted coefficient}
+  summarize the plotted coefficient.}
 
   \item{spalette}{colour palette for use in \code{qi =
   "Hazard Rate"}. Default palette is \code{"Set1"}. See
@@ -56,12 +56,16 @@
   \item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
-  a ggplot2 object.
+  a \code{gg} \code{ggplot} class object
 }
 \description{
-  \code{simGG.simpoly} uses ggplot2 to plot simulated
-  relative quantities of interest from a \code{simpoly}
-  class object.
+  \code{simGG.simpoly} uses \link{ggplot2} to plot
+  simulated relative quantities of interest from a
+  \code{simpoly} class object.
+}
+\details{
+  Uses \link{ggplot2} to plot the quantities of interest
+  from \code{simpoly} objects.
 }
 \examples{
 # Load Carpenter (2002) data

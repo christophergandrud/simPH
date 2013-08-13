@@ -1,16 +1,16 @@
-#' Simulate quantities of interest for linear multiplicative interactions from \code{coxph} models.
+#' Simulate quantities of interest for linear multiplicative interactions from Cox Proportional Hazards models
 #'
-#' \code{coxsimInteract} simulates quantities of interest for linear multiplicative interactions using multivariate normal distributions.
-#' @param obj a \code{coxph} fitted model object with a linear multiplicative interaction.
+#' \code{coxsimInteract} simulates quantities of interest for linear multiplicative interactions using multivariate normal distributions. These can be plotted with \code{\link{simGG}}.
+#' @param obj a \code{\link{coxph}} class fitted model object with a linear multiplicative interaction.
 #' @param b1 character string of the first constitutive variable's name. Note \code{b1} and \code{b2} must be entered in the order in which they are entered into the \code{coxph} model.
 #' @param b2 character string of the second constitutive variable's name.
-#' @param qi quantities of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Hazard Ratio"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
+#' @param qi quantity of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Hazard Ratio"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set. If you want to plot the results, \code{X1} should have more than one value.
 #' @param X2 numeric vector of fitted values of \code{b2} to simulate for. 
 #' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1} \code{b2} and \code{b1*b2}. Note: it does not currently support models that include polynomials created by \code{\link{I}}.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
-#' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
-#' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
+#' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the confidence level of the shortest probability interval. Any value from 0 through 1 may be used.
+#' @param spin logical, whether or not to keep only the shortest probability interval rather than the middle simulations.
 #'
 #' @details Simulates marginal effects, first differences, hazard ratios, and hazard rates for linear multiplicative interactions. 
 #' Marginal effects are calculated as in Brambor et al. (2006) with the addition that we take the exponent, so that it resembles a hazard ratio. For an interaction between variables \eqn{X} and \eqn{Z} then the marginal effect for \eqn{X} is:
@@ -61,10 +61,10 @@
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of Statistical Analyses: Improving Interpretation and Presentation.'' American Journal of Political Science 44(2): 347-61.
 #'
-#' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probablility Intervals.'' Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
+#' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probability Intervals.'' Arvix. \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 #'
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}},
-#' @return a siminteract class object
+#' @return a \code{siminteract} class object
 #' @import data.table
 #' @importFrom reshape2 melt
 #' @importFrom plyr ddply mutate

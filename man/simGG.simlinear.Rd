@@ -1,6 +1,6 @@
 \name{simGG.simlinear}
 \alias{simGG.simlinear}
-\title{Plot simulated linear time-constant quantities of interest.}
+\title{Plot simulated linear time-constant quantities of interest from Cox Proportional Hazards Models}
 \usage{
   \method{simGG}{simlinear} (obj, from = NULL, to = NULL,
     xlab = NULL, ylab = NULL, title = NULL,
@@ -9,7 +9,7 @@
     psize = 1, palpha = 0.1, ...)
 }
 \arguments{
-  \item{obj}{a simlinear object.}
+  \item{obj}{a \code{simlinear} class object.}
 
   \item{xlab}{a label for the plot's x-axis.}
 
@@ -22,10 +22,10 @@
   \item{to}{numeric time to plot to. Only relevant if
   \code{qi = "Hazard Rate"}.}
 
-  \item{title}{the plot's main title}
+  \item{title}{the plot's main title.}
 
   \item{smoother}{what type of smoothing line to use to
-  summarize the plotted coefficient}
+  summarize the plotted coefficient.}
 
   \item{spalette}{colour palette for use in \code{qi =
   "Hazard Rate"}. Default palette is \code{"Set1"}. See
@@ -56,23 +56,23 @@
   \item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
-  a ggplot2 object
+  a \code{gg} \code{ggplot} class object
 }
 \description{
-  Uses ggplot2 to plot the quantities of interest from
-  \code{simlinear} objects, including relative hazards,
-  first differences, hazard ratios, and hazard rates. If
-  there are multiple strata, the quantities of interest
-  will be plotted in a grid by strata. Note: A dotted line
-  is created at y = 1 (0 for first difference), i.e. no
-  effect, for time-varying hazard ratio graphs. No line is
-  created for hazard rates.
-}
-\details{
-  \code{simGG.simlinear} uses ggplot2 to plot the
+  \code{simGG.simlinear} uses \link{ggplot2} to plot the
   quantities of interest from \code{simlinear} objects,
   including relative hazards, first differences, hazard
   ratios, and hazard rates.
+}
+\details{
+  Uses \link{ggplot2} to plot the quantities of interest
+  from \code{simlinear} objects, including relative
+  hazards, first differences, hazard ratios, and hazard
+  rates. If there are multiple strata, the quantities of
+  interest will be plotted in a grid by strata. Note: A
+  dotted line is created at y = 1 (0 for first difference),
+  i.e. no effect, for time-varying hazard ratio graphs. No
+  line is created for hazard rates.
 }
 \examples{
 ## dontrun

@@ -1,6 +1,6 @@
 \name{simGG.simspline}
 \alias{simGG.simspline}
-\title{Plot simulated penalised spline hazards.}
+\title{Plot simulated penalised spline hazards from Cox Proportional Hazards Models}
 \usage{
   \method{simGG}{simspline} (obj, FacetTime = NULL,
     from = NULL, to = NULL, xlab = NULL, ylab = NULL,
@@ -10,7 +10,7 @@
     surface = TRUE, fit = "linear", ...)
 }
 \arguments{
-  \item{obj}{a simspline object}
+  \item{obj}{a \code{simspline} class object}
 
   \item{FacetTime}{a numeric vector of points in time where
   you would like to plot Hazard Rates in a facet grid. Only
@@ -33,10 +33,10 @@
   \item{to}{numeric time to plot to. Only relevant if
   \code{qi = "Hazard Rate"}.}
 
-  \item{title}{the plot's main title}
+  \item{title}{the plot's main title.}
 
   \item{smoother}{what type of smoothing line to use to
-  summarize the plotted coefficient}
+  summarize the plotted coefficient.}
 
   \item{leg.name}{name of the stratified hazard rates
   legend. Only relevant if \code{qi = "Hazard Rate"}.}
@@ -75,10 +75,17 @@
   \item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
-  a ggplot2 object. See \code{\link{scatter3d}} for values
-  from \code{scatter3d} calls.
+  a \code{gg} \code{ggplot} class object. See
+  \code{\link{scatter3d}} for values from \code{scatter3d}
+  calls.
 }
 \description{
+  \code{simGG.simspline} uses \link{ggplot2} and
+  \link{scatter3d} to plot quantities of interest from
+  \code{simspline} objects, including relative hazards,
+  first differences, hazard ratios, and hazard rates.
+}
+\details{
   Uses \code{ggplot2} and \code{scatter3d} to plot the
   quantities of interest from \code{simspline} objects,
   including relative hazards, first differences, hazard
@@ -87,20 +94,14 @@
 
   It can graph hazard rates as a 3D plot using
   \code{\link{scatter3d}} with the dimensions: Time, Hazard
-  Rate, and the value of Xj. You can also choose to plot
-  hazard rates for a range of values of Xj in two
-  dimensional plots at specific points in time. Each plot
-  is arranged in a facet grid.
+  Rate, and the value of \code{Xj}. You can also choose to
+  plot hazard rates for a range of values of \code{Xj} in
+  two dimensional plots at specific points in time. Each
+  plot is arranged in a facet grid.
 
   Note: A dotted line is created at y = 1 (0 for first
   difference), i.e. no effect, for time-varying hazard
   ratio graphs. No line is created for hazard rates.
-}
-\details{
-  \code{simGG.simspline} uses ggplot2 and scatter3d to plot
-  quantities of interest from \code{simspline} objects,
-  including relative hazards, first differences, hazard
-  ratios, and hazard rates.
 }
 \examples{
 ## dontrun

@@ -1,13 +1,13 @@
-#' Plot simulated polynomial quantities of interest from Cox Proportional Hazards Models.
+#' Plot simulated polynomial quantities of interest from Cox Proportional Hazards Models
 #'
-#' \code{simGG.simpoly} uses ggplot2 to plot simulated relative quantities of interest from a \code{simpoly} class object.
-#' @param obj a simpoly object.
+#' \code{simGG.simpoly} uses \link{ggplot2} to plot simulated relative quantities of interest from a \code{simpoly} class object.
+#' @param obj a \code{simpoly} class object.
 #' @param xlab a label for the plot's x-axis.
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
 #' @param from numeric time to start the plot from. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param to numeric time to plot to. Only relevant if \code{qi = "Hazard Rate"}.
-#' @param title the plot's main title
-#' @param smoother what type of smoothing line to use to summarize the plotted coefficient
+#' @param title the plot's main title.
+#' @param smoother what type of smoothing line to use to summarize the plotted coefficient.
 #' @param spalette colour palette for use in \code{qi = "Hazard Rate"}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
 #' @param leg.name name of the stratified hazard rates legend. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "First Difference"}.
@@ -42,9 +42,11 @@
 #' simGG(Sim1)
 #' simGG(Sim2)
 #'
+#' @details Uses \link{ggplot2} to plot the quantities of interest from \code{simpoly} objects. 
+#'
 #' @seealso \code{\link{coxsimPoly}} and \code{\link{ggplot2}}
 #'
-#' @return a ggplot2 object.
+#' @return a \code{gg} \code{ggplot} class object
 #'
 #' @import ggplot2
 #' @method simGG simpoly

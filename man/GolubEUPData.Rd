@@ -1,7 +1,7 @@
 \docType{data}
 \name{GolubEUPData}
 \alias{GolubEUPData}
-\title{A data set from Golub & Steunenberg (2007).}
+\title{A data set from Golub & Steunenberg (2007)}
 \format{A data set with 3001 observations and 17 variables.}
 \source{
   Golub, Jonathan, and Bernard Steunenberg. 2007. ''How
@@ -9,11 +9,12 @@
   Politics 8(4): 555-66.
 
   Amanda A. Licht, 2011, "Replication data for: Change
-  Comes with Time", http://hdl.handle.net/1902.1/15633 IQSS
-  Dataverse Network [Distributor] V3 [Version]
+  Comes with Time".
+  \url{http://hdl.handle.net/1902.1/15633}. IQSS Dataverse
+  Network [Distributor] V3 [Version].
 }
 \description{
-  A data set from Golub & Steunenberg (2007).
+  A data set from Golub & Steunenberg (2007)
 }
 \keyword{datasets}
 

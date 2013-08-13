@@ -1,4 +1,4 @@
-#' A method for plotting simulation objects created by simPH.
+#' A method for plotting simulation objects created by simPH
 #'
 #' @param obj an object created by one of simPH's simulation commands.
 #' @param ... arguments to be passed to methods.

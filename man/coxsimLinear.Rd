@@ -1,13 +1,14 @@
 \name{coxsimLinear}
 \alias{coxsimLinear}
-\title{Simulate quntities of interest for linear time-constant covariates from Cox Proportional Hazards models.}
+\title{Simulate quantities of interest for linear time constant covariates from Cox Proportional Hazards models}
 \usage{
   coxsimLinear(obj, b, qi = "Relative Hazard", Xj = NULL,
     Xl = NULL, means = FALSE, nsim = 1000, ci = 0.95,
     spin = FALSE)
 }
 \arguments{
-  \item{obj}{a coxph fitted model object.}
+  \item{obj}{a \code{\link{coxph}} class fitted model
+  object.}
 
   \item{b}{character string name of the coefficient you
   would like to simulate.}
@@ -20,7 +21,8 @@
   then hazard rates for each strata will also be
   calculated.}
 
-  \item{Xj}{numeric vector of values of X to simulate for.}
+  \item{Xj}{numeric vector of fitted values for \code{b} to
+  simulate for.}
 
   \item{Xl}{numeric vector of values to compare \code{Xj}
   to. Note if \code{code = "Relative Hazard"} only
@@ -35,18 +37,18 @@
   currently support models that include polynomials created
   by \code{\link{I}}.}
 
-  \item{ci}{the proportion of middle simulations to keep.
-  The default is \code{ci = 0.95}, i.e. keep the middle 95
+  \item{ci}{the proportion of simulations to keep. The
+  default is \code{ci = 0.95}, i.e. keep the middle 95
   percent. If \code{spin = TRUE} then \code{ci} is the
-  convidence level of the shortest probability interval.
+  confidence level of the shortest probability interval.
   Any value from 0 through 1 may be used.}
 
   \item{spin}{logical, whether or not to keep only the
-  shortest proability interval rather than the middle
+  shortest probability interval rather than the middle
   simulations.}
 }
 \value{
-  a simlinear object
+  a \code{simlinear} object
 }
 \description{
   Simulates relative hazards, first differences, hazard
@@ -58,7 +60,8 @@
   \code{coxsimLinear} simulates relative hazards, first
   differences, and hazard ratios for time-constant
   covariates from models estimated with \code{\link{coxph}}
-  using the multivariate normal distribution.
+  using the multivariate normal distribution. These can be
+  plotted with \code{\link{simGG}}.
 }
 \examples{
 # Load Carpenter (2002) data
@@ -98,8 +101,8 @@ Sim1 <- coxsimLinear(M1, b = "stafcder",
   Political Science 44(2): 347-61.
 
   Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
-  ''Simulation-Efficient Shortest Probablility Intervals.''
-  Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
+  ''Simulation-Efficient Shortest Probability Intervals.''
+  Arvix. \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 }
 \seealso{
   \code{\link{simGG}}, \code{\link{survival}},

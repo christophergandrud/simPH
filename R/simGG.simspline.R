@@ -1,16 +1,16 @@
-#' Plot simulated penalised spline hazards.
+#' Plot simulated penalised spline hazards from Cox Proportional Hazards Models
 #'
-#' \code{simGG.simspline} uses ggplot2 and scatter3d to plot quantities of interest from \code{simspline} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
+#' \code{simGG.simspline} uses \link{ggplot2} and \link{scatter3d} to plot quantities of interest from \code{simspline} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
 #'
-#' @param obj a simspline object
+#' @param obj a \code{simspline} class object
 #' @param FacetTime a numeric vector of points in time where you would like to plot Hazard Rates in a facet grid. Only relevant if \code{qi == 'Hazard Rate'}. Note: the values of Facet Time must exactly match values of the \code{time} element of \code{obj}.
 #' @param xlab a label for the plot's x-axis.
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
 #' @param zlab a label for the plot's z-axis. Only relevant if \code{qi = "Hazard Rate"} and \code{FacetTime == NULL}.
 #' @param from numeric time to start the plot from. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param to numeric time to plot to. Only relevant if \code{qi = "Hazard Rate"}.
-#' @param title the plot's main title
-#' @param smoother what type of smoothing line to use to summarize the plotted coefficient
+#' @param title the plot's main title.
+#' @param smoother what type of smoothing line to use to summarize the plotted coefficient.
 #' @param leg.name name of the stratified hazard rates legend. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
 #' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
@@ -21,11 +21,11 @@
 #' @param fit one or more of \code{"linear"}, \code{"quadratic"}, \code{"smooth"}, \code{"additive"}; to display fitted surface(s); partial matching is supported e.g., \code{c("lin", "quad")}. Only relevant if \code{qi == 'Relative Hazard'} and \code{FacetTime = NULL}.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
-#' @return a ggplot2 object. See \code{\link{scatter3d}} for values from \code{scatter3d} calls.
+#' @return a \code{gg} \code{ggplot} class object. See \code{\link{scatter3d}} for values from \code{scatter3d} calls.
 #'  
-#' @description Uses \code{ggplot2} and \code{scatter3d} to plot the quantities of interest from \code{simspline} objects, including relative hazards, first differences, hazard ratios, and hazard rates. If currently does not support hazard rates for multiple strata.
+#' @details Uses \code{ggplot2} and \code{scatter3d} to plot the quantities of interest from \code{simspline} objects, including relative hazards, first differences, hazard ratios, and hazard rates. If currently does not support hazard rates for multiple strata.
 #'
-#' It can graph hazard rates as a 3D plot using \code{\link{scatter3d}} with the dimensions: Time, Hazard Rate, and the value of Xj. You can also choose to plot hazard rates for a range of values of Xj in two dimensional plots at specific points in time. Each plot is arranged in a facet grid.
+#' It can graph hazard rates as a 3D plot using \code{\link{scatter3d}} with the dimensions: Time, Hazard Rate, and the value of \code{Xj}. You can also choose to plot hazard rates for a range of values of \code{Xj} in two dimensional plots at specific points in time. Each plot is arranged in a facet grid.
 #'
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
 #'

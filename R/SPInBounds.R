@@ -11,7 +11,7 @@
 #'
 #' @description \code{SpinBounds} is an internal function used by \code{simPH}'s simulation commands to find the shortest probability interval. It is largely drawn from Liu's (2013) \code{SPIn} command (version 1.1), with two modifications. First it returns just the lower or upper bound of the interval, rather than the whole SPIn object. Second, if there is no variation in the interval (as the hazard ratio for a fitted value of 0, e.g. all simulation values are 1) it takes the "central interval" of the simulations. Effectively it reduces the number of simulations by \code{nsim} * \code{ci}.  
 #'
-#' @references Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probablility Intervals.'' Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
+#' @references Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probability Intervals.'' Arvix. \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 #' 
 #' @import quadprog
 #' @keywords internals

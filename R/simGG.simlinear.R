@@ -1,14 +1,14 @@
-#' Plot simulated linear time-constant quantities of interest.
+#' Plot simulated linear time-constant quantities of interest from Cox Proportional Hazards Models
 #'
-#' \code{simGG.simlinear} uses ggplot2 to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
+#' \code{simGG.simlinear} uses \link{ggplot2} to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
 #'
-#' @param obj a simlinear object.
+#' @param obj a \code{simlinear} class object.
 #' @param xlab a label for the plot's x-axis.
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
 #' @param from numeric time to start the plot from. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param to numeric time to plot to. Only relevant if \code{qi = "Hazard Rate"}.
-#' @param title the plot's main title
-#' @param smoother what type of smoothing line to use to summarize the plotted coefficient
+#' @param title the plot's main title.
+#' @param smoother what type of smoothing line to use to summarize the plotted coefficient.
 #' @param spalette colour palette for use in \code{qi = "Hazard Rate"}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
 #' @param leg.name name of the stratified hazard rates legend. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "First Difference"}.
@@ -18,7 +18,7 @@
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
-#' @return a ggplot2 object
+#' @return a \code{gg} \code{ggplot} class object
 #'
 #' @examples
 #'
@@ -47,7 +47,7 @@
 #' #						qi = "Hazard Rate", Xj = c(1237, 1600))
 #' # simGG(Sim2)
 #'
-#' @description Uses ggplot2 to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
+#' @details Uses \link{ggplot2} to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
 #'
 #' @import ggplot2

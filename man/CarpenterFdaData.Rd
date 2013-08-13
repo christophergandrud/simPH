@@ -10,7 +10,8 @@
 
   Luke Keele, "Replication data for: Proportionally
   Difficult: Testing for Nonproportional Hazards In Cox
-  Models", http://hdl.handle.net/1902.1/17068, V1 [Version]
+  Models". \url{http://hdl.handle.net/1902.1/17068}. V1
+  [Version].
 }
 \description{
   A data set from Carpenter (2002).

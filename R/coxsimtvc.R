@@ -1,22 +1,23 @@
-#' Simulate time-varying quantities of interest from coxph fitted model objects
+#' Simulate time-varying quantities of interest from Cox Proportional Hazards models
 #' 
-#' \code{coxsimtvc} simulates time-varying relative hazards, first differences, and hazard ratios from models estimated with \code{\link{coxph}} using the multivariate normal distribution.
-#' @param obj a coxph fitted model object with a time interaction. 
+#' \code{coxsimtvc} simulates time-varying relative hazards, first differences, and hazard ratios from models estimated with \code{\link{coxph}} using the multivariate normal distribution. These can be plotted with \code{\link{simGG}}.
+#' @param obj a \code{\link{coxph}} fitted model object with a time interaction. 
 #' @param b the non-time interacted variable's name.
 #' @param btvc the time interacted variable's name.
 #' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, \code{'Hazard Rate'}. Default is \code{qi = 'Relative Hazard'}. If \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'} then you can set \code{Xj} and \code{Xl}.
-#' @param Xj numeric vector of fitted values for Xj. Must be the same length as \code{Xl} or \code{Xl} must be \code{NULL}. 
-#' @param Xl numeric vector of fitted values for Xl. Must be the same length as Xj. Only applies if \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'}.
+#' @param Xj numeric vector of fitted values for \code{b}. Must be the same length as \code{Xl} or \code{Xl} must be \code{NULL}. 
+#' @param Xl numeric vector of fitted values for Xl. Must be the same length as \code{Xj}. Only applies if \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'}.
 #' @param nsim the number of simulations to run per point in time. Default is \code{nsim = 1000}.
-#' @param tfun function of time that btvc was multiplied by. Default is "linear". Can also be "log" (natural log) and "power". If \code{tfun = "power"} then the pow argument needs to be specified also.
+#' @param tfun function of time that btvc was multiplied by. Default is "linear". It can also be "log" (natural log) and "power". If \code{tfun = "power"} then the pow argument needs to be specified also.
 #' @param pow if \code{tfun = "power"}, then use pow to specify what power the time interaction was raised to.
 #' @param from point in time from when to begin simulating coefficient values
-#' @param to point in time to stop simulating coefficient values
-#' @param by time intervals by which to simulate coefficient values
-#' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the convidence level of the shortest probability interval. Any value from 0 through 1 may be used.
-#' @param spin logical, whether or not to keep only the shortest proability interval rather than the middle simulations.
+#' @param to point in time to stop simulating coefficient values.
+#' @param by time intervals by which to simulate coefficient values.
+#' @param ci the proportion of simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the confidence level of the shortest probability interval. Any value from 0 through 1 may be used.
+#' @param spin logical, whether or not to keep only the shortest probability interval rather than the middle simulations.
 #'
-#' @return a simtvc object
+#' @return a \code{simtvc} object
+#'
 #' @details Simulates time-varying relative hazards, first differences, and hazard ratios using parameter estimates from \code{coxph} models. Can also simulate hazard rates for multiple strata.
 #'
 #' Relative hazards are found using:
@@ -98,10 +99,10 @@
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of Statistical Analyses: Improving Interpretation and Presentation.'' American Journal of Political Science 44(2): 347-61.
 #'
-#' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probablility Intervals.'' Arvix. http://arxiv.org/pdf/1302.2142v1.pdf.
+#' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probability Intervals.'' Arvix. \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 
 
-coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000, from, to, by, ci = 0.95, spin = FALSE)
+coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000, from, to, by = 1, ci = 0.95, spin = FALSE)
 {
   QI <- NULL
   ############ Means Not Supported Yet for coxsimtvc ########

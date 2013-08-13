@@ -1,13 +1,13 @@
-#' Plot simulated time-varying hazard ratios or stratified time-varying hazard rates from a simtvc class object using ggplot2
+#' Plot simulated time-varying hazard ratios or stratified time-varying hazard rates from Cox Proportional Hazards Models
 #' 
-#' \code{simGG.simtvc} uses ggplot2 to plot the simulated hazards from a \code{simtvc} class object using ggplot2. 
-#' @param obj a simtvc class object
+#' \code{simGG.simtvc} uses \link{ggplot2} to plot the simulated hazards from a \code{simtvc} class object created by \code{\link{coxsimtvc}} using \link{ggplot2}. 
+#' @param obj a \code{simtvc} class object
 #' @param from numeric time to start the plot from.
 #' @param to numeric time to plot to.
 #' @param xlab a label for the plot's x-axis.
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
-#' @param title the plot's main title
-#' @param smoother what type of smoothing line to use to summarize the plotted coefficient
+#' @param title the plot's main title.
+#' @param smoother what type of smoothing line to use to summarize the plotted coefficient.
 #' @param spalette colour palette for use in \code{qi = "Hazard Rate"}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
 #' @param leg.name name of the stratified hazard rates legend. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
@@ -17,7 +17,7 @@
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
-#' @return a ggplot2 object
+#' @return a \code{gg} \code{ggplot} class object
 #' @details Plots either a time varying hazard ratio or the hazard rates for multiple strata. Currently the strata legend labels need to be changed manually (see \code{\link{revalue}} in the \link{plyr} package) in the \code{simtvc} object with the \code{strata} component. Also, currently the x-axis tick marks and break labels must be adjusted manually for non-linear functions of time. 
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
 #' @examples

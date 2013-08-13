@@ -1,6 +1,6 @@
 \name{simGG}
 \alias{simGG}
-\title{A method for plotting simulation objects created by simPH.}
+\title{A method for plotting simulation objects created by simPH}
 \usage{
   simGG(obj, ...)
 }
@@ -11,8 +11,7 @@
   \item{...}{arguments to be passed to methods.}
 }
 \description{
-  A method for plotting simulation objects created by
-  simPH.
+  A method for plotting simulation objects created by simPH
 }
 \seealso{
   \code{\link{simGG.siminteract}},

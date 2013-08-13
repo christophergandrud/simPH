@@ -1,6 +1,6 @@
 \name{simGG.siminteract}
 \alias{simGG.siminteract}
-\title{Plot simulated linear multiplicative interactions.}
+\title{Plot simulated linear multiplicative interactions from Cox Proportional Hazards Models}
 \usage{
   \method{simGG}{siminteract} (obj, from = NULL, to = NULL,
     xlab = NULL, ylab = NULL, title = NULL,
@@ -9,7 +9,7 @@
     psize = 1, palpha = 0.1, ...)
 }
 \arguments{
-  \item{obj}{a simlinear object}
+  \item{obj}{a \code{siminteract} class object}
 
   \item{xlab}{a label for the plot's x-axis.}
 
@@ -22,10 +22,10 @@
   \item{to}{numeric time to plot to. Only relevant if
   \code{qi = "Hazard Rate"}.}
 
-  \item{title}{the plot's main title}
+  \item{title}{the plot's main title.}
 
   \item{smoother}{what type of smoothing line to use to
-  summarize the plotted coefficient}
+  summarize the plotted coefficient.}
 
   \item{spalette}{colour palette. Not relevant for \code{qi
   = "Marginal Effect"}. Default palette is \code{"Set1"}.
@@ -56,28 +56,28 @@
   \item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
-  a ggplot2 object
+  a \code{gg} \code{ggplot} class object
 }
 \description{
-  Uses ggplot2 to plot the quantities of interest from
-  \code{siminteract} objects, including marginal effects,
-  first differences, hazard ratios, and hazard rates. If
-  there are multiple strata, the quantities of interest
-  will be plotted in a grid by strata. Note: A dotted line
-  is created at y = 1 (0 for first difference), i.e. no
-  effect, for time-varying hazard ratio graphs. No line is
-  created for hazard rates.
+  \code{simGG.siminteract} uses \link{ggplot2} to plot the
+  quantities of interest from \code{siminteract} objects,
+  including marginal effects, first differences, hazard
+  ratios, and hazard rates.
+}
+\details{
+  Uses \link{ggplot2} to plot the quantities of interest
+  from \code{siminteract} objects, including marginal
+  effects, first differences, hazard ratios, and hazard
+  rates. If there are multiple strata, the quantities of
+  interest will be plotted in a grid by strata. Note: A
+  dotted line is created at y = 1 (0 for first difference),
+  i.e. no effect, for time-varying hazard ratio graphs. No
+  line is created for hazard rates.
 
   Note: if \code{qi = "Hazard Ratio"} or \code{qi = "First
   Difference"} then you need to have choosen more than one
   fitted value for \code{X1} in
   \code{\link{coxsimInteract}}.
-}
-\details{
-  \code{simGG.siminteract} uses ggplot2 to plot the
-  quantities of interest from \code{siminteract} objects,
-  including marginal effects, first differences, hazard
-  ratios, and hazard rates.
 }
 \examples{
 # Load Carpenter (2002) data

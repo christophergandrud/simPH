@@ -1,4 +1,4 @@
-#' Constrict simulations to a defined interval.
+#' Constrict simulations to a defined interval
 #'
 #' \code{IntervalConstrict} is an internal function to constrict a set of simulations to user defined interval.
 #'
