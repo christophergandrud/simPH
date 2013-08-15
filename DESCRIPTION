@@ -7,7 +7,7 @@ Description: The package simulates and plots quantities of interest (relative
     nonproportional hazards, as well as stratified survival curves from Cox
     Proportional Hazard models.
 Version: 0.7.3
-Date: 2013-08-13
+Date: 2013-08-15
 Author: Christopher Gandrud
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
 URL: http://christophergandrud.github.io/simPH/
