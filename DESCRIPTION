@@ -13,7 +13,7 @@ Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
 URL: http://christophergandrud.github.io/simPH/
 BugReports: https://github.com/christophergandrud/SimPH/issues
 Depends:
-    R (>= 3.0.0)
+    Rcpp (>= 0.10.4)
 Imports:
     car,
     data.table,
@@ -27,7 +27,6 @@ Imports:
     stringr,
     survival,
     quadprog
-Depends: Rcpp (>= 0.10.4)
 LinkingTo: Rcpp
 License: GPL (>= 3)
 Collate:
@@ -48,3 +47,4 @@ Collate:
     'tvc.R'
     'SPInBounds.R'
     'IntervalConstrict.R'
+    'RcppExports.R'
