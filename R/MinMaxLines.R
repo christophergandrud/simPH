@@ -21,14 +21,15 @@ MinMaxLines <- function(df, hr = FALSE, strata = FALSE){
 		Linesdf <- Linesdf[!duplicated(Linesdf[[1]]), ] 
 		Linesdf <- Linesdf[, -2]
 	}
-	else if (isTRUE(isTRUE(hr) & !isTRUE(strata))){
-		Linesdf <- ddply(df, .(Time), transform, Median = median(HRate))
-		Linesdf <- ddply(Linesdf, .(Time), transform, Max = max(HRate))
-		Linesdf <- ddply(Linesdf, .(Time), transform, Min = min(HRate))
-		Linesdf <- ddply(Linesdf, .(Time), transform, Lower50 = quantile(HRate, 0.25))
-		Linesdf <- ddply(Linesdf, .(Time), transform, Upper50 = quantile(HRate, 0.75))
+	else if (isTRUE(hr) & !isTRUE(strata)){
+		Linesdf <- ddply(df, .(Time, HRValue), transform, Median = median(HRate))
+		Linesdf <- ddply(Linesdf, .(Time, HRValue), transform, Max = max(HRate))
+		Linesdf <- ddply(Linesdf, .(Time, HRValue), transform, Min = min(HRate))
+		Linesdf <- ddply(Linesdf, .(Time, HRValue), transform, Lower50 = quantile(HRate, 0.25))
+		Linesdf <- ddply(Linesdf, .(Time, HRValue), transform, Upper50 = quantile(HRate, 0.75))
 
 		Linesdf <- Linesdf[!duplicated(Linesdf[[1]]), ] 
-		# Linesdf <- Linesdf[, -2]		
+
 	}
+	return(Linesdf)
 }
