@@ -28,7 +28,7 @@ MinMaxLines <- function(df, hr = FALSE, strata = FALSE){
 		Linesdf <- ddply(Linesdf, .(Time, HRValue), transform, Lower50 = quantile(HRate, 0.25))
 		Linesdf <- ddply(Linesdf, .(Time, HRValue), transform, Upper50 = quantile(HRate, 0.75))
 
-		Linesdf <- Linesdf[!duplicated(Linesdf[[1]]), ] 
+		Linesdf <- Linesdf[!duplicated(Linesdf[, c(1, 3)]), ] 
 
 	}
 	return(Linesdf)

@@ -82,15 +82,17 @@ M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz +
 
 # Simulate simpoly First Difference
 Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference",
-           pow = 3, Xj = seq(1, 150, by = 5))
+           pow = 3, Xj = seq(1, 150, by = 5), nsim = 100)
 
+# dontrun
 # Simulate simpoly Hazard Ratio with spin probibility interval
-Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio",
-           pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
+# Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio",
+#           pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
 
 # Plot simulations
 simGG(Sim1)
-simGG(Sim2)
+# dontrun
+# simGG(Sim2)
 }
 \seealso{
   \code{\link{coxsimPoly}} and \code{\link{ggplot2}}

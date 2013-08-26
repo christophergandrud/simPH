@@ -136,7 +136,7 @@ M1 <- coxph(Surv(begin, end, event) ~
 # Create simtvc object for Relative Hazard
 Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
                    tfun = "log", from = 80, to = 2000,
-                   Xj = 1, by = 15, ci = 0.99)
+                   Xj = 1, by = 15, ci = 0.99, nsim = 100)
 
 ## dontrun
 # Create simtvc object for First Difference
