@@ -61,7 +61,9 @@
   middle interval set with \code{qi} in
   \code{\link{coxsimLinear}}) as well as the central 50% of
   this area. It also plots a line for the median value of
-  the full area.}
+  the full area, so values in \code{smoother} are ignored.
+  One of the key advantages of using ribbons rather than
+  points is that it creates plots with smaller file sizes.}
 
   \item{...}{Additional arguments. (Currently ignored.)}
 }

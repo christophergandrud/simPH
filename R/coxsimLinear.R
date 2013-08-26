@@ -204,6 +204,19 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, m
                                 QI = QI, spin = spin, ci = ci)
 
   # Final clean up
-  class(SimbPerc) <- c("simlinear", qi)
-  SimbPerc
+  # Subset simlinear object & create a data frame of important variables
+  if (qi == "Hazard Rate"){
+    if (is.null(SimbPerc$strata)){
+      SimPercSub <- data.frame(SimbPerc$time, SimbPerc$QI, SimbPerc$HRValue)
+      names(SimPercSub) <- c("Time", "HRate", "HRValue")
+    } else if (!is.null(SimbPerc$strata)) {
+    SimPercSub <- data.frame(SimbPerc$time, SimbPerc$QI, SimbPerc$strata, SimbPerc$HRValue)
+    names(SimPercSub) <- c("Time", "HRate", "Strata", "HRValue")
+    }
+  } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | qi == "First Difference"){
+    SimPercSub <- data.frame(SimbPerc$Xj, SimbPerc$QI)
+    names(SimPercSub) <- c("Xj", "QI")
+  }
+  class(SimPercSub) <- c("simlinear", qi)
+  SimPercSub
 }
