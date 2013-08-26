@@ -16,6 +16,7 @@
 #' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "First Difference"}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
+#' @param ribbons logical specifies whether or not to use summary ribbons of the simulations rather than plotting every simulation value as a point. If \code{lines = TRUE} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimLinear}}) as well as the central 50% of this area. It also plots a line for the median value of the full area.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
 #' @return a \code{gg} \code{ggplot} class object
@@ -61,7 +62,7 @@
 #'
 #' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
 
-simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
+simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ribbons = FALSE, ...)
 {
 	Time <- HRate <- HRValue <- Xj <- QI <- NULL
 	if (!inherits(obj, "simlinear")){
@@ -98,8 +99,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 	  	names(objdf) <- c("Xj", "QI")
 	}
 
-	# Plot
-	  if (qi == "Hazard Rate"){
+	# Plot points
+	if (ribbons == FALSE){
+		if (qi == "Hazard Rate"){
 	  	if (!is.null(obj$strata)) {
 	      ggplot(objdf, aes(x = Time, y = HRate, colour = factor(HRValue))) +
 	        geom_point(alpha = I(palpha), size = psize) +
@@ -120,16 +122,16 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
 		}
-	} else if (qi == "First Difference"){
-		ggplot(objdf, aes(Xj, QI)) +
-	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-	        geom_hline(aes(yintercept = 0), linetype = "dotted") +
-	        xlab(xlab) + ylab(ylab) +
-	        ggtitle(title) +
-	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-	        theme_bw(base_size = 15)
-    	} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
+		} else if (qi == "First Difference"){
+			ggplot(objdf, aes(Xj, QI)) +
+		        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 		ggplot(objdf, aes(Xj, QI)) +
 	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
@@ -138,5 +140,53 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 	        ggtitle(title) +
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 	        theme_bw(base_size = 15)
-    }
+		}
+	}
+	# Plot ribbons
+	if (ribbons == TRUE){
+		objdf <- MinMaxLines(df = objdf)
+		############ Incomplete ############
+		if (qi == "Hazard Rate"){
+	  	if (!is.null(obj$strata)) {
+	      ggplot(objdf, aes(x = Time, y = HRate, colour = factor(HRValue))) +
+	        geom_point(alpha = I(palpha), size = psize) +
+	        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+	        facet_grid(.~ Strata) +
+	        xlab(xlab) + ylab(ylab) +
+	        scale_colour_brewer(palette = spalette, name = leg.name) +
+	        ggtitle(title) +
+	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+	        theme_bw(base_size = 15)
+    	} else if (is.null(obj$strata)){
+	      	ggplot(objdf, aes(Time, HRate, colour = factor(HRValue))) +
+	        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+		        scale_colour_brewer(palette = spalette, name = leg.name) +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+		}
+		} else if (qi == "First Difference"){
+			ggplot(objdf, aes(Xj, Median)) +
+		        geom_line(size = lsize, alpha = I(palpha), colour = pcolour) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = 0.2, colour = pcolour) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = 0.2, colour = pcolour) +
+		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
+			ggplot(objdf, aes(Xj, Median)) +
+		        geom_line(size = lsize, colour = pcolour) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = 0.2, fill = pcolour) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = 0.2, fill = pcolour) +
+	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
+	        xlab(xlab) + ylab(ylab) +
+	        ggtitle(title) +
+	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+	        theme_bw(base_size = 15)
+		}
+	}
 }

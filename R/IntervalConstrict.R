@@ -5,7 +5,7 @@
 #' @param Simb character string naming the data frame with the simulations.
 #' @param SubVar character vector the variable names to subset the simulations by.
 #' @param qi character vector naming the type of quantity of interest.
-#' @param QI character string labeling the quantitiy of interest values.
+#' @param QI character string labeling the quantity of interest values.
 #' @param spin logical for whether or not to use the shortest probability interval or the central interval.
 #' @param ci numeric confidence interval measure.
 #' 

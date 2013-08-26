@@ -6,8 +6,8 @@ Description: The package simulates and plots quantities of interest (relative
     multiplicative interactions, polynomials, penalised splines, and
     nonproportional hazards, as well as stratified survival curves from Cox
     Proportional Hazard models.
-Version: 0.7.3
-Date: 2013-08-15
+Version: 0.7.5
+Date: 2013-08-26
 Author: Christopher Gandrud
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
 URL: http://christophergandrud.github.io/simPH/
@@ -46,3 +46,4 @@ Collate:
     'tvc.R'
     'SPInBounds.R'
     'IntervalConstrict.R'
+    'MinMaxLines.R'
