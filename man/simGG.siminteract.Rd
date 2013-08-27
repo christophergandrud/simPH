@@ -43,9 +43,9 @@
   See \code{\link{ggplot2}}.}
 
   \item{pcolour}{character string colour of the simulated
-  points for relative hazards. Default is hexadecimal
-  colour \code{pcolour = '#A6CEE3'}. Only relevant if
-  \code{qi = "Marginal Effect"}.}
+  points. Default is hexadecimal colour \code{pcolour =
+  '#A6CEE3'}. Only relevant if \code{qi = "Marginal
+  Effect"}.}
 
   \item{psize}{size of the plotted simulation points.
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}

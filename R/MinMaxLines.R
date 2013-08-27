@@ -6,7 +6,7 @@
 #' @param hr logical indicating whether or not \code{df} contains a hazard rate.
 #' @param strata logical indicating whether or not \code{df} contains a stratified hazard rate. 
 #'
-#' @importFrom plyr ddply mutate
+#' @importFrom plyr ddply
 #' @keywords internals
 #' @noRd
 
