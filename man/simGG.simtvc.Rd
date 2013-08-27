@@ -6,7 +6,7 @@
     xlab = NULL, ylab = NULL, title = NULL,
     smoother = "auto", spalette = "Set1", leg.name = "",
     lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
-    psize = 1, palpha = 0.1, ...)
+    psize = 1, palpha = 0.1, ribbons = FALSE, ...)
 }
 \arguments{
   \item{obj}{a \code{simtvc} class object}
@@ -51,6 +51,18 @@
 
   \item{palpha}{point alpha (e.g. transparency). Default is
   \code{palpha = 0.05}. See \code{\link{ggplot2}}.}
+
+  \item{ribbons}{logical specifies whether or not to use
+  summary ribbons of the simulations rather than plotting
+  every simulation value as a point. If \code{lines = TRUE}
+  a plot will be created with shaded areas ('ribbons') for
+  the minimum and maximum simulation values (i.e. the
+  middle interval set with \code{qi} in
+  \code{\link{coxsimtvc}}) as well as the central 50% of
+  this area. It also plots a line for the median value of
+  the full area, so values in \code{smoother} are ignored.
+  One of the key advantages of using ribbons rather than
+  points is that it creates plots with smaller file sizes.}
 
   \item{...}{Additional arguments. (Currently ignored.)}
 }
@@ -119,7 +131,7 @@
 # Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
 #                  qi = "Hazard Ratio", Xj = c(191, 229),
 #                  Xl = c(0, 0),
-#                  tfun = "log", from = 80, to = 2000,
+#                  tfun = "log", from = 100, to = 2000,
 #                  by = 15, ci = 0.99)
 
 # Create plots

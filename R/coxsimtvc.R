@@ -291,8 +291,27 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
   } else if (tfun == "power"){
     SimbPerc$RealTime <- SimbPerc$tf^(1/pow)
   }
-  
+
   # Final clean up
-  class(SimbPerc) <- c("simtvc", qi)
-  SimbPerc
+  # Subset simtvc object & create data frame of important variables
+  if (qi == "Hazard Rate"){
+    if (is.null(SimbPerc$strata)){
+      SimbPercSub <- data.frame(SimbPerc$RealTime, SimbPerc$QI, SimbPerc$HRValue)
+      names(SimbPercSub) <- c("Time", "HRate", "HRValue")
+    } else if (!is.null(SimbPerc$strata)) {
+      SimbPercSub <- data.frame(SimbPerc$RealTime, SimbPerc$QI, SimbPerc$strata, SimbPerc$HRValue)
+      names(SimbPercSub) <- c("Time", "HRate", "Strata", "HRValue")
+    }
+  } else if (qi == "Hazard Ratio"){
+      SimbPercSub <- data.frame(SimbPerc$RealTime, SimbPerc$QI, SimbPerc$Comparison)
+      names(SimbPercSub) <- c("Time", "QI", "Comparison")
+  } else if (qi == "Relative Hazard"){
+      SimbPercSub <- data.frame(SimbPerc$RealTime, SimbPerc$QI, SimbPerc$Xj)
+      names(SimbPercSub) <- c("Time", "QI", "Xj")
+  } else if (qi == "First Difference"){
+      SimbPercSub <- data.frame(SimbPerc$RealTime, SimbPerc$QI, SimbPerc$Comparison)
+      names(SimbPercSub) <- c("Time", "QI", "Comparison")
+  }
+  class(SimbPercSub) <- c("simtvc", qi)
+  SimbPercSub
 }
