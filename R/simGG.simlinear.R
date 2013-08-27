@@ -46,7 +46,8 @@
 #' # Simulate and plot Hazard Rate for stafcder variable
 #' # Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
 #' #						qi = "Hazard Rate", Xj = c(1237, 1600))
-#' # simGG(Sim2)
+#' # simGG(Sim2, ribbons = TRUE)
+#' 
 #'
 #' @details Uses \link{ggplot2} to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
@@ -64,7 +65,7 @@
 
 simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ribbons = FALSE, ...)
 {
-	Time <- HRate <- HRValue <- Xj <- QI <- NULL
+	Time <- HRate <- HRValue <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <- Median <- NULL
 	if (!inherits(obj, "simlinear")){
     	stop("must be a simlinear object")
     }
@@ -92,17 +93,17 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 	# Plot points
 	if (!isTRUE(ribbons)){
 		if (qi == "Hazard Rate"){
-	  	if (!is.null(obj$strata)) {
+	  	if (!is.null(obj$Strata)) {
 			ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
+				facet_grid(. ~ Strata) +
 				geom_point(alpha = I(palpha), size = psize) +
 				geom_smooth(method = smoother, size = lsize, se = FALSE) +
-				facet_grid(.~ Strata) +
 				xlab(xlab) + ylab(ylab) +
 				scale_colour_brewer(palette = spalette, name = leg.name) +
 				ggtitle(title) +
 				guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 				theme_bw(base_size = 15)
-    	} else if (is.null(obj$strata)){
+    	} else if (is.null(obj$Strata)){
 	      	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
 	        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
@@ -136,24 +137,28 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 	else if (isTRUE(ribbons)){
 		############ Incomplete ############
 		if (qi == "Hazard Rate"){
-	  	if (!is.null(obj$strata)) {
+	  	if (!is.null(obj$Strata)) {
 			obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
-			ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
-				geom_point(alpha = I(palpha), size = psize) +
-				geom_smooth(method = smoother, size = lsize, se = FALSE) +
-				facet_grid(.~ Strata) +
+			ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue), fill = factor(HRValue))) +
+				geom_line(size = lsize, alpha = palpha) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, linetype = 0) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) +
+				facet_grid(. ~ Strata) +
 				xlab(xlab) + ylab(ylab) +
-				scale_colour_brewer(palette = spalette, name = leg.name) +
+		        scale_colour_brewer(palette = spalette, name = leg.name) +
+		        scale_fill_brewer(palette = spalette, name = leg.name) +
 				ggtitle(title) +
-				guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        guides(fill = guide_legend(override.aes = list(alpha = 1))) +
 			theme_bw(base_size = 15)
-    	} else if (is.null(obj$strata)){
+    	} else if (is.null(obj$Strata)){
 			obj <- MinMaxLines(df = obj, hr = TRUE)
 	      	ggplot(obj, aes(Time, Median, colour = factor(HRValue), fill = factor(HRValue))) +
-		        geom_line(size = lsize, alpha = I(palpha)) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha) +
+		        geom_line(size = lsize, alpha = palpha) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, linetype = 0) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) +
 		        scale_colour_brewer(palette = spalette, name = leg.name) +
+		        scale_fill_brewer(palette = spalette, name = leg.name) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +

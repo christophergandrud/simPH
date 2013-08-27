@@ -110,7 +110,7 @@
 # Simulate and plot Hazard Rate for stafcder variable
 # Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
 #						qi = "Hazard Rate", Xj = c(1237, 1600))
-# simGG(Sim2)
+# simGG(Sim2, ribbons = TRUE)
 }
 \references{
   Licht, Amanda A. 2011. ''Change Comes with Time:
