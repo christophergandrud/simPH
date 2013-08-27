@@ -137,7 +137,7 @@
 # Create plots
 # simGG(Sim1)
 # simGG(Sim2)
-# simGG(Sim3, leg.name = "Comparision", from = 1200)
+# simGG(Sim3, leg.name = "Comparision", from = 1200, ribbons = TRUE)
 }
 \references{
   Licht, Amanda A. 2011. ''Change Comes with Time:
