@@ -163,7 +163,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 		} else if (qi == "First Difference"){
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
-		        geom_line(size = lsize, alpha = I(palpha), colour = pcolour) +
+		        geom_line(size = lsize, alpha = I(palpha), colour = lcolour) +
 				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
 				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
@@ -174,9 +174,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
-		        geom_line(size = lsize, colour = pcolour) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = 0.2, fill = pcolour) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = 0.2, fill = pcolour) +
+		        geom_line(size = lsize, colour = lcolour) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
 	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        xlab(xlab) + ylab(ylab) +
 	        ggtitle(title) +

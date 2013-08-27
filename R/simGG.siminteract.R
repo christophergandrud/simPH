@@ -13,7 +13,7 @@
 #' @param leg.name name of the stratified hazard rates legend. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "Marginal Effect"}.
 #' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
-#' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "Marginal Effect"}.
+#' @param pcolour character string colour of the simulated points. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "Marginal Effect"}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
 #' @param ... Additional arguments. (Currently ignored.)
@@ -148,7 +148,8 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 	else if (qi == "Marginal Effect"){
 		ggplot(objdf, aes(X2, QI)) +
 		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +   
+	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +  
+	        geom_hline(aes(yintercept = 0), linetype = "dotted") + 
 		    xlab(xlab) + ylab(ylab) +
 		    ggtitle(title) +
 		    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
