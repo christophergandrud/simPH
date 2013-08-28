@@ -106,10 +106,11 @@
 
   It can graph hazard rates as a 3D plot using
   \code{\link{scatter3d}} with the dimensions: Time, Hazard
-  Rate, and the value of \code{Xj}. You can also choose to
-  plot hazard rates for a range of values of \code{Xj} in
-  two dimensional plots at specific points in time. Each
-  plot is arranged in a facet grid.
+  Rate, and the value of \code{Xj}. Ribbon plots are not
+  available with 3D plots. You can also choose to plot
+  hazard rates for a range of values of \code{Xj} in two
+  dimensional plots at specific points in time. Each plot
+  is arranged in a facet grid.
 
   Note: A dotted line is created at y = 1 (0 for first
   difference), i.e. no effect, for time-varying hazard
@@ -153,10 +154,10 @@
 
 # Create a time grid plot
 # Find all points in time where baseline hazard was found
-# unique(Sim2$time)
+# unique(Sim2$Time)
 
 # Round time values so they can be exactly matched with FacetTime
-# Sim2$time <- round(Sim2$time, digits = 2)
+# Sim2$Time <- round(Sim2$Time, digits = 2)
 
 # Create plot
 # simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36))

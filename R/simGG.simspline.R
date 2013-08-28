@@ -26,7 +26,7 @@
 #'  
 #' @details Uses \code{ggplot2} and \code{scatter3d} to plot the quantities of interest from \code{simspline} objects, including relative hazards, first differences, hazard ratios, and hazard rates. If currently does not support hazard rates for multiple strata.
 #'
-#' It can graph hazard rates as a 3D plot using \code{\link{scatter3d}} with the dimensions: Time, Hazard Rate, and the value of \code{Xj}. You can also choose to plot hazard rates for a range of values of \code{Xj} in two dimensional plots at specific points in time. Each plot is arranged in a facet grid.
+#' It can graph hazard rates as a 3D plot using \code{\link{scatter3d}} with the dimensions: Time, Hazard Rate, and the value of \code{Xj}. Ribbon plots are not available with 3D plots. You can also choose to plot hazard rates for a range of values of \code{Xj} in two dimensional plots at specific points in time. Each plot is arranged in a facet grid.
 #'
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
 #'
@@ -68,13 +68,14 @@
 #'
 #' # Create a time grid plot
 #' # Find all points in time where baseline hazard was found
-#' # unique(Sim2$time)
+#' # unique(Sim2$Time)
 #' 
 #' # Round time values so they can be exactly matched with FacetTime
-#' # Sim2$time <- round(Sim2$time, digits = 2)
+#' # Sim2$Time <- round(Sim2$Time, digits = 2)
 #' 
 #' # Create plot
-#' # simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36))
+#' # simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36), 
+#'		       ribbons = TRUE, palpha = 0.5)
 #'
 #' # Simulated Fitted Values of stafcder
 #' # Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)", 
@@ -174,16 +175,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 	}
 	# Plots ribbons
 	else if (isTRUE(ribbons)){
-		if (qi == "Relative Hazard"){
-			ggplot(obj, aes(Xj, QI)) +
-			    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-			    geom_hline(aes(yintercept = 1), linetype = "dotted") +
-			    xlab(xlab) + ylab(ylab) +
-			    ggtitle(title) +
-			    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-			    theme_bw(base_size = 15)
-		} else if (qi == "First Difference"){
+		if (qi == "First Difference"){
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
 		        geom_line(size = lsize, alpha = I(palpha), colour = lcolour) +
@@ -194,7 +186,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 		        ggtitle(title) +
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
-		} else if (qi == "Hazard Ratio"){
+		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
 		        geom_line(size = lsize, colour = lcolour) +
@@ -205,11 +197,6 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 	        ggtitle(title) +
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 	        theme_bw(base_size = 15)
-	    } else if (qi == "Hazard Rate" & is.null(FacetTime)){
-	    	with(obj, scatter3d(x = Time, y = QI, z = Xj,
-	    						  xlab = xlab, ylab = ylab, zlab = zlab,
-	    						  surface = surface,
-	    						  fit = fit))
 	    } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
 			SubsetTime <- function(f){
 			  Time <- NULL
@@ -222,14 +209,17 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 			  CombObjdf
 			}
 			objSub <- SubsetTime(FacetTime)
-			ggplot(objSub, aes(Xj, QI)) +
-		        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+			objSub <- MinMaxLines(df = objSub, byVars = c("Xj", "Time"))
+			ggplot(objSub, aes(Xj, Median)) +
+		        geom_line(size = lsize, colour = lcolour) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
+	        	geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        facet_grid(.~Time) +
-		        xlab(xlab) + ylab(ylab) +
-		        ggtitle(title) +
-		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-		        theme_bw(base_size = 15)
+	        xlab(xlab) + ylab(ylab) +
+	        ggtitle(title) +
+	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+	        theme_bw(base_size = 15)
 	    }
 	}
 }
