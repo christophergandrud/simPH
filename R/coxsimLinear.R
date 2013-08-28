@@ -140,19 +140,19 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, m
   	  	Simb$FakeID <- 1
         bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
         SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
-      Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
-      # Create warning message
-      Rows <- nrow(Simb)
-      if (Rows > 2000000){
-        message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
-      }
-      Simb$QI <- Simb$hazard * Simb$HR 
-      if (is.null(Simb$strata)){
-        Simb <- Simb[, list(time, Xj, QI, HRValue)]
-      } else if (!is.null(Simb$strata)){
-        Simb <- Simb[, list(time, Xj, QI, HRValue, strata)]
-      }
-      Simb <- data.frame(Simb)
+        Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
+        # Create warning message
+        Rows <- nrow(Simb)
+        if (Rows > 2000000){
+          message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
+        }
+        Simb$QI <- Simb$hazard * Simb$HR 
+        if (is.null(Simb$strata)){
+          Simb <- Simb[, list(time, Xj, QI, HRValue)]
+        } else if (!is.null(Simb$strata)){
+          Simb <- Simb[, list(time, Xj, QI, HRValue, strata)]
+        }
+        Simb <- data.frame(Simb)
     }
   }
 

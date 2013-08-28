@@ -167,24 +167,24 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
     if (qi == "Hazard Rate"){
       if (!is.null(obj$Strata)) {
       obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
-      ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue), fill = factor(HRValue))) +
-        geom_line(size = lsize, alpha = palpha) +
-        geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, linetype = 0) +
-        geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) +
-        facet_grid(. ~ Strata) +
-        xlab(xlab) + ylab(ylab) +
-            scale_colour_brewer(palette = spalette, name = leg.name) +
-            scale_fill_brewer(palette = spalette, name = leg.name) +
-        ggtitle(title) +
-            guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-            guides(fill = guide_legend(override.aes = list(alpha = 1))) +
-      theme_bw(base_size = 15)
+        ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue), fill = factor(HRValue))) +
+          geom_line(size = lsize) +
+          geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, linetype = 0) +
+          geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) +
+          facet_grid(. ~ Strata) +
+          xlab(xlab) + ylab(ylab) +
+          scale_colour_brewer(palette = spalette, name = leg.name) +
+          scale_fill_brewer(palette = spalette, name = leg.name) +
+          ggtitle(title) +
+          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          guides(fill = guide_legend(override.aes = list(alpha = 1))) +
+          theme_bw(base_size = 15)
       } else if (is.null(obj$Strata)){
       obj <- MinMaxLines(df = obj, hr = TRUE)
           ggplot(obj, aes(Time, Median, colour = factor(HRValue), fill = factor(HRValue))) +
-            geom_line(size = lsize, alpha = palpha) +
-        geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, linetype = 0) +
-        geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) +
+            geom_line(size = lsize) +
+            geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, linetype = 0) +
+            geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) +
             scale_colour_brewer(palette = spalette, name = leg.name) +
             scale_fill_brewer(palette = spalette, name = leg.name) +
             xlab(xlab) + ylab(ylab) +
@@ -196,7 +196,7 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
     } else if (qi == "Hazard Ratio"){
        obj <- MinMaxLines(df = obj, byVars = c("Time", "Comparison"))
         ggplot(obj, aes(x = Time, y = Median, colour = factor(Comparison), fill = factor(Comparison))) + 
-            geom_line(size = lsize, alpha = I(palpha), colour = lcolour) + 
+            geom_line(size = lsize) + 
             geom_ribbon(aes(ymin = Lower50, ymax = Upper50), 
               alpha = palpha, linetype = 0) + 
             geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) + 
@@ -213,7 +213,7 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
     } else if (qi == "Relative Hazard"){
       obj <- MinMaxLines(df = obj, byVars = c("Time", "Xj"))
       ggplot(obj, aes(x = Time, y = Median, colour = factor(Xj), fill = factor(Xj))) +
-          geom_line(size = lsize, alpha = I(palpha), colour = lcolour) + 
+          geom_line(size = lsize, colour = lcolour) + 
           geom_ribbon(aes(ymin = Lower50, ymax = Upper50), 
             alpha = palpha, linetype = 0) + 
           geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) + 
@@ -230,7 +230,7 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
     } else if (qi == "First Difference"){
 obj <- MinMaxLines(df = obj, byVars = c("Time", "Comparison"))
       ggplot(obj, aes(x = Time, y = Median, group = Comparison, fill = Comparison)) +
-          geom_line(size = lsize, alpha = I(palpha), colour = lcolour) + 
+          geom_line(size = lsize) + 
           geom_ribbon(aes(ymin = Lower50, ymax = Upper50), 
             alpha = palpha, linetype = 0) + 
           geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) + 

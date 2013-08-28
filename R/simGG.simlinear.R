@@ -153,7 +153,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
     	} else if (is.null(obj$Strata)){
 			obj <- MinMaxLines(df = obj, hr = TRUE)
 	      	ggplot(obj, aes(Time, Median, colour = factor(HRValue), fill = factor(HRValue))) +
-		        geom_line(size = lsize, alpha = palpha) +
+		        geom_line(size = lsize) +
 				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, linetype = 0) +
 				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) +
 		        scale_colour_brewer(palette = spalette, name = leg.name) +

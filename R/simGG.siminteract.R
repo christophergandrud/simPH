@@ -16,6 +16,7 @@
 #' @param pcolour character string colour of the simulated points. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "Marginal Effect"}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
+#' @param ribbons logical specifies whether or not to use summary ribbons of the simulations rather than plotting every simulation value as a point. If \code{lines = TRUE} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimInteract}}) as well as the central 50% of this area. It also plots a line for the median value of the full area, so values in \code{smoother} are ignored. One of the key advantages of using ribbons rather than points is that it creates plots with smaller file sizes.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
 #' @return a \code{gg} \code{ggplot} class object
@@ -76,7 +77,7 @@
 #'
 #' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
 
-simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
+simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ribbons = FALSE, ...)
 {
 	Time <- QI <- HRValue <- X1 <- X2 <- NULL
 	if (!inherits(obj, "siminteract")){
@@ -91,100 +92,153 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
     } else {
     	ylab <- ylab
     }
-
-    # Subset siminteract object & create a data frame of important variables
-	if (qi == "Hazard Rate"){
-		colour <- NULL
-		if (is.null(obj$strata)){
-			objdf <- data.frame(obj$time, obj$QI, obj$HRValue)
-			names(objdf) <- c("Time", "QI", "HRValue")
-		} else if (!is.null(obj$strata)) {
-		objdf <- data.frame(obj$time, obj$QI, obj$strata, obj$HRValue)
-		names(objdf) <- c("Time", "QI", "Strata", "HRValue")
+    # Convert obj to data frame
+    class(obj) <- "data.frame"
+    # Constrict time period to plot for hazard rate
+    if (qi == "Hazard Rate"){   
+	    if (!is.null(from)){
+			obj <- subset(obj, Time >= from)
 		}
-		if (!is.null(from)){
-			objdf <- subset(objdf, Time >= from)
-  		}
-  		if (!is.null(to)){
-  			objdf <- subset(objdf, Time <= to)
-  		}
-	} else if (qi == "Hazard Ratio"){
-		colour <- NULL
-	  	objdf <- data.frame(obj$X1, obj$X2, obj$QI, obj$Comparison)
-	  	names(objdf) <- c("X1", "X2", "QI", "Comparison")
-	} else if (qi == "Marginal Effect"){
-	  	spalette <- NULL
-	  	objdf <- data.frame(obj$X2, obj$QI)
-	  	names(objdf) <- c("X2", "QI")
-	} else if (qi == "First Difference"){
-		colour <- NULL
-		objdf <- data.frame(obj$X1, obj$X2, obj$QI)
-		names(objdf) <- c("X1", "X2", "QI")
-	}
-
-	# Plot
-	if (qi == "Hazard Rate"){
-	  	if (!is.null(obj$strata)) {
-	      ggplot(objdf, aes(x = Time, y = QI, colour = factor(HRValue))) +
-	        geom_point(alpha = I(palpha), size = psize) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-	        facet_grid(.~ Strata) +
-	        xlab(xlab) + ylab(ylab) +
-	        scale_colour_brewer(palette = spalette, name = leg.name) +
-	        ggtitle(title) +
-	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-	        theme_bw(base_size = 15)
-    	} else if (is.null(obj$strata)){
-	      	ggplot(objdf, aes(Time, QI, colour = factor(HRValue))) +
-	        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-		        scale_colour_brewer(palette = spalette, name = leg.name) +
-		        xlab(xlab) + ylab(ylab) +
-		        ggtitle(title) +
-		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-		        theme_bw(base_size = 15)
-		}
-	} 
-	else if (qi == "Marginal Effect"){
-		ggplot(objdf, aes(X2, QI)) +
-		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +  
-	        geom_hline(aes(yintercept = 0), linetype = "dotted") + 
-		    xlab(xlab) + ylab(ylab) +
-		    ggtitle(title) +
-		    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-		    theme_bw(base_size = 15)
-	} 
-	else if (qi == "First Difference"){
-		X1Unique <- objdf[!duplicated(objdf[, "X1"]), ]
-		if (nrow(X1Unique) <= 1){
-			message("X1 must have more than one fitted value.")
-		} else {
-			ggplot(objdf, aes(X1, QI, colour = factor(X2), group = factor(X2))) +
-		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
-		        scale_colour_brewer(palette = spalette, name = leg.name) +
-		        xlab(xlab) + ylab(ylab) +
-		        ggtitle(title) +
-		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-		        theme_bw(base_size = 15)
-	    }
-	} 
-	else if (qi == "Hazard Ratio"){
-		X1Unique <- objdf[!duplicated(objdf[, "X1"]), ]
-		if (nrow(X1Unique) <= 1){
-			message("X1 must have more than one fitted value.")
-		} else {
-			ggplot(objdf, aes(X1, QI, colour = factor(X2), group = factor(X2))) +
-		        geom_point(shape = 21, alpha = I(palpha), size = psize) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
-		        scale_colour_brewer(palette = spalette, name = leg.name) +
-		        xlab(xlab) + ylab(ylab) +
-		        ggtitle(title) +
-		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-		        theme_bw(base_size = 15)
+		if (!is.null(to)){
+	        	obj <- subset(obj, Time <= to)
 	    }
     }
+	# Plot points
+	if (!isTRUE(ribbons)){
+		if (qi == "Hazard Rate"){
+		  	if (!is.null(obj$strata)) {
+		      ggplot(obj, aes(x = Time, y = QI, colour = factor(HRValue))) +
+		        geom_point(alpha = I(palpha), size = psize) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+		        facet_grid(.~ Strata) +
+		        xlab(xlab) + ylab(ylab) +
+		        scale_colour_brewer(palette = spalette, name = leg.name) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+	    	} else if (is.null(obj$strata)){
+		      	ggplot(obj, aes(Time, QI, colour = factor(HRValue))) +
+		        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
+			        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+			        scale_colour_brewer(palette = spalette, name = leg.name) +
+			        xlab(xlab) + ylab(ylab) +
+			        ggtitle(title) +
+			        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+			        theme_bw(base_size = 15)
+			}
+		} 
+		else if (qi == "Marginal Effect"){
+			ggplot(obj, aes(X2, QI)) +
+			    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +  
+		        geom_hline(aes(yintercept = 0), linetype = "dotted") + 
+			    xlab(xlab) + ylab(ylab) +
+			    ggtitle(title) +
+			    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+			    theme_bw(base_size = 15)
+		} 
+		else if (qi == "First Difference"){
+			X1Unique <- obj[!duplicated(obj[, "X1"]), ]
+			if (nrow(X1Unique) <= 1){
+				message("X1 must have more than one fitted value.")
+			} else {
+				ggplot(obj, aes(X1, QI, colour = factor(X2), group = factor(X2))) +
+			        geom_point(shape = 21, alpha = I(palpha), size = psize) +
+			        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+			        geom_hline(aes(yintercept = 0), linetype = "dotted") +
+			        scale_colour_brewer(palette = spalette, name = leg.name) +
+			        xlab(xlab) + ylab(ylab) +
+			        ggtitle(title) +
+			        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+			        theme_bw(base_size = 15)
+		    }
+		} 
+		else if (qi == "Hazard Ratio"){
+			X1Unique <- obj[!duplicated(obj[, "X1"]), ]
+			if (nrow(X1Unique) <= 1){
+				message("X1 must have more than one fitted value.")
+			} else {
+				ggplot(obj, aes(X1, QI, colour = factor(X2), group = factor(X2))) +
+			        geom_point(shape = 21, alpha = I(palpha), size = psize) +
+			        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+			        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+			        scale_colour_brewer(palette = spalette, name = leg.name) +
+			        xlab(xlab) + ylab(ylab) +
+			        ggtitle(title) +
+			        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+			        theme_bw(base_size = 15)
+		    }
+	    }
+	}
+	# Plot points ribbons
+	else if (isTRUE(ribbons)){
+		if (qi == "Hazard Rate"){
+		  	if (!is.null(obj$strata)) {
+		      ggplot(obj, aes(x = Time, y = QI, colour = factor(HRValue))) +
+		        geom_point(alpha = I(palpha), size = psize) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+		        facet_grid(.~ Strata) +
+		        xlab(xlab) + ylab(ylab) +
+		        scale_colour_brewer(palette = spalette, name = leg.name) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+	    	} else if (is.null(obj$strata)){
+		      	ggplot(obj, aes(Time, QI, colour = factor(HRValue))) +
+		        	geom_point(shape = 21, alpha = I(palpha), size = psize) +
+			        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+			        scale_colour_brewer(palette = spalette, name = leg.name) +
+			        xlab(xlab) + ylab(ylab) +
+			        ggtitle(title) +
+			        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+			        theme_bw(base_size = 15)
+			}
+		} 
+		else if (qi == "Marginal Effect"){
+			ggplot(obj, aes(X2, QI)) +
+			    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +  
+		        geom_hline(aes(yintercept = 0), linetype = "dotted") + 
+			    xlab(xlab) + ylab(ylab) +
+			    ggtitle(title) +
+			    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+			    theme_bw(base_size = 15)
+		} 
+		else if (qi == "First Difference"){
+			X1Unique <- obj[!duplicated(obj[, "X1"]), ]
+			if (nrow(X1Unique) <= 1){
+				message("X1 must have more than one fitted value.")
+			} else {
+				ggplot(obj, aes(X1, QI, colour = factor(X2), group = factor(X2))) +
+			        geom_point(shape = 21, alpha = I(palpha), size = psize) +
+			        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+			        geom_hline(aes(yintercept = 0), linetype = "dotted") +
+			        scale_colour_brewer(palette = spalette, name = leg.name) +
+			        xlab(xlab) + ylab(ylab) +
+			        ggtitle(title) +
+			        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+			        theme_bw(base_size = 15)
+		    }
+		} 
+		else if (qi == "Hazard Ratio"){
+			X1Unique <- obj[!duplicated(obj[, "X1"]), ]
+			if (nrow(X1Unique) <= 1){
+				message("X1 must have more than one fitted value.")
+			} else {
+				obj <- MinMaxLines(df = obj, byVars = c("X1", "X2"))
+				ggplot(obj, aes(X1, Median, colour = factor(X2), fill = factor(X2))) +
+			        geom_line(size = lsize) +
+					geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, linetype = 0) +
+					geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) +
+					geom_hline(aes(yintercept = 1), linetype = "dotted") +
+					scale_colour_brewer(palette = spalette, name = leg.name) +
+			        scale_fill_brewer(palette = spalette, name = leg.name) +
+			        xlab(xlab) + ylab(ylab) +
+			        ggtitle(title) +
+			        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+			        guides(fill = guide_legend(override.aes = list(alpha = 1))) +
+					theme_bw(base_size = 15)
+		    }
+	    }
+	}
 }
