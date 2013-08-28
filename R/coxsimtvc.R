@@ -105,23 +105,11 @@
 coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000, from, to, by = 1, ci = 0.95, spin = FALSE)
 {
   QI <- NULL
-  ############ Means Not Supported Yet for coxsimtvc ########
-  #### means code is a place holder for future versions #####
-  means <- FALSE
   # Ensure that qi is valid
   qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
   TestqiOpts <- qi %in% qiOpts
   if (!isTRUE(TestqiOpts)){
     stop("Invalid qi type. qi must be 'Relative Hazard', 'First Difference', 'Hazard Rate', or 'Hazard Ratio'")
-  }
-
-  MeansMessage <- NULL
-  if (isTRUE(means) & length(obj$coefficients) == 3){
-    means <- FALSE
-    MeansMessage <- FALSE
-    message("Note: means reset to FALSE. The model only includes the interaction variables.")
-  } else if (isTRUE(means) & length(obj$coefficients) > 3){
-    MeansMessage <- TRUE
   }
 
   if (is.null(Xl) & qi != "Hazard Rate"){
@@ -155,126 +143,76 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
   DrawnDF <- data.frame(Drawn)
   dfn <- names(DrawnDF)
  
-  # If all values aren't set for calculating the hazard rate
-  if (!isTRUE(means)){
+  # Extract simulations for variables of interest
+  bpos <- match(b, dfn)
+  btvcpos <- match(btvc, dfn)
+  
+  Drawn <- data.frame(Drawn[, c(bpos, btvcpos)])
+  Drawn$ID <- 1:nsim
 
-    # Extract simulations for variables of interest
-    bpos <- match(b, dfn)
-    btvcpos <- match(btvc, dfn)
-    
-    Drawn <- data.frame(Drawn[, c(bpos, btvcpos)])
-    Drawn$ID <- 1:nsim
+  # Multiply time function with btvc
+  TVSim <- outer(Drawn[,2], tf)
+  TVSim <- data.frame(melt(TVSim))
+  names(TVSim) <- c("ID", "time", "TVC")
+  time <- 1:length(tf)
+  TempDF <- data.frame(time, tf)
+  TVSim <- merge(TVSim, TempDF)
 
-    # Multiply time function with btvc
-    TVSim <- outer(Drawn[,2], tf)
-    TVSim <- data.frame(melt(TVSim))
-    names(TVSim) <- c("ID", "time", "TVC")
-    time <- 1:length(tf)
-    TempDF <- data.frame(time, tf)
-    TVSim <- merge(TVSim, TempDF)
+  # Combine with non TVC version of the variable
+  TVSim <- merge(Drawn, TVSim, by = "ID")
+  TVSim$CombCoef <- TVSim[[2]] + TVSim$TVC
 
-    # Combine with non TVC version of the variable
-    TVSim <- merge(Drawn, TVSim, by = "ID")
-    TVSim$CombCoef <- TVSim[[2]] + TVSim$TVC
-
-    # Find quantity of interest
-    if (qi == "Relative Hazard"){
-        Xs <- data.frame(Xj)
-        names(Xs) <- c("Xj")
-        Xs$Comparison <- paste(Xs[, 1])
-        Simb <- merge(TVSim, Xs)
-        Simb$QI <- exp(Simb$CombCoef * Simb$Xj)
-    } else if (qi == "First Difference"){
-      if (length(Xj) != length(Xl)){
-        stop("Xj and Xl must be the same length.")
-      } else {
-        TVSim$QI <- exp(TVSim$CombCoef)
-        Xs <- data.frame(Xj, Xl)
-        Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-        Simb <- merge(TVSim, Xs)
-        Simb$QI <- (exp((Simb$Xj - Simb$Xl) * Simb$CombCoef) - 1) * 100
-      }
-    } else if (qi == "Hazard Ratio"){
-       if (length(Xj) != length(Xl)){
-        stop("Xj and Xl must be the same length.")
-      } else {
-        Xs <- data.frame(Xj, Xl)
-        Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-        Simb <- merge(TVSim, Xs)
-        Simb$QI <- exp((Simb$Xj - Simb$Xl) * Simb$CombCoef)
-      }
-    } else if (qi == "Hazard Rate"){
-        Xl <- NULL
-        message("Xl is ignored.")
-
-        if (isTRUE(MeansMessage)){
-          message("All variables values other than b are fitted at 0.")
-        } 
-        Xs <- data.frame(Xj)
-        Xs$HRValue <- paste(Xs[, 1])
-        Simb <- merge(TVSim, Xs)
-        Simb$HR <- exp(Simb$Xj * Simb$CombCoef)  
-        bfit <- basehaz(obj)
-        bfit$FakeID <- 1
-        Simb$FakeID <- 1
-        bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
-        SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
-        SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
-        Simb <- data.frame(SimbCombDT)
-        Simb$QI <- Simb$hazard * Simb$HR 
+  # Find quantity of interest
+  if (qi == "Relative Hazard"){
+      Xs <- data.frame(Xj)
+      names(Xs) <- c("Xj")
+      Xs$Comparison <- paste(Xs[, 1])
+      Simb <- merge(TVSim, Xs)
+      Simb$QI <- exp(Simb$CombCoef * Simb$Xj)
+  } else if (qi == "First Difference"){
+    if (length(Xj) != length(Xl)){
+      stop("Xj and Xl must be the same length.")
+    } else {
+      TVSim$QI <- exp(TVSim$CombCoef)
+      Xs <- data.frame(Xj, Xl)
+      Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
+      Simb <- merge(TVSim, Xs)
+      Simb$QI <- (exp((Simb$Xj - Simb$Xl) * Simb$CombCoef) - 1) * 100
     }
-  }
-
-  # If the user wants to calculate Hazard Rates using means for fitting all covariates other than b.
-  else if (isTRUE(means)){
-    Xl <- NULL
-    message("Xl ignored")
-
-    # Set all values of b at means for data used in the analysis
-    NotB <- setdiff(names(obj$means), b)
-    MeanValues <- data.frame(obj$means)
-    FittedMeans <- function(Z){
-      ID <- 1:nsim
-      Temp <- data.frame(ID)
-      for (i in Z){
-        BarValue <- MeanValues[i, ]
-        DrawnCoef <- DrawnDF[, i]
-        FittedCoef <- outer(DrawnCoef, BarValue)
-        FCMolten <- data.frame(melt(FittedCoef))
-        Temp <- cbind(Temp, FCMolten[,3])
-      }
-      Names <- c("ID", Z)
-      names(Temp) <- Names
-      Temp <- Temp[, -1]
-      return(Temp)
+  } else if (qi == "Hazard Ratio"){
+     if (length(Xj) != length(Xl)){
+      stop("Xj and Xl must be the same length.")
+    } else {
+      Xs <- data.frame(Xj, Xl)
+      Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
+      Simb <- merge(TVSim, Xs)
+      Simb$QI <- exp((Simb$Xj - Simb$Xl) * Simb$CombCoef)
     }
-    FittedComb <- data.frame(FittedMeans(NotB)) 
-    ExpandFC <- do.call(rbind, rep(list(FittedComb), length(Xj)))
-
-    # Set fitted values for Xj
-    bpos <- match(b, dfn)
-    Simb <- data.frame(DrawnDF[, bpos])
-
-    Xs <- data.frame(Xj)
-    Xs$HRValue <- paste(Xs[, 1])
-
-    Simb <- merge(Simb, Xs)
-    Simb$CombB <- Simb[, 1] * Simb[, 2]
-    Simb <- Simb[, 2:4]
-
-    Simb <- cbind(Simb, ExpandFC)
-    Simb$Sum <- rowSums(Simb[, c(-1, -2)])
-    Simb$HR <- exp(Simb$Sum)
-    Simb <- Simb[, c("HRValue", "HR", "Xj")]
-
-    bfit <- basehaz(obj)
-    bfit$FakeID <- 1
-    Simb$FakeID <- 1
-    bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
-    SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
-    SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
-    Simb <- data.frame(SimbCombDT)
-    Simb$QI <- Simb$hazard * Simb$HR 
+  } else if (qi == "Hazard Rate"){
+      Xl <- NULL
+      message("Xl is ignored.")
+      Xs <- data.frame(Xj)
+      Xs$HRValue <- paste(Xs[, 1])
+      Simb <- merge(TVSim, Xs)
+      Simb$HR <- exp(Simb$Xj * Simb$CombCoef)  
+      bfit <- basehaz(obj)
+      bfit$FakeID <- 1
+      Simb$FakeID <- 1
+      bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+      SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+      Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
+      # Create warning message
+      Rows <- nrow(Simb)
+      if (Rows > 2000000){
+        message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
+      }
+      Simb$QI <- Simb$hazard * Simb$HR 
+      if (is.null(Simb$strata)){
+        Simb <- Simb[, list(time, tf, Xj, QI, HRValue)]
+      } else if (!is.null(Simb$strata)){
+        Simb <- Simb[, list(time, tf, Xj, QI, HRValue, strata)]
+      }
+      Simb <- data.frame(Simb)
   }
 
   # Drop simulations outside of 'confidence bounds'
