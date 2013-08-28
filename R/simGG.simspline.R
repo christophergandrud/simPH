@@ -19,6 +19,7 @@
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
 #' @param surface plot surface. Default is \code{surface = TRUE}. Only relevant if \code{qi == 'Relative Hazard'} and \code{FacetTime = NULL}.
 #' @param fit one or more of \code{"linear"}, \code{"quadratic"}, \code{"smooth"}, \code{"additive"}; to display fitted surface(s); partial matching is supported e.g., \code{c("lin", "quad")}. Only relevant if \code{qi == 'Relative Hazard'} and \code{FacetTime = NULL}.
+#' @param ribbons logical specifies whether or not to use summary ribbons of the simulations rather than plotting every simulation value as a point. If \code{lines = TRUE} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimSpline}}) as well as the central 50% of this area. It also plots a line for the median value of the full area, so values in \code{smoother} are ignored. One of the key advantages of using ribbons rather than points is that it creates plots with smaller file sizes.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
 #' @return a \code{gg} \code{ggplot} class object. See \code{\link{scatter3d}} for values from \code{scatter3d} calls.
@@ -95,7 +96,7 @@
 #' @method simGG simspline
 #' @S3method simGG simspline
 
-simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL, title = NULL, smoother = "auto", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, surface = TRUE, fit = "linear", ...)
+simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL, title = NULL, smoother = "auto", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, surface = TRUE, fit = "linear", ribbons = FALSE, ...)
 {
 	Time <- Xj <- QI <- NULL
 	if (!inherits(obj, "simspline")){
@@ -110,87 +111,132 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
     } else {
     	ylab <- ylab
     }
-    # Subset simspline object & create a data frame of important variables
-	if (qi == "Hazard Rate"){
-		spallette <- NULL
-		if (is.null(obj$strata)){
-			objdf <- data.frame(obj$time, obj$QI, obj$Xj)
-			names(objdf) <- c("Time", "QI", "Xj")
-		} 
-		# Currently does not support strata
-		#else if (!is.null(obj$strata)) {
-		#objdf <- data.frame(obj$time, obj$HRate, obj$strata, obj$Xj)
-		#names(objdf) <- c("Time", "HRate", "Strata", "Xj")
-		#}
-		if (!is.null(from)){
-			objdf <- subset(objdf, Time >= from)
-  		}
-  		if (!is.null(to)){
-  			objdf <- subset(objdf, Time <= to)
-  		}
-	} else if (qi == "Hazard Ratio"){
-	  	objdf <- data.frame(obj$Xj, obj$QI, obj$Comparison)
-	  	names(objdf) <- c("Xj", "QI", "Comparison")
-	} else if (qi == "Relative Hazard"){
-	  	objdf <- data.frame(obj$Xj, obj$QI)
-	  	names(objdf) <- c("Xj", "QI")
-	} else if (qi == "First Difference"){
-		objdf <- data.frame(obj$Xj, obj$QI, obj$Comparison)
-		names(objdf) <- c("Xj", "QI", "Comparison")
-	}
 
-	# Plots
-	if (qi == "Relative Hazard"){
-		ggplot(objdf, aes(Xj, QI)) +
-		    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-		    geom_hline(aes(yintercept = 1), linetype = "dotted") +
-		    xlab(xlab) + ylab(ylab) +
-		    ggtitle(title) +
-		    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-		    theme_bw(base_size = 15)
-	} else if (qi == "First Difference"){
-    	ggplot(objdf, aes(Xj, QI)) +
-        	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-	        geom_hline(aes(yintercept = 0), linetype = "dotted") +
-	        xlab(xlab) + ylab(ylab) +
-	        ggtitle(title) +
-	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-	        theme_bw(base_size = 15)
-	} else if (qi == "Hazard Ratio"){
-		ggplot(objdf, aes(Xj, QI)) +
-	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
-	        xlab(xlab) + ylab(ylab) +
-	        ggtitle(title) +
-	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-	        theme_bw(base_size = 15)
-    } else if (qi == "Hazard Rate" & is.null(FacetTime)){
-    	with(objdf, scatter3d(x = Time, y = QI, z = Xj,
-    						  xlab = xlab, ylab = ylab, zlab = zlab,
-    						  surface = surface,
-    						  fit = fit))
-    } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
-		SubsetTime <- function(f){
-		  Time <- NULL
-		  CombObjdf <- data.frame()
-		  for (i in f){
-		    Temps <- objdf
-		    TempsSub <- subset(Temps, Time == i)
-		    CombObjdf <- rbind(CombObjdf, TempsSub)
-		  }
-		  CombObjdf
+    # Convert obj to data frame
+    class(obj) <- "data.frame"
+    
+    # Constrict time period to plot for hazard rate
+    if (qi == "Hazard Rate"){   
+	    if (!is.null(from)){
+			obj <- subset(obj, Time >= from)
 		}
-		objdfSub <- SubsetTime(FacetTime)
-		ggplot(objdfSub, aes(Xj, QI)) +
-	        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-	        facet_grid(.~Time) +
+		if (!is.null(to)){
+	        	obj <- subset(obj, Time <= to)
+	    }
+    }
+
+	# Plots points
+	if (!isTRUE(ribbons)){
+		if (qi == "Relative Hazard"){
+			ggplot(obj, aes(Xj, QI)) +
+			    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+			    geom_hline(aes(yintercept = 1), linetype = "dotted") +
+			    xlab(xlab) + ylab(ylab) +
+			    ggtitle(title) +
+			    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+			    theme_bw(base_size = 15)
+		} else if (qi == "First Difference"){
+	    	ggplot(obj, aes(Xj, QI)) +
+	        	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+		} else if (qi == "Hazard Ratio"){
+			ggplot(obj, aes(Xj, QI)) +
+		        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+	    } else if (qi == "Hazard Rate" & is.null(FacetTime)){
+	    	with(obj, scatter3d(x = Time, y = QI, z = Xj,
+	    						  xlab = xlab, ylab = ylab, zlab = zlab,
+	    						  surface = surface,
+	    						  fit = fit))
+	    } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
+			SubsetTime <- function(f){
+			  Time <- NULL
+			  CombObjdf <- data.frame()
+			  for (i in f){
+			    Temps <- obj
+			    TempsSub <- subset(Temps, Time == i)
+			    CombObjdf <- rbind(CombObjdf, TempsSub)
+			  }
+			  CombObjdf
+			}
+			objSub <- SubsetTime(FacetTime)
+			ggplot(objSub, aes(Xj, QI)) +
+		        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+		        facet_grid(.~Time) +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+	    }
+	}
+	# Plots ribbons
+	else if (isTRUE(ribbons)){
+		if (qi == "Relative Hazard"){
+			ggplot(obj, aes(Xj, QI)) +
+			    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+			    geom_hline(aes(yintercept = 1), linetype = "dotted") +
+			    xlab(xlab) + ylab(ylab) +
+			    ggtitle(title) +
+			    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+			    theme_bw(base_size = 15)
+		} else if (qi == "First Difference"){
+	    	ggplot(obj, aes(Xj, QI)) +
+	        	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+		} else if (qi == "Hazard Ratio"){
+			obj <- MinMaxLines(df = obj)
+			ggplot(obj, aes(Xj, Median)) +
+		        geom_line(size = lsize, colour = lcolour) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
+	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        xlab(xlab) + ylab(ylab) +
 	        ggtitle(title) +
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 	        theme_bw(base_size = 15)
-    }
+	    } else if (qi == "Hazard Rate" & is.null(FacetTime)){
+	    	with(obj, scatter3d(x = Time, y = QI, z = Xj,
+	    						  xlab = xlab, ylab = ylab, zlab = zlab,
+	    						  surface = surface,
+	    						  fit = fit))
+	    } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
+			SubsetTime <- function(f){
+			  Time <- NULL
+			  CombObjdf <- data.frame()
+			  for (i in f){
+			    Temps <- obj
+			    TempsSub <- subset(Temps, Time == i)
+			    CombObjdf <- rbind(CombObjdf, TempsSub)
+			  }
+			  CombObjdf
+			}
+			objSub <- SubsetTime(FacetTime)
+			ggplot(objSub, aes(Xj, QI)) +
+		        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+		        facet_grid(.~Time) +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+	    }
+	}
 }

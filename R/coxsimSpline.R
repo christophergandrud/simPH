@@ -240,10 +240,19 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	  	Simb$FakeID <- 1
 		bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
 		SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
-		SimbCombDT <- SimbDT[bfitDT, allow.cartesian = TRUE]
-		Simb <- data.frame(SimbCombDT)
-	  	Simb$QI <- Simb$hazard * Simb$HR 
-	  	Simb <- Simb[, -1]	
+      Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
+      # Create warning message
+      Rows <- nrow(Simb)
+      if (Rows > 2000000){
+        message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
+      }
+      Simb$QI <- Simb$hazard * Simb$HR 
+      if (is.null(Simb$strata)){
+        Simb <- Simb[, list(time, Xj, QI)]
+      } else if (!is.null(Simb$strata)){
+        Simb <- Simb[, list(time, Xj, QI, strata)]
+      }
+      Simb <- data.frame(Simb)
 	}
 
 	# Drop simulations outside of 'confidence bounds'
@@ -266,6 +275,26 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 
 
   # Final clean up
-  class(SimbPerc) <- c("simspline", qi)
-  SimbPerc
+    # Subset simspline object & create a data frame of important variables
+	if (qi == "Hazard Rate"){
+		if (is.null(SimbPerc$strata)){
+			SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI, SimbPerc$Xj)
+			names(SimbPercSub) <- c("Time", "QI", "Xj")
+		} 
+		# Currently does not support strata
+		else if (!is.null(SimbPerc$strata)) {
+			stop("coxsimSpline currently doesn''t support Hazard Rates when there are multiple stata. Sorry.")
+		}
+	} else if (qi == "Hazard Ratio"){
+	  	SimbPercSub <- data.frame(SimbPerc$Xj, SimbPerc$QI, SimbPerc$Comparison)
+	  	names(SimbPercSub) <- c("Xj", "QI", "Comparison")
+	} else if (qi == "Relative Hazard"){
+	  	SimbPercSub <- data.frame(SimbPerc$Xj, SimbPerc$QI)
+	  	names(SimbPercSub) <- c("Xj", "QI")
+	} else if (qi == "First Difference"){
+		SimbPercSub <- data.frame(SimbPerc$Xj, SimbPerc$QI, SimbPerc$Comparison)
+		names(SimbPercSub) <- c("Xj", "QI", "Comparison")
+	}
+  class(SimbPercSub) <- c("simspline", qi)
+  SimbPercSub
 }
