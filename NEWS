@@ -1,8 +1,10 @@
-Version 0.7.5
+Version 0.8
 
-Added the argument `ribbons` to the simGG method for `coxsimLinear` objects. This produces a plot with shaded areas ('ribbons') for the minimum and maximum simulation values as well as the central 50% of this area. It also plots a line for the median value of this area. This feature will be rolled out for all other simulation types in future versions.
+Added the argument `ribbons` to the simGG method. This produces a plot with shaded areas ('ribbons') for the minimum and maximum simulation values as well as the central 50% of this area. It also plots a line for the median value of this area. This feature will be rolled out for all other simulation types in future versions.
 
 Internal improvements to minimise the size of simulation output objects and improve performance if qi = "Hazard Rate".
+
+A number of bug fixes.
 
 Version 0.7.3
 

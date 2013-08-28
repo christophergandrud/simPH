@@ -261,17 +261,8 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 		SubVar <- c("time", "Xj")
 	}
 
-  if (Inf %in% Simb$QI){
-  	if (isTRUE(spin)){
-		stop("spin cannot be TRUE when there are infinite values for your quantitiy of interest.")
-  	} else {
-	  	message("Warning infinite values calculated for your quantity of interest. Consider changing the difference between Xj and Xl.")
-  	}
-  }
-
   SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi,
           QI = QI, spin = spin, ci = ci)	
-
 
   # Final clean up
     # Subset simspline object & create a data frame of important variables

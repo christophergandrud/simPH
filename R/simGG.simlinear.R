@@ -135,7 +135,6 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 	}
 	# Plot ribbons
 	else if (isTRUE(ribbons)){
-		############ Incomplete ############
 		if (qi == "Hazard Rate"){
 	  	if (!is.null(obj$Strata)) {
 			obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)

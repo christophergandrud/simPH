@@ -160,7 +160,8 @@
 # Sim2$Time <- round(Sim2$Time, digits = 2)
 
 # Create plot
-# simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36))
+# simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36),
+		       ribbons = TRUE, palpha = 0.5)
 
 # Simulated Fitted Values of stafcder
 # Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",

@@ -15,6 +15,17 @@
 
 IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, spin = FALSE, ci = 0.95)
 {
+    if (Inf %in% Simb$QI){
+        if (isTRUE(spin)){
+            stop("spin cannot be TRUE when there are infinite values for your quantitiy of interest.")
+        } else {
+            message("Warning infinite values calculated for your quantity of interest. Consider changing the difference between Xj and Xl.")
+        }
+    }
+    if (any(Simb$QI > 1000) & isTRUE(spin)){
+    	message("Warning very large quantity of interest values. SPIn may not be found. Try spin = FALSE.")
+    }
+
 	Lower <- Upper <- NULL
 	if (qi == "Relative Hazard" |qi == "Hazard Ratio" | qi == "Hazard Ratio"){
 		lb <- 0
