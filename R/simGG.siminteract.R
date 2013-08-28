@@ -195,32 +195,18 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 			}
 		} 
 		else if (qi == "Marginal Effect"){
-			ggplot(obj, aes(X2, QI)) +
-			    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +  
-		        geom_hline(aes(yintercept = 0), linetype = "dotted") + 
-			    xlab(xlab) + ylab(ylab) +
-			    ggtitle(title) +
-			    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-			    theme_bw(base_size = 15)
+			obj <- MinMaxLines(df = obj, byVars = c("X2"))
+			ggplot(obj, aes(X2, Median)) +
+		        geom_line(size = lsize, colour = lcolour) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
+	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
 		} 
-		else if (qi == "First Difference"){
-			X1Unique <- obj[!duplicated(obj[, "X1"]), ]
-			if (nrow(X1Unique) <= 1){
-				message("X1 must have more than one fitted value.")
-			} else {
-				ggplot(obj, aes(X1, QI, colour = factor(X2), group = factor(X2))) +
-			        geom_point(shape = 21, alpha = I(palpha), size = psize) +
-			        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-			        geom_hline(aes(yintercept = 0), linetype = "dotted") +
-			        scale_colour_brewer(palette = spalette, name = leg.name) +
-			        xlab(xlab) + ylab(ylab) +
-			        ggtitle(title) +
-			        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-			        theme_bw(base_size = 15)
-		    }
-		} 
-		else if (qi == "Hazard Ratio"){
+		else if (qi == "Hazard Ratio" | qi == "First Difference"){
 			X1Unique <- obj[!duplicated(obj[, "X1"]), ]
 			if (nrow(X1Unique) <= 1){
 				message("X1 must have more than one fitted value.")

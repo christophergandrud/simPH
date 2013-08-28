@@ -182,10 +182,10 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
 				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
 	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
-	        xlab(xlab) + ylab(ylab) +
-	        ggtitle(title) +
-	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-	        theme_bw(base_size = 15)
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
 		}
 	}
 }
