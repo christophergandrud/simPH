@@ -188,24 +188,23 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	}
 
 	# Find quantities of interest
-	if (qi == "Relative Hazard" | qi == "Hazard Ratio"){
+	if (qi == "Hazard Ratio"){
 	  	if (length(Xj) != length(Xl)){
 	      stop("Xj and Xl must be the same length.")
 	    } 
-
 		Simbj <- MergeX(Xj)
 	    names(Simbj) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
 		Simbl <- MergeX(Xl)
 	    names(Simbl) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xl")
-
-		if (qi == "Hazard Ratio"){
-		 	Xs <- data.frame(Xj, Xl)   	
-		    Simbj <- merge(Simbj, Xs, by = "Xj")
-		    Simbj$Comparison <- paste(Simbj$Xj, "vs.", Simbj$Xl)
-		}
-
+	 	Xs <- data.frame(Xj, Xl)   	
+	    Simbj <- merge(Simbj, Xs, by = "Xj")
+	    Simbj$Comparison <- paste(Simbj$Xj, "vs.", Simbj$Xl)
 	    Simbj$QI <- exp((Simbj$Xj * Simbj$Coef) - (Simbl$Xl * Simbl$Coef))
 	    Simb <- Simbj
+	} else if (qi == "Relative Hazard"){
+		Simb <- MergeX(Xj)
+	    names(Simb) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
+	    Simb$QI <- exp(Simb$Xj * Simb$Coef)
 	}
 	else if (qi == "First Difference"){
 	  	if (length(Xj) != length(Xl)){

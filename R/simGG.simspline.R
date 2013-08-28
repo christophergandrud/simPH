@@ -127,16 +127,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 
 	# Plots points
 	if (!isTRUE(ribbons)){
-		if (qi == "Relative Hazard"){
-			ggplot(obj, aes(Xj, QI)) +
-			    geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-			    geom_hline(aes(yintercept = 1), linetype = "dotted") +
-			    xlab(xlab) + ylab(ylab) +
-			    ggtitle(title) +
-			    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-			    theme_bw(base_size = 15)
-		} else if (qi == "First Difference"){
+		if (qi == "First Difference"){
 	    	ggplot(obj, aes(Xj, QI)) +
 	        	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
@@ -145,7 +136,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 		        ggtitle(title) +
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
-		} else if (qi == "Hazard Ratio"){
+		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 			ggplot(obj, aes(Xj, QI)) +
 		        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
@@ -193,9 +184,11 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 			    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 			    theme_bw(base_size = 15)
 		} else if (qi == "First Difference"){
-	    	ggplot(obj, aes(Xj, QI)) +
-	        	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+			obj <- MinMaxLines(df = obj)
+			ggplot(obj, aes(Xj, Median)) +
+		        geom_line(size = lsize, alpha = I(palpha), colour = lcolour) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
