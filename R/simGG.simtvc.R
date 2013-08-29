@@ -225,9 +225,9 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
           guides(colour = guide_legend(override.aes = list(alpha = 1))) + 
           theme_bw(base_size = 15)
     } else if (qi == "First Difference"){
-obj <- MinMaxLines(df = obj, byVars = c("Time", "Comparison"))
-      ggplot(obj, aes(x = Time, y = Median, group = Comparison, fill = Comparison)) +
-          geom_line(size = lsize) + 
+      obj <- MinMaxLines(df = obj, byVars = c("Time", "Comparison"))
+      ggplot(obj, aes(x = Time, y = Median, group = Comparison)) +
+          geom_line(size = lsize, colour = lcolour) + 
           geom_ribbon(aes(ymin = Lower50, ymax = Upper50), 
             alpha = alpha, linetype = 0) + 
           geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, linetype = 0) + 

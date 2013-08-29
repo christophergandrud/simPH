@@ -1,3 +1,7 @@
+Version 0.8.1
+
+Minor bug fixes
+
 Version 0.8
 
 Added the argument `ribbons` to the simGG method. This produces a plot with shaded areas ('ribbons') for the minimum and maximum simulation values as well as the central 50% of this area. It also plots a line for the median value of this area. This feature will be rolled out for all other simulation types in future versions.
