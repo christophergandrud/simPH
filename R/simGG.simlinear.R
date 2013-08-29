@@ -140,7 +140,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 	  	if (!is.null(obj$Strata)) {
 			obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
 			ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue), fill = factor(HRValue))) +
-				geom_line(size = lsize, alpha = palpha) +
+				geom_line(size = lsize) +
 				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, linetype = 0) +
 				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) +
 				facet_grid(. ~ Strata) +
@@ -149,7 +149,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 		        scale_fill_brewer(palette = spalette, name = leg.name) +
 				ggtitle(title) +
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-			theme_bw(base_size = 15)
+				theme_bw(base_size = 15)
     	} else if (is.null(obj$Strata)){
 			obj <- MinMaxLines(df = obj, hr = TRUE)
 	      	ggplot(obj, aes(Time, Median, colour = factor(HRValue), fill = factor(HRValue))) +
@@ -166,7 +166,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 		} else if (qi == "First Difference"){
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
-		        geom_line(size = lsize, alpha = I(palpha), colour = lcolour) +
+		        geom_line(size = lsize, colour = lcolour) +
 				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
 				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +

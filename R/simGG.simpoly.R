@@ -15,6 +15,7 @@
 #' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "First Difference"}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
+#' @param ribbons logical specifies whether or not to use summary ribbons of the simulations rather than plotting every simulation value as a point. If \code{lines = TRUE} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimPoly}}) as well as the central 50% of this area. It also plots a line for the median value of the full area, so values in \code{smoother} are ignored. One of the key advantages of using ribbons rather than points is that it creates plots with smaller file sizes.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
 #' @examples
@@ -54,7 +55,7 @@
 #' @method simGG simpoly
 #' @S3method simGG simpoly
 
-simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ...)
+simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, ribbons = FALSE, ...)
 {
   Time <- HRValue <- HRate <- Xj <- QI <- NULL
   if (!inherits(obj, "simpoly")){
@@ -79,45 +80,102 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
     obj <- subset(obj, Time <= to)
   }
 
-  # Plot
-  if (qi == "Hazard Rate"){
-    if (!is.null(obj$strata)) {
-      ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
-        geom_point(alpha = I(palpha), size = psize) +
-        geom_smooth(method = smoother, size = lsize, se = FALSE) +
-        facet_grid(.~ Strata) +
-        xlab(xlab) + ylab(ylab) +
-        scale_colour_brewer(palette = spalette, name = leg.name) +
-        ggtitle(title) +
-        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-        theme_bw(base_size = 15)
-    } else if (is.null(obj$strata)){
-        ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
-          geom_point(shape = 21, alpha = I(palpha), size = psize) +
+  # Plot points
+  if (!isTRUE(ribbons)){
+    if (qi == "Hazard Rate"){
+      if (!is.null(obj$strata)) {
+        ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
+          geom_point(alpha = I(palpha), size = psize) +
           geom_smooth(method = smoother, size = lsize, se = FALSE) +
+          facet_grid(.~ Strata) +
+          xlab(xlab) + ylab(ylab) +
           scale_colour_brewer(palette = spalette, name = leg.name) +
+          ggtitle(title) +
+          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          theme_bw(base_size = 15)
+      } else if (is.null(obj$strata)){
+          ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
+            geom_point(shape = 21, alpha = I(palpha), size = psize) +
+            geom_smooth(method = smoother, size = lsize, se = FALSE) +
+            scale_colour_brewer(palette = spalette, name = leg.name) +
+            xlab(xlab) + ylab(ylab) +
+            ggtitle(title) +
+            guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+            theme_bw(base_size = 15)
+    }
+    } else if (qi == "First Difference"){
+      ggplot(obj, aes(Xj, QI)) +
+          geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+          geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+          geom_hline(aes(yintercept = 0), linetype = "dotted") +
           xlab(xlab) + ylab(ylab) +
           ggtitle(title) +
           guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
+    } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
+      ggplot(obj, aes(Xj, QI)) +
+          geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+          geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+          geom_hline(aes(yintercept = 1), linetype = "dotted") +
+          xlab(xlab) + ylab(ylab) +
+          ggtitle(title) +
+          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          theme_bw(base_size = 15)
+    }
   }
-  } else if (qi == "First Difference"){
-    ggplot(obj, aes(Xj, QI)) +
-        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+  # Plot ribbons
+  else if (isTRUE(ribbons)){
+    suppressWarnings(
+    if (qi == "Hazard Rate"){
+      if (!is.null(obj$Strata)) {
+        obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
+        ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue), fill = factor(HRValue))) +
+          geom_line(size = lsize) +
+          geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, linetype = 0) +
+          geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) +
+          facet_grid(. ~ Strata) +
+          xlab(xlab) + ylab(ylab) +
+          scale_colour_brewer(palette = spalette, name = leg.name) +
+          scale_fill_brewer(palette = spalette, name = leg.name) +
+          ggtitle(title) +
+              guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          theme_bw(base_size = 15)
+      } else if (is.null(obj$Strata)){
+      obj <- MinMaxLines(df = obj, hr = TRUE)
+          ggplot(obj, aes(Time, Median, colour = factor(HRValue), fill = factor(HRValue))) +
+            geom_line(size = lsize) +
+            geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, linetype = 0) +
+            geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) +
+            scale_colour_brewer(palette = spalette, name = leg.name) +
+            scale_fill_brewer(palette = spalette, name = leg.name) +
+            xlab(xlab) + ylab(ylab) +
+            ggtitle(title) +
+            guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+            theme_bw(base_size = 15)
+    }
+    } else if (qi == "First Difference"){
+      obj <- MinMaxLines(df = obj)
+      ggplot(obj, aes(Xj, Median)) +
+        geom_line(size = lsize, colour = lcolour) +
+        geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
+        geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
         geom_hline(aes(yintercept = 0), linetype = "dotted") +
         xlab(xlab) + ylab(ylab) +
         ggtitle(title) +
         guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-        theme_bw(base_size = 15)
-  } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
-    ggplot(obj, aes(Xj, QI)) +
-        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+            theme_bw(base_size = 15)
+    } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
+      obj <- MinMaxLines(df = obj)
+      ggplot(obj, aes(Xj, Median)) +
+        geom_line(size = lsize, colour = lcolour) +
+        geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
+        geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
         geom_hline(aes(yintercept = 1), linetype = "dotted") +
         xlab(xlab) + ylab(ylab) +
         ggtitle(title) +
         guides(colour = guide_legend(override.aes = list(alpha = 1))) +
         theme_bw(base_size = 15)
-  } 
+    }
+    )  
+  }
 }
