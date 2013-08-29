@@ -6,7 +6,7 @@
     from = NULL, to = NULL, xlab = NULL, ylab = NULL,
     zlab = NULL, title = NULL, smoother = "auto",
     leg.name = "", lcolour = "#2B8CBE", lsize = 2,
-    pcolour = "#A6CEE3", psize = 1, palpha = 0.1,
+    pcolour = "#A6CEE3", psize = 1, alpha = 0.1,
     surface = TRUE, fit = "linear", ribbons = FALSE, ...)
 }
 \arguments{
@@ -58,8 +58,8 @@
   \item{psize}{size of the plotted simulation points.
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
 
-  \item{palpha}{point alpha (e.g. transparency). Default is
-  \code{palpha = 0.05}. See \code{\link{ggplot2}}.}
+  \item{alpha}{point alpha (e.g. transparency). Default is
+  \code{alpha = 0.05}. See \code{\link{ggplot2}}.}
 
   \item{surface}{plot surface. Default is \code{surface =
   TRUE}. Only relevant if \code{qi == 'Relative Hazard'}
@@ -147,7 +147,7 @@
 #                    Xj = seq(1, 30, by = 2), ci = 0.9, nsim = 10)
 
 # Plot relative hazard
-# simGG(Sim1, palpha = 1)
+# simGG(Sim1, alpha = 1)
 
 # 3D plot hazard rate
 # simGG(Sim2, zlab = "orderent", fit = "quadratic")
@@ -160,7 +160,7 @@
 # Sim2$Time <- round(Sim2$Time, digits = 2)
 
 # Create plot
-# simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36), ribbons = TRUE, palpha = 0.5)
+# simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36), ribbons = TRUE, alpha = 0.5)
 
 # Simulated Fitted Values of stafcder
 # Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
@@ -170,7 +170,7 @@
 #                    Xl = seq(1099, 1699, by = 10), ci = 0.90)
 
 # Plot simulated Hazard Ratios
-# simGG(Sim3, xlab = "\\nFDA Drug Review Staff", palpha = 0.2)
+# simGG(Sim3, xlab = "\\nFDA Drug Review Staff", alpha = 0.2)
 }
 \seealso{
   \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},

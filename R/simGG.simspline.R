@@ -16,7 +16,7 @@
 #' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
 #' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
-#' @param palpha point alpha (e.g. transparency). Default is \code{palpha = 0.05}. See \code{\link{ggplot2}}.
+#' @param alpha point alpha (e.g. transparency) for the points or ribbons. Default is \code{alpha = 0.1}. See \code{\link{ggplot2}}.
 #' @param surface plot surface. Default is \code{surface = TRUE}. Only relevant if \code{qi == 'Relative Hazard'} and \code{FacetTime = NULL}.
 #' @param fit one or more of \code{"linear"}, \code{"quadratic"}, \code{"smooth"}, \code{"additive"}; to display fitted surface(s); partial matching is supported e.g., \code{c("lin", "quad")}. Only relevant if \code{qi == 'Relative Hazard'} and \code{FacetTime = NULL}.
 #' @param ribbons logical specifies whether or not to use summary ribbons of the simulations rather than plotting every simulation value as a point. If \code{lines = TRUE} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimSpline}}) as well as the central 50% of this area. It also plots a line for the median value of the full area, so values in \code{smoother} are ignored. One of the key advantages of using ribbons rather than points is that it creates plots with smaller file sizes.
@@ -61,7 +61,7 @@
 #' #                    Xj = seq(1, 30, by = 2), ci = 0.9, nsim = 10)  
 #'                        
 #' # Plot relative hazard
-#' # simGG(Sim1, palpha = 1)
+#' # simGG(Sim1, alpha = 1)
 #' 
 #' # 3D plot hazard rate
 #' # simGG(Sim2, zlab = "orderent", fit = "quadratic")
@@ -74,7 +74,7 @@
 #' # Sim2$Time <- round(Sim2$Time, digits = 2)
 #' 
 #' # Create plot
-#' # simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36), ribbons = TRUE, palpha = 0.5)
+#' # simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36), ribbons = TRUE, alpha = 0.5)
 #'
 #' # Simulated Fitted Values of stafcder
 #' # Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)", 
@@ -84,7 +84,7 @@
 #' #                    Xl = seq(1099, 1699, by = 10), ci = 0.90)
 #'
 #' # Plot simulated Hazard Ratios
-#' # simGG(Sim3, xlab = "\nFDA Drug Review Staff", palpha = 0.2)
+#' # simGG(Sim3, xlab = "\nFDA Drug Review Staff", alpha = 0.2)
 #' 
 #' @seealso \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},  \code{\link{ggplot2}}, and \code{\link{scatter3d}} 
 #' 
@@ -96,7 +96,7 @@
 #' @method simGG simspline
 #' @S3method simGG simspline
 
-simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL, title = NULL, smoother = "auto", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, palpha = 0.1, surface = TRUE, fit = "linear", ribbons = FALSE, ...)
+simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL, title = NULL, smoother = "auto", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, alpha = 0.1, surface = TRUE, fit = "linear", ribbons = FALSE, ...)
 {
 	Time <- Xj <- QI <- NULL
 	if (!inherits(obj, "simspline")){
@@ -129,7 +129,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 	if (!isTRUE(ribbons)){
 		if (qi == "First Difference"){
 	    	ggplot(obj, aes(Xj, QI)) +
-	        	geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+	        	geom_point(shape = 21, alpha = I(alpha), size = psize, colour = pcolour) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
@@ -138,7 +138,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 		        theme_bw(base_size = 15)
 		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 			ggplot(obj, aes(Xj, QI)) +
-		        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+		        geom_point(shape = 21, alpha = I(alpha), size = psize, colour = pcolour) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
@@ -163,7 +163,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 			}
 			objSub <- SubsetTime(FacetTime)
 			ggplot(objSub, aes(Xj, QI)) +
-		        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+		        geom_point(shape = 21, alpha = I(alpha), size = psize, colour = pcolour) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
 		        facet_grid(.~Time) +
 		        xlab(xlab) + ylab(ylab) +
@@ -179,8 +179,8 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
 		        geom_line(size = lsize, colour = lcolour) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, fill = pcolour) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, fill = pcolour) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
@@ -190,8 +190,8 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
 		        geom_line(size = lsize, colour = lcolour) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, fill = pcolour) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, fill = pcolour) +
 	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        xlab(xlab) + ylab(ylab) +
 	        ggtitle(title) +
@@ -212,8 +212,8 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 			objSub <- MinMaxLines(df = objSub, byVars = c("Xj", "Time"))
 			ggplot(objSub, aes(Xj, Median)) +
 		        geom_line(size = lsize, colour = lcolour) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, fill = pcolour) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, fill = pcolour) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, fill = pcolour) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, fill = pcolour) +
 	        	geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        facet_grid(.~Time) +
 	        xlab(xlab) + ylab(ylab) +
