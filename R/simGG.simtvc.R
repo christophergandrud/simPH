@@ -164,6 +164,7 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
   }
   # Plot ribbons
   else if (isTRUE(ribbons)){
+    suppressWarnings(
     if (qi == "Hazard Rate"){
       if (!is.null(obj$Strata)) {
       obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
@@ -177,7 +178,6 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
           scale_fill_brewer(palette = spalette, name = leg.name) +
           ggtitle(title) +
           guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-          guides(fill = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
       } else if (is.null(obj$Strata)){
       obj <- MinMaxLines(df = obj, hr = TRUE)
@@ -190,7 +190,6 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
             xlab(xlab) + ylab(ylab) +
             ggtitle(title) +
             guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-            guides(fill = guide_legend(override.aes = list(alpha = 1))) +
             theme_bw(base_size = 15)
       }
     } else if (qi == "Hazard Ratio"){
@@ -208,7 +207,6 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
             name = leg.name) + 
             ggtitle(title) + 
             guides(colour = guide_legend(override.aes = list(alpha = 1))) + 
-            guides(fill = guide_legend(override.aes = list(alpha = 1))) +
             theme_bw(base_size = 15)
     } else if (qi == "Relative Hazard"){
       obj <- MinMaxLines(df = obj, byVars = c("Time", "Xj"))
@@ -225,7 +223,6 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
           name = leg.name) + 
           ggtitle(title) + 
           guides(colour = guide_legend(override.aes = list(alpha = 1))) + 
-          guides(fill = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
     } else if (qi == "First Difference"){
 obj <- MinMaxLines(df = obj, byVars = c("Time", "Comparison"))
@@ -242,8 +239,8 @@ obj <- MinMaxLines(df = obj, byVars = c("Time", "Comparison"))
           name = leg.name) + 
           ggtitle(title) + 
           guides(colour = guide_legend(override.aes = list(alpha = 1))) + 
-          guides(fill = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
     }
+    )
   }
 }

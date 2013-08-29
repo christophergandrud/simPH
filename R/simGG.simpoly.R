@@ -58,78 +58,66 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
 {
   Time <- HRValue <- HRate <- Xj <- QI <- NULL
   if (!inherits(obj, "simpoly")){
-      stop("must be a simpoly object")
-    }
-    # Find quantity of interest
-    qi <- class(obj)[[2]]
- 
-    # Create y-axis label
-    if (is.null(ylab)){
-      ylab <- paste(qi, "\n")
-    } else {
-      ylab <- ylab
-    }
+    stop("must be a simpoly object")
+  }
+  # Find quantity of interest
+  qi <- class(obj)[[2]]
 
-    # Subset simlinear object & create a data frame of important variables
-  if (qi == "Hazard Rate"){
-    colour <- NULL
-    if (is.null(obj$strata)){
-      objdf <- data.frame(obj$time, obj$QI, obj$HRValue)
-      names(objdf) <- c("Time", "HRate", "HRValue")
-    } else if (!is.null(obj$strata)) {
-    objdf <- data.frame(obj$time, obj$QI, obj$strata, obj$HRValue)
-    names(objdf) <- c("Time", "HRate", "Strata", "HRValue")
-    }
-    if (!is.null(from)){
-      objdf <- subset(objdf, Time >= from)
-      }
-      if (!is.null(to)){
-        objdf <- subset(objdf, Time <= to)
-      }
-  } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | qi == "First Difference"){
-      objdf <- data.frame(obj$Xj, obj$QI)
-      names(objdf) <- c("Xj", "QI")
+  # Create y-axis label
+  if (is.null(ylab)){
+    ylab <- paste(qi, "\n")
+  } else {
+    ylab <- ylab
+  }
+  # Convert obj to data frame
+  class(obj) <- "data.frame"
+  # Constrict time period to plot for hazard rate  
+  if (!is.null(from)){
+    obj <- subset(obj, Time >= from)
+  }
+  if (!is.null(to)){
+    obj <- subset(obj, Time <= to)
   }
 
   # Plot
-    if (qi == "Hazard Rate"){
-      if (!is.null(obj$strata)) {
-        ggplot(objdf, aes(x = Time, y = HRate, colour = factor(HRValue))) +
-          geom_point(alpha = I(palpha), size = psize) +
+  if (qi == "Hazard Rate"){
+    if (!is.null(obj$strata)) {
+      ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
+        geom_point(alpha = I(palpha), size = psize) +
+        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+        facet_grid(.~ Strata) +
+        xlab(xlab) + ylab(ylab) +
+        scale_colour_brewer(palette = spalette, name = leg.name) +
+        ggtitle(title) +
+        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+        theme_bw(base_size = 15)
+    } else if (is.null(obj$strata)){
+        ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
+          geom_point(shape = 21, alpha = I(palpha), size = psize) +
           geom_smooth(method = smoother, size = lsize, se = FALSE) +
-          facet_grid(.~ Strata) +
-          xlab(xlab) + ylab(ylab) +
           scale_colour_brewer(palette = spalette, name = leg.name) +
+          xlab(xlab) + ylab(ylab) +
           ggtitle(title) +
           guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
-      } else if (is.null(obj$strata)){
-          ggplot(objdf, aes(Time, HRate, colour = factor(HRValue))) +
-            geom_point(shape = 21, alpha = I(palpha), size = psize) +
-            geom_smooth(method = smoother, size = lsize, se = FALSE) +
-            scale_colour_brewer(palette = spalette, name = leg.name) +
-            xlab(xlab) + ylab(ylab) +
-            ggtitle(title) +
-            guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-            theme_bw(base_size = 15)
-    }
+  }
   } else if (qi == "First Difference"){
-      ggplot(objdf, aes(Xj, QI)) +
-          geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-          geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-          geom_hline(aes(yintercept = 0), linetype = "dotted") +
-          xlab(xlab) + ylab(ylab) +
-          ggtitle(title) +
-          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-          theme_bw(base_size = 15)
+    ggplot(obj, aes(Xj, QI)) +
+        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+        geom_hline(aes(yintercept = 0), linetype = "dotted") +
+        xlab(xlab) + ylab(ylab) +
+        ggtitle(title) +
+        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+        theme_bw(base_size = 15)
   } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
-      ggplot(objdf, aes(Xj, QI)) +
-          geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
-          geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
-          geom_hline(aes(yintercept = 1), linetype = "dotted") +
-          xlab(xlab) + ylab(ylab) +
-          ggtitle(title) +
-          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-          theme_bw(base_size = 15)
+    ggplot(obj, aes(Xj, QI)) +
+        geom_point(shape = 21, alpha = I(palpha), size = psize, colour = pcolour) +
+        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+        xlab(xlab) + ylab(ylab) +
+        ggtitle(title) +
+        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+        theme_bw(base_size = 15)
   } 
 }

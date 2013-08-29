@@ -172,6 +172,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 	}
 	# Plot points ribbons
 	else if (isTRUE(ribbons)){
+		suppressWarnings(
 		if (qi == "Hazard Rate"){
 		  	if (!is.null(obj$strata)) {
 			obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
@@ -185,20 +186,18 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		        scale_fill_brewer(palette = spalette, name = leg.name) +
 				ggtitle(title) +
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-		        guides(fill = guide_legend(override.aes = list(alpha = 1))) +
 			theme_bw(base_size = 15)
     	} else if (is.null(obj$Strata)){
 			obj <- MinMaxLines(df = obj, hr = TRUE)
 	      	ggplot(obj, aes(Time, Median, colour = factor(HRValue), fill = factor(HRValue))) +
 		        geom_line(size = lsize) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = palpha, linetype = 0) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), ailpha = palpha, linetype = 0) +
 				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = palpha, linetype = 0) +
 		        scale_colour_brewer(palette = spalette, name = leg.name) +
 		        scale_fill_brewer(palette = spalette, name = leg.name) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-		        guides(fill = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
 			}
 		} 
@@ -230,9 +229,9 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 			        xlab(xlab) + ylab(ylab) +
 			        ggtitle(title) +
 			        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-			        guides(fill = guide_legend(override.aes = list(alpha = 1))) +
 					theme_bw(base_size = 15)
 		    }
 	    }
+	    )
 	}
 }

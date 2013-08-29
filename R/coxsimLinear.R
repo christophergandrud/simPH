@@ -96,7 +96,6 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, m
 
   # If all values aren't set for calculating the hazard rate
   if (!isTRUE(means)){
-
   	# Subset simulations to only include b
   	bpos <- match(b, dfn)
   	Simb <- data.frame(DrawnDF[, bpos])

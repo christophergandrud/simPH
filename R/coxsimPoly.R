@@ -68,13 +68,9 @@ coxsimPoly <- function(obj, b, qi = "Relative Hazard", pow = 2, Xj = NULL, Xl = 
 	# Find X_{jl}
 	if (length(Xj) != length(Xl) & !is.null(Xl)){
 		stop("Xj and Xl must be the same length.")
-	}
-	if (is.null(Xl) & qi != "Hazard Rate") {
+	}	else if (is.null(Xl)) {
 		message("All Xl set at 0.")
 		Xjl <- Xj
-  } else if (!is.null(Xl) & qi == "Relative Hazard") {
-    message("All Xl set to 0.")
-    Xjl <- Xl
 	} else {
   	Xbound <- cbind(Xj, Xl)
   	Xjl <- Xbound[, 1] - Xbound[, 2]
@@ -136,10 +132,19 @@ coxsimPoly <- function(obj, b, qi = "Relative Hazard", pow = 2, Xj = NULL, Xl = 
   	  	Simb$FakeID <- 1
         bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
         SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
-        SimbCombDT <- SimbDT[bfitDT, allow.cartesian=TRUE]
-        Simb <- data.frame(SimbCombDT)
-  	  	Simb$QI <- Simb$hazard * Simb$HR 
-  	  	Simb <- Simb[, -1]
+        Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
+        # Create warning message
+        Rows <- nrow(Simb)
+        if (Rows > 2000000){
+          message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
+        }
+        Simb$QI <- Simb$hazard * Simb$HR 
+        if (is.null(Simb$strata)){
+          Simb <- Simb[, list(time, Xjl, QI)]
+        } else if (!is.null(Simb$strata)){
+          Simb <- Simb[, list(time, Xjl, QI, strata)]
+        }
+        Simb <- data.frame(Simb)
   	}
 
   	# Drop simulations outside of 'confidence bounds'
@@ -154,6 +159,18 @@ coxsimPoly <- function(obj, b, qi = "Relative Hazard", pow = 2, Xj = NULL, Xl = 
                                 QI = QI, spin = spin, ci = ci)
 
 	# Clean up
-	class(SimbPerc) <- c("simpoly", qi)
-	SimbPerc
+  if (qi == "Hazard Rate"){
+    if (is.null(SimbPerc$strata)){
+      SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI, SimbPerc$HRValue)
+      names(SimbPercSub) <- c("Time", "HRate", "HRValue")
+    } else if (!is.null(SimbPerc$strata)) {
+    SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI, SimbPerc$strata, SimbPerc$HRValue)
+    names(SimbPercSub) <- c("Time", "HRate", "Strata", "HRValue")
+    }
+  } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | qi == "First Difference"){
+      SimbPercSub <- data.frame(SimbPerc$Xj, SimbPerc$QI)
+      names(SimbPercSub) <- c("Xj", "QI")
+  }
+	class(SimbPercSub) <- c("simpoly", qi)
+	SimbPercSub
 }

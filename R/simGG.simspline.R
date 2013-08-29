@@ -174,6 +174,7 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 	}
 	# Plots ribbons
 	else if (isTRUE(ribbons)){
+		suppressWarnings(
 		if (qi == "First Difference"){
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
@@ -220,5 +221,6 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 	        theme_bw(base_size = 15)
 	    }
+	    )
 	}
 }
