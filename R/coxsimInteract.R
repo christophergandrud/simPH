@@ -263,10 +263,10 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		colour <- NULL
 		if (is.null(obj$strata)){
 			SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI, SimbPerc$HRValue)
-			names(SimbPercSub) <- c("Time", "QI", "HRValue")
+			names(SimbPercSub) <- c("Time", "HRate", "HRValue")
 		} else if (!is.null(SimbPerc$strata)) {
 		SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI, SimbPerc$strata, SimbPerc$HRValue)
-		names(SimbPercSub) <- c("Time", "QI", "Strata", "HRValue")
+		names(SimbPercSub) <- c("Time", "HRate", "Strata", "HRValue")
 		}
 	} else if (qi == "Hazard Ratio"){
 		colour <- NULL
