@@ -58,8 +58,9 @@
   \item{psize}{size of the plotted simulation points.
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
 
-  \item{alpha}{point alpha (e.g. transparency). Default is
-  \code{alpha = 0.05}. See \code{\link{ggplot2}}.}
+  \item{alpha}{point alpha (e.g. transparency) for the
+  points or ribbons. Default is \code{alpha = 0.1}. See
+  \code{\link{ggplot2}}.}
 
   \item{surface}{plot surface. Default is \code{surface =
   TRUE}. Only relevant if \code{qi == 'Relative Hazard'}
@@ -74,15 +75,16 @@
 
   \item{ribbons}{logical specifies whether or not to use
   summary ribbons of the simulations rather than plotting
-  every simulation value as a point. If \code{lines = TRUE}
-  a plot will be created with shaded areas ('ribbons') for
-  the minimum and maximum simulation values (i.e. the
-  middle interval set with \code{qi} in
-  \code{\link{coxsimSpline}}) as well as the central 50% of
-  this area. It also plots a line for the median value of
-  the full area, so values in \code{smoother} are ignored.
-  One of the key advantages of using ribbons rather than
-  points is that it creates plots with smaller file sizes.}
+  every simulation value as a point. If \code{ribbons =
+  TRUE} a plot will be created with shaded areas
+  ('ribbons') for the minimum and maximum simulation values
+  (i.e. the middle interval set with \code{qi} in
+  \code{\link{coxsimSpline}}) as well as the central 50
+  percent of this area. It also plots a line for the median
+  value of the full area, so values in \code{smoother} are
+  ignored. One of the key advantages of using ribbons
+  rather than points is that it creates plots with smaller
+  file sizes.}
 
   \item{...}{Additional arguments. (Currently ignored.)}
 }

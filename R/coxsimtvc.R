@@ -104,7 +104,7 @@
 
 coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000, from, to, by = 1, ci = 0.95, spin = FALSE)
 {
-  QI <- NULL
+  HRValue <- strata <- QI <- NULL
   # Ensure that qi is valid
   qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
   TestqiOpts <- qi %in% qiOpts
