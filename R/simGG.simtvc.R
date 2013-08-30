@@ -12,7 +12,6 @@
 #' @param leg.name name of the stratified hazard rates legend. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
 #' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
-#' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param alpha point alpha (e.g. transparency) for the points or ribbons. Default is \code{alpha = 0.1}. See \code{\link{ggplot2}}.
 #' @param ribbons logical specifies whether or not to use summary ribbons of the simulations rather than plotting every simulation value as a point. If \code{ribbons = TRUE} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimtvc}}) as well as the central 50 percent of this area. It also plots a line for the median value of the full area, so values in \code{smoother} are ignored. One of the key advantages of using ribbons rather than points is that it creates plots with smaller file sizes.
@@ -81,16 +80,14 @@
 #'
 #' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227-43.
 
-simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3", psize = 1, alpha = 0.1, ribbons = FALSE, ...)
+simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, psize = 1, alpha = 0.1, ribbons = FALSE, ...)
 {
   Time <- HRate <- HRValue <- QI <- Comparison <- Xj <- Lower50 <- Upper50 <- Min <- Max <- Median <- NULL
   if (!inherits(obj, "simtvc")){
     stop("must be a simtvc object")
   }
-
   # Find quantity of interest
   qi <- class(obj)[[2]]
-
   # Create y-axis label
   if (is.null(ylab)){
     ylab <- paste(qi, "\n")
@@ -151,8 +148,8 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
           guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
     } else if (qi == "First Difference"){
-        ggplot(obj, aes(Time, QI, group = Comparison)) +
-          geom_point(shape = 21, alpha = I(alpha), size = psize, colour = pcolour) +
+        ggplot(obj, aes(Time, QI, colour = Comparison)) +
+          geom_point(shape = 21, alpha = I(alpha)) +
           geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
           geom_hline(aes(yintercept = 0), linetype = "dotted") +
           xlab(xlab) + ylab(ylab) +
@@ -211,7 +208,7 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
     } else if (qi == "Relative Hazard"){
       obj <- MinMaxLines(df = obj, byVars = c("Time", "Xj"))
       ggplot(obj, aes(x = Time, y = Median, colour = factor(Xj), fill = factor(Xj))) +
-          geom_line(size = lsize, colour = lcolour) + 
+          geom_line(size = lsize) + 
           geom_ribbon(aes(ymin = Lower50, ymax = Upper50), 
             alpha = alpha, linetype = 0) + 
           geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, linetype = 0) + 
@@ -227,7 +224,7 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
     } else if (qi == "First Difference"){
       obj <- MinMaxLines(df = obj, byVars = c("Time", "Comparison"))
       ggplot(obj, aes(x = Time, y = Median, group = Comparison)) +
-          geom_line(size = lsize, colour = lcolour) + 
+          geom_line(size = lsize) + 
           geom_ribbon(aes(ymin = Lower50, ymax = Upper50), 
             alpha = alpha, linetype = 0) + 
           geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, linetype = 0) + 

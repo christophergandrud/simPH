@@ -14,7 +14,7 @@
 #' @param leg.name name of the stratified hazard rates legend. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
 #' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
-#' @param pcolour character string colour of the simulated points for relative hazards. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
+#' @param pcolour character string colour of the simulated points or ribbons. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"} or \code{qi = "Hazard Rate"} with facets.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param alpha point alpha (e.g. transparency) for the points or ribbons. Default is \code{alpha = 0.1}. See \code{\link{ggplot2}}.
 #' @param surface plot surface. Default is \code{surface = TRUE}. Only relevant if \code{qi == 'Relative Hazard'} and \code{FacetTime = NULL}.
@@ -189,14 +189,14 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
-		        geom_line(size = lsize, colour = lcolour) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, fill = pcolour) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, fill = pcolour) +
+		        geom_line(size = lsize) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha) +
 	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
-	        xlab(xlab) + ylab(ylab) +
-	        ggtitle(title) +
-	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-	        theme_bw(base_size = 15)
+	        	xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
 	    } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
 			SubsetTime <- function(f){
 			  Time <- NULL
@@ -216,10 +216,10 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, fill = pcolour) +
 	        	geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        facet_grid(.~Time) +
-	        xlab(xlab) + ylab(ylab) +
-	        ggtitle(title) +
-	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-	        theme_bw(base_size = 15)
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
 	    }
 	    )
 	}
