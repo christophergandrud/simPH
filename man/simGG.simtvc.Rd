@@ -28,12 +28,12 @@
   \item{spalette}{colour palette. Default palette is
   \code{"Set1"}. See \code{\link{scale_colour_brewer}}.}
 
-  \item{legend}{specifies what type of legend to include.
-  The default is \code{legend = "legend"}. To hide the
-  legend use \code{legend = FALSE}. See the
+  \item{legend}{specifies what type of legend to include
+  (if applicable). The default is \code{legend = "legend"}.
+  To hide the legend use \code{legend = FALSE}. See the
   \code{\link{discrete_scale}} for more details.}
 
-  \item{leg.name}{name of the legend.}
+  \item{leg.name}{name of the legend (if applicable).}
 
   \item{lsize}{size of the smoothing line. Default is 1.
   See \code{\link{ggplot2}}.}

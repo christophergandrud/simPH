@@ -4,9 +4,10 @@
 \usage{
   \method{simGG}{siminteract} (obj, from = NULL, to = NULL,
     xlab = NULL, ylab = NULL, title = NULL,
-    smoother = "auto", spalette = "Set1", leg.name = "",
-    lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
-    psize = 1, alpha = 0.1, ribbons = FALSE, ...)
+    smoother = "auto", spalette = "Set1",
+    legend = "legend", leg.name = "", lcolour = "#2B8CBE",
+    lsize = 1, pcolour = "#A6CEE3", psize = 1, alpha = 0.1,
+    ribbons = FALSE, ...)
 }
 \arguments{
   \item{obj}{a \code{siminteract} class object}
@@ -31,8 +32,12 @@
   = "Marginal Effect"}. Default palette is \code{"Set1"}.
   See \code{\link{scale_colour_brewer}}.}
 
-  \item{leg.name}{name of the stratified hazard rates
-  legend. Only relevant if \code{qi = "Hazard Rate"}.}
+  \item{legend}{specifies what type of legend to include
+  (if applicable). The default is \code{legend = "legend"}.
+  To hide the legend use \code{legend = FALSE}. See the
+  \code{\link{discrete_scale}} for more details.}
+
+  \item{leg.name}{name of the legend (if applicable).}
 
   \item{lcolour}{character string colour of the smoothing
   line. The default is hexadecimal colour \code{lcolour =
@@ -43,9 +48,9 @@
   See \code{\link{ggplot2}}.}
 
   \item{pcolour}{character string colour of the simulated
-  points. Default is hexadecimal colour \code{pcolour =
-  '#A6CEE3'}. Only relevant if \code{qi = "Marginal
-  Effect"}.}
+  points or ribbons (when there are not multiple sets of
+  simulations). Default is hexadecimal colour \code{pcolour
+  = '#A6CEE3'}.}
 
   \item{psize}{size of the plotted simulation points.
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}

@@ -14,7 +14,7 @@
 #' @param leg.name name of the legend (if applicable).
 #' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "Marginal Effect"}.
 #' @param lsize size of the smoothing line. Default is 1. See \code{\link{ggplot2}}.
-#' @param pcolour character string colour of the simulated points. Default is hexadecimal colour \code{pcolour = '#A6CEE3'}. Only relevant if \code{qi = "Marginal Effect"}.
+#' @param pcolour character string colour of the simulated points or ribbons (when there are not multiple sets of simulations). Default is hexadecimal colour \code{pcolour = '#A6CEE3'}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param alpha point alpha (e.g. transparency) for the points or ribbons. Default is \code{alpha = 0.1}. See \code{\link{ggplot2}}.
 #' @param ribbons logical specifies whether or not to use summary ribbons of the simulations rather than plotting every simulation value as a point. If \code{ribbons = TRUE} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimInteract}}) as well as the central 50 percent of this area. It also plots a line for the median value of the full area, so values in \code{smoother} are ignored. One of the key advantages of using ribbons rather than points is that it creates plots with smaller file sizes.
@@ -136,7 +136,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") + 
 			    xlab(xlab) + ylab(ylab) +
 			    ggtitle(title) +
-			    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+			    #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 			    theme_bw(base_size = 15)
 		} 
 		else if (qi == "First Difference"){
