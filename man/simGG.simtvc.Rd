@@ -5,7 +5,7 @@
   \method{simGG}{simtvc} (obj, from = NULL, to = NULL,
     xlab = NULL, ylab = NULL, title = NULL,
     smoother = "auto", spalette = "Set1",
-    legend = "legend", leg.name = "", lsize = 2, psize = 1,
+    legend = "legend", leg.name = "", lsize = 1, psize = 1,
     alpha = 0.1, ribbons = FALSE, ...)
 }
 \arguments{
@@ -29,13 +29,13 @@
   \code{"Set1"}. See \code{\link{scale_colour_brewer}}.}
 
   \item{legend}{specifies what type of legend to include.
-  The fault is \code{legend = "legend"}. To hide the legend
-  use \code{legend = FALSE}. See the
+  The default is \code{legend = "legend"}. To hide the
+  legend use \code{legend = FALSE}. See the
   \code{\link{discrete_scale}} for more details.}
 
   \item{leg.name}{name of the legend.}
 
-  \item{lsize}{size of the smoothing line. Default is 2.
+  \item{lsize}{size of the smoothing line. Default is 1.
   See \code{\link{ggplot2}}.}
 
   \item{psize}{size of the plotted simulation points.

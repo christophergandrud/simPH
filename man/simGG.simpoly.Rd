@@ -5,7 +5,7 @@
   \method{simGG}{simpoly} (obj, from = NULL, to = NULL,
     xlab = NULL, ylab = NULL, title = NULL,
     smoother = "auto", spalette = "Set1", leg.name = "",
-    lcolour = "#2B8CBE", lsize = 2, pcolour = "#A6CEE3",
+    lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
     psize = 1, alpha = 0.1, ribbons = FALSE, ...)
 }
 \arguments{
@@ -39,7 +39,7 @@
   '#2B8CBE'}. Only relevant if \code{qi = "First
   Difference"}.}
 
-  \item{lsize}{size of the smoothing line. Default is 2.
+  \item{lsize}{size of the smoothing line. Default is 1.
   See \code{\link{ggplot2}}.}
 
   \item{pcolour}{character string colour of the simulated

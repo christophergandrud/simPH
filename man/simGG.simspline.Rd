@@ -5,7 +5,7 @@
   \method{simGG}{simspline} (obj, FacetTime = NULL,
     from = NULL, to = NULL, xlab = NULL, ylab = NULL,
     zlab = NULL, title = NULL, smoother = "auto",
-    leg.name = "", lcolour = "#2B8CBE", lsize = 2,
+    leg.name = "", lcolour = "#2B8CBE", lsize = 1,
     pcolour = "#A6CEE3", psize = 1, alpha = 0.1,
     surface = TRUE, fit = "linear", ribbons = FALSE, ...)
 }
@@ -46,7 +46,7 @@
   '#2B8CBE'}. Only relevant if \code{qi = "Relative
   Hazard"} or \code{qi = "First Difference"}.}
 
-  \item{lsize}{size of the smoothing line. Default is 2.
+  \item{lsize}{size of the smoothing line. Default is 1.
   See \code{\link{ggplot2}}.}
 
   \item{pcolour}{character string colour of the simulated
