@@ -8,9 +8,9 @@
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
 #' @param title the plot's main title.
 #' @param smoother what type of smoothing line to use to summarize the plotted coefficient.
-#' @param spalette colour palette for use in \code{qi = "Hazard Rate"}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
-#' @param leg.name name of the stratified hazard rates legend. Only relevant if \code{qi = "Hazard Rate"}.
-#' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
+#' @param spalette colour palette. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
+#' @param legend specifies what type of legend to include. The default is \code{legend = "legend"}. To hide the legend use \code{legend = FALSE}. See the \code{\link{discrete_scale}} for more details.
+#' @param leg.name name of the legend.
 #' @param lsize size of the smoothing line. Default is 2. See \code{\link{ggplot2}}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param alpha point alpha (e.g. transparency) for the points or ribbons. Default is \code{alpha = 0.1}. See \code{\link{ggplot2}}.
@@ -80,14 +80,16 @@
 #'
 #' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227-43.
 
-simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", leg.name = "", lcolour = "#2B8CBE", lsize = 2, psize = 1, alpha = 0.1, ribbons = FALSE, ...)
+simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", legend = "legend", leg.name = "", lsize = 2, psize = 1, alpha = 0.1, ribbons = FALSE, ...)
 {
   Time <- HRate <- HRValue <- QI <- Comparison <- Xj <- Lower50 <- Upper50 <- Min <- Max <- Median <- NULL
   if (!inherits(obj, "simtvc")){
     stop("must be a simtvc object")
   }
+
   # Find quantity of interest
   qi <- class(obj)[[2]]
+
   # Create y-axis label
   if (is.null(ylab)){
     ylab <- paste(qi, "\n")
@@ -113,18 +115,18 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
           geom_smooth(method = smoother, size = lsize, se = FALSE) +
           facet_grid(.~ Strata) +
           xlab(xlab) + ylab(ylab) +
-          scale_colour_brewer(palette = spalette, name = leg.name) +
+          scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
           ggtitle(title) +
-          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
       } else if (is.null(obj$Strata)){
           ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
             geom_point(shape = 21, alpha = I(alpha), size = psize) +
             geom_smooth(method = smoother, size = lsize, se = FALSE) +
-            scale_colour_brewer(palette = spalette, name = leg.name) +
+            scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
             xlab(xlab) + ylab(ylab) +
             ggtitle(title) +
-            guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+            #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
             theme_bw(base_size = 15)
       }
     } else if (qi == "Hazard Ratio"){
@@ -133,9 +135,9 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
           geom_smooth(method = smoother, size = lsize, se = FALSE) +
           geom_hline(aes(yintercept = 1), linetype = "dotted") +
           xlab(xlab) + ylab(ylab) +
-          scale_colour_brewer(palette = spalette, name = leg.name) +
+          scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
           ggtitle(title) +
-          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
     } else if (qi == "Relative Hazard"){
         ggplot(obj, aes(x = Time, y = QI, colour = factor(Xj))) +
@@ -143,19 +145,19 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
           geom_smooth(method = smoother, size = lsize, se = FALSE) +
           geom_hline(aes(yintercept = 1), linetype = "dotted") +
           xlab(xlab) + ylab(ylab) +
-          scale_colour_brewer(palette = spalette, name = leg.name) +
+          scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
           ggtitle(title) +
-          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
     } else if (qi == "First Difference"){
-        ggplot(obj, aes(Time, QI, colour = Comparison)) +
-          geom_point(shape = 21, alpha = I(alpha)) +
-          geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+        ggplot(obj, aes(Time, QI, colour = factor(Comparison))) +
+          geom_point(shape = 21, alpha = I(alpha), size = psize) +
+          geom_smooth(method = smoother, size = lsize, se = FALSE) +
           geom_hline(aes(yintercept = 0), linetype = "dotted") +
           xlab(xlab) + ylab(ylab) +
-          scale_colour_brewer(palette = spalette, name = leg.name) +
+          scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
           ggtitle(title) +
-          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          #guides(colour = guide_legend(override.aes = list(alpha = 1)), colour = FALSE) +
           theme_bw(base_size = 15)
     }
   }
@@ -171,10 +173,10 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
           geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, linetype = 0) +
           facet_grid(. ~ Strata) +
           xlab(xlab) + ylab(ylab) +
-          scale_colour_brewer(palette = spalette, name = leg.name) +
-          scale_fill_brewer(palette = spalette, name = leg.name) +
+          scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+          scale_fill_brewer(palette = spalette, name = leg.name, guide = legend) +
           ggtitle(title) +
-          guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
       } else if (is.null(obj$Strata)){
       obj <- MinMaxLines(df = obj, hr = TRUE)
@@ -182,11 +184,11 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
             geom_line(size = lsize) +
             geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, linetype = 0) +
             geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, linetype = 0) +
-            scale_colour_brewer(palette = spalette, name = leg.name) +
-            scale_fill_brewer(palette = spalette, name = leg.name) +
+            scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+            scale_fill_brewer(palette = spalette, name = leg.name, guide = legend) +
             xlab(xlab) + ylab(ylab) +
             ggtitle(title) +
-            guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+            #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
             theme_bw(base_size = 15)
       }
     } else if (qi == "Hazard Ratio"){
@@ -198,12 +200,10 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
             geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, linetype = 0) + 
             geom_hline(aes(yintercept = 1), linetype = "dotted") + 
             xlab(xlab) + ylab(ylab) + 
-            scale_colour_brewer(palette = spalette, 
-            name = leg.name) + 
-            scale_fill_brewer(palette = spalette, 
-            name = leg.name) + 
+            scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) + 
+            scale_fill_brewer(palette = spalette, name = leg.name, guide = legend) + 
             ggtitle(title) + 
-            guides(colour = guide_legend(override.aes = list(alpha = 1))) + 
+            #guides(colour = guide_legend(override.aes = list(alpha = 1))) + 
             theme_bw(base_size = 15)
     } else if (qi == "Relative Hazard"){
       obj <- MinMaxLines(df = obj, byVars = c("Time", "Xj"))
@@ -214,28 +214,24 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
           geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, linetype = 0) + 
           geom_hline(aes(yintercept = 1), linetype = "dotted") + 
           xlab(xlab) + ylab(ylab) + 
-          scale_colour_brewer(palette = spalette, 
-          name = leg.name) + 
-          scale_fill_brewer(palette = spalette, 
-          name = leg.name) + 
+          scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) + 
+          scale_fill_brewer(palette = spalette, name = leg.name, guide = legend) + 
           ggtitle(title) + 
-          guides(colour = guide_legend(override.aes = list(alpha = 1))) + 
+          #guides(colour = guide_legend(override.aes = list(alpha = 1))) + 
           theme_bw(base_size = 15)
     } else if (qi == "First Difference"){
       obj <- MinMaxLines(df = obj, byVars = c("Time", "Comparison"))
-      ggplot(obj, aes(x = Time, y = Median, group = Comparison)) +
+      ggplot(obj, aes(x = Time, y = Median, colour = factor(Comparison), fill = factor(Comparison))) +
           geom_line(size = lsize) + 
           geom_ribbon(aes(ymin = Lower50, ymax = Upper50), 
             alpha = alpha, linetype = 0) + 
           geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, linetype = 0) + 
           geom_hline(aes(yintercept = 0), linetype = "dotted") + 
           xlab(xlab) + ylab(ylab) + 
-          scale_colour_brewer(palette = spalette, 
-          name = leg.name) + 
-          scale_fill_brewer(palette = spalette, 
-          name = leg.name) + 
+          scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) + 
+          scale_fill_brewer(palette = spalette, name = leg.name, guide = legend) + 
           ggtitle(title) + 
-          guides(colour = guide_legend(override.aes = list(alpha = 1))) + 
+          #guides(colour = guide_legend(override.aes = list(alpha = 1))) + 
           theme_bw(base_size = 15)
     }
     )
