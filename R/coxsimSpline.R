@@ -90,7 +90,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	}
 
 	if (nsim > 10 & qi == "Hazard Rate"){
-		message(paste0("Warning: finding Hazard Rates with ", nsim, " simulations may take awhile.  Consider decreasing the number of simulations with nsim."))
+		message(paste0("Warning: finding Hazard Rates for spline models with ", nsim, " simulations per fitted value may take awhile.  Consider decreasing the number of simulations with nsim."))
 	}
 
 	if (is.null(Xl) & qi != "Hazard Rate"){

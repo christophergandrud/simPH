@@ -1,12 +1,12 @@
 Version 0.8.2
 
-Added `legend` argument to allow the user to hide plot legends.
+Added `legend` argument to allow the user to hide plot legends, when applicable.
 
 Minor aesthetic updates and documentation clarifications.
 
 Version 0.8.1
 
-Minor bug fixes.
+Minor changes for CRAN check.
 
 Version 0.8
 

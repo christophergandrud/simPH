@@ -147,7 +147,7 @@
 #                    Xj = seq(1, 30, by = 2), ci = 0.9, nsim = 10)
 
 # Plot relative hazard
-# simGG(Sim1, alpha = 1)
+# simGG(Sim1, alpha = 0.5)
 
 # 3D plot hazard rate
 # simGG(Sim2, zlab = "orderent", fit = "quadratic")

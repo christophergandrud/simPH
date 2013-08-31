@@ -89,8 +89,8 @@
 # library(survival)
 
 # Create natural log time interactions
-#Golubtvc <- function(x){
-#  assign(paste0("l", x), tvc(GolubEUPData, b = x, tvar = "end", tfun = "log"))
+# Golubtvc <- function(x){
+# tvc(data = GolubEUPData, b = x, tvar = "end", tfun = "log")
 # }
 
 # GolubEUPData$Lcoop <-Golubtvc("coop")
@@ -129,7 +129,7 @@
 #                  by = 15, ci = 0.99)
 
 # Create plots
-# simGG(Sim1)
+# simGG(Sim1, legend = FALSE)
 # simGG(Sim2)
 # simGG(Sim3, leg.name = "Comparision", from = 1200, ribbons = TRUE)
 }

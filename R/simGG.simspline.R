@@ -60,7 +60,7 @@
 #' #                    Xj = seq(1, 30, by = 2), ci = 0.9, nsim = 10)  
 #'                        
 #' # Plot relative hazard
-#' # simGG(Sim1, alpha = 1)
+#' # simGG(Sim1, alpha = 0.5)
 #' 
 #' # 3D plot hazard rate
 #' # simGG(Sim2, zlab = "orderent", fit = "quadratic")
@@ -188,9 +188,9 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
-		        geom_line(size = lsize) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha) +
+				geom_line(size = lsize, colour = lcolour) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, fill = pcolour) +
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, fill = pcolour) +
 	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        	xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
