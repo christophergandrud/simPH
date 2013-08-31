@@ -51,7 +51,7 @@
 
   \item{spin}{logical, whether or not to keep only the
   shortest probability interval rather than the middle
-  simulations.}
+  simulations. Currently not supported for hazard rates.}
 }
 \value{
   a \code{siminteract} class object

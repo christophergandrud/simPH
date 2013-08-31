@@ -14,7 +14,7 @@
 #' @param to point in time to stop simulating coefficient values.
 #' @param by time intervals by which to simulate coefficient values.
 #' @param ci the proportion of simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the confidence level of the shortest probability interval. Any value from 0 through 1 may be used.
-#' @param spin logical, whether or not to keep only the shortest probability interval rather than the middle simulations.
+#' @param spin logical, whether or not to keep only the shortest probability interval rather than the middle simulations. Currently not supported for hazard rates.
 #'
 #' @return a \code{simtvc} object
 #'

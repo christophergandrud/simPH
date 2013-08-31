@@ -9,7 +9,7 @@
 #' @param Xl numeric vector of values to compare \code{Xj} to. If \code{NULL}, then it is authomatically set to 0.
 #' @param nsim the number of simulations to run per value of \code{Xj}. Default is \code{nsim = 1000}.
 #' @param ci the proportion of simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the confidence level of the shortest probability interval. Any value from 0 through 1 may be used.
-#' @param spin logical, whether or not to keep only the shortest probability interval rather than the middle simulations.
+#' @param spin logical, whether or not to keep only the shortest probability interval rather than the middle simulations. Currently not supported for hazard rates.
 #'
 #' @return a \code{simpoly} class object.
 #' @details Simulates quantities of interest for polynomial covariate effects. For example if a nonlinear effect is modeled with a second order polynomial--i.e. \eqn{\beta_{1}x_{i} + \beta_{2}x_{i}^{2}}--we can once again draw \eqn{n} simulations from the multivariate normal distribution for both \eqn{\beta_{1}} and \eqn{\beta_{2}}. Then we simply calculate quantities of interest for a range of values and plot the results as before. For example, we find the first difference for a second order polynomial with:

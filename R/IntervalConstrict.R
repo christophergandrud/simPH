@@ -15,19 +15,23 @@
 
 IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, spin = FALSE, ci = 0.95)
 {
+	if (qi == "Hazard Rate" & isTRUE(spin)){
+		message("spin currently unsupported for Hazard Rates. The central interval will be found instead.")
+		spin <- FALSE
+	}
     if (Inf %in% Simb$QI){
         if (isTRUE(spin)){
-            stop("spin cannot be TRUE when there are infinite values for your quantitiy of interest.")
+            stop("spin cannot be TRUE when there are infinite values for your quantity of interest.")
         } else {
             message("Warning infinite values calculated for your quantity of interest. Consider changing the difference between Xj and Xl.")
         }
     }
-    if (any(Simb$QI > 1000) & isTRUE(spin)){
+    if (any(Simb$QI > 500) & isTRUE(spin)){
     	message("Warning very large quantity of interest values. SPIn may not be found. Try spin = FALSE.")
     }
 
 	Lower <- Upper <- NULL
-	if (qi == "Relative Hazard" |qi == "Hazard Ratio" | qi == "Hazard Ratio"){
+	if (qi == "Relative Hazard" |qi == "Hazard Ratio"| qi == "Hazard Rate"){
 		lb <- 0
 	} 
 	else if (qi == "First Difference"){

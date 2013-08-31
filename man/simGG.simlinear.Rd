@@ -113,7 +113,6 @@
 #						Xj = seq(1237, 1600, by = 2), spin = TRUE)
 # simGG(Sim1)
 
-## dontrun
 # Simulate and plot Hazard Rate for stafcder variable
 # Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
 #						qi = "Hazard Rate", Xj = c(1237, 1600))

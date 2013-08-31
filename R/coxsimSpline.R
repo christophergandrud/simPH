@@ -9,7 +9,7 @@
 #' @param Xl numeric vector of values to compare \code{Xj} to. Note if \code{qi = "Relative Hazard"} or \code{"Hazard Rate"} only \code{Xj} is relevant.
 #' @param nsim the number of simulations to run per value of \code{Xj}. Default is \code{nsim = 1000}.
 #' @param ci the proportion of simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the confidence level of the shortest probability interval. Any value from 0 through 1 may be used.
-#' @param spin logical, whether or not to keep only the shortest probability interval rather than the middle simulations.
+#' @param spin logical, whether or not to keep only the shortest probability interval rather than the middle simulations. Currently not supported for hazard rates.
 #'
 #' @return a \code{simspline} object
 #'

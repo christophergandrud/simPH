@@ -40,11 +40,15 @@
 #' # Simulate simpoly Hazard Ratio with spin probibility interval
 #' # Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio", 
 #' #           pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
+#'
+#' # Sim3 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Rate", 
+#' #           pow = 3, Xj = c(1, 150))
 #' 
 #' # Plot simulations
 #' simGG(Sim1)
 #' # dontrun
-#' # simGG(Sim2)
+#' # simGG(Sim2, ribbons = TRUE)
+#' # simGG(Sim3, ribbons = TRUE)
 #'
 #' @details Uses \link{ggplot2} to plot the quantities of interest from \code{simpoly} objects. 
 #'
@@ -136,8 +140,8 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
           geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, linetype = 0) +
           facet_grid(. ~ Strata) +
           xlab(xlab) + ylab(ylab) +
-          scale_colour_brewer(palette = spalette, name = leg.name, guide = "legend") +
-          scale_fill_brewer(palette = spalette, name = leg.name, guide = "legend") +
+          scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+          scale_fill_brewer(palette = spalette, name = leg.name, guide = legend) +
           ggtitle(title) +
           #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)

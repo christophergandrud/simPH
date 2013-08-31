@@ -43,7 +43,6 @@
 #' #						Xj = seq(1237, 1600, by = 2), spin = TRUE)
 #' # simGG(Sim1)
 #' 
-#' ## dontrun
 #' # Simulate and plot Hazard Rate for stafcder variable
 #' # Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
 #' #						qi = "Hazard Rate", Xj = c(1237, 1600))
@@ -130,7 +129,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        xlab(xlab) + ylab(ylab) +
 	        ggtitle(title) +
-	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+	        #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 	        theme_bw(base_size = 15)
 		}
 	}
@@ -146,10 +145,10 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, linetype = 0) +
 				facet_grid(. ~ Strata) +
 				xlab(xlab) + ylab(ylab) +
-		        scale_colour_brewer(palette = spalette, name = leg.name, guide = "legend") +
-		        scale_fill_brewer(palette = spalette, name = leg.name, guide = "legend") +
+		        scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+		        scale_fill_brewer(palette = spalette, name = leg.name, guide = legend) +
 				ggtitle(title) +
-		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 				theme_bw(base_size = 15)
     	} else if (is.null(obj$Strata)){
 			obj <- MinMaxLines(df = obj, hr = TRUE)
@@ -157,11 +156,11 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 		        geom_line(size = lsize) +
 				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, linetype = 0) +
 				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, linetype = 0) +
-		        scale_colour_brewer(palette = spalette, name = leg.name, guide = "legend") +
-		        scale_fill_brewer(palette = spalette, name = leg.name, guide = "legend") +
+		        scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+		        scale_fill_brewer(palette = spalette, name = leg.name, guide = legend) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
 		}
 		} else if (qi == "First Difference"){
@@ -173,7 +172,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
 		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 			obj <- MinMaxLines(df = obj)
@@ -184,7 +183,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
 	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
 		}
 		)
