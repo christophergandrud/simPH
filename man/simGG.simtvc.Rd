@@ -25,7 +25,8 @@
   \item{smoother}{what type of smoothing line to use to
   summarize the plotted coefficient.}
 
-  \item{spalette}{colour palette. Default palette is
+  \item{spalette}{colour palette for when there are
+  multiple sets of comparisons to plot. Default palette is
   \code{"Set1"}. See \code{\link{scale_colour_brewer}}.}
 
   \item{legend}{specifies what type of legend to include

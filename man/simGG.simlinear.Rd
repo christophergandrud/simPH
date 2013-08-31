@@ -28,9 +28,9 @@
   \item{smoother}{what type of smoothing line to use to
   summarize the plotted coefficient.}
 
-  \item{spalette}{colour palette for use in \code{qi =
-  "Hazard Rate"}. Default palette is \code{"Set1"}. See
-  \code{\link{scale_colour_brewer}}.}
+  \item{spalette}{colour palette for when there are
+  multiple sets of comparisons to plot. Default palette is
+  \code{"Set1"}. See \code{\link{scale_colour_brewer}}.}
 
   \item{legend}{specifies what type of legend to include
   (if applicable). The default is \code{legend = "legend"}.

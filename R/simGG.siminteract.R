@@ -9,7 +9,7 @@
 #' @param to numeric time to plot to. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param title the plot's main title.
 #' @param smoother what type of smoothing line to use to summarize the plotted coefficient.
-#' @param spalette colour palette. Not relevant for \code{qi = "Marginal Effect"}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
+#' @param spalette colour palette for when there are multiple sets of comparisons to plot. Not relevant for \code{qi = "Marginal Effect"}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
 #' @param legend specifies what type of legend to include (if applicable). The default is \code{legend = "legend"}. To hide the legend use \code{legend = FALSE}. See the \code{\link{discrete_scale}} for more details.
 #' @param leg.name name of the legend (if applicable).
 #' @param lcolour character string colour of the smoothing line. The default is hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if \code{qi = "Marginal Effect"}.
@@ -55,11 +55,16 @@
 #' #                       X1 = seq(2, 115, by = 2),
 #' #                       X2 = c(0, 1),
 #' #                       qi = "First Difference", spin = TRUE)
+#' 
+#' # Simulate Hazard Rate
+#'  Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
+#'                        X1 = 100, X2 = 1, qi = "Hazard Rate")
 #'                        
 #' # Plot quantities of interest
 #' # simGG(Sim1, xlab = "\nprevgenx", ylab = "Marginal Effect of lethal\n")
-#' # simGG(Sim2)
+#' # simGG(Sim2, ribbons = TRUE)
 #' # simGG(Sim3)
+#' # simGG(Sim4, to = 150, ribbons = TRUE, legend = FALSE)
 #'
 #' @details Uses \link{ggplot2} to plot the quantities of interest from \code{siminteract} objects, including marginal effects, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.
@@ -109,8 +114,8 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 	if (!isTRUE(ribbons)){
 		if (qi == "Hazard Rate"){
 		  	if (!is.null(obj$strata)) {
-		      ggplot(obj, aes(x = Time, y = QI, colour = factor(HRValue))) +
-		        geom_point(alpha = I(alpha), size = psize) +
+		      ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
+		        geom_point(alpha = alpha, size = psize) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 		        facet_grid(.~ Strata) +
 		        xlab(xlab) + ylab(ylab) +
@@ -119,8 +124,8 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		        #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
 	    	} else if (is.null(obj$strata)){
-		      	ggplot(obj, aes(Time, QI, colour = factor(HRValue))) +
-		        	geom_point(shape = 21, alpha = I(alpha), size = psize) +
+		      	ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
+		        	geom_point(shape = 21, alpha = alpha, size = psize) +
 			        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 			        scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
 			        xlab(xlab) + ylab(ylab) +
@@ -131,7 +136,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		} 
 		else if (qi == "Marginal Effect"){
 			ggplot(obj, aes(X2, QI)) +
-			    geom_point(shape = 21, alpha = I(alpha), size = psize, colour = pcolour) +
+			    geom_point(shape = 21, alpha = alpha, size = psize, colour = pcolour) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +  
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") + 
 			    xlab(xlab) + ylab(ylab) +
@@ -145,7 +150,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 				message("X1 must have more than one fitted value.")
 			} else {
 				ggplot(obj, aes(X1, QI, colour = factor(X2), group = factor(X2))) +
-			        geom_point(shape = 21, alpha = I(alpha), size = psize) +
+			        geom_point(shape = 21, alpha = alpha, size = psize) +
 			        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 			        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 			        scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
@@ -161,7 +166,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 				message("X1 must have more than one fitted value.")
 			} else {
 				ggplot(obj, aes(X1, QI, colour = factor(X2), group = factor(X2))) +
-			        geom_point(shape = 21, alpha = I(alpha), size = psize) +
+			        geom_point(shape = 21, alpha = alpha, size = psize) +
 			        geom_smooth(method = smoother, size = lsize, se = FALSE) +
 			        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 			        scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
@@ -193,7 +198,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 			obj <- MinMaxLines(df = obj, hr = TRUE)
 	      	ggplot(obj, aes(Time, Median, colour = factor(HRValue), fill = factor(HRValue))) +
 		        geom_line(size = lsize) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), ailpha = alpha, linetype = 0) +
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, linetype = 0) +
 				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, linetype = 0) +
 		        scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
 		        scale_fill_brewer(palette = spalette, name = leg.name, guide = legend) +

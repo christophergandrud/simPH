@@ -8,7 +8,7 @@
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
 #' @param title the plot's main title.
 #' @param smoother what type of smoothing line to use to summarize the plotted coefficient.
-#' @param spalette colour palette. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
+#' @param spalette colour palette for when there are multiple sets of comparisons to plot. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
 #' @param legend specifies what type of legend to include (if applicable). The default is \code{legend = "legend"}. To hide the legend use \code{legend = FALSE}. See the \code{\link{discrete_scale}} for more details.
 #' @param leg.name name of the legend (if applicable).
 #' @param lsize size of the smoothing line. Default is 1. See \code{\link{ggplot2}}.

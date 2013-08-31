@@ -28,9 +28,10 @@
   \item{smoother}{what type of smoothing line to use to
   summarize the plotted coefficient.}
 
-  \item{spalette}{colour palette. Not relevant for \code{qi
-  = "Marginal Effect"}. Default palette is \code{"Set1"}.
-  See \code{\link{scale_colour_brewer}}.}
+  \item{spalette}{colour palette for when there are
+  multiple sets of comparisons to plot. Not relevant for
+  \code{qi = "Marginal Effect"}. Default palette is
+  \code{"Set1"}. See \code{\link{scale_colour_brewer}}.}
 
   \item{legend}{specifies what type of legend to include
   (if applicable). The default is \code{legend = "legend"}.
@@ -132,10 +133,15 @@ simGG(Sim1)
 #                       X2 = c(0, 1),
 #                       qi = "First Difference", spin = TRUE)
 
+# Simulate Hazard Rate
+ Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
+                       X1 = 100, X2 = 1, qi = "Hazard Rate")
+
 # Plot quantities of interest
 # simGG(Sim1, xlab = "\\nprevgenx", ylab = "Marginal Effect of lethal\\n")
-# simGG(Sim2)
+# simGG(Sim2, ribbons = TRUE)
 # simGG(Sim3)
+# simGG(Sim4, to = 150, ribbons = TRUE, legend = FALSE)
 }
 \references{
   Brambor, Thomas, William Roberts Clark, and Matt Golder.
