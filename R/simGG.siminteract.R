@@ -57,8 +57,8 @@
 #' #                       qi = "First Difference", spin = TRUE)
 #' 
 #' # Simulate Hazard Rate
-#'  Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
-#'                        X1 = 100, X2 = 1, qi = "Hazard Rate")
+#' # Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
+#' #                       X1 = 100, X2 = 1, qi = "Hazard Rate")
 #'                        
 #' # Plot quantities of interest
 #' # simGG(Sim1, xlab = "\nprevgenx", ylab = "Marginal Effect of lethal\n")

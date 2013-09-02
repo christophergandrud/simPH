@@ -3,7 +3,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 0.8.3
+### Version 0.8.2
 
 ### Please report any bugs at <https://github.com/christophergandrud/simPH/issues>.
 
@@ -11,7 +11,7 @@ simPH
 
 An R package for simulating and plotting quantities of interest (relative hazards, first differences, and hazard ratios) for linear coefficients, multiplicative interactions, polynomials, penalised splines, and non-proportional hazards, as well as stratified survival curves from Cox Proportional Hazard models.
 
-For more information plus examples, please see this [working paper](http://papers.ssrn.com/sol3/papers.cfm?abstract_id=2227226).
+For more information plus examples, please see this [working paper](http://ssrn.com/abstract=2318977).
 
 The package includes the following functions:
 
@@ -45,7 +45,7 @@ The syntax and capabilities of `simGG` varies depending on the sim object class 
 
 ##### Additional styling
 
-Because in almost all cases `simGG` returns a *ggplot2* object, you can add aditional aesthetic attributes in the normal *ggplot2* way. See the [ggplot2 documentation for more details](http://docs.ggplot2.org/current/). Here is a quick example:
+Because in almost all cases `simGG` returns a *ggplot2* object, you can add additional aesthetic attributes in the normal *ggplot2* way. See the [ggplot2 documentation for more details](http://docs.ggplot2.org/current/). Here is a quick example:
 
 
 ---
@@ -58,7 +58,9 @@ Because in almost all cases `simGG` returns a *ggplot2* object, you can add adit
 
 ## Installation
 
-Use the [devtools](https://github.com/hadley/devtools) command `install_github` to install **simPH** in R. Here is the exact code for installing the most recent development version:
+The package is available on CRAN and can be installed in the normal R way.
+
+To install the development version use the [devtools](https://github.com/hadley/devtools) command `install_github`. Here is the code for installing the most recent development version:
 
 ```r
 devtools::install_github("simPH", "christophergandrud")
@@ -109,6 +111,7 @@ Gandrud, Christopher. 2013. [“The Diffusion of Financial Supervisory Governanc
 ---
 
 ## Future Plans
-This package is in the **early stages** of development. I intend to expand the quantities of interest that can be simulated and graphed for Cox PH models. I am also currently working on functions that can simulate and graph hazard ratios estimated from [Fine and Gray competing risks models](http://www.jstor.org/stable/2670170). 
+
+I intend to expand the quantities of interest that can be simulated and graphed for Cox PH models. I am also currently working on functions that can simulate and graph hazard ratios estimated from [Fine and Gray competing risks models](http://www.jstor.org/stable/2670170). 
 
 I am also working on a way to graph hazard ratios with frailties. 
