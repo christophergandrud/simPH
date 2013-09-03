@@ -88,28 +88,31 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 	HRate <- Lower50 <- Upper50 <- Min <- Max <- Median <- NULL
 	Time <- QI <- HRValue <- X1 <- X2 <- NULL
 	if (!inherits(obj, "siminteract")){
-    	stop("must be a siminteract object")
-    }
-    # Find quantity of interest
-    qi <- class(obj)[[2]]
+    stop("must be a siminteract object")
+  }
+  if (isTRUE(ribbons) & smoother != "auto"){
+    message("The smoother argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
+  }
+  # Find quantity of interest
+  qi <- class(obj)[[2]]
 
-    # Create y-axis label
-    if (is.null(ylab)){
-    	ylab <- paste(qi, "\n")
-    } else {
-    	ylab <- ylab
-    }
-    # Convert obj to data frame
-    class(obj) <- "data.frame"
-    # Constrict time period to plot for hazard rate
-    if (qi == "Hazard Rate"){   
-	    if (!is.null(from)){
-			obj <- subset(obj, Time >= from)
-		}
-		if (!is.null(to)){
-	        	obj <- subset(obj, Time <= to)
-	    }
-    }
+  # Create y-axis label
+  if (is.null(ylab)){
+  	ylab <- paste(qi, "\n")
+  } else {
+  	ylab <- ylab
+  }
+  # Convert obj to data frame
+  class(obj) <- "data.frame"
+  # Constrict time period to plot for hazard rate
+  if (qi == "Hazard Rate"){   
+	   if (!is.null(from)){
+		  obj <- subset(obj, Time >= from)
+	  }
+	if (!is.null(to)){
+	       	obj <- subset(obj, Time <= to)
+	   }
+  }
 	# Plot points
 	if (!isTRUE(ribbons)){
 		if (qi == "Hazard Rate"){
@@ -131,7 +134,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 			        xlab(xlab) + ylab(ylab) +
 			        ggtitle(title) +
 			        #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-			        theme_bw(base_size = 15)
+		        theme_bw(base_size = 15)
 			}
 		} 
 		else if (qi == "Marginal Effect"){

@@ -86,6 +86,9 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
   if (!inherits(obj, "simtvc")){
     stop("must be a simtvc object")
   }
+  if (isTRUE(ribbons) & smoother != "auto"){
+    message("The smoother argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
+  }
 
   # Find quantity of interest
   qi <- class(obj)[[2]]

@@ -101,6 +101,9 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 	if (!inherits(obj, "simspline")){
     	stop("must be a simspline object")
     }
+	if (isTRUE(ribbons) & smoother != "auto"){
+	  message("The smoother argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
+	}
     # Find quantity of interest
     qi <- class(obj)[[2]]
 
