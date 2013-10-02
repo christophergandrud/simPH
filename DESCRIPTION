@@ -25,7 +25,7 @@ Imports:
     stringr,
     survival,
     quadprog
-License: GPL (>= 3)
+License: GPL-2 | GPL-3
 Collate:
     'CarpenterFdaData.R'
     'coxsimLinear.R'

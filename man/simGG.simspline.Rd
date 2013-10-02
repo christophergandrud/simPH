@@ -56,7 +56,7 @@
   \item{psize}{size of the plotted simulation points.
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
 
-  \item{alpha}{point alpha (e.g. transparency) for the
+  \item{alpha}{numeric. Alpha (e.g. transparency) for the
   points or ribbons. Default is \code{alpha = 0.1}. See
   \code{\link{ggplot2}}.}
 
