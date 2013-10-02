@@ -26,7 +26,7 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, sp
             message("Warning infinite values calculated for your quantity of interest. Consider changing the difference between Xj and Xl.")
         }
     }
-    if (any(Simb$QI > 500) & isTRUE(spin)){
+    if (any(Simb$QI > 800) & isTRUE(spin)){
     	message("Warning large quantity of interest values estimated. SPIn may not be found. If so, try spin = FALSE.")
     }
 
