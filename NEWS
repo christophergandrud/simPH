@@ -1,3 +1,7 @@
+Version 0.8.3
+
+License change and minor message changes.
+
 Version 0.8.2
 
 Added `legend` argument to allow the user to hide plot legends, when applicable.
@@ -61,7 +65,7 @@ Version 0.6
 
 Version 0.05
 
-**Major update** to the way simPH plots simulated objects. Instead of using seperate commands for plotting objects of different sim classes it now uses the method `simGG`. 
+**Major update** to the way simPH plots simulated objects. Instead of using separate commands for plotting objects of different sim classes it now uses the method `simGG`. 
 
 In practical terms this means that you can now just use the command `simGG` rather than the old gg. . . commands.
 

@@ -27,7 +27,7 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, sp
         }
     }
     if (any(Simb$QI > 500) & isTRUE(spin)){
-    	message("Warning very large quantity of interest values. SPIn may not be found. Try spin = FALSE.")
+    	message("Warning large quantity of interest values estimated. SPIn may not be found. If so, try spin = FALSE.")
     }
 
 	Lower <- Upper <- NULL
