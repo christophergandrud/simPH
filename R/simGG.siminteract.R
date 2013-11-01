@@ -217,7 +217,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		        geom_line(size = lsize, colour = lcolour) +
 				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, fill = pcolour) +
 				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, fill = pcolour) +
-	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
+	        	geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
 		        theme_bw(base_size = 15)
