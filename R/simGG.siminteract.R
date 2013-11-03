@@ -141,7 +141,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 			ggplot(obj, aes(X2, QI)) +
 			    geom_point(shape = 21, alpha = alpha, size = psize, colour = pcolour) +
 		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +  
-		        geom_hline(aes(yintercept = 0), linetype = "dotted") + 
+		        # geom_hline(aes(yintercept = 0), linetype = "dotted") + 
 			    xlab(xlab) + ylab(ylab) +
 			    ggtitle(title) +
 			    #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
@@ -217,7 +217,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		        geom_line(size = lsize, colour = lcolour) +
 				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, fill = pcolour) +
 				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, fill = pcolour) +
-	        	geom_hline(aes(yintercept = 0), linetype = "dotted") +
+	        #	geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
 		        theme_bw(base_size = 15)

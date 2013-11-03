@@ -7,13 +7,14 @@
 #' @param qi quantity of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Hazard Ratio"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set. If you want to plot the results, \code{X1} should have more than one value.
 #' @param X2 numeric vector of fitted values of \code{b2} to simulate for. 
-#' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1} \code{b2} and \code{b1*b2}. Note: it does not currently support models that include polynomials created by \code{\link{I}}.
+#' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1} \code{b2} and \code{b1*b2}. Note: it does not currently support models that include polynomials created by \code{\link{I}}.i
+#' @param expMarg logical. Whether or not to exponentiate the marginal effect.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the confidence level of the shortest probability interval. Any value from 0 through 1 may be used.
 #' @param spin logical, whether or not to keep only the shortest probability interval rather than the middle simulations. Currently not supported for hazard rates.
 #'
 #' @details Simulates marginal effects, first differences, hazard ratios, and hazard rates for linear multiplicative interactions. 
-#' Marginal effects are calculated as in Brambor et al. (2006) with the addition that we take the exponent, so that it resembles a hazard ratio. For an interaction between variables \eqn{X} and \eqn{Z} then the marginal effect for \eqn{X} is:
+#' Marginal effects are calculated as in Brambor et al. (2006) with the addition that we take the exponent, so that it resembles a hazard ratio. You choose not to take the exponent by setting the argument \code{expMarg = FALSE}. For an interaction between variables \eqn{X} and \eqn{Z} then the marginal effect for \eqn{X} is:
 #' \deqn{ME_{X} = exp(\beta_{X} + \beta_{XZ}Z).}
 #'
 #' Note that for First Differences the comparison is not between two values of the same variable but two values of the constitute variable and 0.
@@ -72,7 +73,7 @@
 #' @importFrom MSBVAR rmultnorm
 #' @export
 
-coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
+coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, means = FALSE, expMarg = TRUE, nsim = 1000, ci = 0.95, spin = FALSE)
 {
 	HRValue <- strata <- QI <- NULL
 	if (qi != "Hazard Rate" & isTRUE(means)){
@@ -122,7 +123,12 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 				X2df <- data.frame(X2)
 				names(X2df) <- c("X2")
 				Simb <- merge(Simb, X2df)
-				Simb$QI <- exp(Simb[, 1] + (Simb[, 3] * Simb[, 4])) 
+        if (isTRUE(expMarg)){
+				  Simb$QI <- exp(Simb[, 1] + (Simb[, 3] * Simb[, 4])) 
+        }
+        else if (!isTRUE(expMarg)){
+          Simb$QI <- Simb[, 1] + (Simb[, 3] * Simb[, 4])
+        }
 			}
 		}
 		else if (qi == "First Difference"){

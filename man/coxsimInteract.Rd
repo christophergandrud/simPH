@@ -3,8 +3,8 @@
 \title{Simulate quantities of interest for linear multiplicative interactions from Cox Proportional Hazards models}
 \usage{
   coxsimInteract(obj, b1, b2, qi = "Marginal Effect",
-    X1 = NULL, X2 = NULL, means = FALSE, nsim = 1000,
-    ci = 0.95, spin = FALSE)
+    X1 = NULL, X2 = NULL, means = FALSE, expMarg = TRUE,
+    nsim = 1000, ci = 0.95, spin = FALSE)
 }
 \arguments{
   \item{obj}{a \code{\link{coxph}} class fitted model
@@ -38,7 +38,10 @@
   values to fit the hazard rate for covaraiates other than
   \code{b1} \code{b2} and \code{b1*b2}. Note: it does not
   currently support models that include polynomials created
-  by \code{\link{I}}.}
+  by \code{\link{I}}.i}
+
+  \item{expMarg}{logical. Whether or not to exponentiate
+  the marginal effect.}
 
   \item{nsim}{the number of simulations to run per value of
   X. Default is \code{nsim = 1000}.}
@@ -67,10 +70,12 @@
   ratios, and hazard rates for linear multiplicative
   interactions. Marginal effects are calculated as in
   Brambor et al. (2006) with the addition that we take the
-  exponent, so that it resembles a hazard ratio. For an
-  interaction between variables \eqn{X} and \eqn{Z} then
-  the marginal effect for \eqn{X} is: \deqn{ME_{X} =
-  exp(\beta_{X} + \beta_{XZ}Z).}
+  exponent, so that it resembles a hazard ratio. You choose
+  not to take the exponent by setting the argument
+  \code{expMarg = FALSE}. For an interaction between
+  variables \eqn{X} and \eqn{Z} then the marginal effect
+  for \eqn{X} is: \deqn{ME_{X} = exp(\beta_{X} +
+  \beta_{XZ}Z).}
 
   Note that for First Differences the comparison is not
   between two values of the same variable but two values of
