@@ -46,7 +46,7 @@
 <h4>Simulation Functions</h4>
 
 <ul>
-<li><p><code>coxsimLinear</code>: Simulates relative hazards, first differences, hazard ratios, and hazard rates for linear time-constant covariates from Cox Proportional Hazard models.</p></li>
+<li><p><code>coxsimLinear</code>: Simulates relative hazards, first differences, hazard ratios, and hazard rates for linear non-time interacted covariates from Cox Proportional Hazard models.</p></li>
 <li><p><code>coxsimtvc</code>: a function for simulating time-varying hazards (relative hazards, first differences, and hazard ratios) from a Cox PH model estimated using <code>coxph</code> from the <a href="http://cran.r-project.org/web/packages/survival/index.html">survival</a> package. For more information see this <a href="http://christophergandrud.blogspot.kr/2012/10/graphing-non-proportional-hazards-in-r.html">blog post</a>. The function will calculate time-varying hazard ratios for multiple strata estimated from a stratified Cox PH model.</p></li>
 <li><p><code>coxsimSpline</code>: a function for simulating quantities of interest from penalised splines using multivariate normal distributions. Currently does not support simulating hazard rates from stratified models. <strong>Note:</strong> be extremely careful about the number of simulations you ask the function to find. It is very easy to ask for more than your computer can handle.</p></li>
 <li><p><code>coxsimPoly</code>: a function for simulating quantities of interest for a range of values for a polynomial nonlinear effect from Cox Proportional Hazards models.</p></li>
