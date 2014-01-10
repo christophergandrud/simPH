@@ -2,9 +2,8 @@
 \alias{coxsimInteract}
 \title{Simulate quantities of interest for linear multiplicative interactions from Cox Proportional Hazards models}
 \usage{
-  coxsimInteract(obj, b1, b2, qi = "Marginal Effect",
-    X1 = NULL, X2 = NULL, means = FALSE, expMarg = TRUE,
-    nsim = 1000, ci = 0.95, spin = FALSE)
+coxsimInteract(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL,
+  means = FALSE, expMarg = TRUE, nsim = 1000, ci = 0.95, spin = FALSE)
 }
 \arguments{
   \item{obj}{a \code{\link{coxph}} class fitted model
@@ -57,29 +56,28 @@
   simulations. Currently not supported for hazard rates.}
 }
 \value{
-  a \code{siminteract} class object
+a \code{siminteract} class object
 }
 \description{
-  \code{coxsimInteract} simulates quantities of interest
-  for linear multiplicative interactions using multivariate
-  normal distributions. These can be plotted with
-  \code{\link{simGG}}.
+\code{coxsimInteract} simulates quantities of interest for
+linear multiplicative interactions using multivariate
+normal distributions. These can be plotted with
+\code{\link{simGG}}.
 }
 \details{
-  Simulates marginal effects, first differences, hazard
-  ratios, and hazard rates for linear multiplicative
-  interactions. Marginal effects are calculated as in
-  Brambor et al. (2006) with the addition that we take the
-  exponent, so that it resembles a hazard ratio. You choose
-  not to take the exponent by setting the argument
-  \code{expMarg = FALSE}. For an interaction between
-  variables \eqn{X} and \eqn{Z} then the marginal effect
-  for \eqn{X} is: \deqn{ME_{X} = exp(\beta_{X} +
-  \beta_{XZ}Z).}
+Simulates marginal effects, first differences, hazard
+ratios, and hazard rates for linear multiplicative
+interactions. Marginal effects are calculated as in Brambor
+et al. (2006) with the addition that we take the exponent,
+so that it resembles a hazard ratio. You choose not to take
+the exponent by setting the argument \code{expMarg =
+FALSE}. For an interaction between variables \eqn{X} and
+\eqn{Z} then the marginal effect for \eqn{X} is:
+\deqn{ME_{X} = exp(\beta_{X} + \beta_{XZ}Z).}
 
-  Note that for First Differences the comparison is not
-  between two values of the same variable but two values of
-  the constitute variable and 0.
+Note that for First Differences the comparison is not
+between two values of the same variable but two values of
+the constitute variable and 0.
 }
 \examples{
 # Load Carpenter (2002) data
@@ -120,21 +118,21 @@ Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
 #                       means = TRUE)
 }
 \references{
-  Brambor, Thomas, William Roberts Clark, and Matt Golder.
-  2006. ''Understanding Interaction Models: Improving
-  Empirical Analyses.'' Political Analysis 14(1): 63-82.
+Brambor, Thomas, William Roberts Clark, and Matt Golder.
+2006. ''Understanding Interaction Models: Improving
+Empirical Analyses.'' Political Analysis 14(1): 63-82.
 
-  King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
-  ''Making the Most of Statistical Analyses: Improving
-  Interpretation and Presentation.'' American Journal of
-  Political Science 44(2): 347-61.
+King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
+''Making the Most of Statistical Analyses: Improving
+Interpretation and Presentation.'' American Journal of
+Political Science 44(2): 347-61.
 
-  Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
-  ''Simulation-Efficient Shortest Probability Intervals.''
-  Arvix. \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
+Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
+''Simulation-Efficient Shortest Probability Intervals.''
+Arvix. \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 }
 \seealso{
-  \code{\link{simGG}}, \code{\link{survival}},
-  \code{\link{strata}}, and \code{\link{coxph}},
+\code{\link{simGG}}, \code{\link{survival}},
+\code{\link{strata}}, and \code{\link{coxph}},
 }
 

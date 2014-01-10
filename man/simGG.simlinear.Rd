@@ -1,13 +1,11 @@
 \name{simGG.simlinear}
 \alias{simGG.simlinear}
-\title{Plot simulated linear time-constant quantities of interest from Cox Proportional Hazards Models}
+\title{Plot simulated linear, non-time interacted quantities of interest from Cox Proportional Hazards Models}
 \usage{
-  \method{simGG}{simlinear} (obj, from = NULL, to = NULL,
-    xlab = NULL, ylab = NULL, title = NULL,
-    smoother = "auto", spalette = "Set1",
-    legend = "legend", leg.name = "", lcolour = "#2B8CBE",
-    lsize = 1, pcolour = "#A6CEE3", psize = 1, alpha = 0.1,
-    ribbons = FALSE, ...)
+\method{simGG}{simlinear}(obj, from = NULL, to = NULL, xlab = NULL,
+  ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",
+  legend = "legend", leg.name = "", lcolour = "#2B8CBE", lsize = 1,
+  pcolour = "#A6CEE3", psize = 1, alpha = 0.1, ribbons = FALSE, ...)
 }
 \arguments{
   \item{obj}{a \code{simlinear} class object.}
@@ -75,23 +73,23 @@
   \item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
-  a \code{gg} \code{ggplot} class object
+a \code{gg} \code{ggplot} class object
 }
 \description{
-  \code{simGG.simlinear} uses \link{ggplot2} to plot the
-  quantities of interest from \code{simlinear} objects,
-  including relative hazards, first differences, hazard
-  ratios, and hazard rates.
+\code{simGG.simlinear} uses \link{ggplot2} to plot the
+quantities of interest from \code{simlinear} objects,
+including relative hazards, first differences, hazard
+ratios, and hazard rates.
 }
 \details{
-  Uses \link{ggplot2} to plot the quantities of interest
-  from \code{simlinear} objects, including relative
-  hazards, first differences, hazard ratios, and hazard
-  rates. If there are multiple strata, the quantities of
-  interest will be plotted in a grid by strata. Note: A
-  dotted line is created at y = 1 (0 for first difference),
-  i.e. no effect, for time-varying hazard ratio graphs. No
-  line is created for hazard rates.
+Uses \link{ggplot2} to plot the quantities of interest from
+\code{simlinear} objects, including relative hazards, first
+differences, hazard ratios, and hazard rates. If there are
+multiple strata, the quantities of interest will be plotted
+in a grid by strata. Note: A dotted line is created at y =
+1 (0 for first difference), i.e. no effect, for
+time-varying hazard ratio graphs. No line is created for
+hazard rates.
 }
 \examples{
 ## dontrun
@@ -119,20 +117,20 @@
 # simGG(Sim2, ribbons = TRUE)
 }
 \references{
-  Licht, Amanda A. 2011. ''Change Comes with Time:
-  Substantive Interpretation of Nonproportional Hazards in
-  Event History Analysis.'' Political Analysis 19: 227-43.
+Licht, Amanda A. 2011. ''Change Comes with Time:
+Substantive Interpretation of Nonproportional Hazards in
+Event History Analysis.'' Political Analysis 19: 227-43.
 
-  Keele, Luke. 2010. ''Proportionally Difficult: Testing
-  for Nonproportional Hazards in Cox Models.'' Political
-  Analysis 18(2): 189-205.
+Keele, Luke. 2010. ''Proportionally Difficult: Testing for
+Nonproportional Hazards in Cox Models.'' Political Analysis
+18(2): 189-205.
 
-  Carpenter, Daniel P. 2002. ''Groups, the Media, Agency
-  Waiting Costs, and FDA Drug Approval.'' American Journal
-  of Political Science 46(3): 490-505.
+Carpenter, Daniel P. 2002. ''Groups, the Media, Agency
+Waiting Costs, and FDA Drug Approval.'' American Journal of
+Political Science 46(3): 490-505.
 }
 \seealso{
-  \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},
-  and \code{\link{ggplot2}}
+\code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}}, and
+\code{\link{ggplot2}}
 }
 

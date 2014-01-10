@@ -45,8 +45,8 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, sp
 	{
 		Bottom <- (1 - ci)/2
 		Top <- 1 - Bottom
-		SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = QI < quantile(QI,", Bottom, "))")))
-		SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = QI > quantile(QI,", Top, "))" )))
+		SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate, Lower = QI < quantile(QI,", Bottom, ", na.rm = TRUE))")))
+		SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, mutate, Upper = QI > quantile(QI,", Top, ", na.rm = TRUE))" )))
 	}
 
 	# Drop simulations outside of the shortest probability interval

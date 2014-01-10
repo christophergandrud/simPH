@@ -1,3 +1,7 @@
+Version 0.8.6
+
+Documentation improvements.
+
 Version 0.8.5
 
 Added the ability to choose whether or not to exponentiate marginal effects for `coxsimInteract` with the `expMarg` argument. 

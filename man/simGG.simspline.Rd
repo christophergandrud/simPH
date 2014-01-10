@@ -2,12 +2,11 @@
 \alias{simGG.simspline}
 \title{Plot simulated penalised spline hazards from Cox Proportional Hazards Models}
 \usage{
-  \method{simGG}{simspline} (obj, FacetTime = NULL,
-    from = NULL, to = NULL, xlab = NULL, ylab = NULL,
-    zlab = NULL, title = NULL, smoother = "auto",
-    lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
-    psize = 1, alpha = 0.1, surface = TRUE, fit = "linear",
-    ribbons = FALSE, ...)
+\method{simGG}{simspline}(obj, FacetTime = NULL, from = NULL, to = NULL,
+  xlab = NULL, ylab = NULL, zlab = NULL, title = NULL,
+  smoother = "auto", lcolour = "#2B8CBE", lsize = 1,
+  pcolour = "#A6CEE3", psize = 1, alpha = 0.1, surface = TRUE,
+  fit = "linear", ribbons = FALSE, ...)
 }
 \arguments{
   \item{obj}{a \code{simspline} class object}
@@ -87,34 +86,34 @@
   \item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
-  a \code{gg} \code{ggplot} class object. See
-  \code{\link{scatter3d}} for values from \code{scatter3d}
-  calls.
+a \code{gg} \code{ggplot} class object. See
+\code{\link{scatter3d}} for values from \code{scatter3d}
+calls.
 }
 \description{
-  \code{simGG.simspline} uses \link{ggplot2} and
-  \link{scatter3d} to plot quantities of interest from
-  \code{simspline} objects, including relative hazards,
-  first differences, hazard ratios, and hazard rates.
+\code{simGG.simspline} uses \link{ggplot2} and
+\link{scatter3d} to plot quantities of interest from
+\code{simspline} objects, including relative hazards, first
+differences, hazard ratios, and hazard rates.
 }
 \details{
-  Uses \code{ggplot2} and \code{scatter3d} to plot the
-  quantities of interest from \code{simspline} objects,
-  including relative hazards, first differences, hazard
-  ratios, and hazard rates. If currently does not support
-  hazard rates for multiple strata.
+Uses \code{ggplot2} and \code{scatter3d} to plot the
+quantities of interest from \code{simspline} objects,
+including relative hazards, first differences, hazard
+ratios, and hazard rates. If currently does not support
+hazard rates for multiple strata.
 
-  It can graph hazard rates as a 3D plot using
-  \code{\link{scatter3d}} with the dimensions: Time, Hazard
-  Rate, and the value of \code{Xj}. Ribbon plots are not
-  available with 3D plots. You can also choose to plot
-  hazard rates for a range of values of \code{Xj} in two
-  dimensional plots at specific points in time. Each plot
-  is arranged in a facet grid.
+It can graph hazard rates as a 3D plot using
+\code{\link{scatter3d}} with the dimensions: Time, Hazard
+Rate, and the value of \code{Xj}. Ribbon plots are not
+available with 3D plots. You can also choose to plot hazard
+rates for a range of values of \code{Xj} in two dimensional
+plots at specific points in time. Each plot is arranged in
+a facet grid.
 
-  Note: A dotted line is created at y = 1 (0 for first
-  difference), i.e. no effect, for time-varying hazard
-  ratio graphs. No line is created for hazard rates.
+Note: A dotted line is created at y = 1 (0 for first
+difference), i.e. no effect, for time-varying hazard ratio
+graphs. No line is created for hazard rates.
 }
 \examples{
 ## dontrun
@@ -173,7 +172,7 @@
 # simGG(Sim3, xlab = "\\nFDA Drug Review Staff", alpha = 0.2)
 }
 \seealso{
-  \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},
-  \code{\link{ggplot2}}, and \code{\link{scatter3d}}
+\code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},
+\code{\link{ggplot2}}, and \code{\link{scatter3d}}
 }
 

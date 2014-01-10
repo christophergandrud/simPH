@@ -1,6 +1,6 @@
-#' Simulate quantities of interest for linear time constant covariates from Cox Proportional Hazards models
+#' Simulate quantities of interest for linear covariates that are not interacted with time from Cox Proportional Hazards models
 #'
-#' \code{coxsimLinear} simulates relative hazards, first differences, and hazard ratios for time-constant covariates from models estimated with \code{\link{coxph}} using the multivariate normal distribution. These can be plotted with \code{\link{simGG}}.
+#' \code{coxsimLinear} simulates relative hazards, first differences, and hazard ratios for linear covariates that are not interacted with time from models estimated with \code{\link{coxph}} using the multivariate normal distribution. These can be plotted with \code{\link{simGG}}.
 #' @param obj a \code{\link{coxph}} class fitted model object.
 #' @param b character string name of the coefficient you would like to simulate.
 #' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
@@ -13,7 +13,7 @@
 #'
 #' @return a \code{simlinear} object
 #'
-#' @description Simulates relative hazards, first differences, hazard ratios, and hazard rates for linear time-constant covariates from Cox Proportional Hazard models. These can be plotted with \code{\link{simGG}}.
+#' @description Simulates relative hazards, first differences, hazard ratios, and hazard rates for linear, non-time interacted covariates from Cox Proportional Hazard models. These can be plotted with \code{\link{simGG}}.
 #'
 #'
 #' @examples

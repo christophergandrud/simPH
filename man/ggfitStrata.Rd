@@ -2,8 +2,8 @@
 \alias{ggfitStrata}
 \title{Graph fitted stratified survival curves from Cox Proportional Hazards models}
 \usage{
-  ggfitStrata(obj, byStrata = FALSE, xlab = "", ylab = "",
-    title = "", lcolour = "#2C7FB8", rcolour = "#2C7FB8")
+ggfitStrata(obj, byStrata = FALSE, xlab = "", ylab = "", title = "",
+  lcolour = "#2C7FB8", rcolour = "#2C7FB8")
 }
 \arguments{
   \item{obj}{a \code{survfit} object.}
@@ -27,21 +27,20 @@
   \code{lcolour = "#2C7FB8"} (a bluish hexadecimal colour)}
 }
 \description{
-  This function largely improves
-  \code{\link{plot.survfit}}. It plots the curves using
-  \link{ggplot2} rather than base R graphics. One major
-  advantage is the ability to split the survival curves
-  into multiple plots and arrange them in a grid. This
-  makes it easier to examine many strata at once. Otherwise
-  they can be very bunched up.
+This function largely improves \code{\link{plot.survfit}}.
+It plots the curves using \link{ggplot2} rather than base R
+graphics. One major advantage is the ability to split the
+survival curves into multiple plots and arrange them in a
+grid. This makes it easier to examine many strata at once.
+Otherwise they can be very bunched up.
 
-  Note: the strata legend labels need to be changed
-  manually (see \code{\link{revalue}}) in the
-  \code{survfit} object with the \code{strata} component.
+Note: the strata legend labels need to be changed manually
+(see \code{\link{revalue}}) in the \code{survfit} object
+with the \code{strata} component.
 }
 \details{
-  \code{ggfitStrata} graphs fitted survival curves created
-  with \code{\link{survfit}} using \link{ggplot2}.
+\code{ggfitStrata} graphs fitted survival curves created
+with \code{\link{survfit}} using \link{ggplot2}.
 }
 \examples{
 # dontrun
@@ -57,7 +56,7 @@
 # ggfitStrata(M1Fit, byStrata = TRUE)
 }
 \seealso{
-  \code{\link{survfit}}, \code{\link{ggplot2}} and
-  \code{\link{strata}}
+\code{\link{survfit}}, \code{\link{ggplot2}} and
+\code{\link{strata}}
 }
 

@@ -1,4 +1,4 @@
-#' Plot simulated linear time-constant quantities of interest from Cox Proportional Hazards Models
+#' Plot simulated linear, non-time interacted quantities of interest from Cox Proportional Hazards Models
 #'
 #' \code{simGG.simlinear} uses \link{ggplot2} to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
 #'

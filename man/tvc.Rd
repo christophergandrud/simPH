@@ -2,7 +2,7 @@
 \alias{tvc}
 \title{Create a time interaction variable}
 \usage{
-  tvc(data, b, tvar, tfun = "linear", pow = NULL)
+tvc(data, b, tvar, tfun = "linear", pow = NULL)
 }
 \arguments{
   \item{data}{a data frame}
@@ -21,17 +21,17 @@
   specify what power to raise the time interaction to.}
 }
 \value{
-  a vector
+a vector
 }
 \description{
-  \code{tvc} creates a time interaction variable that can
-  be used in a coxph model (or any other model with time
-  interactions)
+\code{tvc} creates a time interaction variable that can be
+used in a coxph model (or any other model with time
+interactions)
 }
 \details{
-  Interacts a variable with a specified function of time.
-  Possible functions of time include \code{'linear'},
-  natural \code{'log'}, and exponentiated (\code{'power'}).
+Interacts a variable with a specified function of time.
+Possible functions of time include \code{'linear'}, natural
+\code{'log'}, and exponentiated (\code{'power'}).
 }
 \examples{
 # Load Golub & Steunenberg (2007) Data
@@ -41,8 +41,8 @@ data("GolubEUPData")
 GolubEUPData$Lqmv <- tvc(GolubEUPData, b = "qmv", tvar = "end", tfun = "log")
 }
 \seealso{
-  \code{\link{simGG.simtvc}}, \code{coxsimtvc},
-  \code{\link{survival}}, and \code{\link{coxph}}
+\code{\link{simGG.simtvc}}, \code{coxsimtvc},
+\code{\link{survival}}, and \code{\link{coxph}}
 }
 \keyword{utilities}
 

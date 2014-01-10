@@ -2,12 +2,10 @@
 \alias{simGG.siminteract}
 \title{Plot simulated linear multiplicative interactions from Cox Proportional Hazards Models}
 \usage{
-  \method{simGG}{siminteract} (obj, from = NULL, to = NULL,
-    xlab = NULL, ylab = NULL, title = NULL,
-    smoother = "auto", spalette = "Set1",
-    legend = "legend", leg.name = "", lcolour = "#2B8CBE",
-    lsize = 1, pcolour = "#A6CEE3", psize = 1, alpha = 0.1,
-    ribbons = FALSE, ...)
+\method{simGG}{siminteract}(obj, from = NULL, to = NULL, xlab = NULL,
+  ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",
+  legend = "legend", leg.name = "", lcolour = "#2B8CBE", lsize = 1,
+  pcolour = "#A6CEE3", psize = 1, alpha = 0.1, ribbons = FALSE, ...)
 }
 \arguments{
   \item{obj}{a \code{siminteract} class object}
@@ -76,28 +74,27 @@
   \item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
-  a \code{gg} \code{ggplot} class object
+a \code{gg} \code{ggplot} class object
 }
 \description{
-  \code{simGG.siminteract} uses \link{ggplot2} to plot the
-  quantities of interest from \code{siminteract} objects,
-  including marginal effects, first differences, hazard
-  ratios, and hazard rates.
+\code{simGG.siminteract} uses \link{ggplot2} to plot the
+quantities of interest from \code{siminteract} objects,
+including marginal effects, first differences, hazard
+ratios, and hazard rates.
 }
 \details{
-  Uses \link{ggplot2} to plot the quantities of interest
-  from \code{siminteract} objects, including marginal
-  effects, first differences, hazard ratios, and hazard
-  rates. If there are multiple strata, the quantities of
-  interest will be plotted in a grid by strata. Note: A
-  dotted line is created at y = 1 (0 for first difference),
-  i.e. no effect, for time-varying hazard ratio graphs. No
-  line is created for hazard rates.
+Uses \link{ggplot2} to plot the quantities of interest from
+\code{siminteract} objects, including marginal effects,
+first differences, hazard ratios, and hazard rates. If
+there are multiple strata, the quantities of interest will
+be plotted in a grid by strata. Note: A dotted line is
+created at y = 1 (0 for first difference), i.e. no effect,
+for time-varying hazard ratio graphs. No line is created
+for hazard rates.
 
-  Note: if \code{qi = "Hazard Ratio"} or \code{qi = "First
-  Difference"} then you need to have choosen more than one
-  fitted value for \code{X1} in
-  \code{\link{coxsimInteract}}.
+Note: if \code{qi = "Hazard Ratio"} or \code{qi = "First
+Difference"} then you need to have choosen more than one
+fitted value for \code{X1} in \code{\link{coxsimInteract}}.
 }
 \examples{
 # Load Carpenter (2002) data
@@ -144,20 +141,20 @@ simGG(Sim1)
 # simGG(Sim4, to = 150, ribbons = TRUE, legend = FALSE)
 }
 \references{
-  Brambor, Thomas, William Roberts Clark, and Matt Golder.
-  2006. ''Understanding Interaction Models: Improving
-  Empirical Analyses.'' Political Analysis 14(1): 63-82.
+Brambor, Thomas, William Roberts Clark, and Matt Golder.
+2006. ''Understanding Interaction Models: Improving
+Empirical Analyses.'' Political Analysis 14(1): 63-82.
 
-  Keele, Luke. 2010. ''Proportionally Difficult: Testing
-  for Nonproportional Hazards in Cox Models.'' Political
-  Analysis 18(2): 189-205.
+Keele, Luke. 2010. ''Proportionally Difficult: Testing for
+Nonproportional Hazards in Cox Models.'' Political Analysis
+18(2): 189-205.
 
-  Carpenter, Daniel P. 2002. ''Groups, the Media, Agency
-  Waiting Costs, and FDA Drug Approval.'' American Journal
-  of Political Science 46(3): 490-505.
+Carpenter, Daniel P. 2002. ''Groups, the Media, Agency
+Waiting Costs, and FDA Drug Approval.'' American Journal of
+Political Science 46(3): 490-505.
 }
 \seealso{
-  \code{\link{coxsimInteract}},
-  \code{\link{simGG.simlinear}}, and \code{\link{ggplot2}}
+\code{\link{coxsimInteract}},
+\code{\link{simGG.simlinear}}, and \code{\link{ggplot2}}
 }
 

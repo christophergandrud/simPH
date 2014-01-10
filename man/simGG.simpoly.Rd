@@ -2,12 +2,10 @@
 \alias{simGG.simpoly}
 \title{Plot simulated polynomial quantities of interest from Cox Proportional Hazards Models}
 \usage{
-  \method{simGG}{simpoly} (obj, from = NULL, to = NULL,
-    xlab = NULL, ylab = NULL, title = NULL,
-    smoother = "auto", spalette = "Set1",
-    legend = "legend", leg.name = "", lcolour = "#2B8CBE",
-    lsize = 1, pcolour = "#A6CEE3", psize = 1, alpha = 0.1,
-    ribbons = FALSE, ...)
+\method{simGG}{simpoly}(obj, from = NULL, to = NULL, xlab = NULL,
+  ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",
+  legend = "legend", leg.name = "", lcolour = "#2B8CBE", lsize = 1,
+  pcolour = "#A6CEE3", psize = 1, alpha = 0.1, ribbons = FALSE, ...)
 }
 \arguments{
   \item{obj}{a \code{simpoly} class object.}
@@ -75,16 +73,16 @@
   \item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
-  a \code{gg} \code{ggplot} class object
+a \code{gg} \code{ggplot} class object
 }
 \description{
-  \code{simGG.simpoly} uses \link{ggplot2} to plot
-  simulated relative quantities of interest from a
-  \code{simpoly} class object.
+\code{simGG.simpoly} uses \link{ggplot2} to plot simulated
+relative quantities of interest from a \code{simpoly} class
+object.
 }
 \details{
-  Uses \link{ggplot2} to plot the quantities of interest
-  from \code{simpoly} objects.
+Uses \link{ggplot2} to plot the quantities of interest from
+\code{simpoly} objects.
 }
 \examples{
 # Load Carpenter (2002) data
@@ -118,6 +116,6 @@ simGG(Sim1)
 # simGG(Sim3, ribbons = TRUE)
 }
 \seealso{
-  \code{\link{coxsimPoly}} and \code{\link{ggplot2}}
+\code{\link{coxsimPoly}} and \code{\link{ggplot2}}
 }
 

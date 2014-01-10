@@ -2,8 +2,8 @@
 \alias{coxsimSpline}
 \title{Simulate quantities of interest for penalized splines from Cox Proportional Hazards models}
 \usage{
-  coxsimSpline(obj, bspline, bdata, qi = "Relative Hazard",
-    Xj = 1, Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE)
+coxsimSpline(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0,
+  nsim = 1000, ci = 0.95, spin = FALSE)
 }
 \arguments{
   \item{obj}{a \code{\link{coxph}} class fitted model
@@ -49,48 +49,46 @@
   simulations. Currently not supported for hazard rates.}
 }
 \value{
-  a \code{simspline} object
+a \code{simspline} object
 }
 \description{
-  \code{coxsimSpline} simulates quantities of interest from
-  penalized splines using multivariate normal
-  distributions.
+\code{coxsimSpline} simulates quantities of interest from
+penalized splines using multivariate normal distributions.
 }
 \details{
-  Simulates relative hazards, first differences, hazard
-  ratios, and hazard rates for penalized splines from Cox
-  Proportional Hazards models. These can be plotted with
-  \code{\link{simGG}}. A Cox PH model with one penalized
-  spline is given by:
-  \deqn{h(t|\mathbf{X}_{i})=h_{0}(t)\mathrm{e}^{g(x)}}
+Simulates relative hazards, first differences, hazard
+ratios, and hazard rates for penalized splines from Cox
+Proportional Hazards models. These can be plotted with
+\code{\link{simGG}}. A Cox PH model with one penalized
+spline is given by:
+\deqn{h(t|\mathbf{X}_{i})=h_{0}(t)\mathrm{e}^{g(x)}}
 
-  where \eqn{g(x)} is the penalized spline function. For
-  our post-estimation purposes \eqn{g(x)} is basically a
-  series of linearly combined coefficients such that:
+where \eqn{g(x)} is the penalized spline function. For our
+post-estimation purposes \eqn{g(x)} is basically a series
+of linearly combined coefficients such that:
 
-  \deqn{g(x) = \beta_{k_{1}}(x)_{1+} +
-  \beta_{k_{2}}(x)_{2+} + \beta_{k_{3}}(x)_{3+} + \ldots +
-  \beta_{k_{n}}(x)_{n+}}
+\deqn{g(x) = \beta_{k_{1}}(x)_{1+} + \beta_{k_{2}}(x)_{2+}
++ \beta_{k_{3}}(x)_{3+} + \ldots + \beta_{k_{n}}(x)_{n+}}
 
-  where \eqn{k} are the equally spaced spline knots with
-  values inside of the range of observed \eqn{x} and
-  \eqn{n} is the number of knots.
+where \eqn{k} are the equally spaced spline knots with
+values inside of the range of observed \eqn{x} and \eqn{n}
+is the number of knots.
 
-  We can again draw values of each \eqn{\beta_{k_{1}},
-  \ldots \beta_{k_{n}}} from the multivariate normal
-  distribution described above. We then use these simulated
-  coefficients to estimates quantities of interest for a
-  range covariate values. For example, the first difference
-  between two values \eqn{x_{j}} and \eqn{x_{l}} is:
+We can again draw values of each \eqn{\beta_{k_{1}}, \ldots
+\beta_{k_{n}}} from the multivariate normal distribution
+described above. We then use these simulated coefficients
+to estimates quantities of interest for a range covariate
+values. For example, the first difference between two
+values \eqn{x_{j}} and \eqn{x_{l}} is:
 
-  \deqn{\%\triangle h_{i}(t) = (\mathrm{e}^{g(x_{j}) -
-  g(x_{l})} - 1) * 100}
+\deqn{\%\triangle h_{i}(t) = (\mathrm{e}^{g(x_{j}) -
+g(x_{l})} - 1) * 100}
 
-  Relative hazards and hazard ratios can be calculated by
-  extension.
+Relative hazards and hazard ratios can be calculated by
+extension.
 
-  Currently \code{coxsimSpline} does not support simulating
-  hazard rates form multiple stratified models.
+Currently \code{coxsimSpline} does not support simulating
+hazard rates form multiple stratified models.
 }
 \examples{
 ## dontrun
@@ -125,22 +123,22 @@
 #                       nsim = 100)
 }
 \references{
-  Luke Keele, "Replication data for: Proportionally
-  Difficult: Testing for Nonproportional Hazards In Cox
-  Models", 2010, \url{http://hdl.handle.net/1902.1/17068}
-  V1 [Version].
+Luke Keele, "Replication data for: Proportionally
+Difficult: Testing for Nonproportional Hazards In Cox
+Models", 2010, \url{http://hdl.handle.net/1902.1/17068} V1
+[Version].
 
-  King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
-  ''Making the Most of Statistical Analyses: Improving
-  Interpretation and Presentation.'' American Journal of
-  Political Science 44(2): 347-61.
+King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
+''Making the Most of Statistical Analyses: Improving
+Interpretation and Presentation.'' American Journal of
+Political Science 44(2): 347-61.
 
-  Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
-  ''Simulation-Efficient Shortest Probability Intervals.''
-  Arvix. \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
+Liu, Ying, Andrew Gelman, and Tian Zheng. 2013.
+''Simulation-Efficient Shortest Probability Intervals.''
+Arvix. \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 }
 \seealso{
-  \code{\link{simGG}}, \code{\link{survival}},
-  \code{\link{strata}}, and \code{\link{coxph}}
+\code{\link{simGG}}, \code{\link{survival}},
+\code{\link{strata}}, and \code{\link{coxph}}
 }
 

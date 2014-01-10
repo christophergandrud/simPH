@@ -3,7 +3,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 0.8.5
+### Version 0.8.6
 
 ### Please report any bugs at <https://github.com/christophergandrud/simPH/issues>.
 
@@ -17,7 +17,7 @@ The package includes the following functions:
 
 #### Simulation Functions
 
-- `coxsimLinear`: Simulates relative hazards, first differences, hazard ratios, and hazard rates for linear time-constant covariates from Cox Proportional Hazard models.
+- `coxsimLinear`: Simulates relative hazards, first differences, hazard ratios, and hazard rates for linear, non-time interacted covariates from Cox Proportional Hazard models.
 
 - `coxsimtvc`: a function for simulating time-varying hazards (relative hazards, first differences, and hazard ratios) from a Cox PH model estimated using `coxph` from the [survival](http://cran.r-project.org/web/packages/survival/index.html) package. For more information see this [blog post](http://christophergandrud.blogspot.kr/2012/10/graphing-non-proportional-hazards-in-r.html). The function will calculate time-varying hazard ratios for multiple strata estimated from a stratified Cox PH model.
 

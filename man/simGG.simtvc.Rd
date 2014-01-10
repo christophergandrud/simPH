@@ -2,11 +2,10 @@
 \alias{simGG.simtvc}
 \title{Plot simulated time-varying hazard ratios or stratified time-varying hazard rates from Cox Proportional Hazards Models}
 \usage{
-  \method{simGG}{simtvc} (obj, from = NULL, to = NULL,
-    xlab = NULL, ylab = NULL, title = NULL,
-    smoother = "auto", spalette = "Set1",
-    legend = "legend", leg.name = "", lsize = 1, psize = 1,
-    alpha = 0.1, ribbons = FALSE, ...)
+\method{simGG}{simtvc}(obj, from = NULL, to = NULL, xlab = NULL,
+  ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",
+  legend = "legend", leg.name = "", lsize = 1, psize = 1, alpha = 0.1,
+  ribbons = FALSE, ...)
 }
 \arguments{
   \item{obj}{a \code{simtvc} class object}
@@ -62,24 +61,24 @@
   \item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
-  a \code{gg} \code{ggplot} class object
+a \code{gg} \code{ggplot} class object
 }
 \description{
-  \code{simGG.simtvc} uses \link{ggplot2} to plot the
-  simulated hazards from a \code{simtvc} class object
-  created by \code{\link{coxsimtvc}} using \link{ggplot2}.
+\code{simGG.simtvc} uses \link{ggplot2} to plot the
+simulated hazards from a \code{simtvc} class object created
+by \code{\link{coxsimtvc}} using \link{ggplot2}.
 }
 \details{
-  Plots either a time varying hazard ratio or the hazard
-  rates for multiple strata. Currently the strata legend
-  labels need to be changed manually (see
-  \code{\link{revalue}} in the \link{plyr} package) in the
-  \code{simtvc} object with the \code{strata} component.
-  Also, currently the x-axis tick marks and break labels
-  must be adjusted manually for non-linear functions of
-  time. Note: A dotted line is created at y = 1 (0 for
-  first difference), i.e. no effect, for time-varying
-  hazard ratio graphs. No line is created for hazard rates.
+Plots either a time varying hazard ratio or the hazard
+rates for multiple strata. Currently the strata legend
+labels need to be changed manually (see
+\code{\link{revalue}} in the \link{plyr} package) in the
+\code{simtvc} object with the \code{strata} component.
+Also, currently the x-axis tick marks and break labels must
+be adjusted manually for non-linear functions of time.
+Note: A dotted line is created at y = 1 (0 for first
+difference), i.e. no effect, for time-varying hazard ratio
+graphs. No line is created for hazard rates.
 }
 \examples{
 ## dontrun
@@ -135,8 +134,8 @@
 # simGG(Sim3, leg.name = "Comparision", from = 1200, ribbons = TRUE)
 }
 \references{
-  Licht, Amanda A. 2011. ''Change Comes with Time:
-  Substantive Interpretation of Nonproportional Hazards in
-  Event History Analysis.'' Political Analysis 19: 227-43.
+Licht, Amanda A. 2011. ''Change Comes with Time:
+Substantive Interpretation of Nonproportional Hazards in
+Event History Analysis.'' Political Analysis 19: 227-43.
 }
 
