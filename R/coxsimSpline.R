@@ -15,17 +15,17 @@
 #'
 #' @details Simulates relative hazards, first differences, hazard ratios, and hazard rates for penalized splines from Cox Proportional Hazards models. These can be plotted with \code{\link{simGG}}. 
 #' A Cox PH model with one penalized spline is given by:
-#'  \deqn{h(t|\mathbf{X}_{i})=h_{0}(t)\mathrm{e}^{g(x)}}
+#'  \deqn{h(t|\mathbf{X}_{i})=h_{0}(t)\mathrm{e}^{g(x)}}{h(t|X[i])=h[0](t)exp(g(x))}
 #'
 #' where \eqn{g(x)} is the penalized spline function. For our post-estimation purposes \eqn{g(x)} is basically a series of linearly combined coefficients such that:
 #'
-#'  \deqn{g(x) = \beta_{k_{1}}(x)_{1+} + \beta_{k_{2}}(x)_{2+} + \beta_{k_{3}}(x)_{3+} + \ldots + \beta_{k_{n}}(x)_{n+}}
+#'  \deqn{g(x) = \beta_{k_{1}}(x)_{1+} + \beta_{k_{2}}(x)_{2+} + \beta_{k_{3}}(x)_{3+} + \ldots + \beta_{k_{n}}(x)_{n+}}{g(x) = \beta[k][1](x)[1+] + \beta[k][2](x)[2+] + \beta[k][3](x)[3+] + \ldots + \beta[k][n](x)[n+]}
 #'
 #' where \eqn{k} are the equally spaced spline knots with values inside of the range of observed \eqn{x} and \eqn{n} is the number of knots. 
 #'
-#' We can again draw values of each \eqn{\beta_{k_{1}}, \ldots \beta_{k_{n}}} from the multivariate normal distribution described above. We then use these simulated coefficients to estimates quantities of interest for a range covariate values. For example, the first difference between two values \eqn{x_{j}} and \eqn{x_{l}} is:
+#' We can again draw values of each \eqn{\beta_{k_{1}},\: \ldots \beta_{k_{n}}}{\beta[k][1], \ldots \beta[k[n]} from the multivariate normal distribution described above. We then use these simulated coefficients to estimates quantities of interest for a range covariate values. For example, the first difference between two values \eqn{x_{j}}{x[j]} and \eqn{x_{l}}{x[l]} is:
 #'
-#'    \deqn{\%\triangle h_{i}(t) = (\mathrm{e}^{g(x_{j}) - g(x_{l})} - 1) * 100}
+#'    \deqn{\%\triangle h_{i}(t) = (\mathrm{e}^{g(x_{j}) - g(x_{l})} - 1) * 100}{FD(h[i](t)) = (exp(g(x[j]) - g(x[l])) - 1) * 100}
 #'
 #' Relative hazards and hazard ratios can be calculated by extension.
 #'
@@ -42,11 +42,11 @@
 #' # Run basic model
 #' # From Keele (2010) replication data
 #' # M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 + 
-#' #				acutediz + hosp01  + pspline(hospdisc, df = 4) + 
-#' #				pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 +
-#' #				orphdum + natreg + vandavg3 + wpnoavg3 + 
-#' #				pspline(condavg3, df = 4) + pspline(orderent, df = 4) + 
-#'#				pspline(stafcder, df = 4), data = CarpenterFdaData)
+#' #           acutediz + hosp01  + pspline(hospdisc, df = 4) + 
+#' #           pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 +
+#' #           orphdum + natreg + vandavg3 + wpnoavg3 + 
+#' #           pspline(condavg3, df = 4) + pspline(orderent, df = 4) + 
+#' #           pspline(stafcder, df = 4), data = CarpenterFdaData)
 #'
 #' # Simulate Relative Hazards for orderent
 #' # Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)", 
@@ -55,13 +55,11 @@
 #' #                    Xj = seq(1100, 1700, by = 10), 
 #' #                    Xl = seq(1099, 1699, by = 10), spin = TRUE)
 #'
-#' ## dontrun  
 #' # Simulate Hazard Rates for orderent
 #' # Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
 #' #                       bdata = CarpenterFdaData$orderent,
 #' #                       qi = "Hazard Rate",
-#' #                       Xj = seq(2, 53, by = 3),
-#' #                       nsim = 100)
+#' #                       Xj = seq(2, 53, by = 3), nsim = 100)
 #'
 #'
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}

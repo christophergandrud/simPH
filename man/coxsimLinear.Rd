@@ -29,7 +29,7 @@ coxsimLinear(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
 
   \item{means}{logical, whether or not to use the mean
   values to fit the hazard rate for covaraiates other than
-  \code{b}.}
+  \code{b}. Note: EXPERIMENTAL.}
 
   \item{nsim}{the number of simulations to run per value of
   X. Default is \code{nsim = 1000}. Note: it does not
@@ -44,7 +44,7 @@ coxsimLinear(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
 
   \item{spin}{logical, whether or not to keep only the
   shortest probability interval rather than the middle
-  simulations. Currently not supported for hazard rates.}
+  simulations. Currently not supported for Hazard Rates.}
 }
 \value{
 a \code{simlinear} object
@@ -79,16 +79,16 @@ M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
 
 # Simulate Hazard Ratios
 Sim1 <- coxsimLinear(M1, b = "stafcder",
-                       Xj = c(1237, 1600),
-                       Xl = c(1000, 1000),
-                       spin = TRUE, ci = 0.99)
+                     Xj = c(1237, 1600),
+                     Xl = c(1000, 1000),
+                     qi = "Hazard Ratio",
+                     spin = TRUE, ci = 0.99)
 
 ## dontrun
 # Simulate Hazard Rates
 # Sim2 <- coxsimLinear(M1, b = "stafcder",
-#                       qi = "Hazard Rate",
-#                       Xj = 1237,
-#                       ci = 0.99, means = TRUE)
+#                      Xj = 1237,
+#                      ci = 0.99)
 }
 \references{
 Licht, Amanda A. 2011. ''Change Comes with Time:

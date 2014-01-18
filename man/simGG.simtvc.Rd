@@ -1,6 +1,6 @@
 \name{simGG.simtvc}
 \alias{simGG.simtvc}
-\title{Plot simulated time-varying hazard ratios or stratified time-varying hazard rates from Cox Proportional Hazards Models}
+\title{Plot simulated time interactive hazard ratios or stratified time interactive hazard rates from Cox Proportional Hazards Models}
 \usage{
 \method{simGG}{simtvc}(obj, from = NULL, to = NULL, xlab = NULL,
   ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",
@@ -69,16 +69,17 @@ simulated hazards from a \code{simtvc} class object created
 by \code{\link{coxsimtvc}} using \link{ggplot2}.
 }
 \details{
-Plots either a time varying hazard ratio or the hazard
-rates for multiple strata. Currently the strata legend
-labels need to be changed manually (see
-\code{\link{revalue}} in the \link{plyr} package) in the
-\code{simtvc} object with the \code{strata} component.
-Also, currently the x-axis tick marks and break labels must
-be adjusted manually for non-linear functions of time.
-Note: A dotted line is created at y = 1 (0 for first
-difference), i.e. no effect, for time-varying hazard ratio
-graphs. No line is created for hazard rates.
+Plots either a time interactive hazard ratios, first
+differences, and relative hazards, or the hazard rates for
+multiple strata. Currently the strata legend labels need to
+be changed manually (see \code{\link{revalue}} in the
+\link{plyr} package) in the \code{simtvc} object with the
+\code{strata} component. Also, currently the x-axis tick
+marks and break labels must be adjusted manually for
+non-linear functions of time. Note: A dotted line is
+created at y = 1 (0 for first difference), i.e. no effect,
+for time-varying hazard ratio graphs. No line is created
+for hazard rates.
 }
 \examples{
 ## dontrun

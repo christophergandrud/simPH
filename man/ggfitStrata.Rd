@@ -43,7 +43,7 @@ with the \code{strata} component.
 with \code{\link{survfit}} using \link{ggplot2}.
 }
 \examples{
-# dontrun
+## dontrun
 # Load survival
 # library(survival)
 # Subset data

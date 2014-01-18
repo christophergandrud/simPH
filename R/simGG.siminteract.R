@@ -30,11 +30,12 @@
 #' library(survival)
 #'
 #' # Run basic model
-#' M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
+#' M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, 
+#'             data = CarpenterFdaData)
 #' 
 #' # Simulate Marginal Effect of lethal for multiple values of prevgenx
 #' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx", 
-#'							X2 = seq(2, 115, by = 2), nsim = 100)
+#'                      X2 = seq(2, 115, by = 2), nsim = 100)
 #'
 #' # Plot quantities of interest
 #' simGG(Sim1)
@@ -42,7 +43,8 @@
 #' ## dontrun
 #' # Change the order of the covariates to make a more easily
 #' # interpretable hazard ratio graph.
-#' # M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal, data = CarpenterFdaData)
+#' # M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal, 
+#'               data = CarpenterFdaData)
 #'
 #' # Simulate Hazard Ratio of lethal for multiple values of prevgenx
 #' # Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
@@ -61,7 +63,8 @@
 #' #                       X1 = 100, X2 = 1, qi = "Hazard Rate")
 #'                        
 #' # Plot quantities of interest
-#' # simGG(Sim1, xlab = "\nprevgenx", ylab = "Marginal Effect of lethal\n")
+#' # simGG(Sim1, xlab = "\nprevgenx", 
+#' #       ylab = "Marginal Effect of lethal\n")
 #' # simGG(Sim2, ribbons = TRUE)
 #' # simGG(Sim3)
 #' # simGG(Sim4, to = 150, ribbons = TRUE, legend = FALSE)

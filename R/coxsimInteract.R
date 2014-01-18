@@ -7,17 +7,17 @@
 #' @param qi quantity of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Hazard Ratio"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set. If you want to plot the results, \code{X1} should have more than one value.
 #' @param X2 numeric vector of fitted values of \code{b2} to simulate for. 
-#' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1} \code{b2} and \code{b1*b2}. Note: it does not currently support models that include polynomials created by \code{\link{I}}.i
+#' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1} \code{b2} and \code{b1*b2}. Note: it does not currently support models that include polynomials created by \code{\link{I}}.i. Note: EXPERIMENTAL.
 #' @param expMarg logical. Whether or not to exponentiate the marginal effect.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the confidence level of the shortest probability interval. Any value from 0 through 1 may be used.
 #' @param spin logical, whether or not to keep only the shortest probability interval rather than the middle simulations. Currently not supported for hazard rates.
 #'
 #' @details Simulates marginal effects, first differences, hazard ratios, and hazard rates for linear multiplicative interactions. 
-#' Marginal effects are calculated as in Brambor et al. (2006) with the addition that we take the exponent, so that it resembles a hazard ratio. You choose not to take the exponent by setting the argument \code{expMarg = FALSE}. For an interaction between variables \eqn{X} and \eqn{Z} then the marginal effect for \eqn{X} is:
-#' \deqn{ME_{X} = exp(\beta_{X} + \beta_{XZ}Z).}
+#' Marginal effects are calculated as in Brambor et al. (2006) with the addition that we take the exponent, so that it resembles a hazard ratio. You can choose not to take the exponent by setting the argument \code{expMarg = FALSE}. For an interaction between variables \eqn{X} and \eqn{Z} the marginal effect for \eqn{X} is:
+#' \deqn{ME_{X} = e^(\beta_{X} + \beta_{XZ}Z)}{ME[X] = exp(\beta[X] + \beta[XZ]Z)}
 #'
-#' Note that for First Differences the comparison is not between two values of the same variable but two values of the constitute variable and 0.
+#' Note that for First Differences the comparison is not between two values of the same variable but two values of the constitute variable and 0 for the two variables.
 #'
 #' @examples 
 #' # Load Carpenter (2002) data
@@ -27,20 +27,22 @@
 #' library(survival)
 #'
 #' # Run basic model
-#' M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
+#' M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, 
+#'             data = CarpenterFdaData)
 #' 
-#' # Simulate Marginal Effect of lethal for multiple values of prevgenx
+#' # Simulate Marginal Effect of lethal for multiple 
+#' # values of prevgenx
 #' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
-#'						  X2 = seq(2, 115, by = 2), spin = TRUE)
+#'                        X2 = seq(2, 115, by = 2), spin = TRUE)
 #'
 #' ## dontrun
 #' # Change the order of the covariates to make a more easily
 #' # interpretable relative hazard graph. 
 #' # M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal + 
-#' #             orphdum,
-#' #             data = CarpenterFdaData)
+#' #             orphdum, data = CarpenterFdaData)
 #'
-#' # Simulate Hazard Ratio of lethal for multiple values of prevgenx
+#' # Simulate Hazard Ratio of lethal for multiple 
+#' # values of prevgenx
 #' # Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
 #' #                    X1 = seq(2, 115, by = 2),
 #' #                    X2 = c(0, 1),

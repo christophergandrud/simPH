@@ -27,9 +27,10 @@
 #' library(survival)
 #'
 #' # Run basic model
-#' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz +
-#'        hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum + 
-#'        natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + 
+#' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + 
+#'        deathrt1 + acutediz + hosp01  + hhosleng + mandiz01 + 
+#'        femdiz01 + peddiz01 + orphdum + natreg +
+#'        I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 + 
 #'        condavg3 + orderent + stafcder, data = CarpenterFdaData)
 #' 
 #' # Simulate simpoly First Difference

@@ -12,10 +12,11 @@
 #' @param spin logical, whether or not to keep only the shortest probability interval rather than the middle simulations. Currently not supported for hazard rates.
 #'
 #' @return a \code{simpoly} class object.
-#' @details Simulates quantities of interest for polynomial covariate effects. For example if a nonlinear effect is modeled with a second order polynomial--i.e. \eqn{\beta_{1}x_{i} + \beta_{2}x_{i}^{2}}--we can once again draw \eqn{n} simulations from the multivariate normal distribution for both \eqn{\beta_{1}} and \eqn{\beta_{2}}. Then we simply calculate quantities of interest for a range of values and plot the results as before. For example, we find the first difference for a second order polynomial with:
-#' \deqn{\%\triangle h_{i}(t) = (\mathrm{e}^{\beta_{1}x_{j-1} + \beta_{2}x_{j-l}^{2}} - 1) * 100}
+#' @details Simulates quantities of interest for polynomial covariate effects. For example if a nonlinear effect is modeled with a second order polynomial--i.e. \eqn{\beta_{1}x_{i} + \beta_{2}x_{i}^{2}}{\beta[1]x[i] + \beta[2]x[i]^2}--we can once again draw \eqn{n} simulations from the multivariate normal distribution for both \eqn{\beta_{1}}{\beta[1]} and \eqn{\beta_{2}}{\beta[2]}. Then we simply calculate quantities of interest for a range of values and plot the results as before. For example, we find the first difference for a second order polynomial with:
+#' \deqn{\%\triangle h_{i}(t) = (\mathrm{e}^{\beta_{1}x_{j-1} + \beta_{2}x_{j-l}^{2}} - 1) * 100}{FD(h[i](t)) = exp(\beta[1]x[j-1] + \beta[2]x[j-l]^2) - 1) * 100}
 
-#' where \eqn{x_{j-l} = x_{j} - x_{l}}.
+
+#' where \eqn{x_{j-l} = x_{j} - x_{l}}{x[j-l] = x[j] - x[l]}.
 #'
 #' Note, you must use \code{\link{I}} to create the polynomials.
 #' 
@@ -36,6 +37,7 @@
 #' Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference", 
 #'						pow = 3, Xj = seq(1, 150, by = 5), nsim = 100)
 #'
+#' ## dontrun
 #' # Simulate simpoly Hazard Ratio with spin probibility interval
 #' # Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio", 
 #' #						pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)

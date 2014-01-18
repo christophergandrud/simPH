@@ -37,7 +37,7 @@ coxsimInteract(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL,
   values to fit the hazard rate for covaraiates other than
   \code{b1} \code{b2} and \code{b1*b2}. Note: it does not
   currently support models that include polynomials created
-  by \code{\link{I}}.i}
+  by \code{\link{I}}.i. Note: EXPERIMENTAL.}
 
   \item{expMarg}{logical. Whether or not to exponentiate
   the marginal effect.}
@@ -69,15 +69,16 @@ Simulates marginal effects, first differences, hazard
 ratios, and hazard rates for linear multiplicative
 interactions. Marginal effects are calculated as in Brambor
 et al. (2006) with the addition that we take the exponent,
-so that it resembles a hazard ratio. You choose not to take
-the exponent by setting the argument \code{expMarg =
+so that it resembles a hazard ratio. You can choose not to
+take the exponent by setting the argument \code{expMarg =
 FALSE}. For an interaction between variables \eqn{X} and
-\eqn{Z} then the marginal effect for \eqn{X} is:
-\deqn{ME_{X} = exp(\beta_{X} + \beta_{XZ}Z).}
+\eqn{Z} the marginal effect for \eqn{X} is: \deqn{ME_{X} =
+e^(\beta_{X} + \beta_{XZ}Z)}{ME[X] = exp(\beta[X] +
+\beta[XZ]Z)}
 
 Note that for First Differences the comparison is not
 between two values of the same variable but two values of
-the constitute variable and 0.
+the constitute variable and 0 for the two variables.
 }
 \examples{
 # Load Carpenter (2002) data
@@ -87,20 +88,22 @@ data("CarpenterFdaData")
 library(survival)
 
 # Run basic model
-M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx, data = CarpenterFdaData)
+M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx,
+            data = CarpenterFdaData)
 
-# Simulate Marginal Effect of lethal for multiple values of prevgenx
+# Simulate Marginal Effect of lethal for multiple
+# values of prevgenx
 Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
-						  X2 = seq(2, 115, by = 2), spin = TRUE)
+                       X2 = seq(2, 115, by = 2), spin = TRUE)
 
 ## dontrun
 # Change the order of the covariates to make a more easily
 # interpretable relative hazard graph.
 # M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal +
-#             orphdum,
-#             data = CarpenterFdaData)
+#             orphdum, data = CarpenterFdaData)
 
-# Simulate Hazard Ratio of lethal for multiple values of prevgenx
+# Simulate Hazard Ratio of lethal for multiple
+# values of prevgenx
 # Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
 #                    X1 = seq(2, 115, by = 2),
 #                    X2 = c(0, 1),

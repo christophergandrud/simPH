@@ -126,11 +126,11 @@ graphs. No line is created for hazard rates.
 # Run basic model
 # From Keele (2010) replication data
 # M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 +
-#				acutediz + hosp01  + pspline(hospdisc, df = 4) +
-#				pspline(hhosleng, df = 4) + mandiz01 + femdiz01 + peddiz01 +
-#				orphdum + natreg + vandavg3 + wpnoavg3 +
-#				pspline(condavg3, df = 4) + pspline(orderent, df = 4) +
-#				pspline(stafcder, df = 4), data = CarpenterFdaData)
+#                acutediz + hosp01  + pspline(hospdisc, df = 4) +
+#                pspline(hhosleng, df = 4) + mandiz01 + femdiz01 +
+#                peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 +
+#                pspline(condavg3, df = 4) + pspline(orderent, df = 4) +
+#                pspline(stafcder, df = 4), data = CarpenterFdaData)
 
 # Simulate Relative Hazards for orderent
 # Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
@@ -159,7 +159,8 @@ graphs. No line is created for hazard rates.
 # Sim2$Time <- round(Sim2$Time, digits = 2)
 
 # Create plot
-# simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36), ribbons = TRUE, alpha = 0.5)
+# simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36),
+#       ribbons = TRUE, alpha = 0.5)
 
 # Simulated Fitted Values of stafcder
 # Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
