@@ -6,10 +6,16 @@
   from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL,
   title = NULL, smoother = "auto", lcolour = "#2B8CBE", lsize = 1,
   pcolour = "#A6CEE3", psize = 1, alpha = 0.1, surface = TRUE,
-  fit = "linear", ribbons = FALSE, ...)
+  fit = "linear", type = "points", ...)
 }
 \arguments{
   \item{obj}{a \code{simspline} class object}
+
+  \item{SmoothSpline}{logical whether or not to fit the
+  simulations with smoothing splines. Creates a smoother
+  plot. See \code{\link{smooth.spline}} for more
+  information. Note: currently the degrees of freedom are
+  set at 10.}
 
   \item{FacetTime}{a numeric vector of points in time where
   you would like to plot Hazard Rates in a facet grid. Only
@@ -70,12 +76,17 @@
   \code{qi == 'Relative Hazard'} and \code{FacetTime =
   NULL}.}
 
-  \item{ribbons}{logical specifies whether or not to use
-  summary ribbons of the simulations rather than plotting
-  every simulation value as a point. If \code{ribbons =
-  TRUE} a plot will be created with shaded areas
-  ('ribbons') for the minimum and maximum simulation values
-  (i.e. the middle interval set with \code{qi} in
+  \item{type}{character string. Specifies how to plot the
+  simulations. Can be \code{points}, \code{lines}, or
+  \code{ribbons}. If points then each simulation value will
+  be plotted. If \code{lines} is chosen then each
+  simulation is plotted using a different line. Note: any
+  simulation with a value along its length that is outside
+  of the specified central interval will be dropped. This
+  is to create a smooth plot. If \code{type = "ribbons"} a
+  plot will be created with shaded areas ('ribbons') for
+  the minimum and maximum simulation values (i.e. the
+  middle interval set with \code{qi} in
   \code{\link{coxsimSpline}}) as well as the central 50
   percent of this area. It also plots a line for the median
   value of the full area, so values in \code{smoother} are

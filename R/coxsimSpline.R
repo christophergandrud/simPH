@@ -205,7 +205,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	    Simb <- Simbj
 	} else if (qi == "Relative Hazard"){
 		Simb <- MergeX(Xj)
-	    names(Simb) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
+	    names(Simb) <- c("CoefName", "SimID", "Coef", "IntervalStart", "IntervalFinish", "Xj")
 	    Simb$QI <- exp(Simb$Xj * Simb$Coef)
 	}
 	else if (qi == "First Difference"){
@@ -214,9 +214,9 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	    } 
 	    else {
 			Simbj <- MergeX(Xj)
-		    names(Simbj) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
+		    names(Simbj) <- c("CoefName", "SimID",  "Coef", "IntervalStart", "IntervalFinish", "Xj")
 			Simbl <- MergeX(Xl)
-		    names(Simbl) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xl")
+		    names(Simbl) <- c("CoefName", "SimID", "Coef", "IntervalStart", "IntervalFinish", "Xl")
 		 	
 		 	Xs <- data.frame(Xj, Xl)   	
 		    Simbj <- merge(Simbj, Xs, by = "Xj")
@@ -230,7 +230,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 		Xl <- NULL
       message("Xl is ignored. All variables' values other than b fitted at 0.") 
 		Simb <- MergeX(Xj)
-	    names(Simb) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
+	    names(Simb) <- c("CoefName", "SimID", "Coef", "IntervalStart", "IntervalFinish", "Xj")
 	 	Simb$HR <- exp(Simb$Xj * Simb$Coef)
 	  	bfit <- basehaz(obj)
 	  	## Currently does not support strata
@@ -249,9 +249,9 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
       }
       Simb$QI <- Simb$hazard * Simb$HR 
       if (is.null(Simb$strata)){
-        Simb <- Simb[, list(time, Xj, QI)]
+        Simb <- Simb[, list(time, SimID, Xj, QI)]
       } else if (!is.null(Simb$strata)){
-        Simb <- Simb[, list(time, Xj, QI, strata)]
+        Simb <- Simb[, list(time, SimID, Xj, QI, strata)]
       }
       Simb <- data.frame(Simb)
 	}
@@ -263,15 +263,16 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 		SubVar <- c("time", "Xj")
 	}
 
-  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi,
-          QI = QI, spin = spin, ci = ci)	
+  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
+				qi = qi, QI = QI, spin = spin, ci = ci)	
 
   # Final clean up
     # Subset simspline object & create a data frame of important variables
 	if (qi == "Hazard Rate"){
 		if (is.null(SimbPerc$strata)){
-			SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI, SimbPerc$Xj)
-			names(SimbPercSub) <- c("Time", "QI", "Xj")
+			SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time, SimbPerc$QI, 
+				SimbPerc$Xj)
+			names(SimbPercSub) <- c("SimID", "Time", "QI", "Xj")
 		} 
 		# Currently does not support strata
 		else if (!is.null(SimbPerc$strata)) {
@@ -282,11 +283,12 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
                                 SimbPerc$Comparison)
 	  	names(SimbPercSub) <- c("SimID", "Xj", "QI", "Comparison")
 	} else if (qi == "Relative Hazard"){
-	  	SimbPercSub <- data.frame(SimbPerc$Xj, SimbPerc$QI)
-	  	names(SimbPercSub) <- c("Xj", "QI")
+	  	SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
+	  	names(SimbPercSub) <- c("SimID", "Xj", "QI")
 	} else if (qi == "First Difference"){
-		SimbPercSub <- data.frame(SimbPerc$Xj, SimbPerc$QI, SimbPerc$Comparison)
-		names(SimbPercSub) <- c("Xj", "QI", "Comparison")
+		SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI, 
+			SimbPerc$Comparison)
+		names(SimbPercSub) <- c("SimID", "Xj", "QI", "Comparison")
 	}
   class(SimbPercSub) <- c("simspline", qi)
   SimbPercSub

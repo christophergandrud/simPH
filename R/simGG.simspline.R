@@ -3,6 +3,7 @@
 #' \code{simGG.simspline} uses \link{ggplot2} and \link{scatter3d} to plot quantities of interest from \code{simspline} objects, including relative hazards, first differences, hazard ratios, and hazard rates.
 #'
 #' @param obj a \code{simspline} class object
+#' @param SmoothSpline logical whether or not to fit the simulations with smoothing splines. Creates a smoother plot. See \code{\link{smooth.spline}} for more information. Note: currently the degrees of freedom are set at 10.
 #' @param FacetTime a numeric vector of points in time where you would like to plot Hazard Rates in a facet grid. Only relevant if \code{qi == 'Hazard Rate'}. Note: the values of Facet Time must exactly match values of the \code{time} element of \code{obj}.
 #' @param xlab a label for the plot's x-axis.
 #' @param ylab a label of the plot's y-axis. The default uses the value of \code{qi}.
@@ -18,7 +19,7 @@
 #' @param alpha numeric. Alpha (e.g. transparency) for the points or ribbons. Default is \code{alpha = 0.1}. See \code{\link{ggplot2}}.
 #' @param surface plot surface. Default is \code{surface = TRUE}. Only relevant if \code{qi == 'Relative Hazard'} and \code{FacetTime = NULL}.
 #' @param fit one or more of \code{"linear"}, \code{"quadratic"}, \code{"smooth"}, \code{"additive"}; to display fitted surface(s); partial matching is supported e.g., \code{c("lin", "quad")}. Only relevant if \code{qi == 'Relative Hazard'} and \code{FacetTime = NULL}.
-#' @param ribbons logical specifies whether or not to use summary ribbons of the simulations rather than plotting every simulation value as a point. If \code{ribbons = TRUE} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimSpline}}) as well as the central 50 percent of this area. It also plots a line for the median value of the full area, so values in \code{smoother} are ignored. One of the key advantages of using ribbons rather than points is that it creates plots with smaller file sizes.
+#' @param type character string. Specifies how to plot the simulations. Can be \code{points}, \code{lines}, or \code{ribbons}. If points then each simulation value will be plotted. If \code{lines} is chosen then each simulation is plotted using a different line. Note: any simulation with a value along its length that is outside of the specified central interval will be dropped. This is to create a smooth plot. If \code{type = "ribbons"} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimSpline}}) as well as the central 50 percent of this area. It also plots a line for the median value of the full area, so values in \code{smoother} are ignored. One of the key advantages of using ribbons rather than points is that it creates plots with smaller file sizes.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
 #' @return a \code{gg} \code{ggplot} class object. See \code{\link{scatter3d}} for values from \code{scatter3d} calls.
@@ -94,13 +95,13 @@
 #' @method simGG simspline
 #' @S3method simGG simspline
 
-simGG.simspline <- function(obj, SmoothSpline = FALSE, FacetTime = NULL, from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL, title = NULL, smoother = "auto", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", psize = 1, alpha = 0.1, surface = TRUE, fit = "linear", ribbons = FALSE, ...)
+simGG.simspline <- function(obj, SmoothSpline = FALSE, FacetTime = NULL, from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL, title = NULL, smoother = "auto", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", psize = 1, alpha = 0.1, surface = TRUE, fit = "linear", type = "points", ...)
 {
-	Time <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <- Median <- NULL
+	Time <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <- Median <- SimID <- NULL
 	if (!inherits(obj, "simspline")){
     	stop("must be a simspline object")
     }
-	if (isTRUE(ribbons) & smoother != "auto"){
+	if (type == 'ribbons' & smoother != "auto"){
 	  message("The smoother argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
 	}
     # Find quantity of interest
@@ -136,7 +137,7 @@ simGG.simspline <- function(obj, SmoothSpline = FALSE, FacetTime = NULL, from = 
     }
 
 	# Plots points
-	if (!isTRUE(ribbons)){
+	if (type == 'points'){
 		if (qi == "First Difference"){
 	    	ggplot(obj, aes(Xj, QI)) +
 	        	geom_point(shape = 21, alpha = I(alpha), size = psize, colour = pcolour) +
@@ -180,8 +181,48 @@ simGG.simspline <- function(obj, SmoothSpline = FALSE, FacetTime = NULL, from = 
 		        theme_bw(base_size = 15)
 	    }
 	}
+	# Plots lines
+	if (type == 'lines'){
+		if (qi == "First Difference"){
+	    	ggplot(obj, aes(Xj, QI)) +
+	        	geom_line(aes(group = SimID), alpha = I(alpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        theme_bw(base_size = 15)
+		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
+			ggplot(obj, aes(Xj, QI)) +
+		        geom_line(aes(group = SimID), alpha = I(alpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        theme_bw(base_size = 15)
+	    } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
+			SubsetTime <- function(f){
+			  Time <- NULL
+			  CombObjdf <- data.frame()
+			  for (i in f){
+			    Temps <- obj
+			    TempsSub <- subset(Temps, Time == i)
+			    CombObjdf <- rbind(CombObjdf, TempsSub)
+			  }
+			  CombObjdf
+			}
+			objSub <- SubsetTime(FacetTime)
+			ggplot(objSub, aes(Xj, QI)) +
+		        geom_line(aes(group = SimID), alpha = I(alpha), size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+		        facet_grid(.~Time) +
+		        xlab(xlab) + ylab(ylab) +
+		        ggtitle(title) +
+		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+		        theme_bw(base_size = 15)
+	    }
+	}
 	# Plots ribbons
-	else if (isTRUE(ribbons)){
+	else if (type == 'ribbons'){
 		suppressWarnings(
 		if (qi == "First Difference"){
 			obj <- MinMaxLines(df = obj)
