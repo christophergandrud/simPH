@@ -94,7 +94,7 @@
 #' @method simGG simspline
 #' @S3method simGG simspline
 
-simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL, title = NULL, smoother = "auto", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", psize = 1, alpha = 0.1, surface = TRUE, fit = "linear", ribbons = FALSE, ...)
+simGG.simspline <- function(obj, SmoothSpline = FALSE, FacetTime = NULL, from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL, title = NULL, smoother = "auto", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", psize = 1, alpha = 0.1, surface = TRUE, fit = "linear", ribbons = FALSE, ...)
 {
 	Time <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <- Median <- NULL
 	if (!inherits(obj, "simspline")){
@@ -115,7 +115,16 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 
     # Convert obj to data frame
     class(obj) <- "data.frame"
-    
+
+    # Smooth points if SmoothSpline = TRUE
+    if (isTRUE(SmoothSpline)){
+	    if (qi != 'Hazard Rate'){
+	    	obj <- SmoothSimulations(obj)
+		} else if (qi == 'Hazard Rate'){
+			obj <- SmoothSimulations(obj, xaxis = 'Time')
+		}
+	}	
+
     # Constrict time period to plot for hazard rate
     if (qi == "Hazard Rate"){   
 	    if (!is.null(from)){
@@ -135,7 +144,6 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
 		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 			ggplot(obj, aes(Xj, QI)) +
@@ -144,7 +152,6 @@ simGG.simspline <- function(obj, FacetTime = NULL, from = NULL, to = NULL, xlab 
 		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
 		        theme_bw(base_size = 15)
 	    } else if (qi == "Hazard Rate" & is.null(FacetTime)){
 	    	with(obj, scatter3d(x = Time, y = QI, z = Xj,

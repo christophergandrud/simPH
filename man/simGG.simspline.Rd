@@ -2,9 +2,9 @@
 \alias{simGG.simspline}
 \title{Plot simulated penalised spline hazards from Cox Proportional Hazards Models}
 \usage{
-\method{simGG}{simspline}(obj, FacetTime = NULL, from = NULL, to = NULL,
-  xlab = NULL, ylab = NULL, zlab = NULL, title = NULL,
-  smoother = "auto", lcolour = "#2B8CBE", lsize = 1,
+\method{simGG}{simspline}(obj, SmoothSpline = FALSE, FacetTime = NULL,
+  from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL,
+  title = NULL, smoother = "auto", lcolour = "#2B8CBE", lsize = 1,
   pcolour = "#A6CEE3", psize = 1, alpha = 0.1, surface = TRUE,
   fit = "linear", ribbons = FALSE, ...)
 }

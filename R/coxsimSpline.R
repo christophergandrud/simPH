@@ -74,7 +74,7 @@
 #' @importFrom stringr word str_match str_replace
 #' @importFrom reshape2 melt
 #' @importFrom survival basehaz
-#' @importFrom MSBVAR rmultnorm
+#' @importFrom MASS mvrnorm
 #' @export
 
 coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE)
@@ -115,19 +115,20 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	}
 
 	# Extract boundary knots for default Boundary.knots = range(x) & number of knots
-	#### Note: these can also be found with get("cbase", environment(obj$printfun[[1]])) # (replace 1 with the spline term number
+	#### Note: these can also be found with get("cbase", environment(obj$printfun[[1]])) # (replace 1 with the spline term number)
 	#### From: http://r.789695.n4.nabble.com/help-on-pspline-in-coxph-td3431829.html 
 	OA <- obj$assign
 	ListKnots <- OA[bterm]
 	NumKnots <- length(unlist(ListKnots))
 	KnotIntervals <- levels(cut(bdata, breaks = NumKnots))
+  SimID <- 1:nsim
 
 	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
 	VC <- vcov(obj)
 
 	# Draw covariate estimates from the multivariate normal distribution	   
-	Drawn <- rmultnorm(n = nsim, mu = Coef, vmat = VC)
+	Drawn <- mvrnorm(n = nsim, mu = Coef, Sigma = VC)
 	DrawnDF <- data.frame(Drawn)
 	dfn <- names(DrawnDF)
 
@@ -163,8 +164,9 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	names(CoefIntervals) <- c("CoefName", "IntervalStart", "IntervalFinish")
 
 	# Melt Drawn DF to long format
-	TempDF <- suppressMessages(data.frame(melt(DrawnDF)))
-	names(TempDF) <- c("CoefName", "Coef")
+  DrawnDF <- data.frame(SimID, DrawnDF)
+	TempDF <- suppressMessages(data.frame(melt(DrawnDF, id.vars = 'SimID')))
+	names(TempDF) <- c("SimID", "CoefName", "Coef")
 
 	# Merge with CoefIntervals
 	CoefIntervalsDT <- data.table(CoefIntervals, key = "CoefName")
@@ -178,7 +180,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 		CombinedDF <- data.frame()
 		for (i in f){
 		  Temps <- TempDF
-		  Temps$X <- ifelse(TempDF[, 3] < i & i <= TempDF[, 4], i, NA)
+		  Temps$X <- ifelse(TempDF[, 'IntervalStart'] < i & i <= TempDF[, 'IntervalFinish'], i, NA)
 		  Temps <- subset(Temps, !is.na(X))
 		  CombinedDF <- rbind(CombinedDF, Temps)
 		}
@@ -190,11 +192,13 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	  	if (length(Xj) != length(Xl)){
 	      stop("Xj and Xl must be the same length.")
 	    } 
-		Simbj <- MergeX(Xj)
-	    names(Simbj) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xj")
-		Simbl <- MergeX(Xl)
-	    names(Simbl) <- c("CoefName", "Coef", "IntervalStart", "IntervalFinish", "Xl")
-	 	Xs <- data.frame(Xj, Xl)   	
+      Simbj <- MergeX(Xj)
+      names(Simbj) <- c("CoefName", "SimID", "Coef", "IntervalStart", 
+                        "IntervalFinish", "Xj")
+		  Simbl <- MergeX(Xl)
+	    names(Simbl) <- c("CoefName", 'SimID', "Coef", "IntervalStart", 
+                        "IntervalFinish", "Xl")
+	 	  Xs <- data.frame(Xj, Xl)   	
 	    Simbj <- merge(Simbj, Xs, by = "Xj")
 	    Simbj$Comparison <- paste(Simbj$Xj, "vs.", Simbj$Xl)
 	    Simbj$QI <- exp((Simbj$Xj * Simbj$Coef) - (Simbl$Xl * Simbl$Coef))
@@ -274,8 +278,9 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 			stop("coxsimSpline currently doesn''t support Hazard Rates when there are multiple stata. Sorry.")
 		}
 	} else if (qi == "Hazard Ratio"){
-	  	SimbPercSub <- data.frame(SimbPerc$Xj, SimbPerc$QI, SimbPerc$Comparison)
-	  	names(SimbPercSub) <- c("Xj", "QI", "Comparison")
+	  	SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI, 
+                                SimbPerc$Comparison)
+	  	names(SimbPercSub) <- c("SimID", "Xj", "QI", "Comparison")
 	} else if (qi == "Relative Hazard"){
 	  	SimbPercSub <- data.frame(SimbPerc$Xj, SimbPerc$QI)
 	  	names(SimbPercSub) <- c("Xj", "QI")
