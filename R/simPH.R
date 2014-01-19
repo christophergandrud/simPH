@@ -6,9 +6,9 @@
 #' The package includes the following simulation functions:
 #' \itemize{
 #'  \item{\code{\link{coxsimLinear}}: }{a function for simulating relative hazards, first differences, hazard ratios, and hazard rates for linear, non-time interacted covariates from Cox Proportional Hazard models.}
-#'  \item{\code{\link{coxsimtvc}}: }{a function for simulating time interactive hazards (relative hazards, first differences, and hazard ratios) for covariates from Cox Proportional Hazard models. The function will calculate time-varying hazard ratios for multiple strata estimated from a stratified Cox PH model.}
+#'  \item{\code{\link{coxsimtvc}}: }{a function for simulating time-interactive hazards (relative hazards, first differences, and hazard ratios) for covariates from Cox Proportional Hazard models. The function will calculate time-interactive hazard ratios for multiple strata estimated from a stratified Cox Proportional Hazard model.}
 #'  \item{\code{\link{coxsimSpline}}: }{a function for simulating quantities of interest from penalised splines using multivariate normal distributions. Currently does not support simulating hazard rates from stratified models. Note: be extremely careful about the number of simulations you ask the function to find. It is very easy to ask for more than your computer can handle.}
-#'  \item{\code{\link{coxsimPoly}}: }{a function for simulating quantities of interest for a range of values for a polynomial nonlinear effect from Cox Proportional Hazards models.}
+#'  \item{\code{\link{coxsimPoly}}: }{a function for simulating quantities of interest for a range of values for a polynomial nonlinear effect from Cox Proportional Hazard models.}
 #'  \item{\code{\link{coxsimInteract}}: }{a function for simulating quantities of interest for linear multiplicative interactions, including marginal effects and hazard rates.}
 #' }
 #' Results from these functions can be plotted using the \code{\link{simGG}} method.

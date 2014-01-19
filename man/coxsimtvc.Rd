@@ -1,6 +1,6 @@
 \name{coxsimtvc}
 \alias{coxsimtvc}
-\title{Simulate time interactive quantities of interest from Cox Proportional Hazards models}
+\title{Simulate time-interactive quantities of interest from Cox Proportional Hazards models}
 \usage{
 coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
   tfun = "linear", pow = NULL, nsim = 1000, from, to, by = 1,
@@ -64,7 +64,7 @@ coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
 a \code{simtvc} object
 }
 \description{
-\code{coxsimtvc} simulates time interactive relative
+\code{coxsimtvc} simulates time-interactive relative
 hazards, first differences, and hazard ratios from models
 estimated with \code{\link{coxph}} using the multivariate
 normal distribution. These can be plotted with

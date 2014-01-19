@@ -1,6 +1,6 @@
 \name{simGG.simtvc}
 \alias{simGG.simtvc}
-\title{Plot simulated time interactive hazard ratios or stratified time interactive hazard rates from Cox Proportional Hazards Models}
+\title{Plot simulated time-interactive hazard ratios or stratified time-interactive hazard rates from Cox Proportional Hazards Models}
 \usage{
 \method{simGG}{simtvc}(obj, from = NULL, to = NULL, xlab = NULL,
   ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",
@@ -69,7 +69,7 @@ simulated hazards from a \code{simtvc} class object created
 by \code{\link{coxsimtvc}} using \link{ggplot2}.
 }
 \details{
-Plots either a time interactive hazard ratios, first
+Plots either a time-interactive hazard ratios, first
 differences, and relative hazards, or the hazard rates for
 multiple strata. Currently the strata legend labels need to
 be changed manually (see \code{\link{revalue}} in the

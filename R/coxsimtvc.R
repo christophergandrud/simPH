@@ -1,6 +1,6 @@
-#' Simulate time interactive quantities of interest from Cox Proportional Hazards models
+#' Simulate time-interactive quantities of interest from Cox Proportional Hazards models
 #' 
-#' \code{coxsimtvc} simulates time interactive relative hazards, first differences, and hazard ratios from models estimated with \code{\link{coxph}} using the multivariate normal distribution. These can be plotted with \code{\link{simGG}}.
+#' \code{coxsimtvc} simulates time-interactive relative hazards, first differences, and hazard ratios from models estimated with \code{\link{coxph}} using the multivariate normal distribution. These can be plotted with \code{\link{simGG}}.
 #' @param obj a \code{\link{coxph}} fitted model object with a time interaction. 
 #' @param b the non-time interacted variable's name.
 #' @param btvc the time interacted variable's name.

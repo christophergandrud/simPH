@@ -19,19 +19,17 @@ The package includes the following functions:
 
 - `coxsimLinear`: a function for simulating relative hazards, first differences, hazard ratios, and hazard rates for linear, non-time interacted covariates from Cox Proportional Hazard models.
 
-- `coxsimtvc`: a function for simulating time interactive hazards (relative hazards, first differences, and hazard ratios) for covariates from Cox Proportional Hazard models. The function will calculate time-varying hazard ratios for multiple strata estimated from a stratified Cox PH model.
+- `coxsimtvc`: a function for simulating time interactive hazards (relative hazards, first differences, and hazard ratios) for covariates from Cox Proportional Hazard models. The function will calculate time-interactive hazard ratios for multiple strata estimated from a stratified Cox Proportional Hazard model.
 
 - `coxsimSpline`: a function for simulating quantities of interest from penalised splines using multivariate normal distributions. Currently does not support simulating hazard rates from stratified models. **Note:** be extremely careful about the number of simulations you ask the function to find. It is very easy to ask for more than your computer can handle.
 
-- `coxsimPoly`: a function for simulating quantities of interest for a range of values for a polynomial nonlinear effect from Cox Proportional Hazards models.
+- `coxsimPoly`: a function for simulating quantities of interest for a range of values for a polynomial nonlinear effect from Cox Proportional Hazard models.
 
 - `coxsimInteract`: a function for simulating quantities of interest for linear multiplicative interactions, including marginal effects and hazard rates.
 
 #### Plotting Functions
 
-**Important Change:** From **simPH** version 0.05 you can now use the method `simGG` for plotting all simulations rather than the old sim model object specific commands. In practical terms this means that you can now just use the command `simGG` rather than the old gg. . . commands. The old commands are deprecated and will no longer work.
-
-The syntax and capabilities of `simGG` varies depending on the sim object class you are using:
+Results from these functions can be plotted using the `simGG` method. The syntax and capabilities of `simGG` varies depending on the `sim` object class you are using:
 
 - `simGG.simlinear`: plots simulated linear time-constant hazards using [ggplot2](http://ggplot2.org/).
 
@@ -42,6 +40,8 @@ The syntax and capabilities of `simGG` varies depending on the sim object class 
 - `simGG.simpoly`: uses **ggplot2** to graph the simulated polynomial quantities of interest.
 
 - `simGG.siminteract`: uses **ggplot2** to graph linear multiplicative interactions.
+
+**Important Change:** From **simPH** version 0.05 you can now use the method `simGG` for plotting all simulations rather than the old sim model object specific commands. In practical terms this means that you can now just use the command `simGG` rather than the old gg. . . commands. The old commands are deprecated and will no longer work.
 
 ##### Additional styling
 

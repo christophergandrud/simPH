@@ -118,7 +118,7 @@ simGG(Sim1)
 # Change the order of the covariates to make a more easily
 # interpretable hazard ratio graph.
 # M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal,
-              data = CarpenterFdaData)
+#             data = CarpenterFdaData)
 
 # Simulate Hazard Ratio of lethal for multiple values of prevgenx
 # Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
