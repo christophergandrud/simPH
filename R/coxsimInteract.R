@@ -70,7 +70,6 @@
 #' @return a \code{siminteract} class object
 #' @import data.table
 #' @importFrom reshape2 melt
-#' @importFrom plyr ddply mutate
 #' @importFrom survival basehaz
 #' @importFrom MSBVAR rmultnorm
 #' @export

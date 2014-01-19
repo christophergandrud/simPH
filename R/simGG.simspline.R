@@ -104,6 +104,9 @@ simGG.simspline <- function(obj, SmoothSpline = FALSE, FacetTime = NULL, from = 
 	if (type == 'ribbons' & smoother != "auto"){
 	  message("The smoother argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
 	}
+	if (type == 'lines' & !isTRUE(SmoothSpline)){
+		message('The resulting plot may look strange. I suggest using SmoothSpline = TRUE if type = "lines".')
+	}
     # Find quantity of interest
     qi <- class(obj)[[2]]
 
@@ -117,7 +120,7 @@ simGG.simspline <- function(obj, SmoothSpline = FALSE, FacetTime = NULL, from = 
     # Convert obj to data frame
     class(obj) <- "data.frame"
 
-    # Smooth points if SmoothSpline = TRUE
+    # Smooth simulations if SmoothSpline = TRUE
     if (isTRUE(SmoothSpline)){
 	    if (qi != 'Hazard Rate'){
 	    	obj <- SmoothSimulations(obj)
@@ -132,7 +135,7 @@ simGG.simspline <- function(obj, SmoothSpline = FALSE, FacetTime = NULL, from = 
 			obj <- subset(obj, Time >= from)
 		}
 		if (!is.null(to)){
-	        	obj <- subset(obj, Time <= to)
+	        obj <- subset(obj, Time <= to)
 	    }
     }
 
@@ -156,9 +159,9 @@ simGG.simspline <- function(obj, SmoothSpline = FALSE, FacetTime = NULL, from = 
 		        theme_bw(base_size = 15)
 	    } else if (qi == "Hazard Rate" & is.null(FacetTime)){
 	    	with(obj, scatter3d(x = Time, y = QI, z = Xj,
-	    						  xlab = xlab, ylab = ylab, zlab = zlab,
-	    						  surface = surface,
-	    						  fit = fit))
+    						  xlab = xlab, ylab = ylab, zlab = zlab,
+    						  surface = surface,
+    						  fit = fit))
 	    } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
 			SubsetTime <- function(f){
 			  Time <- NULL
@@ -182,7 +185,7 @@ simGG.simspline <- function(obj, SmoothSpline = FALSE, FacetTime = NULL, from = 
 	    }
 	}
 	# Plots lines
-	if (type == 'lines'){
+	else if (type == 'lines'){
 		if (qi == "First Difference"){
 	    	ggplot(obj, aes(Xj, QI)) +
 	        	geom_line(aes(group = SimID), alpha = I(alpha), size = psize, colour = pcolour) +
