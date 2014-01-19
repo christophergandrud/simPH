@@ -59,3 +59,29 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, sp
 	SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
 	return(SimbPerc)
 }
+
+#' Drop any individual simulation with at least one value outside of the specified confidence bounds 
+#'
+#' @param SimIn data frame
+#'
+#' @importFrom dplyr group_by
+#' @importFrom dplyr mutate
+#'
+#' @keywords internals
+#' @noRd
+
+OutlierDrop <- function(SimIn){
+    # CRAN nonsense
+    SimID <- dummy <- Rows <- NULL 
+    
+    # Drop simulations that do not have all values within
+    # the central interval
+    SimIn$dummy <- 1
+    Sims <- dplyr::group_by(SimIn, SimID) 
+    Sims <- dplyr::mutate(Sims, Rows = sum(dummy))
+    MaxRows <- max(Sims$Rows)
+    Sims <- as.data.frame(Sims)
+    Sims <- subset(Sims, Rows == MaxRows)
+    Sims
+}
+

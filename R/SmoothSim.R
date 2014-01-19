@@ -33,20 +33,13 @@ SmoothOneSim <- function(x, y, df = 10){
 #' @noRd
 SmoothSimulations <- function(SimIn, xaxis = "Xj"){
   # CRAN nonsense
-  SimID <- dummy <- Rows <- Xj <- QI <- NULL 
-	# Drop simulations that do not have all values within
-  # the central interval
-	SimIn$dummy <- 1
-	Sims <- dplyr::group_by(SimIn, SimID) 
- 	Sims <- dplyr::mutate(Sims, Rows = sum(dummy))
-  MaxRows <- max(Sims$Rows)
-  Sims <- as.data.frame(Sims)
-  Sims <- subset(Sims, Rows == MaxRows)
-	names(Sims)[names(Sims) == xaxis] <- 'Xj'
+  SimID <- Xj <- QI <- NULL 
+
+  names(SimIn)[names(SimIn) == xaxis] <- 'Xj'
 
   # Spline smooth
-  Sims <- dplyr::group_by(Sims, SimID) 
+  Sims <- dplyr::group_by(SimIn, SimID) 
   SimsFitted <- dplyr::mutate(Sims, QI = SmoothOneSim(Xj, QI))
-	names(Sims)[names(Sims) == 'Xj'] <- xaxis
+  names(Sims)[names(Sims) == 'Xj'] <- xaxis
   SimsFitted
 }

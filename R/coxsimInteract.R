@@ -7,7 +7,7 @@
 #' @param qi quantity of interest to simulate. Values can be \code{"Marginal Effect"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Hazard Ratio"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param X1 numeric vector of fitted values of \code{b1} to simulate for. If \code{qi = "Marginal Effect"} then only \code{X2} can be set. If you want to plot the results, \code{X1} should have more than one value.
 #' @param X2 numeric vector of fitted values of \code{b2} to simulate for. 
-#' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1} \code{b2} and \code{b1*b2}. Note: it does not currently support models that include polynomials created by \code{\link{I}}.i. Note: EXPERIMENTAL.
+#' @param means logical, whether or not to use the mean values to fit the hazard rate for covaraiates other than \code{b1} \code{b2} and \code{b1*b2}. Note: it does not currently support models that include polynomials created by \code{\link{I}}. Note: EXPERIMENTAL. \code{lines} are not currently supported in \code{\link{simGG}} if \code{means = TRUE}.
 #' @param expMarg logical. Whether or not to exponentiate the marginal effect.
 #' @param nsim the number of simulations to run per value of X. Default is \code{nsim = 1000}.
 #' @param ci the proportion of middle simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the confidence level of the shortest probability interval. Any value from 0 through 1 may be used.
@@ -117,7 +117,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	if (!isTRUE(means)){
 
 		# Subset data frame to only include interaction constitutive terms and
-		Simb <- data.frame(Drawn[, NamesInt])
+		Simb <- data.frame(SimID, Drawn[, NamesInt])
 
 		# Find quantity of interest
 		if (qi == "Marginal Effect"){
@@ -128,10 +128,10 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 				names(X2df) <- c("X2")
 				Simb <- merge(Simb, X2df)
         if (isTRUE(expMarg)){
-				  Simb$QI <- exp(Simb[, 1] + (Simb[, 3] * Simb[, 4])) 
+				  Simb$QI <- exp(Simb[, 2] + (Simb[, 4] * Simb[, 5])) 
         }
         else if (!isTRUE(expMarg)){
-          Simb$QI <- Simb[, 1] + (Simb[, 3] * Simb[, 4])
+          Simb$QI <- Simb[, 2] + (Simb[, 4] * Simb[, 5])
         }
 			}
 		}
@@ -143,7 +143,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			names(Xs) <- c("X1", "X2")
 			Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
 		    Simb <- merge(Simb, Xs)
-			Simb$QI <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]) - 1) * 100)	
+			Simb$QI <- (exp((Simb$X1 * Simb[, 2]) + (Simb$X2 * Simb[, 3]) + (Simb$X1 * Simb$X2 * Simb[, 4]) - 1) * 100)	
 		  }
 		}
 		else if (qi == "Hazard Ratio"){
@@ -154,7 +154,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			names(Xs) <- c("X1", "X2")
 			Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
 		    Simb <- merge(Simb, Xs)
-			Simb$QI <- (exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3])))
+			Simb$QI <- (exp((Simb$X1 * Simb[, 2]) + (Simb$X2 * Simb[, 3]) + (Simb$X1 * Simb$X2 * Simb[, 4])))
 		  }
 		}
 		else if (qi == "Hazard Rate"){
@@ -167,8 +167,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			Xs <- data.frame(X1, X2)
 			Xs$HRValue <- paste0(Xs$X1, ", ", Xs$X2)
 		   
-		    Simb <- merge(Simb, Xs)
-			Simb$HR <- exp((Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3]))	 
+            Simb <- merge(Simb, Xs)
+			Simb$HR <- exp((Simb$X1 * Simb[, 2]) + (Simb$X2 * Simb[, 3]) + (Simb$X1 * Simb$X2 * Simb[, 4]))	 
 		  	
 		  	bfit <- basehaz(obj)
 		  	bfit$FakeID <- 1
@@ -183,9 +183,9 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	        }
 	        Simb$QI <- Simb$hazard * Simb$HR 
 	        if (is.null(Simb$strata)){
-	          Simb <- Simb[, list(time, QI, HRValue)]
+	          Simb <- Simb[, list(SimID, time, QI, HRValue)]
 	        } else if (!is.null(Simb$strata)){
-	          Simb <- Simb[, list(time, QI, HRValue, strata)]
+	          Simb <- Simb[, list(SimID, time, QI, HRValue, strata)]
 	        }
 	        Simb <- data.frame(Simb)
 			}
@@ -265,31 +265,51 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	}
 
 	# Drop simulations outside of the middle
-	SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi,
-									QI = QI, spin = spin, ci = ci)	
+	SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, 
+		                qi = qi, QI = QI, spin = spin, ci = ci)	
 
 	# Final clean up
-	if (qi == "Hazard Rate"){
-		colour <- NULL
+	if (qi == "Hazard Rate" & !isTRUE(means)){
 		if (is.null(obj$strata)){
-			SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI, SimbPerc$HRValue)
-			names(SimbPercSub) <- c("Time", "HRate", "HRValue")
+			SimbPercSub <- data.frame(SimbPerc$SimID, 
+				                      SimbPerc$time, SimbPerc$QI,
+				                      SimbPerc$HRValue)
+			names(SimbPercSub) <- c("SimID", "Time", "HRate", 
+				                    "HRValue")
 		} else if (!is.null(SimbPerc$strata)) {
-		SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI, SimbPerc$strata, SimbPerc$HRValue)
-		names(SimbPercSub) <- c("Time", "HRate", "Strata", "HRValue")
+		SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time, 
+		                SimbPerc$QI, SimbPerc$strata, 
+		                SimbPerc$HRValue)
+		names(SimbPercSub) <- c("SimID", "Time", "HRate", 
+			                    "Strata", "HRValue")
+		}
+	} else if (qi == "Hazard Rate" & isTRUE(means)){
+		if (is.null(obj$strata)){
+			SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI,
+				                      SimbPerc$HRValue)
+			names(SimbPercSub) <- c("Time", "HRate", 
+				                    "HRValue")
+		} else if (!is.null(SimbPerc$strata)) {
+		SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time, 
+		                SimbPerc$QI, SimbPerc$strata, 
+		                SimbPerc$HRValue)
+		names(SimbPercSub) <- c("SimID", "Time", "HRate", 
+			                    "Strata", "HRValue")
 		}
 	} else if (qi == "Hazard Ratio"){
-		colour <- NULL
-	  	SimbPercSub <- data.frame(SimbPerc$X1, SimbPerc$X2, SimbPerc$QI, SimbPerc$Comparison)
-	  	names(SimbPercSub) <- c("X1", "X2", "QI", "Comparison")
+	  	SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$X1, SimbPerc$X2, SimbPerc$QI, SimbPerc$Comparison)
+	  	names(SimbPercSub) <- c("SimID", "X1", "X2", "QI", 
+	  		                    "Comparison")
 	} else if (qi == "Marginal Effect"){
 	  	spalette <- NULL
-	  	SimbPercSub <- data.frame(SimbPerc$X2, SimbPerc$QI)
-	  	names(SimbPercSub) <- c("X2", "QI")
+	  	SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$X2,
+	  	                          SimbPerc$QI)
+	  	names(SimbPercSub) <- c("SimID", "X2", "QI")
 	} else if (qi == "First Difference"){
 		colour <- NULL
-		SimbPercSub <- data.frame(SimbPerc$X1, SimbPerc$X2, SimbPerc$QI)
-		names(SimbPercSub) <- c("X1", "X2", "QI")
+		SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$X1,
+		                          SimbPerc$X2, SimbPerc$QI)
+		names(SimbPercSub) <- c("SimID", "X1", "X2", "QI")
 	}
 	class(SimbPercSub) <- c("siminteract", qi)
 	SimbPercSub

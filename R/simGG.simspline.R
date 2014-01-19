@@ -122,6 +122,11 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL, from = N
     # Convert obj to data frame
     class(obj) <- "data.frame"
 
+    # Drop simulations that include outliers
+    if (type == 'lines'){
+    	obj <- OutlierDrop(obj)
+    }
+
     # Smooth simulations if SmoothSpline = TRUE
     if (isTRUE(SmoothSpline)){
 	    if (qi != 'Hazard Rate'){
