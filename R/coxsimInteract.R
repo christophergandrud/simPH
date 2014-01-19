@@ -71,7 +71,7 @@
 #' @import data.table
 #' @importFrom reshape2 melt
 #' @importFrom survival basehaz
-#' @importFrom MSBVAR rmultnorm
+#' @importFrom MASS mvrnorm
 #' @export
 
 coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, means = FALSE, expMarg = TRUE, nsim = 1000, ci = 0.95, spin = FALSE)
@@ -95,12 +95,15 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		MeansMessage <- TRUE
 	}
 
+    # Create simulation ID variable
+    SimID <- 1:nsim
+
 	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
 	VC <- vcov(obj)
 	
 	# Draw covariate estimates from the multivariate normal distribution	    
-	Drawn <- rmultnorm(n = nsim, mu = Coef, vmat = VC)
+	Drawn <- mvrnorm(n = nsim, mu = Coef, Sigma = VC)
 	DrawnDF <- data.frame(Drawn)
 	dfn <- names(DrawnDF)
 

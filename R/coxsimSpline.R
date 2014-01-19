@@ -121,7 +121,9 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	ListKnots <- OA[bterm]
 	NumKnots <- length(unlist(ListKnots))
 	KnotIntervals <- levels(cut(bdata, breaks = NumKnots))
-  SimID <- 1:nsim
+    
+    # Create simulation ID variable
+    SimID <- 1:nsim
 
 	# Parameter estimates & Variance/Covariance matrix
 	Coef <- matrix(obj$coefficients)
@@ -164,8 +166,9 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	names(CoefIntervals) <- c("CoefName", "IntervalStart", "IntervalFinish")
 
 	# Melt Drawn DF to long format
-  DrawnDF <- data.frame(SimID, DrawnDF)
-	TempDF <- suppressMessages(data.frame(melt(DrawnDF, id.vars = 'SimID')))
+    DrawnDF <- data.frame(SimID, DrawnDF)
+	TempDF <- suppressMessages(data.frame(melt(DrawnDF, 
+		                       id.vars = 'SimID')))
 	names(TempDF) <- c("SimID", "CoefName", "Coef")
 
 	# Merge with CoefIntervals

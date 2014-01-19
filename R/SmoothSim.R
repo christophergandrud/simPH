@@ -32,6 +32,8 @@ SmoothOneSim <- function(x, y, df = 10){
 #' @keywords internals
 #' @noRd
 SmoothSimulations <- function(SimIn, xaxis = "Xj"){
+  # CRAN nonsense
+  SimID <- dummy <- Rows <- Xj <- QI <- NULL 
 	# Drop simulations that do not have all values within
   # the central interval
 	SimIn$dummy <- 1

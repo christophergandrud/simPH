@@ -2,7 +2,7 @@
 \alias{simGG.simspline}
 \title{Plot simulated penalised spline hazards from Cox Proportional Hazards Models}
 \usage{
-\method{simGG}{simspline}(obj, SmoothSpline = FALSE, FacetTime = NULL,
+\method{simGG}{simspline}(obj, SmoothSpline = TRUE, FacetTime = NULL,
   from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL,
   title = NULL, smoother = "auto", lcolour = "#2B8CBE", lsize = 1,
   pcolour = "#A6CEE3", psize = 1, alpha = 0.1, surface = TRUE,
@@ -66,8 +66,8 @@
   \code{\link{ggplot2}}.}
 
   \item{surface}{plot surface. Default is \code{surface =
-  TRUE}. Only relevant if \code{qi == 'Relative Hazard'}
-  and \code{FacetTime = NULL}.}
+  TRUE}. Only relevant if \code{qi == 'Hazard Rate'} and
+  \code{FacetTime = NULL}.}
 
   \item{fit}{one or more of \code{"linear"},
   \code{"quadratic"}, \code{"smooth"}, \code{"additive"};
@@ -182,6 +182,8 @@ graphs. No line is created for hazard rates.
 
 # Plot simulated Hazard Ratios
 # simGG(Sim3, xlab = "\\nFDA Drug Review Staff", alpha = 0.2)
+# simGG(Sim3, xlab = "\\nFDA Drug Review Staff", alpha = 0.2,
+#       SmoothSpline = TRUE, type = 'lines')
 }
 \seealso{
 \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},
