@@ -118,8 +118,8 @@ Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference",
 # Plot simulations
 simGG(Sim1)
 # dontrun
-# simGG(Sim2, ribbons = TRUE)
-# simGG(Sim3, ribbons = TRUE)
+# simGG(Sim2, type = 'ribbons')
+# simGG(Sim3, type = 'lines')
 }
 \seealso{
 \code{\link{coxsimPoly}} and \code{\link{ggplot2}}

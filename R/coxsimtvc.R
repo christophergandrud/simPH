@@ -135,12 +135,15 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
     tf <- (seq(from = from, to = to, by = by))^pow
   }
 
+  # Create simulation ID variable
+  SimID <- 1:nsim
+
   # Parameter estimates & Varance/Covariance matrix
   Coef <- matrix(obj$coefficients)
   VC <- vcov(obj)
     
   # Draw values from the multivariate normal distribution
-  Drawn <- rmultnorm(n = nsim, mu = Coef, vmat = VC)
+  Drawn <- mvrnorm(n = nsim, mu = Coef, Sigma = VC)
   DrawnDF <- data.frame(Drawn)
   dfn <- names(DrawnDF)
  
@@ -149,18 +152,18 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
   btvcpos <- match(btvc, dfn)
   
   Drawn <- data.frame(Drawn[, c(bpos, btvcpos)])
-  Drawn$ID <- 1:nsim
+  Drawn$SimID <- SimID
 
   # Multiply time function with btvc
   TVSim <- outer(Drawn[,2], tf)
   TVSim <- data.frame(melt(TVSim))
-  names(TVSim) <- c("ID", "time", "TVC")
+  names(TVSim) <- c("SimID", "time", "TVC")
   time <- 1:length(tf)
   TempDF <- data.frame(time, tf)
   TVSim <- merge(TVSim, TempDF)
 
   # Combine with non TVC version of the variable
-  TVSim <- merge(Drawn, TVSim, by = "ID")
+  TVSim <- merge(Drawn, TVSim, by = "SimID")
   TVSim$CombCoef <- TVSim[[2]] + TVSim$TVC
 
   # Find quantity of interest
@@ -209,9 +212,9 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
       }
       Simb$QI <- Simb$hazard * Simb$HR 
       if (is.null(Simb$strata)){
-        Simb <- Simb[, list(time, tf, Xj, QI, HRValue)]
+        Simb <- Simb[, list(SimID, time, tf, Xj, QI, HRValue)]
       } else if (!is.null(Simb$strata)){
-        Simb <- Simb[, list(time, tf, Xj, QI, HRValue, strata)]
+        Simb <- Simb[, list(SimID, time, tf, Xj, QI, HRValue, strata)]
       }
       Simb <- data.frame(Simb)
   }
@@ -235,21 +238,21 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
   # Subset simtvc object & create data frame of important variables
   if (qi == "Hazard Rate"){
     if (is.null(SimbPerc$strata)){
-      SimbPercSub <- data.frame(SimbPerc$RealTime, SimbPerc$QI, SimbPerc$HRValue)
-      names(SimbPercSub) <- c("Time", "HRate", "HRValue")
+      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, SimbPerc$HRValue)
+      names(SimbPercSub) <- c("SimID", "Time", "HRate", "HRValue")
     } else if (!is.null(SimbPerc$strata)) {
-      SimbPercSub <- data.frame(SimbPerc$RealTime, SimbPerc$QI, SimbPerc$strata, SimbPerc$HRValue)
-      names(SimbPercSub) <- c("Time", "HRate", "Strata", "HRValue")
+      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, SimbPerc$strata, SimbPerc$HRValue)
+      names(SimbPercSub) <- c("SimID", "Time", "HRate", "Strata", "HRValue")
     }
   } else if (qi == "Hazard Ratio"){
-      SimbPercSub <- data.frame(SimbPerc$RealTime, SimbPerc$QI, SimbPerc$Comparison)
-      names(SimbPercSub) <- c("Time", "QI", "Comparison")
+      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, SimbPerc$Comparison)
+      names(SimbPercSub) <- c("SimID", "Time", "QI", "Comparison")
   } else if (qi == "Relative Hazard"){
-      SimbPercSub <- data.frame(SimbPerc$RealTime, SimbPerc$QI, SimbPerc$Xj)
-      names(SimbPercSub) <- c("Time", "QI", "Xj")
+      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, SimbPerc$Xj)
+      names(SimbPercSub) <- c("SimID", "Time", "QI", "Xj")
   } else if (qi == "First Difference"){
-      SimbPercSub <- data.frame(SimbPerc$RealTime, SimbPerc$QI, SimbPerc$Comparison)
-      names(SimbPercSub) <- c("Time", "QI", "Comparison")
+      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, SimbPerc$Comparison)
+      names(SimbPercSub) <- c("SimID", "Time", "QI", "Comparison")
   }
   class(SimbPercSub) <- c("simtvc", qi)
   SimbPercSub

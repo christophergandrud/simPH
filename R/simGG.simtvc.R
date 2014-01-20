@@ -14,7 +14,7 @@
 #' @param lsize size of the smoothing line. Default is 1. See \code{\link{ggplot2}}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
 #' @param alpha point alpha (e.g. transparency) for the points or ribbons. Default is \code{alpha = 0.1}. See \code{\link{ggplot2}}.
-#' @param ribbons logical specifies whether or not to use summary ribbons of the simulations rather than plotting every simulation value as a point. If \code{ribbons = TRUE} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimtvc}}) as well as the central 50 percent of this area. It also plots a line for the median value of the full area, so values in \code{smoother} are ignored. One of the key advantages of using ribbons rather than points is that it creates plots with smaller file sizes.
+#' @param type character string. Specifies how to plot the simulations. Can be \code{points}, \code{lines}, or \code{ribbons}. If points then each simulation value will be plotted. If \code{lines} is chosen then each simulation is plotted using a different line. Note: any simulation with a value along its length that is outside of the specified central interval will be dropped. This is to create a smooth plot. If \code{type = "ribbons"} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimSpline}}) as well as the central 50 percent of this area. It also plots a line for the median value of the full area, so values in \code{smoother} are ignored. One of the key advantages of using ribbons rather than points is that it creates plots with smaller file sizes.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
 #' @return a \code{gg} \code{ggplot} class object
@@ -71,7 +71,7 @@
 #' # Create plots
 #' # simGG(Sim1, legend = FALSE)
 #' # simGG(Sim2)
-#' # simGG(Sim3, leg.name = "Comparision", from = 1200, ribbons = TRUE)
+#' # simGG(Sim3, leg.name = "Comparision", from = 1200, type = 'lines')
 #'
 #' @import ggplot2
 #' @export
@@ -80,13 +80,13 @@
 #'
 #' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227-43.
 
-simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", legend = "legend", leg.name = "", lsize = 1, psize = 1, alpha = 0.1, ribbons = FALSE, ...)
+simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", legend = "legend", leg.name = "", lsize = 1, psize = 1, alpha = 0.1, type = "points", ...)
 {
-  Time <- HRate <- HRValue <- QI <- Comparison <- Xj <- Lower50 <- Upper50 <- Min <- Max <- Median <- NULL
+  Time <- HRate <- HRValue <- QI <- Comparison <- Xj <- Lower50 <- Upper50 <- Min <- Max <- Median <- SimID <- NULL
   if (!inherits(obj, "simtvc")){
     stop("must be a simtvc object")
   }
-  if (isTRUE(ribbons) & smoother != "auto"){
+  if (type == "ribbons" & smoother != "auto"){
     message("The smoother argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
   }
 
@@ -101,6 +101,12 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
   }
   # Convert obj to data frame
   class(obj) <- "data.frame"
+
+  # Drop simulations that include outliers
+  if (type == 'lines'){
+      obj <- OutlierDrop(obj)
+  } 
+
   # Constrict time period to plot for hazard rate  
   if (!is.null(from)){
     obj <- subset(obj, Time >= from)
@@ -110,7 +116,7 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
   }
 
   # Plot points
-  if (!isTRUE(ribbons)){
+  if (type == 'points'){
     if (qi == "Hazard Rate"){
       if (!is.null(obj$Strata)) {
         ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
@@ -164,8 +170,63 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
           theme_bw(base_size = 15)
     }
   }
+  # Plot lines
+  else if (type == 'lines'){
+    if (qi == "Hazard Rate"){
+      if (!is.null(obj$Strata)) {
+        ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
+          geom_line(aes(group = interaction(SimID, factor(HRValue))), alpha = I(alpha), size = psize) +
+          geom_smooth(aes(colour = factor(HRValue)), method = smoother, size = lsize, se = FALSE) +
+          facet_grid(.~ Strata) +
+          xlab(xlab) + ylab(ylab) +
+          scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+          ggtitle(title) +
+          #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          theme_bw(base_size = 15)
+      } else if (is.null(obj$Strata)){
+          ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
+            geom_line(aes(group = interaction(SimID, factor(HRValue))), shape = 21, alpha = I(alpha), size = psize) +
+            geom_smooth(aes(colour = factor(HRValue)), method = smoother, size = lsize, se = FALSE) +
+            scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+            xlab(xlab) + ylab(ylab) +
+            ggtitle(title) +
+            #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+            theme_bw(base_size = 15)
+      }
+    } else if (qi == "Hazard Ratio"){
+        ggplot(obj, aes(x = Time, y = QI, colour = factor(Comparison))) +
+          geom_line(aes(group = interaction(SimID, factor(Comparison))), alpha = alpha, size = psize) +
+              geom_smooth(aes(group = factor(Comparison)), method = smoother, size = lsize, se = FALSE) +
+          geom_hline(aes(yintercept = 1), linetype = "dotted") +
+          xlab(xlab) + ylab(ylab) +
+          scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+          ggtitle(title) +
+          #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          theme_bw(base_size = 15)
+    } else if (qi == "Relative Hazard"){
+        ggplot(obj, aes(x = Time, y = QI, colour = factor(Xj))) +
+          geom_line(aes(group = interaction(SimID, factor(Xj))), alpha = alpha, size = psize) +
+              geom_smooth(aes(group = factor(Xj)), method = smoother, size = lsize, se = FALSE) +
+          geom_hline(aes(yintercept = 1), linetype = "dotted") +
+          xlab(xlab) + ylab(ylab) +
+          scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+          ggtitle(title) +
+          #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+          theme_bw(base_size = 15)
+    } else if (qi == "First Difference"){
+        ggplot(obj, aes(Time, QI, colour = factor(Comparison))) +
+          geom_line(aes(group = interaction(SimID, factor(Comparison))), alpha = alpha, size = psize) +
+              geom_smooth(aes(group = factor(Comparison)), method = smoother, size = lsize, se = FALSE) +
+          geom_hline(aes(yintercept = 0), linetype = "dotted") +
+          xlab(xlab) + ylab(ylab) +
+          scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+          ggtitle(title) +
+          #guides(colour = guide_legend(override.aes = list(alpha = 1)), colour = FALSE) +
+          theme_bw(base_size = 15)
+    }
+  }
   # Plot ribbons
-  else if (isTRUE(ribbons)){
+  else if (type == 'ribbons'){
     suppressWarnings(
     if (qi == "Hazard Rate"){
       if (!is.null(obj$Strata)) {

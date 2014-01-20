@@ -22,7 +22,6 @@ Imports:
     ggplot2,
     gridExtra,
     MASS,
-    MSBVAR,
     plyr,
     reshape2,
     stats,

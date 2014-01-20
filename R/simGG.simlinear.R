@@ -162,7 +162,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NUL
     	} else if (is.null(obj$Strata)){
 	      	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
 	        	geom_line(aes(group = interaction(SimID, factor(HRValue))), shape = 21, alpha = I(alpha), size = psize) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+		        geom_smooth(aes(colour = factor(HRValue)), method = smoother, size = lsize, se = FALSE) +
 		        scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +

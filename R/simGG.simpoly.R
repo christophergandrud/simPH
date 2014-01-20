@@ -48,8 +48,8 @@
 #' # Plot simulations
 #' simGG(Sim1)
 #' # dontrun
-#' # simGG(Sim2, ribbons = TRUE)
-#' # simGG(Sim3, ribbons = TRUE)
+#' # simGG(Sim2, type = 'ribbons')
+#' # simGG(Sim3, type = 'lines')
 #'
 #' @details Uses \link{ggplot2} to plot the quantities of interest from \code{simpoly} objects. 
 #'
