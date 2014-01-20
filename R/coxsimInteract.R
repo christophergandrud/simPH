@@ -76,7 +76,7 @@
 
 coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, means = FALSE, expMarg = TRUE, nsim = 1000, ci = 0.95, spin = FALSE)
 {
-	HRValue <- strata <- QI <- NULL
+	HRValue <- strata <- QI <- SimID <- NULL
 	if (qi != "Hazard Rate" & isTRUE(means)){
 		stop("means can only be TRUE when qi = 'Hazard Rate'.")
 	}

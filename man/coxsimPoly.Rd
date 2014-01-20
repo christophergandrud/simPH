@@ -78,19 +78,20 @@ data("CarpenterFdaData")
 library(survival)
 
 # Run basic model
-M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 + acutediz +
-				hosp01  + hhosleng + mandiz01 + femdiz01 + peddiz01 + orphdum +
-				natreg + I(natreg^2) + I(natreg^3) + vandavg3 + wpnoavg3 +
-				condavg3 + orderent + stafcder, data = CarpenterFdaData)
+M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 +
+            acutediz + hosp01  + hhosleng + mandiz01 + femdiz01 +
+            peddiz01 + orphdum + natreg + I(natreg^2) +
+            I(natreg^3) + vandavg3 + wpnoavg3 +
+            condavg3 + orderent + stafcder, data = CarpenterFdaData)
 
 # Simulate simpoly First Difference
 Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference",
-						pow = 3, Xj = seq(1, 150, by = 5), nsim = 100)
+                pow = 3, Xj = seq(1, 150, by = 5), nsim = 100)
 
 ## dontrun
 # Simulate simpoly Hazard Ratio with spin probibility interval
 # Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio",
-#						pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
+#              pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
 }
 \references{
 Keele, Luke. 2010. ''Proportionally Difficult: Testing for

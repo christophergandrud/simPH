@@ -89,7 +89,7 @@
 simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", legend = "legend", leg.name = "", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", psize = 1, alpha = 0.1, type = "points", ...)
 {
 	HRate <- Lower50 <- Upper50 <- Min <- Max <- Median <- NULL
-	Time <- QI <- HRValue <- X1 <- X2 <- NULL
+	Time <- QI <- HRValue <- X1 <- X2 <- SimID <- NULL
 	if (!inherits(obj, "siminteract")){
     stop("must be a siminteract object")
   }
@@ -196,7 +196,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		      ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
 		        geom_line(aes(group = interaction(SimID, HRValue)), 
 		        	alpha = alpha, size = psize) +
-		        geom_smooth(aes(group = factor(X2)), method = smoother, size = lsize, se = FALSE) +
+		        geom_smooth(aes(group = factor(HRValue)), method = smoother, size = lsize, se = FALSE) +
 		        facet_grid(.~ Strata) +
 		        xlab(xlab) + ylab(ylab) +
 		        scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
@@ -206,7 +206,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 	    	} else if (is.null(obj$strata)){
 		      	ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
 		        	geom_line(aes(group = SimID), shape = 21, alpha = alpha, size = psize) +
-			        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+			        geom_smooth(aes(group = factor(HRValue)), method = smoother, size = lsize, se = FALSE) +
 			        scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
 			        xlab(xlab) + ylab(ylab) +
 			        ggtitle(title) +
@@ -216,8 +216,8 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		} 
 		else if (qi == "Marginal Effect"){
 			ggplot(obj, aes(X2, QI)) +
-			    geom_line(aes(group = SimID), alpha = alpha, size = psize, colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +  
+			    geom_line(aes(group = interaction(SimID, factor(X2))), alpha = alpha, size = psize, colour = pcolour) +
+		        geom_smooth(aes(group = factor(X2)), method = smoother, size = lsize, se = FALSE, color = lcolour) +  
 		        # geom_hline(aes(yintercept = 0), linetype = "dotted") + 
 			    xlab(xlab) + ylab(ylab) +
 			    ggtitle(title) +
