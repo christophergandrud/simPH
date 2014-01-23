@@ -4,7 +4,9 @@ Added `type` argument to `simGG.spline`. Allows the user to plot using `points`,
 
 Added `SmoothSpline` argument to `simGG.simspline` to use smoothing splines on the simulations. Creates a smoother graph.
 
-Uses `mvrnorm` from the `MASS` package instead of `rmultnorm` to draw the simulations. 
+Uses `mvrnorm` from the `MASS` package instead of `rmultnorm` to draw the simulations.
+
+Documentation and other internal improvements.
 
 Version 0.8.6
 

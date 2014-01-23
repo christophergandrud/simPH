@@ -91,7 +91,7 @@
 #' @import data.table
 #' @importFrom reshape2 melt
 #' @importFrom survival basehaz
-#' @importFrom MSBVAR rmultnorm
+#' @importFrom MASS mvrnorm
 #' @export
 #'
 #' @references Golub, Jonathan, and Bernard Steunenberg. 2007. ''How Time Affects EU Decision-Making.'' European Union Politics 8(4): 555-66.
