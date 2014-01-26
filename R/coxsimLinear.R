@@ -260,10 +260,10 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, m
                           "Strata", "HRValue")
     }
   } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | qi == "First Difference"){
-    SimPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, 
+    SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, 
                              SimbPerc$QI)
-    names(SimPercSub) <- c("SimID", "Xj", "QI")
+    names(SimbPercSub) <- c("SimID", "Xj", "QI")
   }
-  class(SimPercSub) <- c("simlinear", qi)
-  SimPercSub
+  class(SimbPercSub) <- c("simlinear", qi)
+  SimbPercSub
 }
