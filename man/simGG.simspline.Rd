@@ -5,7 +5,7 @@
 \method{simGG}{simspline}(obj, SmoothSpline = TRUE, FacetTime = NULL,
   from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL,
   title = NULL, smoother = "auto", lcolour = "#2B8CBE", lsize = 1,
-  pcolour = "#A6CEE3", psize = 1, alpha = 0.1, surface = TRUE,
+  pcolour = "#A6CEE3", psize = 1, alpha = 0.2, surface = TRUE,
   fit = "linear", type = "points", ...)
 }
 \arguments{
@@ -62,7 +62,7 @@
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
 
   \item{alpha}{numeric. Alpha (e.g. transparency) for the
-  points, lines, or ribbons. Default is \code{alpha = 0.1}.
+  points, lines, or ribbons. Default is \code{alpha = 0.2}.
   See \code{\link{ggplot2}}. Note, if \code{type = "lines"}
   or \code{type = "points"} then \code{alpah} sets the
   maximum value per line or point at the center of the

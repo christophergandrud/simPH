@@ -5,7 +5,7 @@
 \method{simGG}{simpoly}(obj, from = NULL, to = NULL, xlab = NULL,
   ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",
   legend = "legend", leg.name = "", lcolour = "#2B8CBE", lsize = 1,
-  pcolour = "#A6CEE3", psize = 1, alpha = 0.1, type = "points", ...)
+  pcolour = "#A6CEE3", psize = 1, alpha = 0.2, type = "points", ...)
 }
 \arguments{
   \item{obj}{a \code{simpoly} class object.}
@@ -54,7 +54,7 @@
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
 
   \item{alpha}{numeric. Alpha (e.g. transparency) for the
-  points, lines, or ribbons. Default is \code{alpha = 0.1}.
+  points, lines, or ribbons. Default is \code{alpha = 0.2}.
   See \code{\link{ggplot2}}. Note, if \code{type = "lines"}
   or \code{type = "points"} then \code{alpah} sets the
   maximum value per line or point at the center of the
@@ -111,18 +111,22 @@ M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
 Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference",
            pow = 3, Xj = seq(1, 150, by = 5), nsim = 100)
 
+# Plot simulations
+simGG(Sim1, type = 'lines')
+
 # dontrun
 # Simulate simpoly Hazard Ratio with spin probibility interval
-# Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio",
-#           pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
-
-# Sim3 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Rate",
-#           pow = 3, Xj = c(1, 150))
+Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio",
+          pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE,
+          nsim = 100)
 
 # Plot simulations
-simGG(Sim1)
-# dontrun
-# simGG(Sim2, type = 'ribbons')
+simGG(Sim2, type = 'ribbons')
+
+# Sim3 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Rate",
+#           pow = 3, Xj = c(1, 150), nsim = 100)
+
+# Plot simulations
 # simGG(Sim3, type = 'lines')
 }
 \seealso{

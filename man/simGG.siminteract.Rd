@@ -5,7 +5,7 @@
 \method{simGG}{siminteract}(obj, from = NULL, to = NULL, xlab = NULL,
   ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",
   legend = "legend", leg.name = "", lcolour = "#2B8CBE", lsize = 1,
-  pcolour = "#A6CEE3", psize = 1, alpha = 0.1, type = "points", ...)
+  pcolour = "#A6CEE3", psize = 1, alpha = 0.2, type = "points", ...)
 }
 \arguments{
   \item{obj}{a \code{siminteract} class object}
@@ -55,7 +55,7 @@
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
 
   \item{alpha}{numeric. Alpha (e.g. transparency) for the
-  points, lines, or ribbons. Default is \code{alpha = 0.1}.
+  points, lines, or ribbons. Default is \code{alpha = 0.2}.
   See \code{\link{ggplot2}}. Note, if \code{type = "lines"}
   or \code{type = "points"} then \code{alpah} sets the
   maximum value per line or point at the center of the

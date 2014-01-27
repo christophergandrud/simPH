@@ -4,7 +4,7 @@
 \usage{
 \method{simGG}{simtvc}(obj, from = NULL, to = NULL, xlab = NULL,
   ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",
-  legend = "legend", leg.name = "", lsize = 1, psize = 1, alpha = 0.1,
+  legend = "legend", leg.name = "", lsize = 1, psize = 1, alpha = 0.2,
   type = "points", ...)
 }
 \arguments{
@@ -42,7 +42,7 @@
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
 
   \item{alpha}{numeric. Alpha (e.g. transparency) for the
-  points, lines, or ribbons. Default is \code{alpha = 0.1}.
+  points, lines, or ribbons. Default is \code{alpha = 0.2}.
   See \code{\link{ggplot2}}. Note, if \code{type = "lines"}
   or \code{type = "points"} then \code{alpah} sets the
   maximum value per line or point at the center of the

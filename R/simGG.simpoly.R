@@ -15,7 +15,7 @@
 #' @param lsize size of the smoothing line. Default is 1. See \code{\link{ggplot2}}.
 #' @param pcolour character string colour of the simulated points or ribbons (when there are not multiple sets of simulations). Default is hexadecimal colour \code{pcolour = '#A6CEE3'}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
-#' @param alpha numeric. Alpha (e.g. transparency) for the points, lines, or ribbons. Default is \code{alpha = 0.1}. See \code{\link{ggplot2}}. Note, if \code{type = "lines"} or \code{type = "points"} then \code{alpah} sets the maximum value per line or point at the center of the distribution. Lines or points further from the center are more transparent the further they get from the middle. 
+#' @param alpha numeric. Alpha (e.g. transparency) for the points, lines, or ribbons. Default is \code{alpha = 0.2}. See \code{\link{ggplot2}}. Note, if \code{type = "lines"} or \code{type = "points"} then \code{alpah} sets the maximum value per line or point at the center of the distribution. Lines or points further from the center are more transparent the further they get from the middle. 
 #' @param type character string. Specifies how to plot the simulations. Can be \code{points}, \code{lines}, or \code{ribbons}. If points then each simulation value will be plotted. If \code{lines} is chosen then each simulation is plotted using a different line. Note: any simulation with a value along its length that is outside of the specified central interval will be dropped. This is to create a smooth plot. If \code{type = "ribbons"} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimSpline}}) as well as the central 50 percent of this area. It also plots a line for the median value of the full area, so values in \code{smoother} are ignored. One of the key advantages of using ribbons rather than points is that it creates plots with smaller file sizes.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
@@ -36,19 +36,23 @@
 #' # Simulate simpoly First Difference
 #' Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference", 
 #'            pow = 3, Xj = seq(1, 150, by = 5), nsim = 100)
+#' 
+#' # Plot simulations
+#' simGG(Sim1, type = 'lines')
 #'
 #' # dontrun
 #' # Simulate simpoly Hazard Ratio with spin probibility interval
-#' # Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio", 
-#' #           pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
-#'
-#' # Sim3 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Rate", 
-#' #           pow = 3, Xj = c(1, 150))
+#' Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio", 
+#'           pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE,
+#'           nsim = 100)
 #' 
 #' # Plot simulations
-#' simGG(Sim1)
-#' # dontrun
-#' # simGG(Sim2, type = 'ribbons')
+#' simGG(Sim2, type = 'ribbons')
+#'
+#' # Sim3 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Rate", 
+#' #           pow = 3, Xj = c(1, 150), nsim = 100)
+#' 
+#' # Plot simulations
 #' # simGG(Sim3, type = 'lines')
 #'
 #' @details Uses \link{ggplot2} to plot the quantities of interest from \code{simpoly} objects. 
@@ -61,7 +65,7 @@
 #' @method simGG simpoly
 #' @S3method simGG simpoly
 
-simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", legend = "legend", leg.name = "", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", psize = 1, alpha = 0.1, type = "points", ...)
+simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", legend = "legend", leg.name = "", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", psize = 1, alpha = 0.2, type = "points", ...)
 {
   Time <- HRValue <- HRate <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <- Median <- SimID <- NULL
   if (!inherits(obj, "simpoly")){
@@ -86,10 +90,10 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
   if (type == 'lines'){
     obj <- OutlierDrop(obj)
   }  
-   
+
   # Alpha gradient based on percentile in the distribution
   if (type != 'ribbons' & qi != 'Hazard Rate'){
-    obj <- PercRank(obj)
+    obj <- PercRank(obj, xaxis = 'Xj')
   } else if (type != 'ribbons' & qi == 'Hazard Rate'){
     obj <- PercRank(obj, xaxis = 'Time', yaxis = 'HRate')
   } 
@@ -107,19 +111,21 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
     if (qi == "Hazard Rate"){
       if (!is.null(obj$strata)) {
         ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
-          geom_point(alpha = I(alpha), size = psize) +
+          geom_point(aes(alpha = PercRank), size = psize) +
           geom_smooth(method = smoother, size = lsize, se = FALSE) +
           facet_grid(.~ Strata) +
           xlab(xlab) + ylab(ylab) +
           scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+          scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
           ggtitle(title) +
           #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
       } else if (is.null(obj$strata)){
           ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
-            geom_point(shape = 21, alpha = I(alpha), size = psize) +
+            geom_point(shape = 21, aes(alpha = PercRank), size = psize) +
             geom_smooth(method = smoother, size = lsize, se = FALSE) +
             scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+            scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
             xlab(xlab) + ylab(ylab) +
             ggtitle(title) +
             #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
@@ -127,17 +133,19 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
     }
     } else if (qi == "First Difference"){
       ggplot(obj, aes(Xj, QI)) +
-          geom_point(shape = 21, alpha = I(alpha), size = psize, colour = pcolour) +
+          geom_point(shape = 21, aes(alpha = PercRank), size = psize, colour = pcolour) +
           geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
           geom_hline(aes(yintercept = 0), linetype = "dotted") +
           xlab(xlab) + ylab(ylab) +
+          scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
           ggtitle(title) +
           #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
     } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
       ggplot(obj, aes(Xj, QI)) +
-          geom_point(shape = 21, alpha = I(alpha), size = psize, colour = pcolour) +
+          geom_point(shape = 21, aes(alpha = PercRank), size = psize, colour = pcolour) +
           geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
+          scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
           geom_hline(aes(yintercept = 1), linetype = "dotted") +
           xlab(xlab) + ylab(ylab) +
           ggtitle(title) +
@@ -150,19 +158,21 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
     if (qi == "Hazard Rate"){
       if (!is.null(obj$strata)) {
         ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
-          geom_line(aes(group = interaction(SimID, factor(HRValue))), alpha = I(alpha), size = psize) +
+          geom_line(aes(group = interaction(SimID, factor(HRValue)), alpha = PercRank), size = psize) +
           geom_smooth(aes(colour = factor(HRValue)), method = smoother, size = lsize, se = FALSE) +
           facet_grid(.~ Strata) +
           xlab(xlab) + ylab(ylab) +
           scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+          scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
           ggtitle(title) +
           #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
       } else if (is.null(obj$strata)){
           ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
-            geom_line(aes(group = interaction(SimID, factor(HRValue))), alpha = I(alpha), size = psize) +
+            geom_line(aes(group = interaction(SimID, factor(HRValue)), alpha = PercRank), size = psize) +
             geom_smooth(aes(colour = factor(HRValue)), method = smoother, size = lsize, se = FALSE) +
             scale_colour_brewer(palette = spalette, name = leg.name, guide = legend) +
+            scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
             xlab(xlab) + ylab(ylab) +
             ggtitle(title) +
             #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
@@ -170,16 +180,17 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
     }
     } else if (qi == "First Difference"){
       ggplot(obj, aes(Xj, QI)) +
-          geom_line(aes(group = SimID), alpha = I(alpha), size = psize, colour = pcolour) +
+          geom_line(aes(group = SimID, alpha = PercRank), size = psize, colour = pcolour) +
           geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
           geom_hline(aes(yintercept = 0), linetype = "dotted") +
           xlab(xlab) + ylab(ylab) +
+          scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
           ggtitle(title) +
           #guides(colour = guide_legend(override.aes = list(alpha = 1))) +
           theme_bw(base_size = 15)
     } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
       ggplot(obj, aes(Xj, QI)) +
-          geom_line(aes(group = SimID), alpha = I(alpha), size = psize, colour = pcolour) +
+          geom_line(aes(group = SimID, alpha = PercRank), size = psize, colour = pcolour) +
           geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +
           geom_hline(aes(yintercept = 1), linetype = "dotted") +
           xlab(xlab) + ylab(ylab) +

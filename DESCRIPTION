@@ -23,6 +23,7 @@ Imports:
     ggplot2,
     gridExtra,
     MASS,
+    mgcv,
     plyr,
     reshape2,
     stats,
