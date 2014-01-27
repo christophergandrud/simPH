@@ -49,3 +49,36 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE){
 	}
 	return(Linesdf)
 }
+
+
+#' Create a variable of each simulation value's percentile in the distribution. 
+#'
+#' @param SimIn data frame of simulations.
+#' @param xaxis character string. The column that will form the x-axis in the plot.  
+#' @param yaxis character string. The column that will form the y-axis in the plot.  
+#'
+#' @importFrom dplyr group_by
+#' @importFrom dplyr mutate
+#'
+#' @keywords internals
+#' @noRd
+
+PercRank <- function(SimIn, xaxis = 'Xj', yaxis = 'QI'){
+    Xj <- QI <- NULL
+
+    names(SimIn)[names(SimIn) == xaxis] <- 'Xj'
+    names(SimIn)[names(SimIn) == yaxis] <- 'QI'
+
+    PlainPercRank <- function(x) trunc(rank(x))/length(x)
+
+    Temp <- dplyr::group_by(SimIn, Xj)
+	Temp <- dplyr::mutate(Temp, PercRank = PlainPercRank(QI))
+
+	# Center on the 50th percentile
+	Temp$PercRank <- abs(Temp$PercRank - 0.5)
+	Temp$PercRank <- round(abs(0.5 - Temp$PercRank), 1)
+
+    names(Temp)[names(Temp) == 'Xj'] <- xaxis
+    names(Temp)[names(Temp) == 'QI'] <- yaxis
+    Temp
+}

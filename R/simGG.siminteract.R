@@ -8,7 +8,7 @@
 #' @param from numeric time to start the plot from. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param to numeric time to plot to. Only relevant if \code{qi = "Hazard Rate"}.
 #' @param title the plot's main title.
-#' @param smoother what type of smoothing line to use to summarize the plotted coefficient.
+#' @param smoother what type of smoothing line to use to summarize the center of the simulation distribution.
 #' @param spalette colour palette for when there are multiple sets of comparisons to plot. Not relevant for \code{qi = "Marginal Effect"}. Default palette is \code{"Set1"}. See \code{\link{scale_colour_brewer}}.
 #' @param legend specifies what type of legend to include (if applicable). The default is \code{legend = "legend"}. To hide the legend use \code{legend = FALSE}. See the \code{\link{discrete_scale}} for more details.
 #' @param leg.name name of the legend (if applicable).
@@ -16,7 +16,7 @@
 #' @param lsize size of the smoothing line. Default is 1. See \code{\link{ggplot2}}.
 #' @param pcolour character string colour of the simulated points or ribbons (when there are not multiple sets of simulations). Default is hexadecimal colour \code{pcolour = '#A6CEE3'}.
 #' @param psize size of the plotted simulation points. Default is \code{psize = 1}. See \code{\link{ggplot2}}.
-#' @param alpha point alpha (e.g. transparency) for the points or ribbons. Default is \code{alpha = 0.1}. See \code{\link{ggplot2}}.
+#' @param alpha numeric. Alpha (e.g. transparency) for the points, lines, or ribbons. Default is \code{alpha = 0.1}. See \code{\link{ggplot2}}. Note, if \code{type = "lines"} or \code{type = "points"} then \code{alpah} sets the maximum value per line or point at the center of the distribution. Lines or points further from the center are more transparent the further they get from the middle. 
 #' @param type character string. Specifies how to plot the simulations. Can be \code{points}, \code{lines}, or \code{ribbons}. If points then each simulation value will be plotted. If \code{lines} is chosen then each simulation is plotted using a different line. Note: any simulation with a value along its length that is outside of the specified central interval will be dropped. This is to create a smooth plot. If \code{type = "ribbons"} a plot will be created with shaded areas ('ribbons') for the minimum and maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimSpline}}) as well as the central 50 percent of this area. It also plots a line for the median value of the full area, so values in \code{smoother} are ignored. One of the key advantages of using ribbons rather than points is that it creates plots with smaller file sizes.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
@@ -112,6 +112,15 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
   if (type == 'lines'){
    	obj <- OutlierDrop(obj)
   }
+
+  # Alpha gradient based on percentile in the distribution
+  if (type != 'ribbons' & qi != 'Hazard Rate' & qi != 'Marginal Effect'){
+      obj <- PercRank(obj, xaxis = 'X1')
+   } else if (type != 'ribbons' & qi == 'Marginal Effect'){
+      obj <- PercRank(obj, xaxis = 'X2')
+   } else if (type != 'ribbons' & qi == 'Hazard Rate'){
+      obj <- PercRank(obj, xaxis = 'Time', yaxis = 'HRate')
+   }
 
   # Constrict time period to plot for hazard rate
   if (qi == "Hazard Rate"){   
@@ -216,8 +225,8 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = N
 		} 
 		else if (qi == "Marginal Effect"){
 			ggplot(obj, aes(X2, QI)) +
-			    geom_line(aes(group = interaction(SimID, factor(X2))), alpha = alpha, size = psize, colour = pcolour) +
-		        geom_smooth(aes(group = factor(X2)), method = smoother, size = lsize, se = FALSE, color = lcolour) +  
+			    geom_line(aes(group = SimID), alpha = alpha, size = psize, colour = pcolour) +
+		        geom_smooth(method = smoother, size = lsize, se = FALSE, color = lcolour) +  
 		        # geom_hline(aes(yintercept = 0), linetype = "dotted") + 
 			    xlab(xlab) + ylab(ylab) +
 			    ggtitle(title) +

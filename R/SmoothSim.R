@@ -24,7 +24,7 @@ SmoothOneSim <- function(x, y, df = 10){
 #' Smooth values for all simulations
 #'
 #' @param SimIn data frame. Pre-smoothed simulation
-#' @param xaxis character string. The column that will form the xaxis in the plot.  
+#' @param xaxis character string. The column that will form the x-axis in the plot.  
 #'
 #' @importFrom dplyr group_by
 #' @importFrom dplyr mutate
@@ -40,6 +40,6 @@ SmoothSimulations <- function(SimIn, xaxis = "Xj"){
   # Spline smooth
   Sims <- dplyr::group_by(SimIn, SimID) 
   SimsFitted <- dplyr::mutate(Sims, QI = SmoothOneSim(Xj, QI))
-  names(Sims)[names(Sims) == 'Xj'] <- xaxis
+  names(SimsFitted)[names(SimsFitted) == 'Xj'] <- xaxis
   SimsFitted
 }

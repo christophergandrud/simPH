@@ -22,7 +22,7 @@
   \item{title}{the plot's main title.}
 
   \item{smoother}{what type of smoothing line to use to
-  summarize the plotted coefficient.}
+  summarize the center of the simulation distribution.}
 
   \item{spalette}{colour palette for when there are
   multiple sets of comparisons to plot. Default palette is
@@ -41,9 +41,13 @@
   \item{psize}{size of the plotted simulation points.
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
 
-  \item{alpha}{point alpha (e.g. transparency) for the
-  points or ribbons. Default is \code{alpha = 0.1}. See
-  \code{\link{ggplot2}}.}
+  \item{alpha}{numeric. Alpha (e.g. transparency) for the
+  points, lines, or ribbons. Default is \code{alpha = 0.1}.
+  See \code{\link{ggplot2}}. Note, if \code{type = "lines"}
+  or \code{type = "points"} then \code{alpah} sets the
+  maximum value per line or point at the center of the
+  distribution. Lines or points further from the center are
+  more transparent the further they get from the middle.}
 
   \item{type}{character string. Specifies how to plot the
   simulations. Can be \code{points}, \code{lines}, or

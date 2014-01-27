@@ -41,7 +41,7 @@
   \item{title}{the plot's main title.}
 
   \item{smoother}{what type of smoothing line to use to
-  summarize the plotted coefficient.}
+  summarize the center of the simulation distribution.}
 
   \item{lcolour}{character string colour of the smoothing
   line. The default is hexadecimal colour \code{lcolour =
@@ -62,8 +62,12 @@
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
 
   \item{alpha}{numeric. Alpha (e.g. transparency) for the
-  points or ribbons. Default is \code{alpha = 0.1}. See
-  \code{\link{ggplot2}}.}
+  points, lines, or ribbons. Default is \code{alpha = 0.1}.
+  See \code{\link{ggplot2}}. Note, if \code{type = "lines"}
+  or \code{type = "points"} then \code{alpah} sets the
+  maximum value per line or point at the center of the
+  distribution. Lines or points further from the center are
+  more transparent the further they get from the middle.}
 
   \item{surface}{plot surface. Default is \code{surface =
   TRUE}. Only relevant if \code{qi == 'Hazard Rate'} and
