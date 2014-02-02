@@ -2,14 +2,20 @@
 \alias{simGG.simspline}
 \title{Plot simulated penalised spline hazards from Cox Proportional Hazards Models}
 \usage{
-\method{simGG}{simspline}(obj, FacetTime = NULL, from = NULL, to = NULL,
-  xlab = NULL, ylab = NULL, zlab = NULL, title = NULL,
-  smoother = "auto", lcolour = "#2B8CBE", lsize = 1,
-  pcolour = "#A6CEE3", psize = 1, alpha = 0.1, surface = TRUE,
-  fit = "linear", ribbons = FALSE, ...)
+\method{simGG}{simspline}(obj, SmoothSpline = TRUE, FacetTime = NULL,
+  from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL,
+  title = NULL, smoother = "auto", lcolour = "#2B8CBE", lsize = 1,
+  pcolour = "#A6CEE3", psize = 1, alpha = 0.2, surface = TRUE,
+  fit = "linear", type = "points", ...)
 }
 \arguments{
   \item{obj}{a \code{simspline} class object}
+
+  \item{SmoothSpline}{logical whether or not to fit the
+  simulations with smoothing splines. Creates a smoother
+  plot. See \code{\link{smooth.spline}} for more
+  information. Note: currently the degrees of freedom are
+  set at 10.}
 
   \item{FacetTime}{a numeric vector of points in time where
   you would like to plot Hazard Rates in a facet grid. Only
@@ -35,7 +41,7 @@
   \item{title}{the plot's main title.}
 
   \item{smoother}{what type of smoothing line to use to
-  summarize the plotted coefficient.}
+  summarize the center of the simulation distribution.}
 
   \item{lcolour}{character string colour of the smoothing
   line. The default is hexadecimal colour \code{lcolour =
@@ -56,12 +62,16 @@
   Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
 
   \item{alpha}{numeric. Alpha (e.g. transparency) for the
-  points or ribbons. Default is \code{alpha = 0.1}. See
-  \code{\link{ggplot2}}.}
+  points, lines, or ribbons. Default is \code{alpha = 0.2}.
+  See \code{\link{ggplot2}}. Note, if \code{type = "lines"}
+  or \code{type = "points"} then \code{alpah} sets the
+  maximum value per line or point at the center of the
+  distribution. Lines or points further from the center are
+  more transparent the further they get from the middle.}
 
   \item{surface}{plot surface. Default is \code{surface =
-  TRUE}. Only relevant if \code{qi == 'Relative Hazard'}
-  and \code{FacetTime = NULL}.}
+  TRUE}. Only relevant if \code{qi == 'Hazard Rate'} and
+  \code{FacetTime = NULL}.}
 
   \item{fit}{one or more of \code{"linear"},
   \code{"quadratic"}, \code{"smooth"}, \code{"additive"};
@@ -70,12 +80,17 @@
   \code{qi == 'Relative Hazard'} and \code{FacetTime =
   NULL}.}
 
-  \item{ribbons}{logical specifies whether or not to use
-  summary ribbons of the simulations rather than plotting
-  every simulation value as a point. If \code{ribbons =
-  TRUE} a plot will be created with shaded areas
-  ('ribbons') for the minimum and maximum simulation values
-  (i.e. the middle interval set with \code{qi} in
+  \item{type}{character string. Specifies how to plot the
+  simulations. Can be \code{points}, \code{lines}, or
+  \code{ribbons}. If points then each simulation value will
+  be plotted. If \code{lines} is chosen then each
+  simulation is plotted using a different line. Note: any
+  simulation with a value along its length that is outside
+  of the specified central interval will be dropped. This
+  is to create a smooth plot. If \code{type = "ribbons"} a
+  plot will be created with shaded areas ('ribbons') for
+  the minimum and maximum simulation values (i.e. the
+  middle interval set with \code{qi} in
   \code{\link{coxsimSpline}}) as well as the central 50
   percent of this area. It also plots a line for the median
   value of the full area, so values in \code{smoother} are
@@ -171,6 +186,8 @@ graphs. No line is created for hazard rates.
 
 # Plot simulated Hazard Ratios
 # simGG(Sim3, xlab = "\\nFDA Drug Review Staff", alpha = 0.2)
+# simGG(Sim3, xlab = "\\nFDA Drug Review Staff", alpha = 0.2,
+#       SmoothSpline = TRUE, type = 'lines')
 }
 \seealso{
 \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},

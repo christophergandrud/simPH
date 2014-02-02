@@ -37,7 +37,9 @@ coxsimInteract(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL,
   values to fit the hazard rate for covaraiates other than
   \code{b1} \code{b2} and \code{b1*b2}. Note: it does not
   currently support models that include polynomials created
-  by \code{\link{I}}.i. Note: EXPERIMENTAL.}
+  by \code{\link{I}}. Note: EXPERIMENTAL. \code{lines} are
+  not currently supported in \code{\link{simGG}} if
+  \code{means = TRUE}.}
 
   \item{expMarg}{logical. Whether or not to exponentiate
   the marginal effect.}

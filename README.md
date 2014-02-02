@@ -3,7 +3,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 0.8.6
+### Version 1.0
 
 ### Please report any bugs at <https://github.com/christophergandrud/simPH/issues>.
 
