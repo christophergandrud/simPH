@@ -37,12 +37,18 @@ Possible functions of time include \code{'linear'}, natural
 # Load Golub & Steunenberg (2007) Data
 data("GolubEUPData")
 
+# Expand data into equally spaced time intervals
+GolubEUPDataExp <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
+                     Time = 'begin', Time2 = 'end', event = 'event')
+
 # Create natural log time interaction with the qmv variable
-GolubEUPData$Lqmv <- tvc(GolubEUPData, b = "qmv", tvar = "end", tfun = "log")
+GolubEUPData$Lqmv <- tvc(GolubEUPData, b = "qmv",
+                       tvar = "end", tfun = "log")
 }
 \seealso{
-\code{\link{simGG.simtvc}}, \code{coxsimtvc},
-\code{\link{survival}}, and \code{\link{coxph}}
+\code{\link{SurvExpand}}, \code{\link{simGG.simtvc}},
+\code{coxsimtvc}, \code{\link{survival}}, and
+\code{\link{coxph}}
 }
 \keyword{utilities}
 

@@ -13,7 +13,11 @@
 #' }
 #' Results from these functions can be plotted using the \code{\link{simGG}} method.
 #' 
-#' 
+#' The package also includes two functions that make it easier to create time interactions:
+#' \itemize{
+#'  \item{\code{\link{SurvExpand}}: }{a function to convert a data frame of non-equal interval continuous observations into equal interval continuous observations.}
+#'  \item{\code{\link{tvc}}: }{a function to create time interaction variable that can be used in a coxph model (or any other model with time interactions).}
+#' } 
 #' 
 #' @name simPH
 NULL

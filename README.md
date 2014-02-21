@@ -3,7 +3,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 1.0
+### Version 1.1
 
 ### Please report any bugs at <https://github.com/christophergandrud/simPH/issues>.
 
@@ -51,6 +51,8 @@ Because in almost all cases `simGG` returns a *ggplot2* object, you can add addi
 ---
 
 #### Misc.
+
+- `SurvExpand`: a function for converting a data frame of non-equal interval continuous observations into equal interval continuous observations. This is useful to do before creating time interactions.
 
 - `tvc`: a function for creating time interactions. Currently supports `'linear'`, natural `'log'`, and exponentiation (`'power'`).
 
