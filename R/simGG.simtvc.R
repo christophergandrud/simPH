@@ -33,7 +33,7 @@
 #' # tvc(data = GolubEUPData, b = x, tvar = "end", tfun = "log")
 #' # }
 #' # Expand data
-#' # GolubEUPDataExp <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
+#' # GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
 #' #                     Time = 'begin', Time2 = 'end', event = 'event')
 #' 
 #' # GolubEUPData$Lcoop <-Golubtvc("coop")

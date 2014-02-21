@@ -22,8 +22,8 @@
 #' GolubEUPData <- GolubEUPData[1:500, ]
 #' 
 #' # Expand data
-#' GolubEUPDataExp <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
-#'                      Time = 'begin', Time2 = 'end', event = 'event')
+#' GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
+#'                  Time = 'begin', Time2 = 'end', event = 'event')
 #' 
 #' @seealso \code{\link{tvc}}
 #' @importFrom data.table

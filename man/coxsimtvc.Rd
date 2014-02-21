@@ -121,7 +121,7 @@ Golubtvc <- function(x){
 }
 
 # Expand data (not run to speed processing time, but should be run)
-#GolubEUPDataExp <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
+#GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
 #                     Time = 'begin', Time2 = 'end', event = 'event')
 
 

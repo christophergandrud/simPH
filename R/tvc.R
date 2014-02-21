@@ -16,8 +16,8 @@
 #' GolubEUPData <- GolubEUPData[1:500, ]
 #'
 #' # Expand data into equally spaced time intervals
-#' GolubEUPDataExp <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
-#'                      Time = 'begin', Time2 = 'end', event = 'event') 
+#' GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
+#'                   Time = 'begin', Time2 = 'end', event = 'event') 
 #' 
 #' # Create natural log time interaction with the qmv variable
 #' GolubEUPData$Lqmv <- tvc(GolubEUPData, b = "qmv", 
