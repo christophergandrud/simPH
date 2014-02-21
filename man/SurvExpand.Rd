@@ -45,7 +45,7 @@ currently does not support repeated events data.
 data("GolubEUPData")
 
 # Subset PURELY TO SPEED UP THE EXAMPLE
-GolubEUPData <- GolubEUPData[1:1500, ]
+GolubEUPData <- GolubEUPData[1:500, ]
 
 # Expand data
 GolubEUPDataExp <- SurvExpand(GolubEUPData, GroupVar = 'caseno',

@@ -120,8 +120,8 @@ Golubtvc <- function(x){
          tvar = "end", tfun = "log"))
 }
 
-# Expand data
-# GolubEUPDataExp <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
+# Expand data (not run to speed processing time, but should be run)
+#GolubEUPDataExp <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
 #                     Time = 'begin', Time2 = 'end', event = 'event')
 
 

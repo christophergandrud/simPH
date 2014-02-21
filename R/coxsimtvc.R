@@ -49,9 +49,9 @@
 #'          tvar = "end", tfun = "log"))
 #' }
 #'
-#' # Expand data
-#' GolubEUPDataExp <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
-#'                      Time = 'begin', Time2 = 'end', event = 'event')
+#' # Expand data (not run to speed processing time, but should be run)
+#' #GolubEUPDataExp <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
+#' #                     Time = 'begin', Time2 = 'end', event = 'event')
 #' 
 #' 
 #' GolubEUPData$Lcoop <-Golubtvc("coop")

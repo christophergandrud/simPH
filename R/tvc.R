@@ -11,6 +11,9 @@
 #' @examples
 #' # Load Golub & Steunenberg (2007) Data
 #' data("GolubEUPData")
+#' 
+#' # Subset PURELY TO SPEED UP THE EXAMPLE
+#' GolubEUPData <- GolubEUPData[1:500, ]
 #'
 #' # Expand data into equally spaced time intervals
 #' GolubEUPDataExp <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
