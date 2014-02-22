@@ -30,7 +30,6 @@
 #' @importFrom dplyr group_by
 #' @importFrom dplyr mutate
 #' @importFrom DataCombine MoveFront
-#' @importFrom DataCombine VarDrop
 #' 
 #' @export 
 
@@ -127,7 +126,8 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, messages = TRUE){
   # Final clean up
   Out <- data.frame(Out)
   Out$Event[Out$FinalTime != Out$FT] <- 0
-  Out <- VarDrop(Out, c('StartT', 'FinishT', 'FinalTime'))
+  FinalDrop <- c('StartT', 'FinishT', 'FinalTime')
+  Out <- Out[, !(names(Out) %in% FinalDrop)]
   Out <- MoveFront(Out, c('UG', 'ST', 'FT', 'Event'))
   colnames(Out)[1:4] <- Names
 
