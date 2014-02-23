@@ -14,7 +14,7 @@
 #' Note: the function will work best if your original time intervals are recorded in whole numbers. It also currently does not support repeated events data.
 #' 
 #' @examples
-#' 
+#' \dontrun{
 #' # Load Golub & Steunenberg (2007) Data
 #' data("GolubEUPData")
 #' 
@@ -24,6 +24,7 @@
 #' # Expand data
 #' GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
 #'                  Time = 'begin', Time2 = 'end', event = 'event')
+#' }
 #' 
 #' @seealso \code{\link{tvc}}
 #' @importFrom data.table

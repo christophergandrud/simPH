@@ -123,34 +123,35 @@ Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
 # Plot quantities of interest
 simGG(Sim1)
 
-## dontrun
+\dontrun{
 # Change the order of the covariates to make a more easily
 # interpretable hazard ratio graph.
-# M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal,
-#             data = CarpenterFdaData)
+M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal,
+             data = CarpenterFdaData)
 
 # Simulate Hazard Ratio of lethal for multiple values of prevgenx
-# Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
-#                    X1 = seq(2, 115, by = 2),
-#                    X2 = c(0, 1),
-#                    qi = "Hazard Ratio", ci = 0.9)
+Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
+                    X1 = seq(2, 115, by = 2),
+                    X2 = c(0, 1),
+                    qi = "Hazard Ratio", ci = 0.9)
 
 # Simulate First Difference
-# Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
-#                       X1 = seq(2, 115, by = 2),
-#                       X2 = c(0, 1),
-#                       qi = "First Difference", spin = TRUE)
+Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
+                       X1 = seq(2, 115, by = 2),
+                       X2 = c(0, 1),
+                       qi = "First Difference", spin = TRUE)
 
 # Simulate Hazard Rate
-# Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
-#                       X1 = 100, X2 = 1, qi = "Hazard Rate")
+Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
+                       X1 = 100, X2 = 1, qi = "Hazard Rate")
 
 # Plot quantities of interest
-# simGG(Sim1, xlab = "\\nprevgenx",
-#       ylab = "Marginal Effect of lethal\\n")
-# simGG(Sim2, ribbons = TRUE)
-# simGG(Sim3)
-# simGG(Sim4, to = 150, ribbons = TRUE, legend = FALSE)
+simGG(Sim1, xlab = "\\nprevgenx",
+       ylab = "Marginal Effect of lethal\\n")
+simGG(Sim2, ribbons = TRUE)
+simGG(Sim3)
+simGG(Sim4, to = 150, ribbons = TRUE, legend = FALSE)
+}
 }
 \references{
 Brambor, Thomas, William Roberts Clark, and Matt Golder.

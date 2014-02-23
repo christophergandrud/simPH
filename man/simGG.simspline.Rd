@@ -131,58 +131,59 @@ difference), i.e. no effect, for time-varying hazard ratio
 graphs. No line is created for hazard rates.
 }
 \examples{
-## dontrun
+\dontrun{
 # Load Carpenter (2002) data
-# data("CarpenterFdaData")
+data("CarpenterFdaData")
 
 # Load survival package
-# library(survival)
+library(survival)
 
 # Run basic model
 # From Keele (2010) replication data
-# M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 +
-#                acutediz + hosp01  + pspline(hospdisc, df = 4) +
-#                pspline(hhosleng, df = 4) + mandiz01 + femdiz01 +
-#                peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 +
-#                pspline(condavg3, df = 4) + pspline(orderent, df = 4) +
-#                pspline(stafcder, df = 4), data = CarpenterFdaData)
+M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 +
+                acutediz + hosp01  + pspline(hospdisc, df = 4) +
+                pspline(hhosleng, df = 4) + mandiz01 + femdiz01 +
+                peddiz01 + orphdum + natreg + vandavg3 + wpnoavg3 +
+                pspline(condavg3, df = 4) + pspline(orderent, df = 4) +
+                pspline(stafcder, df = 4), data = CarpenterFdaData)
 
 # Simulate Relative Hazards for orderent
-# Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
-#                    bdata = CarpenterFdaData$stafcder,
-#                    qi = "Hazard Ratio",
-#                    Xj = seq(1100, 1700, by = 10),
-#                    Xl = seq(1099, 1699, by = 10), spin = TRUE)
+Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
+                    bdata = CarpenterFdaData$stafcder,
+                    qi = "Hazard Ratio",
+                    Xj = seq(1100, 1700, by = 10),
+                    Xl = seq(1099, 1699, by = 10), spin = TRUE)
 
 # Simulate Hazard Rate for orderent
-# Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
-#                    bdata = CarpenterFdaData$orderent,
-#                    qi = "Hazard Rate",
-#                    Xj = seq(1, 30, by = 2), ci = 0.9, nsim = 10)
+Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
+                    bdata = CarpenterFdaData$orderent,
+                    qi = "Hazard Rate",
+                    Xj = seq(1, 30, by = 2), ci = 0.9, nsim = 10)
 
 # Plot relative hazard
-# simGG(Sim1, alpha = 0.5)
+simGG(Sim1, alpha = 0.5)
 
 # 3D plot hazard rate
-# simGG(Sim2, zlab = "orderent", fit = "quadratic")
+simGG(Sim2, zlab = "orderent", fit = "quadratic")
 
 # Create a time grid plot
 # Find all points in time where baseline hazard was found
-# unique(Sim2$Time)
+unique(Sim2$Time)
 
 # Round time values so they can be exactly matched with FacetTime
-# Sim2$Time <- round(Sim2$Time, digits = 2)
+Sim2$Time <- round(Sim2$Time, digits = 2)
 
 # Create plot
-# simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36),
-#       ribbons = TRUE, alpha = 0.5)
+simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36),
+       ribbons = TRUE, alpha = 0.5)
 
 # Simulated Fitted Values of stafcder
-# Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
-#                    bdata = CarpenterFdaData$stafcder,
-#                    qi = "Hazard Ratio",
-#                    Xj = seq(1100, 1700, by = 10),
-#                    Xl = seq(1099, 1699, by = 10), ci = 0.90)
+Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
+                    bdata = CarpenterFdaData$stafcder,
+                    qi = "Hazard Ratio",
+                    Xj = seq(1100, 1700, by = 10),
+                    Xl = seq(1099, 1699, by = 10), ci = 0.90)
+}
 
 # Plot simulated Hazard Ratios
 # simGG(Sim3, xlab = "\\nFDA Drug Review Staff", alpha = 0.2)

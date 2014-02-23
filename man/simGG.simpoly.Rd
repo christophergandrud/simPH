@@ -114,7 +114,7 @@ Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference",
 # Plot simulations
 simGG(Sim1, type = 'lines')
 
-# dontrun
+\dontrun{
 # Simulate simpoly Hazard Ratio with spin probibility interval
 Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio",
           pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE,
@@ -123,11 +123,12 @@ Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio",
 # Plot simulations
 simGG(Sim2, type = 'ribbons')
 
-# Sim3 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Rate",
-#           pow = 3, Xj = c(1, 150), nsim = 100)
+Sim3 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Rate",
+           pow = 3, Xj = c(1, 150), nsim = 100)
 
 # Plot simulations
-# simGG(Sim3, type = 'lines')
+simGG(Sim3, type = 'lines')
+}
 }
 \seealso{
 \code{\link{coxsimPoly}} and \code{\link{ggplot2}}

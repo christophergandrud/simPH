@@ -37,11 +37,12 @@
 #'                      qi = "Hazard Ratio",
 #'                      spin = TRUE, ci = 0.99)
 #'
-#' ## dontrun
+#' \dontrun{
 #' # Simulate Hazard Rates
-#' # Sim2 <- coxsimLinear(M1, b = "stafcder",  
-#' #                      Xj = 1237, 
-#' #                      ci = 0.99)
+#' Sim2 <- coxsimLinear(M1, b = "stafcder",  
+#'                       Xj = 1237, 
+#'                       ci = 0.99)
+#' }
 #'
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #'

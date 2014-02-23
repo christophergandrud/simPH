@@ -35,30 +35,30 @@
 #' Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
 #'                        X2 = seq(2, 115, by = 2), spin = TRUE)
 #'
-#' ## dontrun
+#' \dontrun{
 #' # Change the order of the covariates to make a more easily
 #' # interpretable relative hazard graph. 
-#' # M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal + 
-#' #             orphdum, data = CarpenterFdaData)
+#' M2 <- coxph(Surv(acttime, censor) ~ prevgenx*lethal + 
+#'              orphdum, data = CarpenterFdaData)
 #'
 #' # Simulate Hazard Ratio of lethal for multiple 
 #' # values of prevgenx
-#' # Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
-#' #                    X1 = seq(2, 115, by = 2),
-#' #                    X2 = c(0, 1),
-#' #                    qi = "Hazard Ratio", ci = 0.9)
+#' Sim2 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
+#'                     X1 = seq(2, 115, by = 2),
+#'                     X2 = c(0, 1),
+#'                     qi = "Hazard Ratio", ci = 0.9)
 #'                     
 #' # Simulate First Difference
-#' # Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
-#' #                       X1 = seq(2, 115, by = 2),
-#' #                       X2 = c(0, 1),
-#' #                       qi = "First Difference", spin = TRUE)
+#' Sim3 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal", 
+#'                        X1 = seq(2, 115, by = 2),
+#'                        X2 = c(0, 1),
+#'                        qi = "First Difference", spin = TRUE)
 #'                        
 #' # Simulate Hazard Rate
-#' # Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
-#' #                       X1 = 90, X2 = 1, qi = "Hazard Rate",
-#' #                       means = TRUE)
-#' 
+#' Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
+#'                        X1 = 90, X2 = 1, qi = "Hazard Rate",
+#'                        means = TRUE)
+#' }
 #'
 #' @references Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. ''Understanding Interaction Models: Improving Empirical Analyses.'' Political Analysis 14(1): 63-82.
 #'

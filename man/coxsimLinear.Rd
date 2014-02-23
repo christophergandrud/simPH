@@ -86,11 +86,12 @@ Sim1 <- coxsimLinear(M1, b = "stafcder",
                      qi = "Hazard Ratio",
                      spin = TRUE, ci = 0.99)
 
-## dontrun
+\dontrun{
 # Simulate Hazard Rates
-# Sim2 <- coxsimLinear(M1, b = "stafcder",
-#                      Xj = 1237,
-#                      ci = 0.99)
+Sim2 <- coxsimLinear(M1, b = "stafcder",
+                      Xj = 1237,
+                      ci = 0.99)
+}
 }
 \references{
 Licht, Amanda A. 2011. ''Change Comes with Time:

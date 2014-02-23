@@ -48,11 +48,11 @@
 #'   assign(paste0("l", x), tvc(GolubEUPData, b = x, 
 #'          tvar = "end", tfun = "log"))
 #' }
-#'
+#' \dontrun{
 #' # Expand data (not run to speed processing time, but should be run)
-#' #GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
-#' #                     Time = 'begin', Time2 = 'end', event = 'event')
-#' 
+#' GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
+#'                      Time = 'begin', Time2 = 'end', event = 'event')
+#' }
 #' 
 #' GolubEUPData$Lcoop <-Golubtvc("coop")
 #' GolubEUPData$Lqmv <- Golubtvc("qmv")
@@ -76,21 +76,21 @@
 #'                    tfun = "log", from = 80, to = 2000, 
 #'                    Xj = 1, by = 15, ci = 0.99, nsim = 100)
 #'
-#' ## dontrun 
+#' \dontrun{
 #' # Create simtvc object for First Difference  
-#' # Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
-#' #                 qi = "First Difference", Xj = 1,
-#' #                 tfun = "log", from = 80, to = 2000,
-#' #                 by = 15, ci = 0.95)
+#' Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
+#'                  qi = "First Difference", Xj = 1,
+#'                  tfun = "log", from = 80, to = 2000,
+#'                  by = 15, ci = 0.95)
 #' 
 #' # Create simtvc object for Hazard Ratio  
-#' # Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
-#' #                  qi = "Hazard Ratio", Xj = c(191, 229), 
-#' #                  Xl = c(0, 0),
-#' #                  tfun = "log", from = 80, to = 2000, 
-#' #                  by = 15, ci = 0.5)
+#' Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
+#'                   qi = "Hazard Ratio", Xj = c(191, 229), 
+#'                   Xl = c(0, 0),
+#'                   tfun = "log", from = 80, to = 2000, 
+#'                   by = 15, ci = 0.5)
+#' }
 #'
-
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
 #'
 #' @import data.table

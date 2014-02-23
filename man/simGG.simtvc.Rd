@@ -91,60 +91,61 @@ for time-varying hazard ratio graphs. No line is created
 for hazard rates.
 }
 \examples{
-## dontrun
+\dontrun{
 # Load Golub & Steunenberg (2007) Data
-# data("GolubEUPData")
+data("GolubEUPData")
 
 # Load survival package
-# library(survival)
+library(survival)
 
 # Create natural log time interactions
-# Golubtvc <- function(x){
-# tvc(data = GolubEUPData, b = x, tvar = "end", tfun = "log")
-# }
+Golubtvc <- function(x){
+ tvc(data = GolubEUPData, b = x, tvar = "end", tfun = "log")
+ }
 # Expand data
-# GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
-#                     Time = 'begin', Time2 = 'end', event = 'event')
+GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
+                     Time = 'begin', Time2 = 'end', event = 'event')
 
-# GolubEUPData$Lcoop <-Golubtvc("coop")
-# GolubEUPData$Lqmv <- Golubtvc("qmv")
-# GolubEUPData$Lbacklog <- Golubtvc("backlog")
-# GolubEUPData$Lcodec <- Golubtvc("codec")
-# GolubEUPData$Lqmvpostsea <- Golubtvc("qmvpostsea")
-# GolubEUPData$Lthatcher <- Golubtvc("thatcher")
+GolubEUPData$Lcoop <-Golubtvc("coop")
+GolubEUPData$Lqmv <- Golubtvc("qmv")
+GolubEUPData$Lbacklog <- Golubtvc("backlog")
+GolubEUPData$Lcodec <- Golubtvc("codec")
+GolubEUPData$Lqmvpostsea <- Golubtvc("qmvpostsea")
+GolubEUPData$Lthatcher <- Golubtvc("thatcher")
 
 # Run Cox PH Model
-# M1 <- coxph(Surv(begin, end, event) ~
-#            qmv + qmvpostsea + qmvpostteu +
-#            coop + codec + eu9 + eu10 + eu12 +
-#            eu15 + thatcher + agenda + backlog +
-#            Lqmv + Lqmvpostsea + Lcoop + Lcodec +
-#            Lthatcher + Lbacklog,
-#         data = GolubEUPData,
-#         ties = "efron")
+M1 <- coxph(Surv(begin, end, event) ~
+            qmv + qmvpostsea + qmvpostteu +
+            coop + codec + eu9 + eu10 + eu12 +
+            eu15 + thatcher + agenda + backlog +
+            Lqmv + Lqmvpostsea + Lcoop + Lcodec +
+            Lthatcher + Lbacklog,
+         data = GolubEUPData,
+         ties = "efron")
 
 # Create simtvc object for Relative Hazard
-# Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
-#                   tfun = "log", from = 80, to = 2000,
-#                   Xj = 1, by = 15, ci = 0.99)
+Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
+                   tfun = "log", from = 80, to = 2000,
+                   Xj = 1, by = 15, ci = 0.99)
 
 # Create simtvc object for First Difference
-# Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
-#                 qi = "First Difference", Xj = 1,
-#                 tfun = "log", from = 80, to = 2000,
-#                 by = 15, ci = 0.95)
+Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
+                 qi = "First Difference", Xj = 1,
+                 tfun = "log", from = 80, to = 2000,
+                 by = 15, ci = 0.95)
 
 # Create simtvc object for Hazard Ratio
-# Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
-#                  qi = "Hazard Ratio", Xj = c(191, 229),
-#                  Xl = c(0, 0),
-#                  tfun = "log", from = 100, to = 2000,
-#                  by = 15, ci = 0.99)
+Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
+                  qi = "Hazard Ratio", Xj = c(191, 229),
+                  Xl = c(0, 0),
+                  tfun = "log", from = 100, to = 2000,
+                  by = 15, ci = 0.99)
 
 # Create plots
-# simGG(Sim1, legend = FALSE)
-# simGG(Sim2)
-# simGG(Sim3, leg.name = "Comparision", from = 1200, type = 'lines')
+simGG(Sim1, legend = FALSE)
+simGG(Sim2)
+simGG(Sim3, leg.name = "Comparision", from = 1200, type = 'lines')
+}
 }
 \references{
 Licht, Amanda A. 2011. ''Change Comes with Time:

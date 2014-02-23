@@ -45,13 +45,13 @@
 #'                      spin = TRUE, ci = 0.99)
 #' # simGG(Sim1)
 #'
-#' ## dontrun
+#' \dontrun{
 #' # Simulate and plot Hazard Rate for stafcder variable
-#' # Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
-#' #                      qi = "Hazard Rate", 
-#' #                      Xj = c(1237, 1600))
-#' # simGG(Sim2, type = 'lines')
-#' 
+#' Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
+#'                       qi = "Hazard Rate", 
+#'                       Xj = c(1237, 1600))
+#' simGG(Sim2, type = 'lines')
+#' }
 #'
 #' @details Uses \link{ggplot2} to plot the quantities of interest from \code{simlinear} objects, including relative hazards, first differences, hazard ratios, and hazard rates. If there are multiple strata, the quantities of interest will be plotted in a grid by strata.
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no effect, for time-varying hazard ratio graphs. No line is created for hazard rates.

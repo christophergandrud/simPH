@@ -88,10 +88,11 @@ M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal + deathrt1 +
 Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference",
                 pow = 3, Xj = seq(1, 150, by = 5), nsim = 100)
 
-## dontrun
+\dontrun{
 # Simulate simpoly Hazard Ratio with spin probibility interval
-# Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio",
-#              pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
+Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio",
+              pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
+}
 }
 \references{
 Keele, Luke. 2010. ''Proportionally Difficult: Testing for

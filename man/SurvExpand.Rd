@@ -41,6 +41,7 @@ time intervals are recorded in whole numbers. It also
 currently does not support repeated events data.
 }
 \examples{
+\dontrun{
 # Load Golub & Steunenberg (2007) Data
 data("GolubEUPData")
 
@@ -50,6 +51,7 @@ GolubEUPData <- GolubEUPData[1:500, ]
 # Expand data
 GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
                  Time = 'begin', Time2 = 'end', event = 'event')
+}
 }
 \seealso{
 \code{\link{tvc}}

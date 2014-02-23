@@ -2,6 +2,8 @@ Version 1.1
 
 Added `SurvExpand` for converting a data frame of non-equal interval continuous observations into equal interval continuous observations. This is very useful if you intend to create time interactions. Thanks to Mintao Nie and an anonymous reviewer for the suggestion.
 
+Roxyegen documentation improvements.
+
 Version 1.0
 
 Added `type` argument to `simGG.spline`. Allows the user to plot using `points`, `ribbons`, or `lines`. NOTE: the `ribbons` standalone argument is depricated.
