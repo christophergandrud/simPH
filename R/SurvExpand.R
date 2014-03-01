@@ -22,8 +22,8 @@
 #' GolubEUPData <- GolubEUPData[1:500, ]
 #' 
 #' # Expand data
-#' GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
-#'                  Time = 'begin', Time2 = 'end', event = 'event')
+#' GolubEUPDataExpand <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
+#'                        Time = 'begin', Time2 = 'end', event = 'event')
 #' }
 #' 
 #' @seealso \code{\link{tvc}}
@@ -40,8 +40,8 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, messages = TRUE){
 
   # Reminder
   if (isTRUE(messages)){
-    message('\nReminder (1): currently SurvExpand does not support repeated events data.\n\n')
-    message('Reminder (2): Times should be in 1 unit intervals or this could take awhile.\n\n')
+    message('\nReminder (1): Currently SurvExpand does not support repeated events data.\n\n')
+    message('Reminder (2): Times should be in 1 unit intervals, otherwise this could take awhile.\n\n')
   }
   # Warnings
   if (class(data[, Time]) != 'numeric'){

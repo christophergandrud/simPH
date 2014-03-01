@@ -49,8 +49,8 @@ data("GolubEUPData")
 GolubEUPData <- GolubEUPData[1:500, ]
 
 # Expand data
-GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
-                 Time = 'begin', Time2 = 'end', event = 'event')
+GolubEUPDataExpand <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
+                       Time = 'begin', Time2 = 'end', event = 'event')
 }
 }
 \seealso{
