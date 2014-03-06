@@ -3,7 +3,9 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 1.1
+### Version 1.1 
+
+[![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH)
 
 ### Please report any bugs at <https://github.com/christophergandrud/simPH/issues>.
 
