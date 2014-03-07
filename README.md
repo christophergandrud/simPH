@@ -7,7 +7,9 @@ simPH
 
 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH)
 
-### Please report any bugs at <https://github.com/christophergandrud/simPH/issues>.
+### Please report any bugs at:
+
+<https://github.com/christophergandrud/simPH/issues>
 
 ---
 
@@ -66,8 +68,8 @@ The package is available on CRAN and can be installed in the normal R way.
 
 To install the development version use the [devtools](https://github.com/hadley/devtools) command `install_github`. Here is the code for installing the most recent development version:
 
-```r
-devtools::install_github("simPH", "christophergandrud")
+```{S}
+devtools::install_github('simPH/christophergandrud')
 ```
 
 ## Tip
