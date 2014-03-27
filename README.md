@@ -119,3 +119,7 @@ Gandrud, Christopher. 2013. [“The Diffusion of Financial Supervisory Governanc
 I intend to expand the quantities of interest that can be simulated and graphed for Cox PH models. I am also currently working on functions that can simulate and graph hazard ratios estimated from [Fine and Gray competing risks models](http://www.jstor.org/stable/2670170). 
 
 I am also working on a way to graph hazard ratios with frailties. 
+
+---
+
+<a href="http://nadrosia.tumblr.com/post/53520500877/made-in-berlin-badge-update"><img alt="image" src="http://media.tumblr.com/023c285c14ef01953d3b67ffe789004d/tumblr_inline_mor1uu2OOZ1qz4rgp.png" height = "100"></a>
