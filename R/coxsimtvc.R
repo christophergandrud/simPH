@@ -115,7 +115,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
   qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
   TestqiOpts <- qi %in% qiOpts
   if (!isTRUE(TestqiOpts)){
-    stop("Invalid qi type. qi must be 'Relative Hazard', 'First Difference', 'Hazard Rate', or 'Hazard Ratio'")
+    stop("Invalid qi type. qi must be 'Relative Hazard', 'First Difference', 'Hazard Rate', or 'Hazard Ratio'.")
   }
 
   if (is.null(Xl) & qi != "Hazard Rate"){

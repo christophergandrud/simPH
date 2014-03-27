@@ -2,7 +2,7 @@
 \alias{coxsimPoly}
 \title{Simulate quantities of interest for a range of values for a polynomial nonlinear effect from Cox Proportional Hazards models}
 \usage{
-coxsimPoly(obj, b, qi = "Relative Hazard", pow = 2, Xj = NULL,
+coxsimPoly(obj, b = NULL, qi = "Relative Hazard", pow = 2, Xj = NULL,
   Xl = NULL, nsim = 1000, ci = 0.95, spin = FALSE)
 }
 \arguments{
@@ -11,7 +11,10 @@ coxsimPoly(obj, b, qi = "Relative Hazard", pow = 2, Xj = NULL,
   plotted with \code{\link{simGG}}.}
 
   \item{b}{character string name of the coefficient you
-  would like to simulate.}
+  would like to simulate. To find the quantity of interest
+  using only the polynomial and not the polynomial + the
+  linear terms enter the polynomial created using
+  \code{\link{I}}, e.g. \code{I(natreg^2)} as a string.}
 
   \item{qi}{quantity of interest to simulate. Values can be
   \code{"Relative Hazard"}, \code{"First Difference"},

@@ -84,7 +84,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 	qiOpts <- c("Marginal Effect", "First Difference", "Hazard Ratio", "Hazard Rate")
 	TestqiOpts <- qi %in% qiOpts
 	if (!isTRUE(TestqiOpts)){
-		stop("Invalid qi type. qi must be 'Marginal Effect', 'First Difference', 'Hazard Ratio', or 'Hazard Rate'")
+		stop("Invalid qi type. qi must be 'Marginal Effect', 'First Difference', 'Hazard Ratio', or 'Hazard Rate'.")
 	}
 	MeansMessage <- NULL
 	if (isTRUE(means) & length(obj$coefficients) == 3){

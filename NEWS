@@ -1,10 +1,16 @@
-Version 1.1
+## Version 1.1.1
+
+`coxsimPoly` is able to simulate quantities of interest for only the polynomial terms without the linear component. Feature request from Mattia Valente.
+
+Minor error message improvements.
+
+## Version 1.1
 
 Added `SurvExpand` for converting a data frame of non-equal interval continuous observations into equal interval continuous observations. This is very useful if you intend to create time interactions. Thanks to Mintao Nie and an anonymous reviewer for the suggestion.
 
 Roxyegen documentation improvements.
 
-Version 1.0
+## Version 1.0
 
 Added `type` argument to `simGG.spline`. Allows the user to plot using `points`, `ribbons`, or `lines`. NOTE: the `ribbons` standalone argument is depricated.
 
@@ -14,33 +20,33 @@ Uses `mvrnorm` from the `MASS` package instead of `rmultnorm` to draw the simula
 
 Documentation and other internal improvements.
 
-Version 0.8.6
+## Version 0.8.6
 
 Documentation improvements.
 
-Version 0.8.5
+## Version 0.8.5
 
 Added the ability to choose whether or not to exponentiate marginal effects for `coxsimInteract` with the `expMarg` argument. 
 
-Version 0.8.4
+## Version 0.8.4
 
 Minor bug fix for `simGG.siminteract`.
 
-Version 0.8.3
+## Version 0.8.3
 
 License change and minor message changes.
 
-Version 0.8.2
+## Version 0.8.2
 
 Added `legend` argument to allow the user to hide plot legends, when applicable.
 
 Minor aesthetic updates and documentation clarifications.
 
-Version 0.8.1
+## Version 0.8.1
 
 Minor changes for CRAN check.
 
-Version 0.8
+## Version 0.8
 
 Added the argument `ribbons` to the simGG method. This produces a plot with shaded areas ('ribbons') for the minimum and maximum simulation values as well as the central 50% of this area. It also plots a line for the median value of this area. (Thanks to Jeff Chwieroth for the suggestion.)
 
@@ -48,19 +54,19 @@ Internal improvements to minimise the size of simulation output objects and impr
 
 A number of bug fixes.
 
-Version 0.7.3
+## Version 0.7.3
 
 Documentation improvements.
 
-Version 0.7.2 
+## Version 0.7.2 
 
 Clean up for CRAN.
 
-Version 0.7.1
+## Version 0.7.1
 
 Added an error message to `coxsimSpline` if white spaces are not entered before and after equal (=) signs in the `bspline` argument.
 
-Version 0.7
+## Version 0.7
 
 - Added package vignette (partially completed).
 
@@ -74,7 +80,7 @@ Version 0.7
   - SPIn lower bound for different quantities of interest.
   - Fixed an error in the calculation of quantities of interest from Splines.
 
-Version 0.6
+## Version 0.6
 
 - Increased flexibility for setting confidence levels. Now they may be set at any numeric value from 0 through 1.
 
@@ -90,64 +96,62 @@ Version 0.6
 
 - Minor bug fixes and documentation updates.
 
-
-Version 0.05
+## Version 0.05
 
 **Major update** to the way simPH plots simulated objects. Instead of using separate commands for plotting objects of different sim classes it now uses the method `simGG`. 
 
 In practical terms this means that you can now just use the command `simGG` rather than the old gg. . . commands.
 
-Version 0.04.62 
+## Version 0.04.62 
 
 Minor bug fix for `ci` argument.
 
-Version 0.04.6.1
+## Version 0.04.6.1
 
 Minor change: now line drawn.
 
 
-Version 0.04.6
+## Version 0.04.6
 
 Standardise how hazard rates are calculated.
 
-Version 0.04.5
+## Version 0.04.5
 
 Made updates so that the package is compatible with data.table package version 1.8.8.
 
-Version 0.04.4
+## Version 0.04.4
 
 Minor improvement to ggtvc legend
 
-Version 0.04.3 
+## Version 0.04.3 
 
 Minor bug fixes.
 
-Version 0.04.2
+## Version 0.04.2
 
 Updated the syntax for `simcoxtvc` and `ggtvc` for hazard ratios and stratified hazard rates so that it matches the syntax for the other commands.
 
 Other bug fixes.
 
-Version 0.04.1
+## Version 0.04.1
 
 Minor bug fix for `ggspline` when `qi == 'First Difference'`.
 
-Version 0.04
+## Version 0.04
 
 Added `coxsimSpline` and `ggspline` to simulate and plot quantities of interest for penalised splines.
 
-
-Version 0.03.2
+## Version 0.03.2
 
 Minor bug fixes, documentation improvements for `coxsimInteract`.
 
 
-Version 0.03.1
+## Version 0.03.1
 
 Improved error messages in `coxsimInteract` and minor documentation changes.
 
 
-Version 0.03
+## Version 0.03
 
 Added `coxsimInteract` to simulate quantities of interest for linear multiplicative interactions and `gginteract` for plotting these simulations.
 
@@ -156,16 +160,16 @@ Also made an important fix to how `coxsimLinear` calculates hazard rates and how
 Other documentation fixes.
 
 
-Version 0.02.2
+## Version 0.02.2
 
 Minor change to how `coxsimtvc` runs so that it is no longer dependent on **reshape**.
 
 
-Version 0.02.1
+## Version 0.02.1
 
 Updated documentation and added the ability to change the smoothing line colour for first difference and relative hazard plots.
 
-Version 0.02
+## Version 0.02
 
 Added functions for simulating and plotting linear non-time-varying hazards. 
 
@@ -173,7 +177,7 @@ Added functions for simulating and plotting linear non-time-varying hazards.
 
 - `gglinear`: plots linear non-time-varying-hazards
 
-Version 0.01
+## Version 0.01
 
 First version, largely ported from simtvc version 0.04 (<http://christophergandrud.github.com/simtvc/>), with the addition of the ability to work with polynomials. This includes two functions
 

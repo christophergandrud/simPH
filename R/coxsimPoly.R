@@ -2,7 +2,7 @@
 #'
 #' \code{coxsimPoly} simulates quantities of interest for polynomial covariate effects estimated from Cox Proportional Hazards models. These can be plotted with \code{\link{simGG}}.
 #' @param obj a \code{\link{coxph}} class fitted model object with a polynomial coefficient. These can be plotted with \code{\link{simGG}}.
-#' @param b character string name of the coefficient you would like to simulate.
+#' @param b character string name of the coefficient you would like to simulate. To find the quantity of interest using only the polynomial and not the polynomial + the linear terms enter the polynomial created using \code{\link{I}}, e.g. \code{I(natreg^2)} as a string.
 #' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
 #' @param pow numeric polynomial used in \code{coxph}.  
 #' @param Xj numeric vector of fitted values for \code{b} to simulate for.
@@ -57,19 +57,31 @@
 #' @importFrom plyr rename
 #' @export 
 
-coxsimPoly <- function(obj, b, qi = "Relative Hazard", pow = 2, Xj = NULL, Xl = NULL, nsim = 1000, ci = 0.95, spin = FALSE) 
+coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2, Xj = NULL, Xl = NULL, nsim = 1000, ci = 0.95, spin = FALSE) 
 {
   strata <- QI <- SimID <-  NULL
 	# Ensure that qi is valid
-	qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
+	qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate",
+             "Hazard Ratio")
 	TestqiOpts <- qi %in% qiOpts
 	if (!isTRUE(TestqiOpts)){
-  	stop("Invalid qi type. qi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'")
+  	stop("Invalid qi type.\nqi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'.",
+      call. = FALSE)
 	}
+  # Ensure that b is declared
+  if (is.null(b)) stop('Need to declare b.', call. = FALSE)
 
+  # Find base variable if polynomial entered 
+  PolyOnly <- grepl(pattern = 'I\\(.*\\^', x = b)
+  if (isTRUE(PolyOnly)){
+    message('Simulations of the quantity of interest will not include the linear term, if any exist in the model.\n')
+    b <- gsub(pattern = '^I\\(', replace = '', x = b)
+    b <- gsub(pattern = '\\^.*$', replace = '', x = b)
+  }  
+  
 	# Find X_{jl}
 	if (length(Xj) != length(Xl) & !is.null(Xl)){
-		stop("Xj and Xl must be the same length.")
+		stop("Xj and Xl must be the same length.", call. = FALSE)
 	}	else if (is.null(Xl)) {
 		message("All Xl set at 0.")
 		Xjl <- Xj
@@ -99,7 +111,10 @@ coxsimPoly <- function(obj, b, qi = "Relative Hazard", pow = 2, Xj = NULL, Xl = 
 	pows <- as.numeric(2:pow)
   NamePow <- sapply(pows, NamesLoc, simplify = TRUE)
 
-  NamePow <- c(bpos, NamePow)
+  if (!isTRUE(PolyOnly)){
+    NamePow <- c(bpos, NamePow)
+  }
+
   Drawn <- data.frame(Drawn[, NamePow])
   VNames <- names(Drawn)
   powFull <- as.numeric(1:pow)
@@ -108,7 +123,7 @@ coxsimPoly <- function(obj, b, qi = "Relative Hazard", pow = 2, Xj = NULL, Xl = 
   	Fitted <- function(VN, x, p){
   		Temp <- outer(Drawn[, VN], x^p)
   		TempDF <- data.frame(melt(Temp))
-  		TempDF <- TempDF[, "value"]
+  		TempDF <- TempDF[, 'value']
   		TempDF
   	}
 
@@ -122,16 +137,21 @@ coxsimPoly <- function(obj, b, qi = "Relative Hazard", pow = 2, Xj = NULL, Xl = 
   	}
 
    	# Create combined quantities of interest
+    if (length(NamePow) > 1){
+      UnExp <- rowSums(Simb[, VNames])
+    }
+    else if (length(NamePow) == 1) UnExp = Simb[, VNames]
+
     if (qi == "Relative Hazard"){
-      Simb$QI <- exp(rowSums(Simb[, VNames]))
+      Simb$QI <- exp(UnExp)
   	} else if (qi == "Hazard Ratio"){
-  		Simb$QI <- exp(rowSums(Simb[, VNames]))
+  		Simb$QI <- exp(UnExp)
   	}
   	else if (qi == "First Difference"){
-  		Simb$QI <- (exp(rowSums(Simb[, VNames])) - 1) * 100
+  		Simb$QI <- (exp(UnExp) - 1) * 100
   	}
   	else if (qi == "Hazard Rate"){
-  		Simb$HR <- exp(rowSums(Simb[, VNames]))
+  		Simb$HR <- exp(UnExp)
   	  	bfit <- basehaz(obj)
   	  	bfit$FakeID <- 1
   	  	Simb$FakeID <- 1
@@ -141,7 +161,8 @@ coxsimPoly <- function(obj, b, qi = "Relative Hazard", pow = 2, Xj = NULL, Xl = 
         # Create warning message
         Rows <- nrow(Simb)
         if (Rows > 2000000){
-          message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
+          message(paste("There are", Rows, 
+            "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
         }
         Simb$QI <- Simb$hazard * Simb$HR 
         if (is.null(Simb$strata)){
@@ -170,7 +191,8 @@ coxsimPoly <- function(obj, b, qi = "Relative Hazard", pow = 2, Xj = NULL, Xl = 
                                 SimbPerc$QI, SimbPerc$HRValue)
       names(SimbPercSub) <- c("SimID", "Time", "HRate", "HRValue")
     } else if (!is.null(SimbPerc$strata)) {
-    SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time, SimbPerc$QI, SimbPerc$strata, SimbPerc$HRValue)
+    SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time, SimbPerc$QI, 
+                              SimbPerc$strata, SimbPerc$HRValue)
     names(SimbPercSub) <- c("SimID", "Time", "HRate", "Strata", "HRValue")
     }
   } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | qi == "First Difference"){

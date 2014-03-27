@@ -3,7 +3,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 1.1 
+### Version 1.1.1 
 
 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH)
 
@@ -44,8 +44,6 @@ Results from these functions can be plotted using the `simGG` method. The syntax
 - `simGG.simpoly`: uses **ggplot2** to graph the simulated polynomial quantities of interest.
 
 - `simGG.siminteract`: uses **ggplot2** to graph linear multiplicative interactions.
-
-**Important Change:** From **simPH** version 0.05 you can now use the method `simGG` for plotting all simulations rather than the old sim model object specific commands. In practical terms this means that you can now just use the command `simGG` rather than the old gg. . . commands. The old commands are deprecated and will no longer work.
 
 ##### Additional styling
 
