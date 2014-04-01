@@ -137,50 +137,50 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 							  leg.name = "", lcolour = "#2B8CBE", lsize = 1, 
 							  pcolour = "#A6CEE3", psize = 1, alpha = 0.2, 
 							  type = "points", ...)
-{
+	{
 	HRate <- Lower50 <- Upper50 <- Min <- Max <- Median <- NULL
 	Time <- QI <- HRValue <- X1 <- X2 <- SimID <- NULL
 	if (!inherits(obj, "siminteract")){
-    stop("must be a siminteract object")
-  }
-  if (type == 'ribbons' & smoother != "auto"){
-    message("The smoother argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
-  }
-  # Find quantity of interest
-  qi <- class(obj)[[2]]
+	stop("must be a siminteract object")
+	}
+	if (type == 'ribbons' & smoother != "auto"){
+	message("The smoother argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
+	}
+	# Find quantity of interest
+	qi <- class(obj)[[2]]
 
-  # Create y-axis label
-  if (is.null(ylab)){
-  	ylab <- paste(qi, "\n")
-  } else {
-  	ylab <- ylab
-  }
-  # Convert obj to data frame
-  class(obj) <- "data.frame"
+	# Create y-axis label
+	if (is.null(ylab)){
+		ylab <- paste(qi, "\n")
+	} else {
+		ylab <- ylab
+	}
+	# Convert obj to data frame
+	class(obj) <- "data.frame"
 
-  # Drop simulations that include outliers
-  if (type == 'lines'){
-   	obj <- OutlierDrop(obj)
-  }
+	# Drop simulations that include outliers
+	if (type == 'lines'){
+		obj <- OutlierDrop(obj)
+	}
 
-  # Alpha gradient based on percentile in the distribution
-  if (type != 'ribbons' & qi != 'Hazard Rate' & qi != 'Marginal Effect'){
-      obj <- PercRank(obj, xaxis = 'X1')
-   } else if (type != 'ribbons' & qi == 'Marginal Effect'){
-      obj <- PercRank(obj, xaxis = 'X2')
-   } else if (type != 'ribbons' & qi == 'Hazard Rate'){
-      obj <- PercRank(obj, xaxis = 'Time', yaxis = 'HRate')
-   }
+	# Alpha gradient based on percentile in the distribution
+	if (type != 'ribbons' & qi != 'Hazard Rate' & qi != 'Marginal Effect'){
+	  obj <- PercRank(obj, xaxis = 'X1')
+	} else if (type != 'ribbons' & qi == 'Marginal Effect'){
+	  obj <- PercRank(obj, xaxis = 'X2')
+	} else if (type != 'ribbons' & qi == 'Hazard Rate'){
+	  obj <- PercRank(obj, xaxis = 'Time', yaxis = 'HRate')
+	}
 
-  # Constrict time period to plot for hazard rate
-  if (qi == "Hazard Rate"){   
+	# Constrict time period to plot for hazard rate
+	if (qi == "Hazard Rate"){   
 	   if (!is.null(from)){
 		  obj <- subset(obj, Time >= from)
 	  }
 	if (!is.null(to)){
 	       	obj <- subset(obj, Time <= to)
 	   }
-  }
+	}
 	# Plot points
 	if (type == 'points'){
 		if (qi == "Hazard Rate"){
@@ -361,7 +361,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        				  guide = legend) +
 				ggtitle(title) +
 				theme_bw(base_size = 15)
-    	} else if (is.null(obj$Strata)){
+		} else if (is.null(obj$Strata)){
 			obj <- MinMaxLines(df = obj, hr = TRUE)
 	      	ggplot(obj, aes(Time, Median, colour = factor(HRValue), 
 	      					fill = factor(HRValue))) +
