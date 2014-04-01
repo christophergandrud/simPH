@@ -1,17 +1,28 @@
-#' Convert a data frame of non-equal interval continuous observations into equal interval continuous observations
+#' Convert a data frame of non-equal interval continuous observations into 
+#' equal interval continuous observations
 #' 
-#' \code{SurvExpand} convert a data frame of non-equal interval continuous observations into equal interval continuous observations. This is useful for creating time-interactions with \code{\link{tvc}}.
+#' \code{SurvExpand} convert a data frame of non-equal interval continuous 
+#' observations into equal interval continuous observations. This is useful for 
+#' creating time-interactions with \code{\link{tvc}}.
 #' @param data a data frame.
 #' @param GroupVar a character string naming the unit grouping variable.
-#' @param Time a character string naming the variable with the interval start time.
-#' @param Time2 a character string naming the variable with the interval end time.
-#' @param event a character string naming the event variable. Note: must be numeric with 0 indicating no event.
-#' @param messages logical indicating if you want messages returned while the function is working.
+#' @param Time a character string naming the variable with the interval start 
+#' time.
+#' @param Time2 a character string naming the variable with the interval end 
+#' time.
+#' @param event a character string naming the event variable. Note: must be 
+#' numeric with 0 indicating no event.
+#' @param messages logical indicating if you want messages returned while the 
+#' function is working.
 #' 
-#' @return Returns a data frame where observations have been expanded into equally spaced time intervals.
+#' @return Returns a data frame where observations have been expanded into 
+#' equally spaced time intervals.
 #' 
-#' @details The function primarily prepares data from the creation of accurate time-interactions with the \code{\link{tvc}} command.
-#' Note: the function will work best if your original time intervals are recorded in whole numbers. It also currently does not support repeated events data.
+#' @details The function primarily prepares data from the creation of accurate 
+#' time-interactions with the \code{\link{tvc}} command.
+#' Note: the function will work best if your original time intervals are 
+#' recorded in whole numbers. It also currently does not support repeated 
+#' events data.
 #' 
 #' @examples
 #' \dontrun{
@@ -46,21 +57,24 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, messages = TRUE){
   # Warnings
   if (class(data[, Time]) != 'numeric'){
     if (isTRUE(messages)){
-      message(paste0('Converting ', deparse(substitute(Time)), ' to numeric. Things might get wacky. Please check.'))
+      message(paste0('Converting ', deparse(substitute(Time)), 
+                    ' to numeric. Things might get wacky. Please check.'))
     }
     data[, Time] <- as.character(data[, Time])
     data[, Time] <- as.numeric(data[, Time])
   }
   if (class(data[, Time2]) != 'numeric'){
     if (isTRUE(messages)){
-      message(paste0('Converting ', deparse(substitute(Time2)), ' to numeric. Things might get wacky. Please check.'))
+      message(paste0('Converting ', deparse(substitute(Time2)), 
+                    ' to numeric. Things might get wacky. Please check.'))
     }
     data[, Time2] <- as.character(data[, Time2])
     data[, Time2] <- as.numeric(data[, Time2])
   }
   if (class(data[, event]) != 'numeric'){
     if (isTRUE(messages)){
-      message(paste0('Converting ', deparse(substitute(event)), ' to numeric. Things might get wacky. Please check.'))
+      message(paste0('Converting ', deparse(substitute(event)), 
+                    ' to numeric. Things might get wacky. Please check.'))
     }
     data[, event] <- as.character(data[, event])
     data[, event] <- as.numeric(data[, event])
@@ -91,9 +105,11 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, messages = TRUE){
   FullSub <- Full[FT %in% End]
   FullSub <- FullSub[order(UG, FT)]
 
-  # Find last observation and subset data so that unit-observations greater than this are excluded
+  # Find last observation and subset data so that unit-observations greater 
+  # than this are excluded
   DGroup <- eval(parse(text = paste0('group_by(data, ', GroupVar, ')')))
-  DGroup <- eval(parse(text = paste0('dplyr::mutate(DGroup, FinalTime = max(', Time2, '))')))
+  DGroup <- eval(parse(text = paste0('dplyr::mutate(DGroup, FinalTime = max(', 
+                                    Time2, '))')))
   DGroup <- DGroup[, c(GroupVar, 'FinalTime')]
   names(DGroup) <- c('UG', 'FinalTime')
   DGroup <- DGroup[!duplicated(DGroup$UG, DGroup$FinalTime), ]

@@ -111,8 +111,8 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
   PolyOnly <- grepl(pattern = 'I\\(.*\\^', x = b)
   if (isTRUE(PolyOnly)){
     message('Simulations of the quantity of interest will not include the linear term, if any exist in the model.\n')
-    b <- gsub(pattern = '^I\\(', replace = '', x = b)
-    b <- gsub(pattern = '\\^.*$', replace = '', x = b)
+    b <- gsub(pattern = '^I\\(', replacement = '', x = b)
+    b <- gsub(pattern = '\\^.*$', replacement = '', x = b)
   }  
   
 	# Find X_{jl}

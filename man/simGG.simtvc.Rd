@@ -1,6 +1,7 @@
 \name{simGG.simtvc}
 \alias{simGG.simtvc}
-\title{Plot simulated time-interactive hazard ratios or stratified time-interactive hazard rates from Cox Proportional Hazards Models}
+\title{Plot simulated time-interactive hazard ratios or stratified time-interactive
+hazard rates from Cox Proportional Hazards Models}
 \usage{
 \method{simGG}{simtvc}(obj, from = NULL, to = NULL, xlab = NULL,
   ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",

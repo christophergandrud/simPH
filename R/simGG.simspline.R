@@ -56,8 +56,8 @@
 #' will be dropped. This is to create a smooth plot. If \code{type = "ribbons"} 
 #' a plot will be created with shaded areas ('ribbons') for the minimum and 
 #' maximum simulation values (i.e. the middle interval set with \code{qi} in 
-#' \code{\link{coxsimSpline}}) as well as the central 50 percent of this area. It 
-#' also plots a line for the median value of the full area, so values in 
+#' \code{\link{coxsimSpline}}) as well as the central 50 percent of this area. 
+#' It also plots a line for the median value of the full area, so values in 
 #' \code{smoother} are ignored. One of the key advantages of using ribbons 
 #' rather than points is that it creates plots with smaller file sizes.
 #' @param ... Additional arguments. (Currently ignored.)

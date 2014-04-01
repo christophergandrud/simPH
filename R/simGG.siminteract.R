@@ -132,9 +132,11 @@
 #' FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
 
 simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, 
-	ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1", 
-	legend = "legend", leg.name = "", lcolour = "#2B8CBE", lsize = 1, 
-	pcolour = "#A6CEE3", psize = 1, alpha = 0.2, type = "points", ...)
+							  ylab = NULL, title = NULL, smoother = "auto", 
+							  spalette = "Set1", legend = "legend", 
+							  leg.name = "", lcolour = "#2B8CBE", lsize = 1, 
+							  pcolour = "#A6CEE3", psize = 1, alpha = 0.2, 
+							  type = "points", ...)
 {
 	HRate <- Lower50 <- Upper50 <- Min <- Max <- Median <- NULL
 	Time <- QI <- HRValue <- X1 <- X2 <- SimID <- NULL

@@ -1,6 +1,7 @@
 \name{SurvExpand}
 \alias{SurvExpand}
-\title{Convert a data frame of non-equal interval continuous observations into equal interval continuous observations}
+\title{Convert a data frame of non-equal interval continuous observations into
+equal interval continuous observations}
 \usage{
 SurvExpand(data, GroupVar, Time, Time2, event, messages = TRUE)
 }

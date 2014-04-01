@@ -2,13 +2,17 @@
 #'
 #' @param x a vector containing the x value.
 #' @param y a vector containing the y value.
-#' @param df numeric. The desired equivalent number of degrees of freedom (trace of the smoother matrix).
+#' @param df numeric. The desired equivalent number of degrees of freedom 
+#' (trace of the smoother matrix).
 #'
-#' @references Chambers, J. M. and Hastie, T. J. (1992) Statistical Models in S, Wadsworth & Brooks/Cole.
+#' @references Chambers, J. M. and Hastie, T. J. (1992) Statistical Models in 
+#' S, Wadsworth & Brooks/Cole.
 #'
-#' Green, P. J. and Silverman, B. W. (1994) Nonparametric Regression and Generalized Linear Models: A Roughness Penalty Approach. Chapman and Hall.
+#' Green, P. J. and Silverman, B. W. (1994) Nonparametric Regression and 
+#' Generalized Linear Models: A Roughness Penalty Approach. Chapman and Hall.
 #'
-#'Hastie, T. J. and Tibshirani, R. J. (1990) Generalized Additive Models. Chapman and Hall.
+#'Hastie, T. J. and Tibshirani, R. J. (1990) Generalized Additive Models. 
+#' Chapman and Hall.
 #'
 #' @importFrom stats smooth.spline
 #' @keywords internals
@@ -24,7 +28,8 @@ SmoothOneSim <- function(x, y, df = 10){
 #' Smooth values for all simulations
 #'
 #' @param SimIn data frame. Pre-smoothed simulation
-#' @param xaxis character string. The column that will form the x-axis in the plot.  
+#' @param xaxis character string. The column that will form the x-axis in the 
+#' plot.  
 #'
 #' @importFrom dplyr group_by
 #' @importFrom dplyr mutate

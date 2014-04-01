@@ -1,6 +1,7 @@
 \name{simPH}
 \alias{simPH}
-\title{An R package for simulating and plotting quantities of interest from Cox Proportional Hazard models.}
+\title{An R package for simulating and plotting quantities of interest from Cox
+Proportional Hazard models.}
 \description{
 An R package for simulating and plotting quantities of
 interest (relative hazards, first differences, and hazard
@@ -43,6 +44,6 @@ data frame of non-equal interval continuous observations
 into equal interval continuous observations.}
 \item{\code{\link{tvc}}: }{a function to create time
 interaction variable that can be used in a coxph model (or
-any other model with time interactions).} }
+any other model with time nteractions).} }
 }
 
