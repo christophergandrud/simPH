@@ -57,7 +57,9 @@
 #' @importFrom plyr rename
 #' @export 
 
-coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2, Xj = NULL, Xl = NULL, nsim = 1000, ci = 0.95, spin = FALSE) 
+coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2, 
+                       Xj = NULL, Xl = NULL, nsim = 1000, ci = 0.95, 
+                       spin = FALSE) 
 {
   strata <- QI <- SimID <-  NULL
 	# Ensure that qi is valid
@@ -195,7 +197,8 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2, Xj = NULL
                               SimbPerc$strata, SimbPerc$HRValue)
     names(SimbPercSub) <- c("SimID", "Time", "HRate", "Strata", "HRValue")
     }
-  } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | qi == "First Difference"){
+  } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | 
+             qi == "First Difference"){
       SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
       names(SimbPercSub) <- c("SimID", "Xj", "QI")
   }

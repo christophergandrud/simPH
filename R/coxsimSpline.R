@@ -77,14 +77,17 @@
 #' @importFrom MASS mvrnorm
 #' @export
 
-coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE)
+coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, 
+                         Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE)
 { 
 	strata <- QI <- NULL
 	# Ensure that qi is valid
-	qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
+	qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", 
+	            "Hazard Ratio")
 	TestqiOpts <- qi %in% qiOpts
 	if (!isTRUE(TestqiOpts)){
-		stop("Invalid qi type. qi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'.")
+		stop("Invalid qi type. qi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'.",
+			call. = FALSE)
 	}
 
 	if (nsim > 10 & qi == "Hazard Rate"){
@@ -103,7 +106,8 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	NoSpace1 <- grepl("[^ ]=", bspline)
 	NoSpace2 <- grepl("[^ ]=", bspline)
 	if (any(NoSpace1) | any(NoSpace2)){
-		stop(paste0("Place a white space before and after equal (=) signs in ", bspline, "."))
+		stop(paste0("Place a white space before and after equal (=) signs in ", bspline, "."),
+			call. = FALSE)
 	}
 
 
@@ -114,9 +118,13 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 		stop(paste0("Unable to find ", bspline, "."))
 	}
 
-	# Extract boundary knots for default Boundary.knots = range(x) & number of knots
-	#### Note: these can also be found with get("cbase", environment(obj$printfun[[1]])) # (replace 1 with the spline term number)
-	#### From: http://r.789695.n4.nabble.com/help-on-pspline-in-coxph-td3431829.html 
+	# Extract boundary knots for default Boundary.knots = range(x) & 
+	# number of knots
+	#### Note: these can also be found with 
+	# get("cbase", environment(obj$printfun[[1]])) 
+	# (replace 1 with the spline term number)
+	#### From: 
+	# http://r.789695.n4.nabble.com/help-on-pspline-in-coxph-td3431829.html 
 	OA <- obj$assign
 	ListKnots <- OA[bterm]
 	NumKnots <- length(unlist(ListKnots))
@@ -183,7 +191,8 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 		CombinedDF <- data.frame()
 		for (i in f){
 		  Temps <- TempDF
-		  Temps$X <- ifelse(TempDF[, 'IntervalStart'] < i & i <= TempDF[, 'IntervalFinish'], i, NA)
+		  Temps$X <- ifelse(TempDF[, 'IntervalStart'] < i & i <= 
+		  	                TempDF[, 'IntervalFinish'], i, NA)
 		  Temps <- subset(Temps, !is.na(X))
 		  CombinedDF <- rbind(CombinedDF, Temps)
 		}
@@ -208,7 +217,8 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 	    Simb <- Simbj
 	} else if (qi == "Relative Hazard"){
 		Simb <- MergeX(Xj)
-	    names(Simb) <- c("CoefName", "SimID", "Coef", "IntervalStart", "IntervalFinish", "Xj")
+	    names(Simb) <- c("CoefName", "SimID", "Coef", "IntervalStart", 
+	    	             "IntervalFinish", "Xj")
 	    Simb$QI <- exp(Simb$Xj * Simb$Coef)
 	}
 	else if (qi == "First Difference"){
@@ -219,13 +229,15 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 			Simbj <- MergeX(Xj)
 		    names(Simbj) <- c("CoefName", "SimID",  "Coef", "IntervalStart", "IntervalFinish", "Xj")
 			Simbl <- MergeX(Xl)
-		    names(Simbl) <- c("CoefName", "SimID", "Coef", "IntervalStart", "IntervalFinish", "Xl")
+		    names(Simbl) <- c("CoefName", "SimID", "Coef", "IntervalStart", 
+		    	              "IntervalFinish", "Xl")
 		 	
 		 	Xs <- data.frame(Xj, Xl)   	
 		    Simbj <- merge(Simbj, Xs, by = "Xj")
 		    Simbj$Comparison <- paste(Simbj$Xj, "vs.", Simbj$Xl)
 
-		 	Simbj$QI <- (exp((Simbj$Xj * Simbj$Coef) - (Simbl$Xl * Simbl$Coef)) - 1) * 100
+		 	Simbj$QI <- (exp((Simbj$Xj * Simbj$Coef) - 
+		 		        (Simbl$Xl * Simbl$Coef)) - 1) * 100
 			Simb <- Simbj
 		}
 	}
@@ -233,7 +245,8 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
 		Xl <- NULL
       message("Xl is ignored. All variables' values other than b fitted at 0.") 
 		Simb <- MergeX(Xj)
-	    names(Simb) <- c("CoefName", "SimID", "Coef", "IntervalStart", "IntervalFinish", "Xj")
+	    names(Simb) <- c("CoefName", "SimID", "Coef", "IntervalStart", 
+	    	             "IntervalFinish", "Xj")
 	 	Simb$HR <- exp(Simb$Xj * Simb$Coef)
 	  	bfit <- basehaz(obj)
 	  	## Currently does not support strata
@@ -273,13 +286,14 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl
     # Subset simspline object & create a data frame of important variables
 	if (qi == "Hazard Rate"){
 		if (is.null(SimbPerc$strata)){
-			SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time, SimbPerc$QI, 
-				SimbPerc$Xj)
+			SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time, 
+				SimbPerc$QI, SimbPerc$Xj)
 			names(SimbPercSub) <- c("SimID", "Time", "QI", "Xj")
 		} 
 		# Currently does not support strata
 		else if (!is.null(SimbPerc$strata)) {
-			stop("coxsimSpline currently doesn''t support Hazard Rates when there are multiple stata. Sorry.")
+			stop("coxsimSpline currently doesn''t support Hazard Rates when there are multiple stata. Sorry.", 
+			    call. = FALSE)
 		}
 	} else if (qi == "Hazard Ratio"){
 	  	SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI, 

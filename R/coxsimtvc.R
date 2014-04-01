@@ -108,14 +108,19 @@
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probability Intervals.'' Arvix. \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 
 
-coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000, from, to, by = 1, ci = 0.95, spin = FALSE)
+coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, 
+                      Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000, 
+                      from, to, by = 1, ci = 0.95, spin = FALSE)
 {
   HRValue <- strata <- QI <- NULL
   # Ensure that qi is valid
-  qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
+  qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", 
+              "Hazard Ratio")
   TestqiOpts <- qi %in% qiOpts
   if (!isTRUE(TestqiOpts)){
-    stop("Invalid qi type. qi must be 'Relative Hazard', 'First Difference', 'Hazard Rate', or 'Hazard Ratio'.")
+    stop("Invalid qi type. qi must be 'Relative Hazard', 'First Difference', 
+         'Hazard Rate', or 'Hazard Ratio'.",
+         call. = FALSE)
   }
 
   if (is.null(Xl) & qi != "Hazard Rate"){
@@ -129,7 +134,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
   tfunOpts <- c("linear", "log", "power")
   TestforTOpts <- tfun %in% tfunOpts
   if (!isTRUE(TestforTOpts)){
-    stop("Must specify tfun as 'linear', 'log', or 'power'")
+    stop("Must specify tfun as 'linear', 'log', or 'power'", call. = FALSE)
   }
     
   if (tfun == "linear"){
@@ -243,20 +248,25 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL
   # Subset simtvc object & create data frame of important variables
   if (qi == "Hazard Rate"){
     if (is.null(SimbPerc$strata)){
-      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, SimbPerc$HRValue)
+      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, 
+                                SimbPerc$HRValue)
       names(SimbPercSub) <- c("SimID", "Time", "HRate", "HRValue")
     } else if (!is.null(SimbPerc$strata)) {
-      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, SimbPerc$strata, SimbPerc$HRValue)
+      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, 
+                                SimbPerc$strata, SimbPerc$HRValue)
       names(SimbPercSub) <- c("SimID", "Time", "HRate", "Strata", "HRValue")
     }
   } else if (qi == "Hazard Ratio"){
-      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, SimbPerc$Comparison)
+      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, 
+                                SimbPerc$Comparison)
       names(SimbPercSub) <- c("SimID", "Time", "QI", "Comparison")
   } else if (qi == "Relative Hazard"){
-      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, SimbPerc$Xj)
+      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, 
+                                SimbPerc$Xj)
       names(SimbPercSub) <- c("SimID", "Time", "QI", "Xj")
   } else if (qi == "First Difference"){
-      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, SimbPerc$Comparison)
+      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI, 
+                                SimbPerc$Comparison)
       names(SimbPercSub) <- c("SimID", "Time", "QI", "Comparison")
   }
   class(SimbPercSub) <- c("simtvc", qi)

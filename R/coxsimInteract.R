@@ -74,17 +74,20 @@
 #' @importFrom MASS mvrnorm
 #' @export
 
-coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL, means = FALSE, expMarg = TRUE, nsim = 1000, ci = 0.95, spin = FALSE)
+coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, 
+                           X2 = NULL, means = FALSE, expMarg = TRUE, 
+                           nsim = 1000, ci = 0.95, spin = FALSE)
 {
 	HRValue <- strata <- QI <- SimID <- NULL
 	if (qi != "Hazard Rate" & isTRUE(means)){
 		stop("means can only be TRUE when qi = 'Hazard Rate'.")
 	}
 	# Ensure that qi is valid
-	qiOpts <- c("Marginal Effect", "First Difference", "Hazard Ratio", "Hazard Rate")
+	qiOpts <- c("Marginal Effect", "First Difference", "Hazard Ratio", 
+				"Hazard Rate")
 	TestqiOpts <- qi %in% qiOpts
 	if (!isTRUE(TestqiOpts)){
-		stop("Invalid qi type. qi must be 'Marginal Effect', 'First Difference', 'Hazard Ratio', or 'Hazard Rate'.")
+		stop("Invalid qi type. qi must be 'Marginal Effect', 'First Difference', 'Hazard Ratio', or 'Hazard Rate'.", call. = FALSE)
 	}
 	MeansMessage <- NULL
 	if (isTRUE(means) & length(obj$coefficients) == 3){
@@ -143,7 +146,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			names(Xs) <- c("X1", "X2")
 			Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
 		    Simb <- merge(Simb, Xs)
-			Simb$QI <- (exp((Simb$X1 * Simb[, 2]) + (Simb$X2 * Simb[, 3]) + (Simb$X1 * Simb$X2 * Simb[, 4]) - 1) * 100)	
+			Simb$QI <- (exp((Simb$X1 * Simb[, 2]) + (Simb$X2 * Simb[, 3]) + 
+				       (Simb$X1 * Simb$X2 * Simb[, 4]) - 1) * 100)	
 		  }
 		}
 		else if (qi == "Hazard Ratio"){
@@ -154,12 +158,14 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			names(Xs) <- c("X1", "X2")
 			Xs$Comparison <- paste0(Xs[, 1], ", ", Xs[, 2])
 		    Simb <- merge(Simb, Xs)
-			Simb$QI <- (exp((Simb$X1 * Simb[, 2]) + (Simb$X2 * Simb[, 3]) + (Simb$X1 * Simb$X2 * Simb[, 4])))
+			Simb$QI <- (exp((Simb$X1 * Simb[, 2]) + (Simb$X2 * Simb[, 3]) + 
+                       (Simb$X1 * Simb$X2 * Simb[, 4])))
 		  }
 		}
 		else if (qi == "Hazard Rate"){
 			if (is.null(X1) | is.null(X2)){
-				stop("For Hazard Rates, both X1 and X2 should be specified.")
+				stop("For Hazard Rates, both X1 and X2 should be specified.",
+                     call. = FALSE)
 			}
 			if (isTRUE(MeansMessage)){
 			  	message("All variables' values other than b1, b2, and b1*b2 are fitted at 0.") 
@@ -168,7 +174,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			Xs$HRValue <- paste0(Xs$X1, ", ", Xs$X2)
 		   
             Simb <- merge(Simb, Xs)
-			Simb$HR <- exp((Simb$X1 * Simb[, 2]) + (Simb$X2 * Simb[, 3]) + (Simb$X1 * Simb$X2 * Simb[, 4]))	 
+			Simb$HR <- exp((Simb$X1 * Simb[, 2]) + (Simb$X2 * Simb[, 3]) + 
+                          (Simb$X1 * Simb$X2 * Simb[, 4]))	 
 		  	
 		  	bfit <- basehaz(obj)
 		  	bfit$FakeID <- 1
@@ -191,13 +198,16 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			}
 	}
 
-  # If the user wants to calculate Hazard Rates using means for fitting all covariates other than b.
+  # If the user wants to calculate Hazard Rates using means for fitting all 
+  #covariates other than b.
 	else if (isTRUE(means)){
 		if (is.null(X1) | is.null(X2)){
-			stop("For Hazard Rates, both X1 and X2 should be specified.")
+			stop("For Hazard Rates, both X1 and X2 should be specified.", 
+                 call. = FALSE)
 		}
 		if (length(X1) != 1 | length(X2) != 1){
-			stop("For coxsimInteract only one value of X1 and one value of X2 can be specified.")
+			stop("For coxsimInteract only one value of X1 and one value of X2 can be specified.", 
+                call. = FALSE)
 		}
 
 	  	Xs <- data.frame(X1, X2)
@@ -228,7 +238,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 		Simb <- data.frame(DrawnDF[, NamesInt])
 
 	    Simb <- merge(Simb, Xs)
-		Simb$PreHR <- (Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + (Simb$X1 * Simb$X2 * Simb[, 3])
+		Simb$PreHR <- (Simb$X1 * Simb[, 1]) + (Simb$X2 * Simb[, 2]) + 
+                      (Simb$X1 * Simb$X2 * Simb[, 3])
 
 		Simb <- cbind(Simb, ExpandFC)
 		Simb$Sum <- rowSums(Simb[, c(7, 8)])
@@ -297,7 +308,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = 
 			                    "Strata", "HRValue")
 		}
 	} else if (qi == "Hazard Ratio"){
-	  	SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$X1, SimbPerc$X2, SimbPerc$QI, SimbPerc$Comparison)
+	  	SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$X1, SimbPerc$X2, 
+                                  SimbPerc$QI, SimbPerc$Comparison)
 	  	names(SimbPercSub) <- c("SimID", "X1", "X2", "QI", 
 	  		                    "Comparison")
 	} else if (qi == "Marginal Effect"){

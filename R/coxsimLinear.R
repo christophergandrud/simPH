@@ -1,6 +1,6 @@
-#' Simulate quantities of interest for linear covariates that are not interacted with time from Cox Proportional Hazards models
+#' Simulate quantities of interest for covariates from Cox Proportional Hazards models that are not interacted with time or nonlinearly transformed
 #'
-#' \code{coxsimLinear} simulates relative hazards, first differences, and hazard ratios for linear covariates that are not interacted with time from models estimated with \code{\link{coxph}} using the multivariate normal distribution. These can be plotted with \code{\link{simGG}}.
+#' \code{coxsimLinear} simulates relative hazards, first differences, and hazard ratios for linear covariates that are not interacted with time or nonlinearly transformed from models estimated with \code{\link{coxph}} using the multivariate normal distribution. These can be plotted with \code{\link{simGG}}.
 #' @param obj a \code{\link{coxph}} class fitted model object.
 #' @param b character string name of the coefficient you would like to simulate.
 #' @param qi quantity of interest to simulate. Values can be \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"}, and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}. If \code{qi = "Hazard Rate"} and the \code{coxph} model has strata, then hazard rates for each strata will also be calculated.
@@ -58,7 +58,8 @@
 #' @importFrom MASS mvrnorm
 #' @export
 
-coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
+coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, 
+                        means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
 {	
   HRValue <- strata <- QI <- SimID <- NULL
   if (qi != "Hazard Rate" & isTRUE(means)){
@@ -73,10 +74,12 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, m
   }
 
   # Ensure that qi is valid
-  qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", "Hazard Ratio")
+  qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate", 
+              "Hazard Ratio")
   TestqiOpts <- qi %in% qiOpts
   if (!isTRUE(TestqiOpts)){
-    stop("Invalid qi type. qi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'.")
+    stop("Invalid qi type. qi must be 'Relative Hazard', 'Hazard Rate', 
+         'First Difference', or 'Hazard Ratio'.")
   }
   MeansMessage <- NULL
   if (isTRUE(means) & length(obj$coefficients) == 3){
@@ -115,7 +118,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, m
       Simb$QI <- exp(Simb$Xj * Simb$Coef) 
     } else if (qi == "First Difference"){
       if (length(Xj) != length(Xl)){
-        stop("Xj and Xl must be the same length.")
+        stop("Xj and Xl must be the same length.", call. = FALSE)
       } 
       else {
   	    Xs <- data.frame(Xj, Xl)
@@ -160,7 +163,8 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, m
     }
   }
 
-  # If the user wants to calculate Hazard Rates using means for fitting all covariates other than b.
+  # If the user wants to calculate Hazard Rates using means for fitting 
+  # all covariates other than b.
   else if (isTRUE(means)){
     Xl <- NULL
     message("Xl ignored")
@@ -260,7 +264,8 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, m
     names(SimbPercSub) <- c("SimID", "Time", "HRate", 
                           "Strata", "HRValue")
     }
-  } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | qi == "First Difference"){
+  } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" | 
+            qi == "First Difference"){
     SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, 
                              SimbPerc$QI)
     names(SimbPercSub) <- c("SimID", "Xj", "QI")

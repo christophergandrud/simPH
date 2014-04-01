@@ -1,3 +1,9 @@
+## Version 1.1.2
+
+Minor documentation improvements.
+
+Internal code cleaning.
+
 ## Version 1.1.1
 
 `coxsimPoly` is able to simulate quantities of interest for only the polynomial terms without the linear component. Feature request from Mattia Valente.

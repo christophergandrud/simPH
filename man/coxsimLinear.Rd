@@ -1,6 +1,6 @@
 \name{coxsimLinear}
 \alias{coxsimLinear}
-\title{Simulate quantities of interest for linear covariates that are not interacted with time from Cox Proportional Hazards models}
+\title{Simulate quantities of interest for covariates from Cox Proportional Hazards models that are not interacted with time or nonlinearly transformed}
 \usage{
 coxsimLinear(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
   means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
@@ -60,9 +60,9 @@ be plotted with \code{\link{simGG}}.
 \details{
 \code{coxsimLinear} simulates relative hazards, first
 differences, and hazard ratios for linear covariates that
-are not interacted with time from models estimated with
-\code{\link{coxph}} using the multivariate normal
-distribution. These can be plotted with
+are not interacted with time or nonlinearly transformed
+from models estimated with \code{\link{coxph}} using the
+multivariate normal distribution. These can be plotted with
 \code{\link{simGG}}.
 }
 \examples{
