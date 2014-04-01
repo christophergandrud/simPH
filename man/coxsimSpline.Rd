@@ -1,6 +1,7 @@
 \name{coxsimSpline}
 \alias{coxsimSpline}
-\title{Simulate quantities of interest for penalized splines from Cox Proportional Hazards models}
+\title{Simulate quantities of interest for penalized splines from Cox Proportional
+Hazards models}
 \usage{
 coxsimSpline(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0,
   nsim = 1000, ci = 0.95, spin = FALSE)
@@ -61,7 +62,8 @@ ratios, and hazard rates for penalized splines from Cox
 Proportional Hazards models. These can be plotted with
 \code{\link{simGG}}. A Cox PH model with one penalized
 spline is given by:
-\deqn{h(t|\mathbf{X}_{i})=h_{0}(t)\mathrm{e}^{g(x)}}{h(t|X[i])=h[0](t)exp(g(x))}
+\deqn{h(t|\mathbf{X}_{i})=h_{0}(t)\mathrm{e}^{g(x)}}{h(t|X[i])=h[0](t)exp(g
+(x))}
 
 where \eqn{g(x)} is the penalized spline function. For our
 post-estimation purposes \eqn{g(x)} is basically a series
@@ -86,8 +88,8 @@ example, the first difference between two values
 \eqn{x_{j}}{x[j]} and \eqn{x_{l}}{x[l]} is:
 
 \deqn{\%\triangle h_{i}(t) = (\mathrm{e}^{g(x_{j}) -
-g(x_{l})} - 1) * 100}{FD(h[i](t)) = (exp(g(x[j]) - g(x[l]))
-- 1) * 100}
+g(x_{l})} - 1) * 100} {FD(h[i](t)) = (exp(g(x[j]) -
+g(x[l])) - 1) * 100}
 
 Relative hazards and hazard ratios can be calculated by
 extension.

@@ -1,19 +1,23 @@
 #' Constrict simulations to a defined interval
 #'
-#' \code{IntervalConstrict} is an internal function to constrict a set of simulations to user defined interval.
+#' \code{IntervalConstrict} is an internal function to constrict a set of 
+#' simulations to user defined interval.
 #'
 #' @param Simb character string naming the data frame with the simulations.
-#' @param SubVar character vector the variable names to subset the simulations by.
+#' @param SubVar character vector the variable names to subset the simulations 
+#' by.
 #' @param qi character vector naming the type of quantity of interest.
 #' @param QI character string labeling the quantity of interest values.
-#' @param spin logical for whether or not to use the shortest probability interval or the central interval.
+#' @param spin logical for whether or not to use the shortest probability 
+#' interval or the central interval.
 #' @param ci numeric confidence interval measure.
 #' 
 #' @importFrom plyr ddply
 #' @keywords internals
 #' @noRd
 
-IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, spin = FALSE, ci = 0.95)
+IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, 
+                              spin = FALSE, ci = 0.95)
 {
 	if (qi == "Hazard Rate" & isTRUE(spin)){
 		message("spin currently unsupported for Hazard Rates. The central interval will be found instead.")
@@ -21,7 +25,8 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, sp
 	}
     if (Inf %in% Simb$QI){
         if (isTRUE(spin)){
-            stop("spin cannot be TRUE when there are infinite values for your quantity of interest.")
+            stop("spin cannot be TRUE when there are infinite values for your quantity of interest.",
+                call. = FALSE)
         } else {
             message("Warning infinite values calculated for your quantity of interest. Consider changing the difference between Xj and Xl.")
         }
@@ -45,22 +50,31 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi, QI = QI, sp
 	{
 		Bottom <- (1 - ci)/2
 		Top <- 1 - Bottom
-		SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, transform, Lower = QI < quantile(QI,", Bottom, ", na.rm = TRUE))")))
-		SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, transform, Upper = QI > quantile(QI,", Top, ", na.rm = TRUE))" )))
+		SimbPerc <- eval(parse(text = 
+         paste0("ddply(Simb, SubVar, transform, Lower = QI < quantile(QI,", 
+                Bottom, ", na.rm = TRUE))")))
+		SimbPerc <- eval(parse(text = 
+         paste0("ddply(SimbPerc, SubVar, transform, Upper = QI > quantile(QI,", 
+                Top, ", na.rm = TRUE))" )))
 	}
 
 	# Drop simulations outside of the shortest probability interval
 	else if (isTRUE(spin))
 	{
-		SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, transform, Lower = QI < simPH:::SpinBounds(QI, conf = ", ci, ", lb = ", lb, ", LowUp = 1))" )))
-		SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar, transform, Upper = QI > simPH:::SpinBounds(QI, conf = ", ci, ", lb = ", lb, ", LowUp = 2))" )))
+		SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, transform,",
+                        "Lower = QI < simPH:::SpinBounds(QI, conf = ", ci,
+                         ", lb = ", lb, ", LowUp = 1))" )))
+		SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar,", 
+                        "transform, Upper = QI > simPH:::SpinBounds(QI,",
+                        "conf = ", ci, ", lb = ", lb, ", LowUp = 2))" )))
 	}
 
 	SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
 	return(SimbPerc)
 }
 
-#' Drop any individual simulation with at least one value outside of the specified confidence bounds 
+#' Drop any individual simulation with at least one value outside of the
+#' specified confidence bounds 
 #'
 #' @param SimIn data frame
 #'

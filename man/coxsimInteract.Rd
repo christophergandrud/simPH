@@ -1,6 +1,7 @@
 \name{coxsimInteract}
 \alias{coxsimInteract}
-\title{Simulate quantities of interest for linear multiplicative interactions from Cox Proportional Hazards models}
+\title{Simulate quantities of interest for linear multiplicative interactions
+from Cox Proportional Hazards models}
 \usage{
 coxsimInteract(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL,
   means = FALSE, expMarg = TRUE, nsim = 1000, ci = 0.95, spin = FALSE)
@@ -96,7 +97,7 @@ M1 <- coxph(Surv(acttime, censor) ~ lethal*prevgenx,
 # Simulate Marginal Effect of lethal for multiple
 # values of prevgenx
 Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
-                       X2 = seq(2, 115, by = 2), spin = TRUE)
+                       X2 = seq(2, 115, by = 5), spin = TRUE)
 
 \dontrun{
 # Change the order of the covariates to make a more easily

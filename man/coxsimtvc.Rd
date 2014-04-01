@@ -1,6 +1,7 @@
 \name{coxsimtvc}
 \alias{coxsimtvc}
-\title{Simulate time-interactive quantities of interest from Cox Proportional Hazards models}
+\title{Simulate time-interactive quantities of interest from Cox Proportional
+Hazards models}
 \usage{
 coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
   tfun = "linear", pow = NULL, nsim = 1000, from, to, by = 1,

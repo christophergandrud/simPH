@@ -1,6 +1,7 @@
 \name{coxsimPoly}
 \alias{coxsimPoly}
-\title{Simulate quantities of interest for a range of values for a polynomial nonlinear effect from Cox Proportional Hazards models}
+\title{Simulate quantities of interest for a range of values for a polynomial
+nonlinear effect from Cox Proportional Hazards models}
 \usage{
 coxsimPoly(obj, b = NULL, qi = "Relative Hazard", pow = 2, Xj = NULL,
   Xl = NULL, nsim = 1000, ci = 0.95, spin = FALSE)

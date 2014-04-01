@@ -1,18 +1,31 @@
 #' Graph fitted stratified survival curves from Cox Proportional Hazards models
 #'
-#' \code{ggfitStrata} graphs fitted survival curves created with \code{\link{survfit}} using \link{ggplot2}.
+#' \code{ggfitStrata} graphs fitted survival curves created with 
+#' \code{\link{survfit}} using \link{ggplot2}.
 #'
 #' @param obj a \code{survfit} object.
-#' @param byStrata logical, whether or not you want to include all of the stratified survival curves on one plot or separate them into a grid arranged plot.
+#' @param byStrata logical, whether or not you want to include all of the 
+#' stratified survival curves on one plot or separate them into a grid arranged 
+#' plot.
 #' @param xlab a label for the plot's x-axis
 #' @param ylab a label of the plot's y-axis
 #' @param title plot title.
-#' @param lcolour line color. Currently only works if \code{byStrata = TRUE}. The default it \code{lcolour = "#2C7FB8"} (a bluish hexadecimal colour)
-#' @param rcolour confidence bounds ribbon color. Either a single color or a vector of colours. The default it \code{lcolour = "#2C7FB8"} (a bluish hexadecimal colour)
+#' @param lcolour line color. Currently only works if \code{byStrata = TRUE}. 
+#' The default it \code{lcolour = "#2C7FB8"} (a bluish hexadecimal colour)
+#' @param rcolour confidence bounds ribbon color. Either a single color or a 
+#' vector of colours. The default it \code{lcolour = "#2C7FB8"} 
+#' (a bluish hexadecimal colour)
 #'
-#' @description This function largely improves \code{\link{plot.survfit}}. It plots the curves using \link{ggplot2} rather than base R graphics. One major advantage is the ability to split the survival curves into multiple plots and arrange them in a grid. This makes it easier to examine many strata at once. Otherwise they can be very bunched up.
+#' @description This function largely improves \code{\link{plot.survfit}}. It 
+#' plots the curves using \link{ggplot2} rather than base R graphics. One major 
+#' advantage is the ability to split the survival curves into multiple plots and 
+#' arrange them in a grid. This makes it easier to examine many strata at once. 
+#' Otherwise they can be very bunched up.
 #' 
-#' Note: the strata legend labels need to be changed manually (see \code{\link{revalue}}) in the \code{survfit} object with the \code{strata} component.
+#' Note: the strata legend labels need to be changed manually (see 
+#' \code{\link{revalue}}) in the \code{survfit} object with the \code{strata} 
+#' component.
+#' 
 #' @examples
 #' \dontrun{
 #' # Load survival
@@ -20,18 +33,21 @@
 #' # Subset data
 #' bladder1 <- bladder[bladder$enum < 5, ] 
 #' # Estimate coxph model
-#' M1 <- coxph(Surv(stop, event) ~ (rx + size + number) * strata(enum) + cluster(id), bladder1)
+#' M1 <- coxph(Surv(stop, event) ~ (rx + size + number) * strata(enum) + 
+#' cluster(id), bladder1)
 #' # Survfit
 #' M1Fit <- survfit(M1)
 #' # Plot strata in a grid
 #' ggfitStrata(M1Fit, byStrata = TRUE)
 #' }
-#' @seealso \code{\link{survfit}}, \code{\link{ggplot2}} and \code{\link{strata}} 
+#' @seealso \code{\link{survfit}}, \code{\link{ggplot2}} and 
+#' \code{\link{strata}} 
 #' @import ggplot2 
 #' @importFrom gridExtra grid.arrange
 #' @export 
 
-ggfitStrata <- function(obj, byStrata = FALSE, xlab = "", ylab = "", title = "", lcolour = "#2C7FB8", rcolour = "#2C7FB8")
+ggfitStrata <- function(obj, byStrata = FALSE, xlab = "", ylab = "", title = "",
+                        lcolour = "#2C7FB8", rcolour = "#2C7FB8")
 {
   Strata <- Lower <- Upper <- StrataC <- Time <- Survival <- NULL
   sFit <- obj
@@ -70,7 +86,8 @@ ggfitStrata <- function(obj, byStrata = FALSE, xlab = "", ylab = "", title = "",
                                                 alpha = I(0.1),
                                                 colour = NA,
                                                 fill = rcolour) +
-                                   xlab("") + ylab("") + ggtitle(paste(i, "\n")) +
+                                   xlab("") + ylab("") + 
+                                   ggtitle(paste(i, "\n")) +
                                    theme_bw()
     }
   Grid <- do.call(grid.arrange, c(p, main = title, sub = xlab, left = ylab))

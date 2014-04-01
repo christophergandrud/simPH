@@ -1,38 +1,68 @@
-#' Simulate time-interactive quantities of interest from Cox Proportional Hazards models
+#' Simulate time-interactive quantities of interest from Cox Proportional 
+#' Hazards models
 #' 
-#' \code{coxsimtvc} simulates time-interactive relative hazards, first differences, and hazard ratios from models estimated with \code{\link{coxph}} using the multivariate normal distribution. These can be plotted with \code{\link{simGG}}.
+#' \code{coxsimtvc} simulates time-interactive relative hazards, first 
+#' differences, and hazard ratios from models estimated with \code{\link{coxph}} 
+#' using the multivariate normal distribution. These can be plotted with 
+#' \code{\link{simGG}}.
 #' @param obj a \code{\link{coxph}} fitted model object with a time interaction. 
 #' @param b the non-time interacted variable's name.
 #' @param btvc the time interacted variable's name.
-#' @param qi character string indicating what quantity of interest you would like to calculate. Can be \code{'Relative Hazard'}, \code{'First Difference'}, \code{'Hazard Ratio'}, \code{'Hazard Rate'}. Default is \code{qi = 'Relative Hazard'}. If \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'} then you can set \code{Xj} and \code{Xl}.
-#' @param Xj numeric vector of fitted values for \code{b}. Must be the same length as \code{Xl} or \code{Xl} must be \code{NULL}. 
-#' @param Xl numeric vector of fitted values for Xl. Must be the same length as \code{Xj}. Only applies if \code{qi = 'First Difference'} or \code{qi = 'Hazard Ratio'}.
-#' @param nsim the number of simulations to run per point in time. Default is \code{nsim = 1000}.
-#' @param tfun function of time that btvc was multiplied by. Default is "linear". It can also be "log" (natural log) and "power". If \code{tfun = "power"} then the pow argument needs to be specified also.
-#' @param pow if \code{tfun = "power"}, then use pow to specify what power the time interaction was raised to.
+#' @param qi character string indicating what quantity of interest you would 
+#' like to calculate. Can be \code{'Relative Hazard'}, 
+#' \code{'First Difference'}, \code{'Hazard Ratio'}, \code{'Hazard Rate'}. 
+#' Default is \code{qi = 'Relative Hazard'}. If \code{qi = 'First Difference'} 
+#' or \code{qi = 'Hazard Ratio'} then you can set \code{Xj} and \code{Xl}.
+#' @param Xj numeric vector of fitted values for \code{b}. Must be the same 
+#' length as \code{Xl} or \code{Xl} must be \code{NULL}. 
+#' @param Xl numeric vector of fitted values for Xl. Must be the same length as 
+#' \code{Xj}. Only applies if \code{qi = 'First Difference'} or 
+#' \code{qi = 'Hazard Ratio'}.
+#' @param nsim the number of simulations to run per point in time. Default is 
+#' \code{nsim = 1000}.
+#' @param tfun function of time that btvc was multiplied by. Default is 
+#' "linear". It can also be "log" (natural log) and "power". If 
+#' \code{tfun = "power"} then the pow argument needs to be specified also.
+#' @param pow if \code{tfun = "power"}, then use pow to specify what power the 
+#' time interaction was raised to.
 #' @param from point in time from when to begin simulating coefficient values
 #' @param to point in time to stop simulating coefficient values.
 #' @param by time intervals by which to simulate coefficient values.
-#' @param ci the proportion of simulations to keep. The default is \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} then \code{ci} is the confidence level of the shortest probability interval. Any value from 0 through 1 may be used.
-#' @param spin logical, whether or not to keep only the shortest probability interval rather than the middle simulations. Currently not supported for hazard rates.
+#' @param ci the proportion of simulations to keep. The default is 
+#' \code{ci = 0.95}, i.e. keep the middle 95 percent. If \code{spin = TRUE} 
+#' then \code{ci} is the confidence level of the shortest probability interval. 
+#' Any value from 0 through 1 may be used.
+#' @param spin logical, whether or not to keep only the shortest probability 
+#' interval rather than the middle simulations. Currently not supported for 
+#' hazard rates.
 #'
 #' @return a \code{simtvc} object
 #'
-#' @details Simulates time-varying relative hazards, first differences, and hazard ratios using parameter estimates from \code{coxph} models. Can also simulate hazard rates for multiple strata.
+#' @details Simulates time-varying relative hazards, first differences, and 
+#' hazard ratios using parameter estimates from \code{coxph} models. Can also 
+#' simulate hazard rates for multiple strata.
 #'
 #' Relative hazards are found using:
 #' \deqn{RH = e^{\beta_{1} + \beta_{2}f(t)}}{RH = exp(\beta[1] + \beta[2] f(t))}
 #' where \eqn{f(t)} is the function of time.
 #'
 #' First differences are found using:
-#' \deqn{FD = (e^{(X_{j} - X_{l}) (\beta_{1} + \beta_{2}f(t))} - 1) * 100}{FD = (exp((X[j] - X[l])(\beta[1] + \beta[2]f(t)) - 1) * 100}
-#' where \eqn{X_{j}}{X[j]} and \eqn{X_{l}}{X[l]} are some values of \eqn{X} to contrast.
+#' \deqn{FD = (e^{(X_{j} - X_{l}) (\beta_{1} + \beta_{2}f(t))} - 1) * 100}{FD = 
+#' (exp((X[j] - X[l])(\beta[1] + \beta[2]f(t)) - 1) * 100}
+#' where \eqn{X_{j}}{X[j]} and \eqn{X_{l}}{X[l]} are some values of \eqn{X} to 
+#' contrast.
 #'
 #' Hazard ratios are calculated using:
 #' \deqn{FD = e^{(X_{j} - X_{l}) (\beta_{1} + \beta_{2}f(t))}}{FD = exp((X[j] - X[l])(\beta[1] + \beta[2]f(t))}
-#' When simulating non-stratifed time-varying harzards \code{coxsimtvc} uses the point estimates for a given coefficient \eqn{\hat{\beta}_{x}}{hat \beta[x]} and its time interaction \eqn{\hat{\beta}_{xt}}{hat \beta[xt]} along with the variance matrix (\eqn{\hat{V}(\hat{\beta})}{hat V(hat \beta)}) estimated from a \code{coxph} model. These are used to draw values of \eqn{\beta_{1}}{\beta[1]} and \eqn{\beta_{2}}{\beta[2]} from the multivariate normal distribution \eqn{N(\hat{\beta},\: \hat{V}(\hat{\beta}))}{N(hat \beta, hat V (hat \beta))}.
+#' When simulating non-stratifed time-varying harzards \code{coxsimtvc} uses 
+#' the point estimates for a given coefficient \eqn{\hat{\beta}_{x}}{hat \beta[x]} and its time interaction \eqn{\hat{\beta}_{xt}}{hat \beta[xt]} 
+#' along with the variance matrix (\eqn{\hat{V}(\hat{\beta})}{hat V(hat \beta)}) 
+#' estimated from a \code{coxph} model. These are used to draw values of 
+#' \eqn{\beta_{1}}{\beta[1]} and \eqn{\beta_{2}}{\beta[2]} from the 
+#' multivariate normal distribution \eqn{N(\hat{\beta},\: \hat{V}(\hat{\beta}))}{N(hat \beta, hat V (hat \beta))}.
 #'
-#' When simulating stratified time-varying hazard rates \eqn{H} for a given strata \eqn{k}, \code{coxsimtvc} uses:
+#' When simulating stratified time-varying hazard rates \eqn{H} for a given 
+#' strata \eqn{k}, \code{coxsimtvc} uses:
 #' \deqn{H_{kxt} = \hat{\beta}_{k0t}e^{\hat{\beta_{1}} + \beta_{2}f(t)}}{H_{kxt} = hat \beta[k0t]exp(hat \beta[1] + \beta[2]f(t))}
 #' The resulting simulation values can be plotted using \code{\link{simGG}}. 
 #'
@@ -91,7 +121,8 @@
 #'                   by = 15, ci = 0.5)
 #' }
 #'
-#' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, and \code{\link{coxph}}
+#' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}}, 
+#' and \code{\link{coxph}}
 #'
 #' @import data.table
 #' @importFrom reshape2 melt
@@ -99,14 +130,20 @@
 #' @importFrom MASS mvrnorm
 #' @export
 #'
-#' @references Golub, Jonathan, and Bernard Steunenberg. 2007. ''How Time Affects EU Decision-Making.'' European Union Politics 8(4): 555-66.
+#' @references Golub, Jonathan, and Bernard Steunenberg. 2007. ''How Time 
+#' Affects EU Decision-Making.'' European Union Politics 8(4): 555-66.
 #'
-#' Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.'' Political Analysis 19: 227-43.
+#' Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation 
+#' of Nonproportional Hazards in Event History Analysis.'' Political Analysis 
+#' 19: 227-43.
 #'
-#' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of Statistical Analyses: Improving Interpretation and Presentation.'' American Journal of Political Science 44(2): 347-61.
+#' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of 
+#' Statistical Analyses: Improving Interpretation and Presentation.'' American 
+#' Journal of Political Science 44(2): 347-61.
 #'
-#' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient Shortest Probability Intervals.'' Arvix. \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
-
+#' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient 
+#' Shortest Probability Intervals.'' Arvix. 
+#' \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 
 coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, 
                       Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000, 

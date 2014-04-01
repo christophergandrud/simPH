@@ -1,6 +1,7 @@
 \name{simGG.simpoly}
 \alias{simGG.simpoly}
-\title{Plot simulated polynomial quantities of interest from Cox Proportional Hazards Models}
+\title{Plot simulated polynomial quantities of interest from Cox Proportional
+Hazards Models}
 \usage{
 \method{simGG}{simpoly}(obj, from = NULL, to = NULL, xlab = NULL,
   ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",

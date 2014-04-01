@@ -1,6 +1,7 @@
 \name{coxsimLinear}
 \alias{coxsimLinear}
-\title{Simulate quantities of interest for covariates from Cox Proportional Hazards models that are not interacted with time or nonlinearly transformed}
+\title{Simulate quantities of interest for covariates from Cox Proportional Hazards
+models that are not interacted with time or nonlinearly transformed}
 \usage{
 coxsimLinear(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
   means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)

@@ -1,6 +1,7 @@
 \name{simGG.siminteract}
 \alias{simGG.siminteract}
-\title{Plot simulated linear multiplicative interactions from Cox Proportional Hazards Models}
+\title{Plot simulated linear multiplicative interactions from Cox Proportional
+Hazards Models}
 \usage{
 \method{simGG}{siminteract}(obj, from = NULL, to = NULL, xlab = NULL,
   ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",

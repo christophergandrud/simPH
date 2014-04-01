@@ -1,6 +1,7 @@
 \name{simGG.simlinear}
 \alias{simGG.simlinear}
-\title{Plot simulated linear, non-time interacted quantities of interest from Cox Proportional Hazards Models}
+\title{Plot simulated linear, non-time interacted quantities of interest from Cox
+Proportional Hazards Models}
 \usage{
 \method{simGG}{simlinear}(obj, from = NULL, to = NULL, xlab = NULL,
   ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",
