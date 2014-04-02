@@ -1,6 +1,8 @@
 simPH
 ======
 
+<img src="https://raw.github.com/christophergandrud/simPH/gh-pages/img/Graphs/banner.png" height="40" width="1000"></img>
+
 ### Christopher Gandrud
 
 ### Version 1.1.1 
