@@ -1,7 +1,7 @@
 ## Version 1.1.2
 
-`smoother` argument for `simGG` is deprecated. Use `method` instead.
-The functionality is exactly the same.
+!!!! `smoother` argument for `simGG` is deprecated. Use `method` instead.
+The functionality is exactly the same. !!!!
 
 `extremesDrop` argument added to `coxsim` functions. This drops simulated 
 quantity of interest values that are Inf/NA/NaN/>1000000. These can create
@@ -9,7 +9,7 @@ problems with plotting and finding the `spin`.
 
 Small utility `setXl` created that makes it easier to set `Xl` values.
 
-Automatic bspline cleaning features added for `coxsimSpline`.
+Automatic `bspline` cleaning features added for `coxsimSpline`.
 
 Minor documentation improvements.
 

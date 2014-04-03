@@ -50,5 +50,8 @@ sequence of fitted \code{Xj} values. This makes it more
 intituitive to find hazard ratios and first differences for
 comparisons between some \eqn{Xj} fitted values and
 \eqn{Xl} values other than 0.} }
+
+For a demo replicating all of the figures from the working
+paper use \code{demo('jss-examples')}.
 }
 

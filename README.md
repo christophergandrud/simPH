@@ -51,10 +51,7 @@ Results from these functions can be plotted using the `simGG` method. The syntax
 
 ##### Additional styling
 
-Because in almost all cases `simGG` returns a *ggplot2* object, you can add additional aesthetic attributes in the normal *ggplot2* way. See the [ggplot2 documentation for more details](http://docs.ggplot2.org/current/). Here is a quick example:
-
-
----
+Because in almost all cases `simGG` returns a *ggplot2* object, you can add additional aesthetic attributes in the normal *ggplot2* way. See the [ggplot2 documentation for more details](http://docs.ggplot2.org/current/).
 
 #### Misc.
 
@@ -78,9 +75,7 @@ devtools::install_github('christophergandrud/simPH')
 
 ## Tip
 
-Before running the simulation and graph functions in this package carefully consider how many simulations you are about to make. Especially for hazard rates over long periods of time and with multiple strata, you can be asking **simPH** to run very many simulations. This will be computationally intensive. 
-
----
+Before running the simulation and graph functions in this package carefully consider how many simulations you are about to make. Especially for hazard rates over long periods of time and with multiple strata, you can be asking **simPH** to run very many simulations. This will be computationally intensive. e
 
 ## Sources
 
@@ -117,8 +112,6 @@ Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. [“Understanding
 For an example of how non-proportional hazard results were often presented before **simPH** see (some of the problems I encountered in this paper were a major part of why I'm developing this package): 
 
 Gandrud, Christopher. 2013. [“The Diffusion of Financial Supervisory Governance Ideas.”](http://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362) Review of International Political Economy. 20(4):881-916.
-
----
 
 ## Future Plans
 
