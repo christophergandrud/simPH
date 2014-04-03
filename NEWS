@@ -4,8 +4,6 @@
 quantity of interest values that are Inf/NA/NaN/>1000000. These can create
 problems with plotting and finding the `spin`.
 
-Performace improvements for `coxsim` functions.
-
 Small utility `setXl` created that makes it easier to set `Xl` values.
 
 Automatic bspline cleaning features added for `coxsimSpline`.
