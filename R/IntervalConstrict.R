@@ -75,31 +75,33 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi,
 		Bottom <- (1 - ci)/2
 		Top <- 1 - Bottom
 		SimbPerc <- eval(parse(text = 
-                                 paste0("dplyr::mutate(group_by(Simb, ", 
-                                        SubVar, 
-                                        "), Lower = QI < quantile(QI,", 
-                                        Bottom, ", na.rm = TRUE))")))
+                             paste0("dplyr::mutate(group_by(Simb, ", 
+                                    SubVar, 
+                                    "), Lower = QI < quantile(QI,", 
+                                    Bottom, ", na.rm = TRUE))")))
 		SimbPerc <- eval(parse(text = 
-                                 paste0("dplyr::mutate(group_by(SimbPerc, ", 
-                                        SubVar, 
-                                        "), Upper = QI > quantile(QI,", 
-                                        Top, ", na.rm = TRUE))")))
+                             paste0("dplyr::mutate(group_by(SimbPerc, ", 
+                                    SubVar, 
+                                    "), Upper = QI > quantile(QI,", 
+                                    Top, ", na.rm = TRUE))")))
 	}
 
 	# Drop simulations outside of the shortest probability interval
 	else if (isTRUE(spin))
 	{
-		SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, transform,",
-                        "Lower = QI < simPH:::SpinBounds(QI, conf = ", ci,
-                         ", lb = ", lb, ", LowUp = 1))" )))
-		SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar,", 
-                        "transform, Upper = QI > simPH:::SpinBounds(QI,",
-                        "conf = ", ci, ", lb = ", lb, ", LowUp = 2))" )))
-	}
-
-	SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
-	return(SimbPerc)
-}
+        SimbPerc <- eval(parse(text = 
+                            paste0("dplyr::mutate(group_by(Simb, ", SubVar, 
+                            "), Lower = QI < simPH:::SpinBounds(QI, conf = ", 
+                            ci, ", lb = ", lb, ", LowUp = 1))" )))
+        SimbPerc <- eval(parse(text = 
+                                paste0("dplyr::mutate(group_by(SimbPerc, ", 
+                                SubVar, 
+                                "), Upper = QI > simPH:::SpinBounds(QI,",
+                                "conf = ", ci, ", lb = ", lb, ", LowUp = 2))")))
+        }
+        SimbPerc <- subset(SimbPerc, Lower == FALSE & Upper == FALSE)
+        return(SimbPerc)
+    }
 
 #' Drop any individual simulation with at least one value outside of the
 #' specified confidence bounds 
