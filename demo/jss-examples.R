@@ -1,7 +1,6 @@
 #############
 # Replication file for: simPH: An R package for showing estimates for 
 # interactive and nonlinear effects from Cox proportional hazard models
-# Requires R 3.0.3 or greater and simPH version 1.2 or greater
 # Updated 3 April 2014
 #############
 

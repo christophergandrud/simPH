@@ -5,7 +5,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 1.1.2 
+### Version 1.2 
 
 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH)
 
