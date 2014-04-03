@@ -9,7 +9,7 @@ simPH
 
 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH)
 
-### Please report any bugs at:
+#### Please report any bugs to:
 
 <https://github.com/christophergandrud/simPH/issues>
 
@@ -18,6 +18,8 @@ simPH
 An R package for simulating and plotting quantities of interest (relative hazards, first differences, and hazard ratios) for linear coefficients, multiplicative interactions, polynomials, penalised splines, and non-proportional hazards, as well as stratified survival curves from Cox Proportional Hazard models.
 
 For more information plus examples, please see this [working paper](http://ssrn.com/abstract=2318977).
+
+## Functions
 
 The package includes the following functions:
 
@@ -62,13 +64,13 @@ Because in almost all cases `simGG` returns a *ggplot2* object, you can add addi
 
 - `setXl`: a function for setting valid `Xl` values given a sequence of fitted `Xj` values. This makes it more intituitive to find hazard ratios and first differences for comparisons between some Xj fitted values and Xl values other than 0.
 
-- `ggfitStrata`: a function to plot fitted stratified survival curves estimated from `survfit` using **ggplot2**. This function builds on the **survival** package's `plot.survfit` command. One major advantage is the ability to split the survival curves into multiple plots and arrange them in a grid. This makes it easier to examine many strata at once. Otherwise they can be very bunched up.
+- `ggfitStrata`: a function to plot fitted stratified survival curves estimated from `survfit` using **ggplot2**. This function builds on the **survival** package's `plot.survfit` function. One major advantage is the ability to split the survival curves into multiple plots and arrange them in a grid. This makes it easier to examine many strata at once. Otherwise they can be very bunched up.
 
 ## Installation
 
 The package is available on CRAN and can be installed in the normal R way.
 
-To install the development version use the [devtools](https://github.com/hadley/devtools) command `install_github`. Here is the code for installing the most recent development version:
+To install the development version use the [devtools](https://github.com/hadley/devtools) function `install_github`. Here is the code for installing the most recent development version:
 
 ```{S}
 devtools::install_github('christophergandrud/simPH')
@@ -76,7 +78,7 @@ devtools::install_github('christophergandrud/simPH')
 
 ## Tip
 
-Before running the simulation and graph commands in this package carefully consider how many simulations you are about to make. Especially for hazard rates over long periods of time and with multiple strata, you can be asking **simPH** to run very many simulations. This will be computationally intensive. 
+Before running the simulation and graph functions in this package carefully consider how many simulations you are about to make. Especially for hazard rates over long periods of time and with multiple strata, you can be asking **simPH** to run very many simulations. This will be computationally intensive. 
 
 ---
 

@@ -100,14 +100,14 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
                        spin = FALSE, extremesDrop = TRUE) 
 {
   strata <- QI <- SimID <-  NULL
-	# Ensure that qi is valid
-	qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate",
+  # Ensure that qi is valid
+  qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate",
              "Hazard Ratio")
-	TestqiOpts <- qi %in% qiOpts
-	if (!isTRUE(TestqiOpts)){
-  	stop("Invalid qi type.\nqi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'.",
+  TestqiOpts <- qi %in% qiOpts
+  if (!isTRUE(TestqiOpts)){
+    stop("Invalid qi type.\nqi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'.",
       call. = FALSE)
-	}
+  }
   # Ensure that b is declared
   if (is.null(b)) stop('Need to declare b.', call. = FALSE)
 
@@ -118,17 +118,17 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
     b <- gsub(pattern = '^I\\(', replacement = '', x = b)
     b <- gsub(pattern = '\\^.*$', replacement = '', x = b)
   }  
-  
-	# Find X_{jl}
-	if (length(Xj) != length(Xl) & !is.null(Xl)){
-		stop("Xj and Xl must be the same length.", call. = FALSE)
-	}	else if (is.null(Xl)) {
-		message("All Xl set at 0.")
-		Xjl <- Xj
-	} else {
+
+  # Find X_{jl}
+  if (length(Xj) != length(Xl) & !is.null(Xl)){
+  	stop("Xj and Xl must be the same length.", call. = FALSE)
+  }	else if (is.null(Xl)) {
+  	message("All Xl set at 0.")
+  	Xjl <- Xj
+  } else {
   	Xbound <- cbind(Xj, Xl)
   	Xjl <- Xbound[, 1] - Xbound[, 2]
-	}
+  }
 
   # Create simulation ID variable
   SimID <- 1:nsim

@@ -128,7 +128,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
 				"Hazard Rate")
 	TestqiOpts <- qi %in% qiOpts
 	if (!isTRUE(TestqiOpts)){
-		stop("Invalid qi type. qi must be 'Marginal Effect', 'First Difference', 'Hazard Ratio', or 'Hazard Rate'.", call. = FALSE)
+		stop("Invalid qi type. qi must be 'Marginal Effect', 'First Difference', 'Hazard Ratio', or 'Hazard Rate'.", 
+			call. = FALSE)
 	}
 	MeansMessage <- NULL
 	if (isTRUE(means) & length(obj$coefficients) == 3){
@@ -299,7 +300,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
         # Create warning message
         Rows <- nrow(Simb)
         if (Rows > 2000000){
-          message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
+          message(paste("There are", Rows, 
+          	"simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
         }
         Simb$QI <- Simb$hazard * Simb$HR 
         if (is.null(Simb$strata)){
