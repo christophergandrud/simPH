@@ -4,7 +4,7 @@
 \usage{
 \method{simGG}{simspline}(obj, SmoothSpline = TRUE, FacetTime = NULL,
   from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL,
-  title = NULL, smoother = "auto", lcolour = "#2B8CBE", lsize = 1,
+  title = NULL, method = "auto", lcolour = "#2B8CBE", lsize = 1,
   pcolour = "#A6CEE3", psize = 1, alpha = 0.2, surface = TRUE,
   fit = "linear", type = "points", ...)
 }
@@ -40,7 +40,7 @@
 
   \item{title}{the plot's main title.}
 
-  \item{smoother}{what type of smoothing line to use to
+  \item{method}{what type of smoothing method to use to
   summarize the center of the simulation distribution.}
 
   \item{lcolour}{character string colour of the smoothing
@@ -93,7 +93,7 @@
   middle interval set with \code{qi} in
   \code{\link{coxsimSpline}}) as well as the central 50
   percent of this area. It also plots a line for the median
-  value of the full area, so values in \code{smoother} are
+  value of the full area, so values in \code{method} are
   ignored. One of the key advantages of using ribbons
   rather than points is that it creates plots with smaller
   file sizes.}

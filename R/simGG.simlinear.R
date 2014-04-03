@@ -14,7 +14,7 @@
 #' @param to numeric time to plot to. Only relevant if 
 #' \code{qi = "Hazard Rate"}.
 #' @param title the plot's main title.
-#' @param smoother what type of smoothing line to use to summarize the center 
+#' @param method what type of smoothing method to use to summarize the center 
 #' of the simulation distribution.
 #' @param spalette colour palette for when there are multiple sets of 
 #' comparisons to plot. Default palette is \code{"Set1"}. See 
@@ -48,7 +48,7 @@
 #' plot will be created with shaded areas ('ribbons') for the minimum and 
 #' maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimSpline}}) as well as the central 50 percent of this area. It
 #'  also plots a line for the median value of the full area, so values in 
-#' \code{smoother} are ignored. One of the key advantages of using ribbons 
+#' \code{method} are ignored. One of the key advantages of using ribbons 
 #' rather than points is that it creates plots with smaller file sizes.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
@@ -110,7 +110,7 @@
 #' FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
 
 simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, 
-							ylab = NULL, title = NULL, smoother = "auto", 
+							ylab = NULL, title = NULL, method = "auto", 
 							spalette = "Set1", legend = "legend", leg.name = "", 
 							lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", 
 							psize = 1, alpha = 0.2, type = "points", ...)
@@ -120,8 +120,8 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 	if (!inherits(obj, "simlinear")){
     	stop("must be a simlinear object", call. = FALSE)
     }
-	if (type == 'ribbons' & smoother != "auto"){
-	  message("The smoother argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
+	if (type == 'ribbons' & method != "auto"){
+	  message("The method argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
 	}
     # Find quantity of interest
     qi <- class(obj)[[2]]  
@@ -164,7 +164,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
 				facet_grid(. ~ Strata) +
 				geom_point(aes(alpha = PercRank), size = psize) +
-				geom_smooth(method = smoother, size = lsize, se = FALSE) +
+				geom_smooth(method = method, size = lsize, se = FALSE) +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 				xlab(xlab) + ylab(ylab) +
 				scale_colour_brewer(palette = spalette, name = leg.name, 
@@ -174,7 +174,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
     	} else if (is.null(obj$Strata)){
 	      	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
 	        	geom_point(shape = 21, aes(alpha = PercRank), size = psize) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE) +
+		        geom_smooth(method = method, size = lsize, se = FALSE) +
 		        scale_colour_brewer(palette = spalette, name = leg.name, 
 		        					guide = legend) +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -186,7 +186,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			ggplot(obj, aes(Xj, QI)) +
 		        geom_point(shape = 21, aes(alpha = PercRank), size = psize, 
 		        						   colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, 
+		        geom_smooth(method = method, size = lsize, se = FALSE, 
 		        			color = lcolour) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -197,7 +197,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		ggplot(obj, aes(Xj, QI)) +
 	        geom_point(shape = 21, aes(alpha = PercRank), size = psize, 
 	        						   colour = pcolour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE, 
+	        geom_smooth(method = method, size = lsize, se = FALSE, 
 	        			color = lcolour) +
 	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -214,7 +214,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 				facet_grid(. ~ Strata) +
 				geom_line(aes(group = interaction(SimID, factor(HRValue)), 
 							  alpha = PercRank), size = psize) +
-				geom_smooth(aes(colour = factor(HRValue)), method = smoother, 
+				geom_smooth(aes(colour = factor(HRValue)), method = method, 
 								size = lsize, se = FALSE) +
 				xlab(xlab) + ylab(ylab) +
 				scale_colour_brewer(palette = spalette, name = leg.name, 
@@ -226,7 +226,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 	      	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
 	        	geom_line(aes(group = interaction(SimID, factor(HRValue)), 
 	        				  alpha = PercRank), shape = 21, size = psize) +
-		        geom_smooth(aes(colour = factor(HRValue)), method = smoother, 
+		        geom_smooth(aes(colour = factor(HRValue)), method = method, 
 		        				size = lsize, se = FALSE) +
 		        scale_colour_brewer(palette = spalette, name = leg.name, 
 		        					guide = legend) +
@@ -239,7 +239,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			ggplot(obj, aes(Xj, QI)) +
 		        geom_line(aes(group = SimID, alpha = PercRank), size = psize, 
 		        			  colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, 
+		        geom_smooth(method = method, size = lsize, se = FALSE, 
 		        			color = lcolour) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -250,7 +250,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		ggplot(obj, aes(Xj, QI)) +
 	        geom_line(aes(group = SimID, alpha = PercRank), size = psize, 
 	        			  colour = pcolour) +
-	        geom_smooth(method = smoother, size = lsize, se = FALSE, 
+	        geom_smooth(method = method, size = lsize, se = FALSE, 
 	        			color = lcolour) +
 	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +

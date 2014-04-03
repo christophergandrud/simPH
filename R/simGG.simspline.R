@@ -22,7 +22,7 @@
 #' @param to numeric time to plot to. Only relevant if 
 #' \code{qi = "Hazard Rate"}.
 #' @param title the plot's main title.
-#' @param smoother what type of smoothing line to use to summarize the center 
+#' @param method what type of smoothing method to use to summarize the center 
 #' of the simulation distribution.
 #' @param lcolour character string colour of the smoothing line. The default is 
 #' hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if 
@@ -58,7 +58,7 @@
 #' maximum simulation values (i.e. the middle interval set with \code{qi} in 
 #' \code{\link{coxsimSpline}}) as well as the central 50 percent of this area. 
 #' It also plots a line for the median value of the full area, so values in 
-#' \code{smoother} are ignored. One of the key advantages of using ribbons 
+#' \code{method} are ignored. One of the key advantages of using ribbons 
 #' rather than points is that it creates plots with smaller file sizes.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
@@ -151,7 +151,7 @@
 
 simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL, 
 							from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
-							zlab = NULL, title = NULL, smoother = "auto", 
+							zlab = NULL, title = NULL, method = "auto", 
 							lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", 
 							psize = 1, alpha = 0.2, surface = TRUE, 
 							fit = "linear", type = "points", ...)
@@ -161,8 +161,8 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
 	if (!inherits(obj, "simspline")){
     	stop("must be a simspline object", call. = FALSE)
     }
-	if (type == 'ribbons' & smoother != "auto"){
-	  message("The smoother argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
+	if (type == 'ribbons' & method != "auto"){
+	  message("The method argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
 	}
 	if (type == 'lines' & !isTRUE(SmoothSpline)){
 		message(paste0('The resulting plot may look strange.', 
@@ -216,7 +216,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
 	    	ggplot(obj, aes(Xj, QI)) +
 	        	geom_point(shape = 21, aes(alpha = PercRank), size = psize, 
 	        			   colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, 
+		        geom_smooth(method = method, size = lsize, se = FALSE, 
 		        			color = lcolour) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -227,7 +227,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
 			ggplot(obj, aes(Xj, QI)) +
 		        geom_point(shape = 21,  aes(alpha = PercRank), size = psize, 
 		        							colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, 
+		        geom_smooth(method = method, size = lsize, se = FALSE, 
 		        			color = lcolour) +
 		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -254,7 +254,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
 			ggplot(objSub, aes(Xj, QI)) +
 		        geom_point(shape = 21,  aes(alpha = PercRank), size = psize, 
 		        			colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, 
+		        geom_smooth(method = method, size = lsize, se = FALSE, 
 		        			color = lcolour) +
 		        facet_grid(.~Time) +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -270,7 +270,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
 	    	ggplot(obj, aes(Xj, QI)) +
 	        	geom_line(aes(group = SimID, alpha = PercRank), size = psize, 
 	        				 colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, 
+		        geom_smooth(method = method, size = lsize, se = FALSE, 
 		        			color = lcolour) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -281,7 +281,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
 			ggplot(obj, aes(Xj, QI)) +
 		        geom_line(aes(group = SimID, alpha = PercRank), size = psize, 
 		        			  colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, 
+		        geom_smooth(method = method, size = lsize, se = FALSE, 
 		        			color = lcolour) +
 		        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -303,7 +303,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
 			ggplot(objSub, aes(Xj, QI)) +
 		        geom_line(aes(group = SimID, alpha = PercRank), size = psize, 
 		        			 colour = pcolour) +
-		        geom_smooth(method = smoother, size = lsize, se = FALSE, 
+		        geom_smooth(method = method, size = lsize, se = FALSE, 
 		        			color = lcolour) +
 		        facet_grid(.~Time) +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +

@@ -4,7 +4,7 @@
 hazard rates from Cox Proportional Hazards Models}
 \usage{
 \method{simGG}{simtvc}(obj, from = NULL, to = NULL, xlab = NULL,
-  ylab = NULL, title = NULL, smoother = "auto", spalette = "Set1",
+  ylab = NULL, title = NULL, method = "auto", spalette = "Set1",
   legend = "legend", leg.name = "", lsize = 1, psize = 1, alpha = 0.2,
   type = "points", ...)
 }
@@ -22,7 +22,7 @@ hazard rates from Cox Proportional Hazards Models}
 
   \item{title}{the plot's main title.}
 
-  \item{smoother}{what type of smoothing line to use to
+  \item{method}{what type of smoothing method to use to
   summarize the center of the simulation distribution.}
 
   \item{spalette}{colour palette for when there are
@@ -63,7 +63,7 @@ hazard rates from Cox Proportional Hazards Models}
   middle interval set with \code{qi} in
   \code{\link{coxsimSpline}}) as well as the central 50
   percent of this area. It also plots a line for the median
-  value of the full area, so values in \code{smoother} are
+  value of the full area, so values in \code{method} are
   ignored. One of the key advantages of using ribbons
   rather than points is that it creates plots with smaller
   file sizes.}
