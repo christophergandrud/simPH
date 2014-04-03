@@ -24,7 +24,7 @@ sequence of \code{Xj} values and a fixed difference.
 setXj = seq(1100, 1700, by = 10)
 
 # Find Xl that are 1 less than Xj
-setXl(Xj = Xj, diff = 1)
+setXl(Xj = setXj, diff = 1)
 }
 \keyword{utilities}
 
