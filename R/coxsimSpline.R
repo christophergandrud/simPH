@@ -116,7 +116,8 @@
 #' @export
 
 coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, 
-                         Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE)
+                         Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE, 
+                         extremesDrop = TRUE)
 { 
 	strata <- QI <- NULL
 	# Ensure that qi is valid
@@ -321,7 +322,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
 	}
 
   SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
-				qi = qi, QI = QI, spin = spin, ci = ci)	
+				qi = qi, spin = spin, ci = ci, extremesDrop = extremesDrop)	
 
   # Final clean up
     # Subset simspline object & create a data frame of important variables

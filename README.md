@@ -60,6 +60,8 @@ Because in almost all cases `simGG` returns a *ggplot2* object, you can add addi
 
 - `tvc`: a function for creating time interactions. Currently supports `'linear'`, natural `'log'`, and exponentiation (`'power'`).
 
+- `setXl`: a function for setting valid `Xl` values given a sequence of fitted `Xj` values. This makes it more intituitive to find hazard ratios and first differences for comparisons between some Xj fitted values and Xl values other than 0.
+
 - `ggfitStrata`: a function to plot fitted stratified survival curves estimated from `survfit` using **ggplot2**. This function builds on the **survival** package's `plot.survfit` command. One major advantage is the ability to split the survival curves into multiple plots and arrange them in a grid. This makes it easier to examine many strata at once. Otherwise they can be very bunched up.
 
 ## Installation

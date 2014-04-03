@@ -43,6 +43,10 @@
 #'  \item{\code{\link{tvc}}: }{a function to create time interaction variable 
 #' that can be used in a coxph model (or any other model with time 
 #' nteractions).}
+#'  \item{setXl: }{a function for setting valid \code{Xl} values given a 
+#'  sequence of fitted \code{Xj} values. This makes it more intituitive to find 
+#'  hazard ratios and first differences for comparisons between some \eqn{Xj} 
+#'  fitted values and \eqn{Xl} values other than 0.}
 #' } 
 #' 
 #' @name simPH

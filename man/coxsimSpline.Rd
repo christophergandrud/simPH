@@ -4,7 +4,7 @@
 Hazards models}
 \usage{
 coxsimSpline(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1, Xl = 0,
-  nsim = 1000, ci = 0.95, spin = FALSE)
+  nsim = 1000, ci = 0.95, spin = FALSE, extremesDrop = TRUE)
 }
 \arguments{
   \item{obj}{a \code{\link{coxph}} class fitted model

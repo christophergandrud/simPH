@@ -165,7 +165,8 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
 	  message("The smoother argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
 	}
 	if (type == 'lines' & !isTRUE(SmoothSpline)){
-		message('The resulting plot may look strange. I suggest using SmoothSpline = TRUE if type = "lines".')
+		message(paste0('The resulting plot may look strange.', 
+				'\nI suggest using SmoothSpline = TRUE if type = "lines".'))
 	}
     # Find quantity of interest
     qi <- class(obj)[[2]]
