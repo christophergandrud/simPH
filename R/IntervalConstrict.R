@@ -23,11 +23,11 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi,
                               spin = FALSE, ci = 0.95, 
                               extremesDrop = extremesDrop)
 {
-	if (qi == "Hazard Rate" & isTRUE(spin)){
-		message(paste("spin currently unsupported for Hazard Rates.",
+    if (qi == "Hazard Rate" & isTRUE(spin)){
+    	message(paste("spin currently unsupported for Hazard Rates.",
                       "\nThe central interval will be found instead."))
-		spin <- FALSE
-	}
+    	spin <- FALSE
+    }
     if (isTRUE(extremesDrop)){
         SimbNoExt <- Simb[!is.infinite(Simb$QI), ]
         SimbNoExt <- SimbNoExt[!is.na(SimbNoExt$QI), ]
@@ -75,11 +75,15 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi,
 		Bottom <- (1 - ci)/2
 		Top <- 1 - Bottom
 		SimbPerc <- eval(parse(text = 
-         paste0("ddply(Simb, SubVar, transform, Lower = QI < quantile(QI,", 
-                Bottom, ", na.rm = TRUE))")))
+                                 paste0("dplyr::mutate(group_by(Simb, ", 
+                                        SubVar, 
+                                        "), Lower = QI < quantile(QI,", 
+                                        Bottom, ", na.rm = TRUE))")))
 		SimbPerc <- eval(parse(text = 
-         paste0("ddply(SimbPerc, SubVar, transform, Upper = QI > quantile(QI,", 
-                Top, ", na.rm = TRUE))" )))
+                                 paste0("dplyr::mutate(group_by(SimbPerc, ", 
+                                        SubVar, 
+                                        "), Upper = QI > quantile(QI,", 
+                                        Top, ", na.rm = TRUE))")))
 	}
 
 	# Drop simulations outside of the shortest probability interval
