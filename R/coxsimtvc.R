@@ -222,7 +222,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL,
       Simb$QI <- exp(Simb$CombCoef * Simb$Xj)
   } else if (qi == "First Difference"){
     if (length(Xj) != length(Xl)){
-      stop("Xj and Xl must be the same length.")
+      stop("Xj and Xl must be the same length.", call. = FALSE)
     } else {
       TVSim$QI <- exp(TVSim$CombCoef)
       Xs <- data.frame(Xj, Xl)
@@ -232,7 +232,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL,
     }
   } else if (qi == "Hazard Ratio"){
      if (length(Xj) != length(Xl)){
-      stop("Xj and Xl must be the same length.")
+      stop("Xj and Xl must be the same length.", call. = FALSE)
     } else {
       Xs <- data.frame(Xj, Xl)
       Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])

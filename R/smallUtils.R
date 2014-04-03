@@ -55,3 +55,42 @@ tvc <- function(data, b, tvar, tfun = "linear", pow = NULL)
     data[[b]] * (data[[tvarpos]])^pow
   }
 }
+
+#' Create a sequence of Xl values
+#' 
+#' \code{setXl} creates a sequence of \code{Xl} values given a sequence of 
+#' \code{Xj} values and a fixed difference.
+#' @param Xj numeric vector of fitted values for the covariate of interest to 
+#' simulate for.
+#' @param diff numeric vector of length 1. It specifies the difference between 
+#' \code{Xj} and \code{Xl}. \code{Xl} is always smaller than \code{Xj}.
+#' 
+#' @return a vector
+#' 
+#' @examples 
+#' # Set Xj
+#' setXj = seq(1100, 1700, by = 10)
+#' 
+#' # Find Xl that are 1 less than Xj 
+#' setXl(Xj = Xj, diff = 1) 
+#' @keywords utilities
+#' @export
+
+setXl <- function(Xj, diff = 1){
+  # Errors
+  if (class(Xj) != 'numeric') stop('Xj must be numeric',
+                                                call. = FALSE)
+  if (class(diff) != 'numeric') stop('diff must be numeric',
+                                     call. = FALSE)
+  if (length(diff) != 1) stop('diff can only be one value', call. = FALSE)
+  if (diff <= 0){
+    message('diff cannot be negative. Using the absolute value of diff.', 
+      call. = FALSE)
+    diff <- abs(diff)
+  } 
+  if (diff == 0) stop('diff cannot be 0.', call. = FALSE)
+
+  # Set Xl  
+  set <- Xj - diff
+  return(set)
+}

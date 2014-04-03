@@ -116,7 +116,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
 {
 	HRValue <- strata <- QI <- SimID <- NULL
 	if (qi != "Hazard Rate" & isTRUE(means)){
-		stop("means can only be TRUE when qi = 'Hazard Rate'.")
+		stop("means can only be TRUE when qi = 'Hazard Rate'.", call. = FALSE)
 	}
 	# Ensure that qi is valid
 	qiOpts <- c("Marginal Effect", "First Difference", "Hazard Ratio", 
@@ -161,7 +161,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
 		# Find quantity of interest
 		if (qi == "Marginal Effect"){
 			if (!is.null(X1)){
-				stop("For Marginal Effects only X2 should be specified.")
+				stop("For Marginal Effects only X2 should be specified.", 
+					call. = FALSE)
 			} else{
 				X2df <- data.frame(X2)
 				names(X2df) <- c("X2")
@@ -176,7 +177,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
 		}
 		else if (qi == "First Difference"){
 		  if (is.null(X1) | is.null(X2)){
-		    stop("For First Differences both X1 and X2 should be specified.")
+		    stop("For First Differences both X1 and X2 should be specified.", 
+		    	call. = FALSE)
 		  } else{
 			Xs <- merge(X1, X2)
 			names(Xs) <- c("X1", "X2")
@@ -188,7 +190,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
 		}
 		else if (qi == "Hazard Ratio"){
 		  if (is.null(X1) | is.null(X2)){
-		    stop("For Hazard Ratios both X1 and X2 should be specified.")
+		    stop("For Hazard Ratios both X1 and X2 should be specified.", 
+		    	call. = FALSE)
 		  } else {
 			Xs <- merge(X1, X2)
 			names(Xs) <- c("X1", "X2")

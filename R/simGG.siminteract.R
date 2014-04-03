@@ -141,7 +141,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 	HRate <- Lower50 <- Upper50 <- Min <- Max <- Median <- NULL
 	Time <- QI <- HRValue <- X1 <- X2 <- SimID <- NULL
 	if (!inherits(obj, "siminteract")){
-	stop("must be a siminteract object")
+	stop("must be a siminteract object", call. = FALSE)
 	}
 	if (type == 'ribbons' & smoother != "auto"){
 	message("The smoother argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")

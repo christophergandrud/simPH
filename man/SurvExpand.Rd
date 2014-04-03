@@ -57,4 +57,5 @@ GolubEUPDataExpand <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
 \seealso{
 \code{\link{tvc}}
 }
+\keyword{utilities}
 

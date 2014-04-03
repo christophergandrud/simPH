@@ -92,7 +92,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
 {	
   HRValue <- strata <- QI <- SimID <- NULL
   if (qi != "Hazard Rate" & isTRUE(means)){
-    stop("means can only be TRUE when qi = 'Hazard Rate'.")
+    stop("means can only be TRUE when qi = 'Hazard Rate'.", call. = FALSE)
   }
 
   if (is.null(Xl) & qi != "Hazard Rate"){
@@ -108,7 +108,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
   TestqiOpts <- qi %in% qiOpts
   if (!isTRUE(TestqiOpts)){
     stop("Invalid qi type. qi must be 'Relative Hazard', 'Hazard Rate', 
-         'First Difference', or 'Hazard Ratio'.")
+         'First Difference', or 'Hazard Ratio'.", call. = FALSE)
   }
   MeansMessage <- NULL
   if (isTRUE(means) & length(obj$coefficients) == 3){

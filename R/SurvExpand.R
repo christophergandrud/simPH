@@ -42,7 +42,7 @@
 #' @importFrom dplyr group_by
 #' @importFrom dplyr mutate
 #' @importFrom DataCombine MoveFront
-#' 
+#' @keywords utilities
 #' @export 
 
 SurvExpand <- function(data, GroupVar, Time, Time2, event, messages = TRUE){

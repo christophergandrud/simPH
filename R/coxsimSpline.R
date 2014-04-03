@@ -129,7 +129,8 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
 	}
 
 	if (nsim > 10 & qi == "Hazard Rate"){
-		message(paste0("Warning: finding Hazard Rates for spline models with ", nsim, " simulations per fitted value may take awhile.  Consider decreasing the number of simulations with nsim."))
+		message(paste0("Warning: finding Hazard Rates for spline models with ", 
+			nsim, " simulations per fitted value may take awhile.  Consider decreasing the number of simulations with nsim."))
 	}
 
 	if (is.null(Xl) & qi != "Hazard Rate"){
@@ -240,7 +241,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
 	# Find quantities of interest
 	if (qi == "Hazard Ratio"){
 	  	if (length(Xj) != length(Xl)){
-	      stop("Xj and Xl must be the same length.")
+	      stop("Xj and Xl must be the same length.", call. = FALSE)
 	    } 
       Simbj <- MergeX(Xj)
       names(Simbj) <- c("CoefName", "SimID", "Coef", "IntervalStart", 
@@ -261,11 +262,12 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
 	}
 	else if (qi == "First Difference"){
 	  	if (length(Xj) != length(Xl)){
-	      stop("Xj and Xl must be the same length.")
+	      stop("Xj and Xl must be the same length.", call. = FALSE)
 	    } 
 	    else {
 			Simbj <- MergeX(Xj)
-		    names(Simbj) <- c("CoefName", "SimID",  "Coef", "IntervalStart", "IntervalFinish", "Xj")
+		    names(Simbj) <- c("CoefName", "SimID",  "Coef", "IntervalStart", 
+						      "IntervalFinish", "Xj")
 			Simbl <- MergeX(Xl)
 		    names(Simbl) <- c("CoefName", "SimID", "Coef", "IntervalStart", 
 		    	              "IntervalFinish", "Xl")
@@ -289,7 +291,8 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
 	  	bfit <- basehaz(obj)
 	  	## Currently does not support strata
 	  	if (!is.null(bfit$strata)){
-	  		stop("coxsimSpline currently does not support strata.")
+	  		stop("coxsimSpline currently does not support strata.", 
+	  			call. = FALSE)
 	  	}
 	  	bfit$FakeID <- 1
 	  	Simb$FakeID <- 1
@@ -330,7 +333,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
 		} 
 		# Currently does not support strata
 		else if (!is.null(SimbPerc$strata)) {
-			stop("coxsimSpline currently doesn''t support Hazard Rates when there are multiple stata. Sorry.", 
+			stop("coxsimSpline currently doesn't support Hazard Rates when there are multiple stata. Sorry.", 
 			    call. = FALSE)
 		}
 	} else if (qi == "Hazard Ratio"){
