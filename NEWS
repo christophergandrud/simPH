@@ -1,5 +1,7 @@
 ## Version 1.1.2
 
+Automatic bspline cleaning features added for `coxsimSpline`.
+
 Minor documentation improvements.
 
 Internal code cleaning.

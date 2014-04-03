@@ -141,19 +141,19 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
 	}
 
 	# Standardise pspline term with white space around '='
-	NoSpace1 <- grepl("[^ ]=", bspline)
-	NoSpace2 <- grepl("[^ ]=", bspline)
-	if (any(NoSpace1) | any(NoSpace2)){
-		stop(paste0("Place a white space before and after equal (=) signs in ", bspline, "."),
-			call. = FALSE)
-	}
-
+	Before <- grepl(pattern = "[^ ]=", x = bspline)
+	if (isTRUE(Before)) bspline <- gsub(pattern = "=", replacement = ' =', 
+	                        		   x = bspline)
+	bspline <- gsub(pattern = "[^ ]=", replacement = ' =', x = bspline)
+	After <- grepl(pattern = "=[^ ]", x = bspline)
+	if (isTRUE(After)) bspline <- gsub(pattern = "=", replacement = '= ', 
+	                        		   x = bspline)
 
 	# Find term number
 	TermNum <- names(obj$pterms)
 	bterm <- match(bspline, TermNum)
 	if (is.na(bterm)){
-		stop(paste0("Unable to find ", bspline, "."))
+		stop(paste0("Unable to find ", bspline, "."), call. = FALSE)
 	}
 
 	# Extract boundary knots for default Boundary.knots = range(x) & 
