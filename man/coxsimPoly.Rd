@@ -4,7 +4,8 @@
 nonlinear effect from Cox Proportional Hazards models}
 \usage{
 coxsimPoly(obj, b = NULL, qi = "Relative Hazard", pow = 2, Xj = NULL,
-  Xl = NULL, nsim = 1000, ci = 0.95, spin = FALSE)
+  Xl = NULL, nsim = 1000, ci = 0.95, spin = FALSE,
+  extremesDrop = TRUE)
 }
 \arguments{
   \item{obj}{a \code{\link{coxph}} class fitted model
@@ -45,6 +46,13 @@ coxsimPoly(obj, b = NULL, qi = "Relative Hazard", pow = 2, Xj = NULL,
   \item{spin}{logical, whether or not to keep only the
   shortest probability interval rather than the middle
   simulations. Currently not supported for hazard rates.}
+
+  \item{extremesDrop}{logical whether or not to drop
+  simulated quantity of interest values that are
+  \code{Inf}, \code{NA}, \code{NaN} and \eqn{> 1000000}.
+  These values are difficult to plot \code{\link{simGG}}
+  and may prevent \code{spin} from finding the central
+  interval.}
 }
 \value{
 a \code{simpoly} class object.

@@ -34,6 +34,10 @@
 #' @param spin logical, whether or not to keep only the shortest probability 
 #' interval rather than the middle simulations. Currently not supported for 
 #' hazard rates.
+#' @param extremesDrop logical whether or not to drop simulated quantity of 
+#' interest values that are \code{Inf}, \code{NA}, \code{NaN} and 
+#' \eqn{> 1000000}. These values are difficult to plot \code{\link{simGG}} and 
+#' may prevent \code{spin} from finding the central interval.
 #'
 #' @details Simulates marginal effects, first differences, hazard ratios, and 
 #' hazard rates for linear multiplicative interactions. 
@@ -112,7 +116,8 @@
 
 coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, 
                            X2 = NULL, means = FALSE, expMarg = TRUE, 
-                           nsim = 1000, ci = 0.95, spin = FALSE)
+                           nsim = 1000, ci = 0.95, spin = FALSE, 
+                           extremesDrop = TRUE)
 {
 	HRValue <- strata <- QI <- SimID <- NULL
 	if (qi != "Hazard Rate" & isTRUE(means)){
@@ -315,8 +320,9 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
 	}
 
 	# Drop simulations outside of the middle
-	SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, 
-		                qi = qi, QI = QI, spin = spin, ci = ci)	
+	SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
+								  qi = qi, spin = spin, ci = ci, 
+								  extremesDrop = extremesDrop)	
 
 	# Final clean up
 	if (qi == "Hazard Rate" & !isTRUE(means)){

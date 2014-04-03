@@ -10,9 +10,12 @@
 #' @param spin logical for whether or not to use the shortest probability 
 #' interval or the central interval.
 #' @param ci numeric confidence interval measure.
-#' @param extremesDrop logical whether or not to drop simulated quantity of interest values that are \code{Inf}, \code{NA}, \code{NaN} and \eqn{> 1000000}. These values are difficult to plot \code{\link{simPH}} and may prevent \code{spin} from finding the central interval.
+#' @param extremesDrop logical whether or not to drop simulated quantity of 
+#' interest values that are \code{Inf}, \code{NA}, \code{NaN} and 
+#' \eqn{> 1000000}. These values are difficult to plot \code{\link{simGG}} and 
+#' may prevent \code{spin} from finding the central interval.
 #' 
-#' @importFrom plyr ddply
+#' @importFrom dplyr group_by mutate
 #' @keywords internals
 #' @noRd
 

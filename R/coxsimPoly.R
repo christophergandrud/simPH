@@ -28,6 +28,10 @@
 #' @param spin logical, whether or not to keep only the shortest probability 
 #' interval rather than the middle simulations. Currently not supported for 
 #' hazard rates.
+#' @param extremesDrop logical whether or not to drop simulated quantity of 
+#' interest values that are \code{Inf}, \code{NA}, \code{NaN} and 
+#' \eqn{> 1000000}. These values are difficult to plot \code{\link{simGG}} and 
+#' may prevent \code{spin} from finding the central interval.
 #'
 #' @return a \code{simpoly} class object.
 #' @details Simulates quantities of interest for polynomial covariate effects. 
@@ -93,7 +97,7 @@
 
 coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2, 
                        Xj = NULL, Xl = NULL, nsim = 1000, ci = 0.95, 
-                       spin = FALSE) 
+                       spin = FALSE, extremesDrop = TRUE) 
 {
   strata <- QI <- SimID <-  NULL
 	# Ensure that qi is valid
@@ -216,9 +220,11 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
 		Simb <- rename(Simb, replace = c("Xjl" = "HRValue"))
 		SubVar <- c("SimID", "time", "HRValue")
 	}
-
-  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi,
-                                QI = QI, spin = spin, ci = ci)
+  
+  # Drop simulations outside of the middle
+  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
+                                qi = qi, spin = spin, ci = ci, 
+                                extremesDrop = extremesDrop)  
 
 	# Clean up
   if (qi == "Hazard Rate"){

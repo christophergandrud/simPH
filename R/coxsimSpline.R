@@ -29,6 +29,10 @@
 #' @param spin logical, whether or not to keep only the shortest probability 
 #' interval rather than the middle simulations. Currently not supported for 
 #' hazard rates.
+#' @param extremesDrop logical whether or not to drop simulated quantity of 
+#' interest values that are \code{Inf}, \code{NA}, \code{NaN} and 
+#' \eqn{> 1000000}. These values are difficult to plot \code{\link{simGG}} and 
+#' may prevent \code{spin} from finding the central interval.
 #'
 #' @return a \code{simspline} object
 #'
@@ -320,9 +324,11 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
 	} else if (qi == "Hazard Rate"){
 		SubVar <- c("time", "Xj")
 	}
-
-  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
-				qi = qi, spin = spin, ci = ci, extremesDrop = extremesDrop)	
+	
+	# Drop simulations outside of the middle
+	SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
+								  qi = qi, spin = spin, ci = ci, 
+								  extremesDrop = extremesDrop)	
 
   # Final clean up
     # Subset simspline object & create a data frame of important variables

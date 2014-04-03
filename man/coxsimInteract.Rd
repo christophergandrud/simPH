@@ -4,7 +4,8 @@
 from Cox Proportional Hazards models}
 \usage{
 coxsimInteract(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL,
-  means = FALSE, expMarg = TRUE, nsim = 1000, ci = 0.95, spin = FALSE)
+  means = FALSE, expMarg = TRUE, nsim = 1000, ci = 0.95, spin = FALSE,
+  extremesDrop = TRUE)
 }
 \arguments{
   \item{obj}{a \code{\link{coxph}} class fitted model
@@ -57,6 +58,13 @@ coxsimInteract(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL,
   \item{spin}{logical, whether or not to keep only the
   shortest probability interval rather than the middle
   simulations. Currently not supported for hazard rates.}
+
+  \item{extremesDrop}{logical whether or not to drop
+  simulated quantity of interest values that are
+  \code{Inf}, \code{NA}, \code{NaN} and \eqn{> 1000000}.
+  These values are difficult to plot \code{\link{simGG}}
+  and may prevent \code{spin} from finding the central
+  interval.}
 }
 \value{
 a \code{siminteract} class object

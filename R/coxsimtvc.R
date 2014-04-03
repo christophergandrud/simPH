@@ -35,6 +35,10 @@
 #' @param spin logical, whether or not to keep only the shortest probability 
 #' interval rather than the middle simulations. Currently not supported for 
 #' hazard rates.
+#' @param extremesDrop logical whether or not to drop simulated quantity of 
+#' interest values that are \code{Inf}, \code{NA}, \code{NaN} and 
+#' \eqn{> 1000000}. These values are difficult to plot \code{\link{simGG}} and 
+#' may prevent \code{spin} from finding the central interval.
 #'
 #' @return a \code{simtvc} object
 #'
@@ -147,7 +151,8 @@
 
 coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, 
                       Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000, 
-                      from, to, by = 1, ci = 0.95, spin = FALSE)
+                      from, to, by = 1, ci = 0.95, spin = FALSE, 
+                      extremesDrop = TRUE)
 {
   HRValue <- strata <- QI <- NULL
   # Ensure that qi is valid
@@ -269,8 +274,10 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL,
   # Drop simulations outside of 'confidence bounds'
   SubVar <- c("time", "Xj")
   
-  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, qi = qi,
-                                QI = QI, spin = spin, ci = ci)
+  # Drop simulations outside of the middle
+  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
+                                qi = qi, spin = spin, ci = ci, 
+                                extremesDrop = extremesDrop)  
 
   # Create real time variable
   if (tfun == "linear"){

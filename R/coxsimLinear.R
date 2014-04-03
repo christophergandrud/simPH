@@ -30,6 +30,10 @@
 #' @param spin logical, whether or not to keep only the shortest probability 
 #' interval rather than the middle simulations. Currently not supported for 
 #' Hazard Rates.
+#' @param extremesDrop logical whether or not to drop simulated quantity of 
+#' interest values that are \code{Inf}, \code{NA}, \code{NaN} and 
+#' \eqn{> 1000000}. These values are difficult to plot \code{\link{simGG}} and 
+#' may prevent \code{spin} from finding the central interval.
 #'
 #' @return a \code{simlinear} object
 #'
@@ -88,7 +92,8 @@
 #' @export
 
 coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL, 
-                        means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE)
+                        means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE,
+                        extremesDrop = TRUE)
 {	
   HRValue <- strata <- QI <- SimID <- NULL
   if (qi != "Hazard Rate" & isTRUE(means)){
@@ -261,8 +266,10 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
   	SubVar <- c("time", "Xj")
   }
 
-  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar, 
-                        qi = qi, QI = QI, spin = spin, ci = ci)
+  # Drop simulations outside of the middle
+  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
+                                qi = qi, spin = spin, ci = ci, 
+                                extremesDrop = extremesDrop)  
 
   # Final clean up
   # Subset simlinear object & create a data frame of important variables

@@ -5,7 +5,7 @@ Hazards models}
 \usage{
 coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
   tfun = "linear", pow = NULL, nsim = 1000, from, to, by = 1,
-  ci = 0.95, spin = FALSE)
+  ci = 0.95, spin = FALSE, extremesDrop = TRUE)
 }
 \arguments{
   \item{obj}{a \code{\link{coxph}} fitted model object with
@@ -60,6 +60,13 @@ coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
   \item{spin}{logical, whether or not to keep only the
   shortest probability interval rather than the middle
   simulations. Currently not supported for hazard rates.}
+
+  \item{extremesDrop}{logical whether or not to drop
+  simulated quantity of interest values that are
+  \code{Inf}, \code{NA}, \code{NaN} and \eqn{> 1000000}.
+  These values are difficult to plot \code{\link{simGG}}
+  and may prevent \code{spin} from finding the central
+  interval.}
 }
 \value{
 a \code{simtvc} object
