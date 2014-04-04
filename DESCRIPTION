@@ -8,7 +8,7 @@ Description: The package simulates and plots quantities of interest (relative
     Proportional Hazard models. It also simulates and plots marginal effects
     for multiplicative interactions.
 Version: 1.2
-Date: 2014-04-03
+Date: 2014-04-04
 Author: Christopher Gandrud
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
 URL: http://christophergandrud.github.io/simPH/
@@ -23,6 +23,7 @@ Imports:
     dplyr,
     ggplot2,
     gridExtra,
+    knitr,
     MASS,
     mgcv,
     plyr,
@@ -31,3 +32,4 @@ Imports:
     stringr,
     survival,
     quadprog
+VignetteBuilder: knitr
