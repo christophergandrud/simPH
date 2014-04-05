@@ -121,4 +121,6 @@ I am also working on a way to graph hazard ratios with frailties.
 
 ---
 
-<a href="http://nadrosia.tumblr.com/post/53520500877/made-in-berlin-badge-update"><img alt="image" src="http://media.tumblr.com/023c285c14ef01953d3b67ffe789004d/tumblr_inline_mor1uu2OOZ1qz4rgp.png" height = "100"></a>
+[<img src="http://media.tumblr.com/023c285c14ef01953d3b67ffe789004d/tumblr_inline_mor1uu2OOZ1qz4rgp.png" height = "100" align="right" />](http://nadrosia.tumblr.com/post/53520500877/made-in-berlin-badge-update)
+
+Licensed under [GPL-3](https://github.com/christophergandrud/simPH/blob/master/LICENSE.md) 
