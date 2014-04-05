@@ -53,10 +53,10 @@ coxsimLinear(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
   \item{extremesDrop}{logical whether or not to drop
   simulated quantity of interest values that are
   \code{Inf}, \code{NA}, \code{NaN} and \eqn{> 1000000} for
-  \code{spin = FALSE} or \eqn{>800} for \code{spin = TRUE}.
-  These values are difficult to plot \code{\link{simGG}}
-  and may prevent \code{spin} from finding the central
-  interval.}
+  \code{spin = FALSE} or \eqn{> 800} for \code{spin =
+  TRUE}. These values are difficult to plot
+  \code{\link{simGG}} and may prevent \code{spin} from
+  finding the central interval.}
 }
 \value{
 a \code{simlinear} object
