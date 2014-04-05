@@ -1,13 +1,11 @@
 simPH
 ======
 
-<img src="https://raw.github.com/christophergandrud/simPH/gh-pages/img/Graphs/banner.png" height="40" width="1000"></img>
+<img src="img/plotbanner.png" height="40" width="1000"></img>
 
 ### Christopher Gandrud
 
-### Version 1.2 
-
-[![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH)
+### Version 1.2 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH)
 
 #### Please report any bugs to:
 

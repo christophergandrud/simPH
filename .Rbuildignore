@@ -6,3 +6,6 @@
 
 # Travis scripts
 .travis.yml
+
+# Images
+img/*
