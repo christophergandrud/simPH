@@ -12,8 +12,9 @@
 #' @param ci numeric confidence interval measure.
 #' @param extremesDrop logical whether or not to drop simulated quantity of 
 #' interest values that are \code{Inf}, \code{NA}, \code{NaN} and 
-#' \eqn{> 1000000}. These values are difficult to plot \code{\link{simGG}} and 
-#' may prevent \code{spin} from finding the central interval.
+#' \eqn{> 1000000} for \code{spin = FALSE} or \eqn{>800} for \code{spin = TRUE}. 
+#' These values are difficult to plot \code{\link{simGG}} and may prevent 
+#' \code{spin} from finding the central interval.
 #' 
 #' @importFrom plyr ddply transform
 #' @keywords internals
@@ -32,15 +33,21 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi,
         SimbNoExt <- Simb[!is.infinite(Simb$QI), ]
         SimbNoExt <- SimbNoExt[!is.na(SimbNoExt$QI), ]
         SimbNoExt <- SimbNoExt[!is.nan(SimbNoExt$QI), ]
-        SimbNoExt <- SimbNoExt[SimbNoExt$QI <= 1000000, ]
-
+        if (!isTRUE(spin)){
+            SimbNoExt <- SimbNoExt[SimbNoExt$QI <= 1000000, ]
+            MaxNum <- '1000000'
+        }
+        else if (isTRUE(spin)){
+            SimbNoExt <- SimbNoExt[SimbNoExt$QI <= 800, ]
+            MaxNum <- '800'
+        }
         # Messages informing the user of dropped infinite values (if any)
         extDropped <- nrow(Simb) - nrow(SimbNoExt)
         extDroppedPerc <- round((extDropped/nrow(Simb) * 100), digits = 1) 
         if (extDropped > 0){ 
             message(paste0(extDropped, ' (', extDroppedPerc, '%)',
                    ' simulations dropped for having', 
-                   '\nquantity of interest values: Inf/NA/NaN/>1000000.\n',
+                   '\nquantity of interest values: Inf/NA/NaN/>', MaxNum, '.\n',
                    '\nTo keep extreme values set extremesDrop = FALSE.\n'))
         }
         Simb <- SimbNoExt

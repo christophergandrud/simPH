@@ -1,1 +1,3 @@
-jss-examples    JSS paper replication
+linear-jss       Linear effect examples from JSS paper
+tvc-jss          Time-interactive effect examples from JSS paper
+splines-jss      Penalized spline effect examples from JSS paper

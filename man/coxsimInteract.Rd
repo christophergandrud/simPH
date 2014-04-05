@@ -61,7 +61,8 @@ coxsimInteract(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL,
 
   \item{extremesDrop}{logical whether or not to drop
   simulated quantity of interest values that are
-  \code{Inf}, \code{NA}, \code{NaN} and \eqn{> 1000000}.
+  \code{Inf}, \code{NA}, \code{NaN} and \eqn{> 1000000} for
+  \code{spin = FALSE} or \eqn{>800} for \code{spin = TRUE}.
   These values are difficult to plot \code{\link{simGG}}
   and may prevent \code{spin} from finding the central
   interval.}
