@@ -3,6 +3,8 @@
 !!!! `smoother` argument for `simGG` is deprecated. Use `method` instead.
 The functionality is exactly the same. !!!!
 
+`tvc` now accepts a vector of variable names.
+
 jss-example demo added.
 
 simPH-overview vignette added.

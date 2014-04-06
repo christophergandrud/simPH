@@ -72,54 +72,41 @@
 #' The resulting simulation values can be plotted using \code{\link{simGG}}. 
 #'
 #' @examples
+#' \dontrun{
 #' # Load Golub & Steunenberg (2007) Data
 #' data("GolubEUPData")
 #' 
 #' # Load survival package
 #' library(survival)
 #' 
-#' # Create natural log time interactions
-#' Golubtvc <- function(x){
-#'   assign(paste0("l", x), tvc(GolubEUPData, b = x, 
-#'          tvar = "end", tfun = "log"))
-#' }
-#' \dontrun{
 #' # Expand data (not run to speed processing time, but should be run)
 #' GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
 #'                      Time = 'begin', Time2 = 'end', event = 'event')
-#' }
 #' 
-#' GolubEUPData$Lcoop <-Golubtvc("coop")
-#' GolubEUPData$Lqmv <- Golubtvc("qmv")
-#' GolubEUPData$Lbacklog <- Golubtvc("backlog")
-#' GolubEUPData$Lcodec <- Golubtvc("codec")
-#' GolubEUPData$Lqmvpostsea <- Golubtvc("qmvpostsea")
-#' GolubEUPData$Lthatcher <- Golubtvc("thatcher") 
+#' # Create time interactions
+#' BaseVars <- c('qmv', 'backlog', 'coop', 'codec', 'qmvpostsea', 'thatcher')
+#' GolubEUPData <- tvc(GolubEUPData, b = BaseVars, tvar = 'end', tfun = 'log')
 #' 
 #' # Run Cox PH Model
-#' M1 <- coxph(Surv(begin, end, event) ~ 
-#'             qmv + qmvpostsea + qmvpostteu + 
-#'             coop + codec + eu9 + eu10 + eu12 +
-#'             eu15 + thatcher + agenda + backlog +
-#'             Lqmv + Lqmvpostsea + Lcoop + Lcodec +
-#'             Lthatcher + Lbacklog, 
-#'          data = GolubEUPData,
-#'          ties = "efron")
+#' M2 <- coxph(Surv(begin, end, event) ~ qmv + qmvpostsea + qmvpostteu +
+#'                 coop + codec + eu9 + eu10 + eu12 + eu15 + thatcher +
+#'                 agenda + backlog + qmv_log + qmvpostsea_log + coop_log +
+#'                 codec_log + thatcher_log + backlog_log,
+#'             data = GolubEUPData, ties = "efron")
 #'          
 #' # Create simtvc object for Relative Hazard
-#' Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
+#' Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "qmv_log",
 #'                    tfun = "log", from = 80, to = 2000, 
 #'                    Xj = 1, by = 15, ci = 0.99, nsim = 100)
 #'
-#' \dontrun{
 #' # Create simtvc object for First Difference  
-#' Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "Lqmv",
+#' Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "qmv_log",
 #'                  qi = "First Difference", Xj = 1,
 #'                  tfun = "log", from = 80, to = 2000,
 #'                  by = 15, ci = 0.95)
 #' 
 #' # Create simtvc object for Hazard Ratio  
-#' Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "Lbacklog",
+#' Sim3 <- coxsimtvc(obj = M1, b = "backlog", btvc = "backlog_log",
 #'                   qi = "Hazard Ratio", Xj = c(191, 229), 
 #'                   Xl = c(0, 0),
 #'                   tfun = "log", from = 80, to = 2000, 
