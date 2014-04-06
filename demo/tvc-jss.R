@@ -42,11 +42,10 @@ Sim3 <- coxsimtvc(obj = M2, b = "qmv", btvc = "qmv_log",
                     tfun = "log", from = 80, to = 2000,
                     by = 10, ci = 0.95)
 
-# Create simtvc object for first difference (SPIn)
-Sim3 <- coxsimtvc(obj = M2, b = "qmv", btvc = "qmv_log",
-                    qi = "First Difference", Xj = 1,
-                    tfun = "log", from = 80, to = 2000,
-                    by = 10, ci = 0.95, spin = TRUE)
+# Create first difference plots
+simGG(Sim3, xlab = "\nTime in Days", 
+       title = "Central Interval\n", alpha = 0.3,
+       type = "ribbons", lsize = 0.5, legend = FALSE)
 
 # Create simtvc object for relative hazard
 Sim4 <- coxsimtvc(obj = M2, b = "backlog", btvc = "backlog_log",

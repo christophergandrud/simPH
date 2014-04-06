@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % simPH: Showing Estimates from Cox Proportional Hazard Models
 % Christopher Gandrud
-% 4 April 2014
+% 6 April 2014
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[nojss]{jss}
@@ -12,13 +12,10 @@
 
 <<include=FALSE>>=
 #### Load Packages ####
-library(knitr)
-#library(repmis)
-
-#Packages <- c("car", "knitr", "gridExtra", "repmis", "devtools",
-#            "MASS", "simPH", "SPIn", "stats", "survival", "Zelig", "ggplot2")
-
-#LoadandCite(Packages, file = "HRPackages.bib")
+library(simPH)
+library(survival)
+library(ggplot2)
+library(gridExtra)
 
 #### Load data ####
 # Load Carpenter (2002) data 
@@ -71,14 +68,14 @@ opts_chunk$set(fig.align='center', dev='png', prompt=TRUE, highlight=FALSE, back
 
 \begin{document}
 
-The \cite{cox1972} Proportional Hazards (PH) model is used in a wide range of disciplines including epidemiology and political science. However, many mis-specify their models and poorly communicate uncertainty about their estimates. This is unfortunate because causes of model mis-specification--e.g., interactive and nonlinear effects--may be substantively meaningful. Uncertainty about these effects can be difficult to assess because quantities of interest are often on asymmetric and nonlinear scales. Part of the problem has been that available computational tools make it difficult to explore and communicate these effects. 
+The \cite{cox1972} Proportional Hazards (PH) model is used in a wide range of disciplines, including epidemiology and political science, to study time to event data. However, many poorly communicate quantities of interest and associated uncertainty estimated with these models. This is especially true when estimates are generated from interactions and nonlinearly transformed continuous variables. These transformations can be especially useful for Cox PH models as they can be used to correctly specify models that would otherwise have nonproportional hazards, a key violation of the Cox PH model. These effects are extremely hard to interpret using coefficient tables and available computational tools. In addition, estimated uncertainty around them is difficult to assess because quantities of interest are often on asymmetric and nonlinear scales. 
 
-This article aims to improve the use of Cox-type models in two ways. After briefly discussing previous research on how Cox-type models can be misspecified by ignoring time interactions and nonlinear effects for continuous variables, it (a) advocates using shortest probability intervals and visual-weighting to display simulated quantities of interest that describe these estimated effects. Then (b) it makes it easy to use these methods by demonstrating the new \proglang{R} \citep{CiteR} package \pkg{simPH} \citep{R-simPH}, that is freely available on the Comprehensive \proglang{R} Archive Network. The package makes it easy to simulate distributions of quantities of interest estimated from Cox-type models. The central or shortest probability intervals of these distributions can then be plotted using visually-weighted plots. The latter type of interval is often more appropriate for Cox-type model results. Quantities of interest \pkg{simPH} can handle include hazard ratios, first differences, relative hazards, marginal effects, and hazard rates from linear, linear multiplicative interactions between covariates, time interactions, and nonlinear coefficients for continuous variables. Hypothetical and empirical examples are used to illustrate \pkg{simPH}'s syntax and capabilities. 
+This article aims to improve the use of Cox PH models. It first briefly discusses what a Cox PH model is and previous research on how time interactions and nonlinear effects can be helpful for correctly specifying models that would otherwise violate the proportional hazards assumption (PHA). Second, it advocates using shortest probability intervals and visual-weighting to display simulated quantities of interest from interactive, nonlinear, and even `vanilla' linear estimates from Cox PH models. The latter type of interval is often more appropriate for Cox PH model results. Third, it demonstrates how the new \proglang{R} \citep{CiteR} package \pkg{simPH} \citep{R-simPH} makes it easy to implement these techniques. The package is freely available on the Comprehensive \proglang{R} Archive Network. Quantities of interest \pkg{simPH} can simulate and plot include hazard ratios, first differences, relative hazards, marginal effects, and hazard rates from linear, linear multiplicative interactions between covariates, time interactions, and nonlinear coefficients for continuous variables. Hypothetical and empirical examples are used to illustrate \pkg{simPH}'s syntax and capabilities. 
 
 %%%%%% Section: Common issues
 \section[The Cox PH model]{The Cox PH model}
 
-Before discussing model misspecification problems, let's quickly look at what Cox PH models are. The Cox PH model is a semi-parametric survival model that allows the examination of how specified factors influence the rate of a particular event happening--e.g., infection, death, the adoption of a public policy--at a particular point in time given that the event has not already occurred. This rate is commonly referred to as the hazard rate ($h_{i}(t)$). The hazard rate for unit $i$ at time $t$ is estimated with the Cox PH model using: 
+Let's start by quickly looking at the basic mechanics of a Cox PH model. The Cox PH model is a semi-parametric survival model that allows us to examine how specified factors influence the rate of a particular event happening--e.g., infection, death, the adoption of a public policy--at a particular point in time given that the event has not already occurred. This rate is commonly referred to as the hazard rate ($h_{i}(t)$). The hazard rate for unit $i$ at time $t$ is estimated with the Cox PH model using: 
 %
 \begin{equation}
     h(t|\mathbf{X}_{i})=h_{0}(t)\mathrm{e}^{(\mathbf{\beta X}_{i})},
@@ -86,29 +83,29 @@ Before discussing model misspecification problems, let's quickly look at what Co
 %
 where $h_{0}(t)$ is the baseline hazard, i.e., the instantaneous rate of a transition at time $t$ when all of the covariates are zero. $\mathbf{\beta}$ is a vector of coefficients and $\mathbf{X}_{i}$ is the vector of covariates for unit $i$.
 
-We are often interested in how a covariate changes the rate of an event happening. In general researchers have tried to address this by looking at Cox PH coefficient estimates $\beta$. However, only examining single coefficients can lead to significant model misspecification and erroneous substantive interpretation of Cox PH results.
+We are often interested in how a covariate changes the rate of an event happening. In general researchers have tried to address this by looking at Cox PH coefficient estimates $\beta$. However, only examining single coefficients can lead to erroneous substantive interpretations of results. This is especially true when time-interactions and nonlinearly transformed continuous variables are used to correct for violations of the proportional hazards assumption.
 
-\section[Nonproportional hazards]{Nonproportional hazards}
+\section[Violations of the PHA]{Violations of the proportional hazards assumption}
 
-One of the most important sources of estimation bias in Cox PH models discussed at length by \cite{Licht2011}, \cite{BoxSteffensmeier2001}, and \cite{boxsteffensmeier2004} is a violation of the proportional hazards assumption (PHA). The PHA is that the hazards of two units experiencing an event are proportional to one another and that this relationship is constant over time. Formally, for the PHA to hold the hazard for units $j$ and $l$ must be:
+Time-interactions and nonlinear continuous variable transformations are particularly important when using Cox PH models as they can correct for violations of the proportional hazards assumption. The PHA is one of the most important sources of estimation bias in Cox PH models. It has been discussed at length by \cite{Licht2011}, \cite{BoxSteffensmeier2001}, and \cite{boxsteffensmeier2004}. The proportional hazards assumption is that the hazards of two units experiencing an event are proportional to one another and that this relationship is constant over time. Formally, for the PHA to hold the hazard for units $j$ and $l$ must be:
 %
 \begin{equation}
     \frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{\beta\prime(x_{j} - x_{l})}.
 \end{equation}
 %
-for all points in time. This is also the equation for the hazard ratio between $x_{j}$ and $x_{l}$. If the proportional hazards assumption is violated and measures are not taken to correct for the violation, then researchers may create biased parameter estimates and statistical tests with lower power \citep{Therneau1990,Keele2010}. Beyond these statistical problems, not adjusting for violations of the PHA can prevent researchers from finding evidence for phenomena they are interested in studying, including how an effect changes over time and whether or not it changes nonlinearly over the range of a variable's values.
+for all points in time. This is also the equation for the hazard ratio between $x_{j}$ and $x_{l}$. If the proportional hazards assumption is violated and measures are not taken to correct for the violation, then researchers may create biased parameter estimates and statistical tests with lower power \citep{Therneau1990,Keele2010}. Beyond these statistical problems, not adjusting for violations of the PHA can prevent researchers from finding evidence for phenomena they are interested in studying, including how an effect changes over time and whether or not it changes nonlinearly over the range of a continuous variable's values.
 
-There are a number of widely used tests to examine if the PHA has been violated. See \cite{Grambsch1994}, \cite{BoxSteffensmeier2001}, and \cite{boxsteffensmeier2004} for discussions of various PHA testing methods.Many software packages implement versions of these tests. \proglang{R}'s \pkg{survival} package \citep{R-survival} implements Grambsch and Therneau's \citeyearpar{Grambsch1994} modified Schoenfeld residuals test. This is done with the \code{cox.zph} function. 
+There are a number of widely used tests to examine if the PHA has been violated. See \cite{Grambsch1994}, \cite{BoxSteffensmeier2001}, and \cite{boxsteffensmeier2004} for discussions of various methods. Many software packages implement versions of these tests. \proglang{R}'s \pkg{survival} package \citep{R-survival} implements Grambsch and Therneau's \citeyearpar{Grambsch1994} modified Schoenfeld residuals test with the \code{cox.zph} function. 
 
-\subsection[Nonproportional and time-interactive]{Nonproportional hazards and time-interactive effects}
+\subsection[Nonproportional and time-interactive]{Correcting nonproportional hazards with time-interactions}
 
-If a covariate is determined to violate the PHA, Box-Steffensmeier and co-authors \citep[see][]{BoxSteffensmeier2003,boxsteffensmeier2004} suggest directly modeling the relationship between the variable and time. This usually entails including an interaction between the variable and some function of time such as the natural logarithm or some exponent. The decision to use a particular functional form should be guided by theory and will likely also be influenced by findings in the data. If $f(t)$ is some function of time then a simple Nonproportional Hazards Cox model estimating the hazard rate for unit $i$ with one time-interaction is given by:
+If a covariate is determined to violate the PHA, Box-Steffensmeier and co-authors \citep[see][]{BoxSteffensmeier2003,boxsteffensmeier2004} suggest directly modeling the relationship between the variable and time. This usually entails including an interaction between the variable and some function of time such as the natural logarithm or some exponent. The decision to use a particular functional form should be guided by theory and will likely also be influenced by findings in the data. If $f(t)$ is some function of time then a simple model estimating the hazard rate for unit $i$ with one time-interaction is given by:
 %
 \begin{equation}
     h_{i}(t|\mathbf{x}_{i})=h_{0}(t)\mathrm{e}^{(\beta_{1}x_{i} + \beta_{2}f(t)x_{i})}.
 \end{equation}
 
-Like any other interaction effect \cite[see][]{Brambor2006} extra care should be taken when interpreting the $\beta_{1}$ and $\beta_{2}$ parameter estimates and their associated uncertainty. We cannot simply interpret the effect by looking at $\beta_{1}$ or $\beta_{2}$ in isolation. They need to be combined. \cite{Licht2011} argues that post-estimation simulation techniques should be employed to substantively interpret these combined coefficients and the uncertainty surrounding them. Let's briefly look at ways to calculate combined effects. Later in this section we will look at showing our uncertainty about them using simulation techniques. 
+Like any other interaction effect \cite[see][]{Brambor2006} extra care should be taken when interpreting the $\beta_{1}$ and $\beta_{2}$ parameter estimates and their associated uncertainty. We cannot simply interpret the effect by looking at $\beta_{1}$ or $\beta_{2}$ in isolation. They need to be combined. \cite{Licht2011} argues that post-estimation simulation techniques should be employed to substantively interpret these combined coefficients and the uncertainty surrounding them. Let's briefly look at ways to calculate combined effects. In the next section, we will look at showing our uncertainty about them using simulation techniques. 
 
 \cite{Licht2011} describes two methods for calculating the combined effect of a time interaction on the hazard of an event happening in ways that are relatively easy to interpret: (a) first differences and (b) relative hazards. A first difference is the percentage change in the hazard rate at time $t$ between two values of $x$:
 %
@@ -122,23 +119,25 @@ Relative hazards are given by:
     \frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{x_{j}(\beta_{1} + \beta_{2}f(t))}.
 \end{equation}
 %
-In this situation the covariate $x_{l}$ is 0. Relative hazards represent the change in the hazard when $x$ is `switched on'. As such, relative hazards are a special case of the hazard ratio \citep[231]{Licht2011}. They are the expected change in the hazard when $x$ is fitted at a value different from zero compared to when $x$ is zero.
+In this situation the covariate $x_{l}$ is zero. Relative hazards represent the change in the hazard when $x$ is `switched on'. As such, relative hazards are a special case of the hazard ratio \citep[p. 231]{Licht2011}. They are the expected change in the hazard when $x$ is fitted at a value different from zero compared to when $x$ is zero.
  
-\subsection[Nonproportional and nonlinear effects]{Nonproportional hazards and nonlinear effects}
+\subsection[Nonproportional and nonlinear effects]{Correcting nonproportional hazards with nonlinear transformations of continuous variables}
 
-Time-interactive effects are not the only cause of PHA violations. Building on \cite{Grambsch1994} and \cite{Therneau2000}, \cite{Keele2010} points out that common diagnostic tests will also indicate PHA violations if the model is misspecified for other reasons. Omitting an important covariate, using a proportional hazards model even if another survival model is more appropriate, or including a continuous covariate as linear when its effect is actually nonlinear can lead to significant PHA tests. Addressing the omission of important covariates is beyond the scope of the \pkg{simPH} package. 
+Un-modeled time-interactive effects are not the only cause of PHA violations. Building on \cite{Grambsch1994} and \cite{Therneau2000}, \cite{Keele2010} points out that common diagnostic tests will also indicate PHA violations if the model is misspecified for other reasons, such as omitting an important covariate, using a proportional hazards model when another survival model is more appropriate, or including a continuous covariate as linear when its effect is actually nonlinear.
 
-Because of this Keele suggests that \emph{before} testing the PHA we should try to make sure that we are not omitting important variables and find the covariates' appropriate functional forms, typically using either polynomials or splines. He demonstrates this in replication studies by adding penalized splines then using a Wald test to examine if the spline estimates have a better fit than their linear counterparts. Many studies using Cox PH models do not test for nonlinearity, but instead jump straight to testing the PHA, including time-interactions when it is violated. As Keele \citeyearpar{Keele2010} demonstrates, ascribing a time-interactive effect to a covariate when in fact the effect varies not over time, but nonlinearly over values of the covariate can have major implications for substantive interpretations of results.
+Keele suggests that \emph{before} testing the PHA we should try to make sure that we are not omitting important variables and find the covariates' appropriate functional forms, typically using either polynomials or splines. He demonstrates this in replication studies by adding penalized splines then using a Wald test to examine if the spline estimates have a better fit than their linear counterparts. Many studies using Cox PH models do not test for nonlinearity, but instead jump straight to testing the PHA, including time-interactions when it is violated. As Keele \citeyearpar{Keele2010} demonstrates, ascribing a time-interactive effect to a covariate when in fact the effect varies not over time, but nonlinearly over values of a continuous covariate can have major implications for substantive interpretations of results.
+
+Because of their role in correcting for violations of the proportional hazards assumption, it is especially important that researchers using the Cox PH model have accessible tools for exploring estimates and associated uncertainty from time-interactions and nonlinear transformations of continuous variables. 
 
 \section[Show estimates]{Show estimation uncertainty}
 
-How can we effectively examine and communicate both the point estimates of and our uncertainty about quantities of interest from time-interactive and nonlinear effects? In this section I advocate showing these results using simulations, shortest probability intervals, and visually-weighted plots.
+How can we effectively examine and communicate both the point estimates of and our uncertainty about quantities of interest from time-interactive and nonlinear effects? In this section I advocate showing these results using simulations, shortest probability intervals, and visually-weighted plots. These tools are useful for showing `vanilla' linear effects estimated from Cox PH models as well.
 
 \subsection{Post estimation simulations}
 
-Following \cite{King2000}, \cite{Licht2011} proposes post-estimation simulation techniques to make it easier to estimate the uncertainty surrounding quantities of interest for time interactions like first differences and relative hazards. See \citet[352-353]{King2000} for a discussion of alternative approaches including fully Bayesian Markov-Chain Monte Carlo techniques and bootstraping. The main difference between these three approaches is how the parameters are drawn. Using the post-estimation simulation technique, we first find the parameter point estimates for $\hat{\beta_{1}}$ and $\hat{\beta_{2}}$ from a Nonproportional Hazards Cox model that make up the time-interactive effect as well as the parameter covariance estimates. Second, we draw $n$ values of $\beta_{1}$ and $\beta_{2}$ from the multivariate normal distribution with a mean of $\hat{\beta}$ and variance specified by the parameters' estimated covariance. Third, we use these simulated values to calculate a quantity of interest such as the first difference or relative hazard for a range of times as well as specified values of $x_{j}$ and $x_{l}$ (as appropriate). Finally, we plot the results. Using this simulation technique allows us to estimate full time-interactive effects, how they change over time, substantively evaluate the effects, and show the uncertainty surrounding the estimates.
+Following \cite{King2000}, \cite{Licht2011} proposes post-estimation simulation techniques to make it easier to estimate the uncertainty surrounding quantities of interest for time interactions like first differences and relative hazards. See \citet[352-353]{King2000} for a discussion of alternative approaches including fully Bayesian Markov-Chain Monte Carlo techniques and bootstraping. The main difference between these three approaches is how the parameters are drawn. Using the post-estimation simulation technique, we first find the parameter point estimates for $\hat{\beta_{1}}$ and $\hat{\beta_{2}}$. Second, we draw $n$ values of $\beta_{1}$ and $\beta_{2}$ from the multivariate normal distributions with means $\beta_{1}$ and $\beta_{2}$ and variance specified by the parameters' estimated covariance. Third, we use these simulated values to calculate a quantity of interest such as the first difference or relative hazard for a range of times as well as specified values of $x_{j}$ and $x_{l}$ (as appropriate). Finally, we plot the results. Using this simulation technique allows us to estimate full time-interactive effects, how they change over time, substantively evaluate the effects, and show the uncertainty surrounding the estimates.
 
-We can easily extend this simulation technique to quantities of interest for other estimated effect types, including nonlinear effects. For example if a nonlinear effect is modeled with a second order polynomial, i.e. $\beta_{1}x_{i} + \beta_{2}x_{i}^{2}$, we can once again draw $n$ simulations from the multivariate normal distribution for both $\beta_{1}$ and $\beta_{2}$. Then we simply calculate quantities of interest for a range of values and plot the results as before. For example, we find the first difference for a second order polynomial with:
+We can easily extend this simulation technique to quantities of interest for other estimated effect types. For example if a nonlinear effect is modeled with a second order polynomial, i.e. $\beta_{1}x_{i} + \beta_{2}x_{i}^{2}$, we can once again draw $n$ simulations from the multivariate normal distribution for both $\beta_{1}$ and $\beta_{2}$. Then we simply calculate quantities of interest for a range of values and plot the results as before. We find the first difference for a second order polynomial with:
 %
 \begin{equation}
     \%\triangle h_{i}(t) = (\mathrm{e}^{\beta_{1}x_{j-l} + \beta_{2}x_{j-l}^{2}} - 1) \cdot 100,
@@ -146,7 +145,7 @@ We can easily extend this simulation technique to quantities of interest for oth
 %
 \noindent where $x_{j-l} = x_{j} - x_{l}$. Note we will not be showing the estimated effect over time. For this we need to estimate the hazard rate for a range of comparisons between $x_{j}$ and $x_{l}$.
 
-We can use a similar procedure for splines. Penalized splines \citep{Eilers1996} are a commonly used way of showing more complex nonlinear effects than polynomials \cite[see][]{Keele2008}. They involve ``linear combinations of B-spline basis functions'' \citep[5]{Strasak2009} joined at points in the range of observed values of $x$ called ``knots'' \citep[50]{Keele2008}. A Cox PH model with one penalized spline is given by:
+We can use a similar procedure for splines. Penalized splines \citep{Eilers1996} are a commonly used way of showing more complex nonlinear effects than polynomials \cite[see][]{Keele2008}. They involve ``linear combinations of B-spline basis functions'' \citep[p. 5]{Strasak2009} joined at points in the range of observed values of $x$ called ``knots'' \citep[p. 50]{Keele2008}. A Cox PH model with one penalized spline is given by:
 %
 \begin{equation}
     h(t|\mathbf{X}_{i})=h_{0}(t)\mathrm{e}^{g(x)},
@@ -177,36 +176,36 @@ Note, $x$ should be within the observed data.
 We can again draw values of each $\beta_{k_{1}}, \ldots \beta_{k_{n}}$ from the multivariate normal distribution described above. We then use these simulated coefficients to estimate quantities of interest for a range of covariate values. For example, the first difference between two values $x_{j}$ and $x_{l}$ is:
 %
 \begin{equation}
-    \%\triangle h_{i}(t) = (\mathrm{e}^{g(x_{j}) - g(x_{l})} - 1) * 100.
+    \%\triangle h_{i}(t) = (\mathrm{e}^{g(x_{j} - x_{l})} - 1) * 100.
 \end{equation}
 %
 Relative hazards and hazard ratios can be calculated by extension. Once we find the simulated quantities of interest, plotting the results is straightforward. 
 
-We can use this post-estimation simulation technique for virtually any quantity of interest estimated from Cox-type models including marginal effects for multiplicative interactions \cite[see][]{Brambor2006} and plain linear effects. 
+We can use this post-estimation simulation technique for virtually any quantity of interest estimated from Cox PH models including marginal effects for multiplicative interactions \cite[see][]{Brambor2006} and plain linear effects as well. 
 
 \subsection{Which interval to show?}
 
-If researchers go beyond the usual `train timetable' coefficient tables and graphically show their parameter estimates, as \pkg{simPH} makes easier, they usually do so by plotting lines of some measure of central tendency and confidence bands calculated from standard errors over a range of fitted values. Previous work with post-estimation simulations, e.g., \cite{Licht2011}, has mirrored this approach in graphs with a line for the median or mean of the simulation distribution and lines representing the boundaries of a central interval of the distribution. For example, the central 95 percent interval could be represented by lines at the 2.5 and 97.5 percentiles of the distribution.
+If researchers go beyond usual `train timetable' coefficient tables and graphically show their parameter estimates, as \pkg{simPH} makes easier, they usually do so by plotting lines of some measure of central tendency and confidence bands calculated from standard errors over a range of fitted values. Previous work with post-estimation simulations, e.g., \cite{Licht2011}, has mirrored this approach in graphs with a line for the median or mean of the simulation distribution and lines representing the boundaries of a central interval of the distribution. For example, the central 95 percent interval could be represented by lines at the 2.5 and 97.5 percentiles of the distribution.
 
-Many quantities of interest from Cox-type models have asymmetric probability distributions on a nonlinear scale and can therefore be poorly summarized by central intervals. Recall that most quantities of interest are on an exponential scale with a lower bound of 0 or, in the case of first differences, -100. They can have very long and sparse upper regions relative to a tighter concentration of the distribution near the lower boundary. In these cases it can be more useful to look at highest density regions \citep[see][]{Box1973,Hyndman1996}. The underlying idea is that we should be more interested in the set of quantities of interest values with the most probability \cite[120]{Hyndman1996}, rather than an arbitrary central interval. When the simulation has a normal distribution, the highest density region will be equivalent to the central interval with the same percentage of the simulations, e.g., 95 percent. However, when the highest density is at the boundary, for example when many of the simulated relative hazard values are close to 0, then \cite{Liu2013} argue that the highest density region is preferable to the central interval. In these cases ``central intervals can be much longer and have the awkward property [of] cutting off a narrow high-posterior slice that happens to be near the boundary, thus ruling out a part of the distribution that is actually strongly supported by the inference'' \citep[2]{Liu2013}. If this happens \citeauthor{Liu2013} recommend finding the shortest probability interval (SPIn). This is the shortest interval of a particular probability coverage based on the simulations. They find this to be a very efficient way of finding the shortest highest density region for unimodal distributions.
+Many quantities of interest from Cox PH models have asymmetric probability distributions on a nonlinear scale and can therefore be poorly summarized by central intervals. Recall that most quantities of interest are on an exponential scale with a lower bound of 0 or, in the case of first differences, -100. They can have very long and sparse upper regions relative to a tighter concentration of the distribution near the lower boundary. In these cases it can be more useful to look at highest density regions \citep[see][]{Box1973,Hyndman1996}. The underlying idea is that we should be more interested in the set of quantities of interest values with the most probability \cite[p. 120]{Hyndman1996}, rather than an arbitrary central interval. When the simulation has a normal distribution, the highest density region will be equivalent to the central interval with the same percentage of the simulations, e.g., 95 percent. However, when the highest density is at the boundary, for example when many of the simulated relative hazard values are close to 0, then \cite{Liu2013} argue that the highest density region is preferable to the central interval. In these cases ``central intervals can be much longer and have the awkward property [of] cutting off a narrow high-posterior slice that happens to be near the boundary, thus ruling out a part of the distribution that is actually strongly supported by the inference'' \citep[p. 2]{Liu2013}. If this happens \citeauthor{Liu2013} recommend finding the shortest probability interval (SPIn). This is the shortest interval of a particular probability coverage based on the simulations. They find this to be a very efficient way of finding the shortest highest density region for unimodal distributions.
 
 \subsection{Visual weighting}
 
 Whether graphing a central or shortest probability interval, only using lines to represent the center and edges can draw the reader's attention away from what the graph is trying to communicate. This approach overemphasizes the edges of the interval, the areas of lowest probability. Some graphs uniformly shade the interval between the upper and lower bounds. Uniform shading suggest to the reader a uniform distribution between the edges. Both of these characteristics give misleading information about the quantities of interests' probability distributions, especially when they are on an exponential scale.
 
-Visual weighting presents a solution to these problems. Hsiang calls visual weight ``the amount of a viewer's attention that a graphical object or display region attracts, based on visual properties'' \citeyearpar[3]{Hsiang2012}. More visual weight can be created by using more ``graphical ink" \citep{Tufte2001}. Visual weight is decreased by removing graphical ink. The simplest way to increase or decrease graphical ink with our simulations is to simply plot each simulation value as a point or series of values with a line that is semi-transparent. Areas of the distribution with many simulations will be darker. Areas with fewer simulations, often near the edges of the distribution, will be lighter. Plotting semi-transparent points or lines allows for very clear communication of a quantity of interest's probability distribution. When each point or line is partially transparent, areas of the chart where the points or lines are darker indicate areas of the distribution with higher probability, because more points or lines are stacked on top of one another. This approach gives more visual weight to areas of higher probability and avoids drawing the reader's attention to the edges of the distribution, the areas of lower probability, in the way that traditional confidence interval lines do. 
+Visual weighting presents a solution to these problems. Hsiang calls visual weight ``the amount of a viewer's attention that a graphical object or display region attracts, based on visual properties'' \citeyearpar[p. 3]{Hsiang2012}. More visual weight can be created by using more ``graphical ink" \citep{Tufte2001}. Visual weight is decreased by removing graphical ink. The simplest way to increase or decrease graphical ink with our simulations is to simply plot each simulation value as a point or series of values with a line that is semi-transparent. Areas of the distribution with many simulations will be darker. Areas with fewer simulations, often near the edges of the distribution, will be lighter. Plotting semi-transparent points or lines clearly communicates a quantity of interest's probability distribution. When each point or line is partially transparent, areas of the chart where the points or lines are darker indicate areas of the distribution with higher probability, because more points or lines are stacked on top of one another. This approach gives more visual weight to areas of higher probability and avoids drawing the reader's attention to the edges of the distribution (the areas of lower probability) in the way that traditional confidence interval lines do. 
 
 As a practical issue if a plot shows very many simulations as individual points, and to a lesser extent lines, it may create a very large file size. This is especially true if higher quality vector graphics are desired. An alternative it to summarize simulated distributions with multiple ribbons of increasing transparency the further from the central tendency a portion of the distribution is. These ribbons could stretch across given segments of the distribution such as the central 50 and 95 percentage intervals. Using ribbons rather than points conveys somewhat less information about a distribution, but can be convenient if very many simulations are plotted.
 
 %%%%%% Section: simPH
 \section[simPH: Tools]{\pkg{simPH}: Tools for simulating and graphing effects}
 
-One reason that researchers have inconsistently incorporated suggestions to test for and examine time interactions and nonlinearities in their Cox-type models and show their estimation uncertainty is that there has been a lack of computational capabilities to easily do so. In \proglang{R} the \pkg{survival} \citep{R-survival} package has functions for testing the proportional hazards assumption. The \pkg{survival} and \pkg{Zelig} \citep{R-zelig} packages can estimate models with splines and interactions. However, their capabilities for graphically showing these estimates and associated uncertainty are very limited. \pkg{Zelig} can plot basic estimates from Cox PH models using simulation techniques, but not time-interactive or nonlinear spline effects. Current capabilities for showing results from splines present results in difficult to interpret quantities. In general the capabilities for showing results from time interactions is very limited. Usually, showing these types of results requires considerable effort to extract estimates from model objects and then devise ways to show them graphically. See for example Licht's \citeyearpar{Licht2011data} \proglang{Stata} \citep{StataCite} code for replicating the time-interaction plots in her paper. No method allows you to easily plot shortest probability intervals and virtually none effectively uses visual weighting.
+One reason that researchers have inconsistently incorporated suggestions to test for and examine time interactions and nonlinearities in their Cox PH models and show their estimation uncertainty is that there has been a lack of computational capabilities to easily do so. In \proglang{R} the \pkg{survival} \citep{R-survival} package has functions for testing the proportional hazards assumption. The \pkg{survival} and \pkg{Zelig} \citep{R-zelig} packages can estimate models with splines and interactions. However, their capabilities for graphically showing these estimates and associated uncertainty are very limited. \pkg{Zelig} can plot basic estimates from Cox PH models using simulation techniques, but not time-interactive or nonlinear spline effects. Current capabilities for showing results from splines present results in difficult to interpret quantities. In general the capabilities for showing results from time interactions is very limited. Usually, showing these types of results requires considerable effort to extract estimates from model objects and then devise ways to show them graphically. See for example Licht's \citeyearpar{Licht2011data} \proglang{Stata} \citep{StataCite} code for replicating the time-interaction plots in her paper. No method allows you to easily plot shortest probability intervals and virtually none effectively uses visual weighting.
 
 To solve these problems I am introducing the \pkg{simPH} package for \proglang{R}. There are three basic steps to use the package:
 
 \begin{enumerate}
-    \item Estimate a Cox-type model using \pkg{survival}'s \code{coxph} function.
+    \item Estimate a Cox PH model using \pkg{survival}'s \code{coxph} function.
     \item Simulate parameter estimates and calculate quantities of interest, e.g., relative hazards, first differences, hazard ratios, marginal effects for linear interactions, or hazard rates, using the function from the  \pkg{simPH} package corresponding to the effect type. See Table~\ref{simTable} for a summary of the simulation functions.
     \item Plot the simulations using the \code{simGG} method.
 \end{enumerate}
@@ -231,26 +230,26 @@ To solve these problems I am introducing the \pkg{simPH} package for \proglang{R
     \end{center}
 \end{table}
 
-\pkg{simPH}'s simulation functions follow \cite{King2000} to simulate parameters\footnote{\pkg{simPH} uses the \pkg{MASS} \citep{R-MASS} \proglang{R} package to draw the simulations.} and calculate a variety of quantities of interest. The user can specify the number of simulations to run per fitted value with the \code{nsim} argument. The default is 1000. The more simulations conducted, the better picture we get of the probability distributions our parameters are from \citep[349]{King2000}. Warning: in some cases, especially with penalized splines, it is easy to ask the program to create more simulations than average desktop computers can easily handle. Therefore the user may need to balance a desire for a clear view of the probability distribution a quantity of interest comes from with what is computationally feasible. 
+\pkg{simPH}'s simulation functions follow \cite{King2000} to simulate parameters and calculate a variety of quantities of interest. The user can specify the number of simulations to run per fitted value with the \code{nsim} argument. The default is 1,000. Warning: in some cases, especially with penalized splines, it is easy to ask the program to create more simulations than an average desktop computer can easily handle. The user may need to balance a desire for a clear view of the probability distribution a quantity of interest comes from with what is computationally feasible. 
 
-`'\pkg{simPH}'s simulation functions allow the user to keep either the traditional central interval of the simulations' distributions (the middle 95 percent by default) or use the shortest probability interval (also 95 percent by default). In either case the range is set with the \code{ci} argument, i.e., to find the central 90 percent interval use \code{ci = 0.9}. To tell \pkg{simPH} to find the shortest probability interval with any of \pkg{simPH}'s simulation functions simply set the argument \code{spin = TRUE}.\footnote{This capability was developed from \cite{Liu2013} and the accompanying code in Liu's \citeyearpar{R-SPIn} \pkg{SPIn} \proglang{R} package. It is currently unavailable for hazard rates.} 
+\pkg{simPH}'s simulation functions allow the user to keep either the traditional central interval of the simulations' distributions or use the shortest probability interval (both are the 95 percent interval by default). In either case the range is set with the \code{ci} argument, i.e., to find the central 90 percent interval use \code{ci = 0.9}. To tell \pkg{simPH} to find the shortest probability interval with any of \pkg{simPH}'s simulation functions simply set the argument \code{spin = TRUE}.\footnote{This capability was developed from \cite{Liu2013} and the accompanying code in Liu's \citeyearpar{R-SPIn} \pkg{SPIn} \proglang{R} package. It is currently unavailable for hazard rates.} 
 
-The \code{simGG} plotting method can then be used to plot these simulated values as semi-transparent points, lines, or ribbons. It is important to note that while points and ribbons plot values in the selected interval for each value of the x-axis lines plots simulations in the selected interval for all values plotted on the x-axis. This is to avoid creating jagged line plots, though it creates an interval with a slightly different interpretation. The transparency level can be set with the argument \code{alpha}. If points or lines are used, \code{alpha} sets the transparency level for simulation values at the center of the distribution. Simulation values further from the center become more transparent the further out they are. A smoothing line of a type that can be specified by the user with the \code{method} argument is also plotted to summarize the distribution's central tendency. In general, any smoothing method accepted by \pkg{ggplot2} \citep{R-ggplot2} can be used. By plotting semi-transparent points for each simulated quantity of interest value or lines for the series of values from each simulation, \code{simGG} visually weights simulation distributions. 
+The \code{simGG} plotting method can then be used to plot these simulated values as semi-transparent points, lines, or ribbons. To choose between points, lines, or ribbons use the \code{type} argument and set it, simply enough, to \code{points}, \code{lines}, or \code{ribbons}, respectively. The default is \code{type = `points'}.  It is important to note that while \code{points} and \code{ribbons} plot values in the selected interval for each value of the x-axis, \code{lines} plots simulations in the selected interval for all values plotted on the x-axis. This is to avoid creating jagged line plots, though it creates an interval with a slightly different interpretation. 
 
-If the user selects ribbon plots, three ribbons will be show. The most transparent shows the furthest extent of the central or shortest probability interval. The less transparent ribbon shows the central 50 percent of this interval. And the middle line shows the interval's median.
+The transparency level can be set with the argument \code{alpha}. If points or lines are used, \code{alpha} sets the transparency level for simulation values at the center of the distribution. Simulation values further from the center become more transparent the further out they are. If the user selects ribbon plots, three ribbons will be show. The most transparent shows the furthest extent of the central or shortest probability interval. The less transparent ribbon shows the central 50 percent of this interval. And the middle line shows the interval's median.
 
-To choose between points, lines, or ribbons use the \code{type} argument and set it to \code{points}, \code{lines}, or \code{ribbons}, respectively. The default is \code{type = 'points'}. 
+A smoothing line of a type that can be specified by the user with the \code{method} argument is also plotted to summarize the distribution's central tendency. In general, any smoothing method accepted by \pkg{ggplot2} \citep{R-ggplot2} can be used. By plotting semi-transparent points for each simulated quantity of interest value or lines for the series of values from each simulation, \code{simGG} visually weights simulation distributions. 
 
-The \code{simGG} method draws on \pkg{ggplot2} to plot the simulations. In most cases \code{simGG} returns a \pkg{ggplot2} \code{gg} object. As such you can add any aesthetic attributes to the plots that \pkg{ggplot2} will allow.
+The \code{simGG} method draws on \pkg{ggplot2} to plot the simulations. In most cases \code{simGG} returns a \pkg{ggplot2} \code{gg} object. As such, you can add any aesthetic attributes to the plots that \pkg{ggplot2} will allow.
 
 %%%%%% Section: Demonstrations
 \section[Demonstrations]{Demonstrations}
 
-To illustrate \pkg{simPH}'s syntax and capabilities we will first go through a simple example without interactive or nonlinear effects. Then we will replicate key figures and findings from \cite{Licht2011} and \cite{Keele2010}. The quantities of interest from these studies are from time-interactive and penalized spline effects. For examples with other quantities of interest and variable types please see \pkg{simPH}'s documentation. 
+To illustrate \pkg{simPH}'s syntax and capabilities we will first go through a simple example without interactive or nonlinear effects. Then we will replicate key figures and findings from \cite{Licht2011} and \cite{Keele2010}. The quantities of interest from these studies are from time-interactive and penalized spline effects. These effects help correct for nonproportional hazards. For examples with other quantities of interest and variable types please see \pkg{simPH}'s documentation. 
 
 \subsection{Simple non-interactive and linear example}
 
-\pkg{simPH} can be used to show results from effects that are not explicitly modeled as interactions or nonlinearly. To do this use the \code{coxsimLinear} function. Let's look at an example using a hypothetical data set called \code{hmohiv} from \cite{hosmer2008}.  The data is hosted by and the basic estimation model is from \cite{UCLAtest}. The data set contains 100 members of a Health Maintenance Organization (HMO). All of the members are HIV positive. The HMO wants to examine their survival times. Note: the model we will estimate below does not violate the proportional hazard assumption.
+\pkg{simPH} can be used to show results from effects that are not explicitly modeled as interactions or with nonlinear transformations. To do this use the \code{coxsimLinear} function. Let's look at an example using a hypothetical data set called \code{hmohiv} from \cite{hosmer2008}.  The data is hosted by and the basic estimation model is from \cite{UCLAtest}. The data set contains 100 members of a Health Maintenance Organization (HMO). All of the members are HIV positive. The HMO wants to examine their survival times. Note: the model we will estimate below does not violate the proportional hazard assumption.
 
 Let's estimate a simple Cox PH model that includes information on the members' ages and intravenous drug use. We can load the necessary packages for this example and download the data with the following code:
 
@@ -262,14 +261,9 @@ hmohiv <- read.table(
             sep = ",", header = TRUE)
 @
 
-<<internal, include=FALSE>>=
-library(ggplot2)
-library(gridExtra)
-@
-
 \noindent In the data set intravenous drug use is recorded as a binary variable called \code{drug}, where one is a history of drug use and zero otherwise. Each member's age in years is recorded in a variable called \code{age}. The ages range from 20 to 54 with a median of 35. 
 
-We are going to present results for how age is associated with survival times. Remember that quantities of interest such as relative hazards and hazard ratios are comparisons. Relative hazards are simply hazard ratios comparing a unit with a value of zero on some variable to another unit with another value of this variable. For the \code{age} variable this would mean a comparison between someone with an age of zero and someone with some other age. This may not be a particularly interesting comparison. In our case, it is also an out of sample comparison as the youngest observed HMO member is 20 years old. We can easily create a much more substantively interesting comparison by making the reference value the median age (35):
+We are first going to present results for how age is associated with survival times. Remember that quantities of interest such as relative hazards and hazard ratios are comparisons. Relative hazards are simply hazard ratios comparing a unit with a value of zero on some variable to another unit with another value of this variable. For the \code{age} variable this would mean a comparison between someone with an age of zero and someone with some other age. This may not be a particularly interesting comparison. In our case, it is also an out of sample comparison as the youngest observed HMO member is 20 years old. We can easily create a much more substantively interesting comparison by making the reference value the median age (35):
 
 <<LinearModel1_2, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE>>=
 hmohiv$AgeMed <- hmohiv$age - 35 
@@ -282,19 +276,19 @@ M1 <- coxph(Surv(time, censor) ~ AgeMed + drug,
             method = "breslow", data = hmohiv)
 @
 
-Age is clearly a time-varying quantity. Not only does it simply vary over time in the way a person's income (probably) does, for example, but in effect it has a linear interaction with time. However, in our model we do not explicitly interact age with time as we will interact other variables with time in later examples. Therefore we can treat the variable in the same way as personal income for the purposes of creating simulations with \pkg{simPH} and can therefore use the \code{coxsimLinear} function:
+Age is clearly a time-varying quantity. Not only does it change over time in the way a person's income (probably) does, for example, but in effect it has a linear interaction with time. However, in our model we do not explicitly interact age with time as we will interact other variables with time in later examples. We can treat the variable in the same way as personal income for the purposes of creating simulations with \pkg{simPH} and so can use the \code{coxsimLinear} function:
 
 <<LinearModel1_4, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE>>=
-Sim1 <- coxsimLinear(M1, b = "AgeMed", Xj = seq(-15, 19, by = 0.2), nsim = 100)
+Sim1 <- coxsimLinear(M1, b = "AgeMed", Xj = seq(-15, 19, by = 1))
 @   
 
-\noindent We told \code{coxsimLinear} that we wanted to simulate relative hazards (the default quantity of interest) based on our model object \code{M1}. We specify which variable to find hazard ratios for using the \code{b} argument. The \code{Xj} argument lets us set the fitted values of $x_{j}$; in this case a sequence of values between -15 and 19 at intervals of 0.2. The smaller the interval, the smoother the resulting graph will look. To graphically present the results now in the \code{Sim1} object we can use the \code{simGG} method. The following code creates the left panel of Figure~\ref{LinearPlot}:
+\noindent We told \code{coxsimLinear} that we wanted to simulate relative hazards (the default quantity of interest) based on our model object \code{M1}. We specified which variable to find hazard ratios for using the \code{b} argument. The \code{Xj} argument lets us set the fitted values of $x_{j}$; in this case a sequence of values between -15 and 19 at intervals of 1. The smaller the interval, the smoother the resulting graph will look. To graphically present the results now in the \code{Sim1} object we can use the \code{simGG} method. The following code creates the left panel of Figure~\ref{LinearPlot}:
 
 <<LinearModel1_5, eval=FALSE>>=
 simGG(Sim1)
 @
 
-\noindent We can set the x and y axis labels make other aesthetic changes to create the right panel of Figure~\ref{LinearPlot} using the following code:
+\noindent We can set the x and y axis labels and make other aesthetic changes to create the right panel of Figure~\ref{LinearPlot} using the following code:
 
 <<LinearModel1_6, eval=FALSE, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE>>=
 simGG(Sim1, xlab = "\nYears of Age from the Sample Median (35)", 
@@ -304,7 +298,7 @@ simGG(Sim1, xlab = "\nYears of Age from the Sample Median (35)",
 
 \begin{figure}
 
-<<LinearModel1_7, tidy=FALSE, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE, fig.height=4, out.width='0.95\\linewidth', dev='pdf'>>=
+<<LinearModel1_7, tidy=FALSE, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, out.width='0.95\\linewidth', dev='pdf'>>=
 # Plot results with simGG default
 Plot1_1 <- simGG(Sim1)
 
@@ -317,21 +311,21 @@ Plot1_2 <-simGG(Sim1, xlab = "\nYears of Age from the\n Sample Median (35)",
 grid.arrange(Plot1_1, Plot1_2, ncol = 2)
 @
 
-    \caption{Simulated relative hazards of age on survival time for HIV positive HMO members.}
+    \caption{Simulated relative hazards of age on survival time for HIV positive HMO members. Default \code{simGG} plot (left) and with user-defined styling (right).}
     \label{LinearPlot}
 \end{figure}
 
-\noindent In Figure~\ref{LinearPlot} we can see that the relative hazard at \code{AgeMed} zero (age 35) is one. A relative hazard for a unit at zero is always one, as it is a ratio of the hazards with itself. The simulated relative hazards for ages below the median are less than one. This means that they are less likely to die at a given point in time than someone aged 35. Ages above the median have a relative hazard greater than one and are therefore more likely to die than 35 year olds. We can see in this figure that we have estimated a 54 year old (those 19 years older than the median) to be about six times more likely than 35 year olds to die, all else equal.    
+\noindent We can see in the figure that the relative hazard at \code{AgeMed} zero (age 35) is one. A relative hazard for a unit at zero is always one, as it is a ratio of the hazards with itself. The simulated relative hazards for ages below the median are less than one. This means that they are less likely to die at a given point in time than someone aged 35. Ages above the median have a relative hazard greater than one and so are more likely to die than 35 year olds. We can see in this figure that we have estimated a 54 year old (those 19 years older than the median) to be about six times more likely than 35 year olds to die, all else equal.    
 
-Three quick notes on syntax. The \code{xlab} and \code{ylab} arguments in \code{simGG} allowed us to set the x-axis and y-axis labels respectively. The backslash followed by the letter \code{n} creates a new line in the output.
+The \code{xlab} and \code{ylab} arguments in \code{simGG} allowed us to set the x-axis and y-axis labels respectively. The backslash followed by the letter \code{n} creates a new line in the label.
 
-We could also use \pkg{simPH} to find and plot quantites of interest for the binary \code{drug} use variable. For example, using the model object \code{M1} as before we first simulate relative hazards for the variables' two levels zero and one:
+We can also use \pkg{simPH} to find and plot quantities of interest for the binary \code{drug} use variable. For example, using the model object \code{M1} we simulate relative hazards for the variable's two levels: zero and one.
 
 <<LinearModel1_8, tidy=FALSE, message=FALSE>>=
 Sim2 <- coxsimLinear(M1, b = "drug", Xj = 0:1)
 @  
 
-\noindent We can then use \code{simGG} (with some stylistic modifications)\footnote{It is important to note that the \code{method} argument should be set to \code{method = "lm"} (i.e. linear) when using binary variables. The nonlinear smoothers will not work with fewer than 10 x-axis values.} to create the plot in Figure~\ref{LinearPlotDrug}. Remember from our earlier discussion in Section 2 that a relative hazard is the change in the hazard when the covariate is `switched on' at some level that is not zero. As the \code{drug} variable is binary, it only has two realistic levels: zero and one. As such there is only really one substantively meaningful relative hazard in Figure~\ref{LinearPlotDrug}.
+\noindent We can then use \code{simGG} (with some stylistic modifications) to create the plot in Figure~\ref{LinearPlotDrug}. It is important to note that the \code{method} argument should be set to \code{method = "lm"} (i.e. linear) when using binary variables. The nonlinear smoothers will not work with fewer than 10 x-axis values.
 
 \begin{figure}[t]
 
@@ -343,7 +337,7 @@ simGG(Sim2, psize = 3, xlab = "",
                        labels = c('\nNo Drug Use', '\nDrug Use'))
 @
 
-    \caption{Simulated relative hazards of drug use history for HIV positive HMO members.}
+    \caption{Simulated relative hazards of drug use history on survival time for HIV positive HMO members.}
     \label{LinearPlotDrug}
 \end{figure}
 
@@ -352,7 +346,7 @@ simGG(Sim2, psize = 3, xlab = "",
 
 Let's now look at how to use \pkg{simPH} to explore time-interactive effects that are explicitly created by interacting a given variable in the estimation model with some time transformation. To do this we will recreate plots from \cite{Licht2011}. She re-examines Golub and Steunenberg's \citeyearpar{Golub2007} analysis of European Union legislative deliberation time. They wanted to find out what factors affected the amount of time it took the European Union to pass a new piece of legislation. Key variables they examined included the voting procedure that was used for a given piece of legislation, including the so-called qualified majority vote (QMV) procedure\footnote{The procedure changed over time, but essentially QMV requires some voting majority greater than 50\% + 1. See the European Union's website for more details: \url{http://europa.eu/legislation_summaries/glossary/qualified_majority_en.htm} (accessed January 2014).}, and the amount of other legislation pending, i.e. legislative backlog. Both of these variables violated the proportional hazard assumption and were more accurately modeled with log-time interactions.
 
-The left panel of Figure~\ref{TVCQMV} recreates Licht's \citeyearpar{Licht2011} figure showing the first difference of a log-time interaction for how the effect of the QMV procedure on legislative deliberation time changes as the number of days of deliberation increases \citep[see][236]{Licht2011}.\footnote{Her original figure was not in terms of a percentage difference to make it more comparable to a figure in Golub and Steunenberg's original. The results are presented in terms of percentage difference, as the first difference is commonly reported. The pre and post Single European Act time periods are not separated out for simplicity. Finally, I also examined whether or not nonlinearity functional forms would be better fits than time interactions as per our discussion above. However, no evidence of this.} To create this figure we first load the data \code{GolubEUPData}. This data set is included in \pkg{simPH}.
+The left panel of Figure~\ref{TVCQMV} recreates Licht's \citeyearpar{Licht2011} figure showing the first difference of a log-time interaction for how the effect of the QMV procedure on legislative deliberation time changes as the number of days of deliberation increases \citep[see][p. 236]{Licht2011}.\footnote{Her original figure was not in terms of a percentage difference to make it more comparable to a figure in Golub and Steunenberg's original. The results are presented in terms of percentage difference, as the first difference is commonly reported. The pre and post Single European Act time periods are not separated out for simplicity. Finally, I also examined whether or not nonlinearity functional forms would be better fits than time interactions as per our discussion above. However, no evidence of this was found.} To create this figure we first load the data set \code{GolubEUPData}. This data set is included in \pkg{simPH}.
 
 <<TVCModel1_1, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE>>=
 data("GolubEUPData")
@@ -364,9 +358,9 @@ Then we create the log-time interactions. Before jumping into this, let's look a
 head(GolubEUPData[, 2:5])
 @
 
-We can see that each piece of prospective legislation is identified with a case number in the \code{caseno} variable. The \code{event} variable records if the event of interest occurred (i.e. the legislation was passed) or not. Observation intervals \code{begin} at 0 and extend to the \code{end} when either the event occurs, or one of the covariate values change. If we simply create a time interaction by using the \code{end} variable as the time value, we will over-measure the interaction for failures before this time. For example, imagine we create a simple interaction between a binary variable and time. Imagine one unit has the value 1 for the binary variable and that this unit experiences an event of interest at time 1,000 in a data set formatted as above. The time interaction would then be treated as 1,000 for all failures at time $t \leq 1,000$. This would be inaccurate. At time 500, for example the interaction should be 500, not 1,000.
+We can see that each piece of prospective legislation is identified with a case number in the \code{caseno} variable. The \code{event} variable records if the event of interest occurred (i.e. the legislation was passed) or not. Observation intervals \code{begin} at 0 and extend to the \code{end} when either the event occurs, or one of the covariate values change. If we simply create a time interaction by using the \code{end} variable as the time value, we will over-measure the interaction for failures before this time. For example, imagine we create a simple interaction between a binary variable and time. One unit has the value 1 for the binary variable and this unit experiences an event of interest at time 1,000 in a data set formatted as above. The time interaction would then be treated as 1,000 for all failures at time $t \leq 1,000$. This would be inaccurate. At time 500, for example the interaction should be 500, not 1,000.
 
-To solve this problem, \pkg{simPH} includes a function called \code{SurvExpand} to expand a data set out into equally spaced intervals. It keeps all intervals that end at an observed event time or when a covariate changes. These are the only time points interesting to the Cox PH model and removing unneeded periods helps save memory. The resulting data frame allows us to create accurate time interactions. Here is how we use the function with the \code{GolubEUPData} data:
+To solve this problem, \pkg{simPH} includes the \code{SurvExpand} function. It expands a data set out into equally spaced intervals. It keeps all intervals that end at an observed event time and when a covariate changes. These are the only time points that are interesting to the Cox PH model and removing unneeded periods helps save memory. The resulting data frame allows us to create accurate time interactions. Here is how we use the function with the \code{GolubEUPData} data:
 
 <<TVCModel1_1_2, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE>>=
 GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
@@ -375,81 +369,52 @@ GolubEUPData <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
 head(GolubEUPData[, 1:4])
 @
 
-\noindent Now we can create the log-time interactions.
-
-The two time-interaction variables we will focus on are for qualified majority voting (\code{qmv}) and legislative backlog (\code{backlog}). Other time-interacted variables are from the original model. Notice below the use of the \code{tvc} function to create the log-time interactions. The function is included with the \pkg{simPH} package. The \code{data} argument specifies the data frame where our covariate and time variables are. The covariate we wish to interact is specified with \code{b} and the time variable with \code{tvar}. Finally, we specify the function of time with the \code{tfun} argument. The additional creation of the \code{Golubtvc} function is not necessary, it just makes the code tidier. 
+Now we can create the log-time interactions. The two time-interaction variables we will focus on are for qualified majority voting (\code{qmv}) and legislative backlog (\code{backlog}). Other time-interacted variables are from the original model. Notice the use of the \code{tvc} function below to create log-time interactions. The function is included with the \pkg{simPH} package. The \code{data} argument specifies the data frame where our covariate and time variables are. The covariate we wish to interact is specified with \code{b} and the time variable with \code{tvar}. Finally, we specify the function of time with the \code{tfun} argument. 
 
 <<TVCModel1_2, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE>>=
-Golubtvc <- function(x){
-  tvc(data = GolubEUPData, b = x, tvar = "end", tfun = "log")
-}
-GolubEUPData$Lqmv <- Golubtvc("qmv")
-GolubEUPData$Lbacklog <- Golubtvc("backlog")
-GolubEUPData$Lcoop <- Golubtvc("coop")
-GolubEUPData$Lcodec <- Golubtvc("codec")
-GolubEUPData$Lqmvpostsea <- Golubtvc("qmvpostsea")
-GolubEUPData$Lthatcher <- Golubtvc("thatcher")
+BaseVars <- c('qmv', 'backlog', 'coop', 'codec', 'qmvpostsea', 'thatcher')
+GolubEUPData <- tvc(GolubEUPData, b = BaseVars, tvar = 'end', tfun = 'log')
+
+names(GolubEUPData)[18:23]
 @
+
+Notice that the time interaction varibles are added to the original \code{GolubEUPData} using the original variable names plus a suffix denoting the log transformation.
 
 Now estimate the model with \code{coxph}. Note that each log-time interaction is entered into the model along with the corresponding non-time interacted term.
 
-
 <<TVCModel1_3, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE>>=
 M2 <- coxph(Surv(begin, end, event) ~ qmv + qmvpostsea + qmvpostteu +
-              coop + codec + eu9 + eu10 + eu12 + eu15 + thatcher + 
-              agenda + backlog + Lqmv + Lqmvpostsea + Lcoop + Lcodec +
-              Lthatcher + Lbacklog, 
+                coop + codec + eu9 + eu10 + eu12 + eu15 + thatcher + 
+                agenda + backlog + qmv_log + qmvpostsea_log + coop_log + 
+                codec_log + thatcher_log + backlog_log, 
             data = GolubEUPData, ties = "efron") 
 @
 
-In the following code chunk we take the \code{M2} model object created by \code{coxph} and use it in \pkg{simPH}'s \code{coxsimtvc} function to simulate the first difference of the time-interactive effect of qualified majority voting on directive deliberation time from 80 through 2000 days after deliberation begins. We specify the quantity of interest that we want to simulate with the \code{qi} argument. The non-time interacted term is entered with the \code{b} argument as before. The time interacted term is entered with \code{btvc}. The form of the time interaction is declared with the \code{tfun} argument, i.e \code{tfun = "log"}.\footnote{Other options include \code{"linear"} for linear time-interactions and \code{"pow"} for polynomials. If \code{tfun = "pow"} then also set the argument \code{pow} to specify the power the time interaction was raised to.} \code{Xj = 1} specifies that the difference is between values of \code{qmv} 1 and 0. This is a comparison between using QMV or not. We could change the $x_{l}$ value with the \code{Xl} argument, but this is not relevant for binary variables. The \code{from} and \code{to} arguments allow us to specify the time period over which to simulate the quantity of interest. The \code{by} argument allows us to specify the increment of the time sequence to simulate values at. 
+In the following code chunk we take the \code{M2} model object created by \code{coxph} and use it in \pkg{simPH}'s \code{coxsimtvc} function to simulate the first difference of the time-interactive effect of qualified majority voting on directive deliberation time. We create the simulations for 80 through 2000 days after deliberation begins. We specify the quantity of interest that we want to simulate with the \code{qi} argument. The non-time interacted term is entered with the \code{b} argument. The time interacted term is entered with \code{btvc}. The form of the time interaction is declared with the \code{tfun} argument, i.e \code{tfun = `log'}.\footnote{Other options include \code{linear} for linear time-interactions and \code{pow} for polynomials. If \code{tfun = "pow"} then also set the argument \code{pow} to specify the power the time interaction was raised to.} \code{Xj = 1} specifies that the difference is between values of \code{qmv} 1 and 0. This is a comparison between using QMV or not. We could change the $x_{l}$ value with the \code{Xl} argument, but this is not relevant for binary variables. The \code{from} and \code{to} arguments allow us to specify the time period over which to simulate the quantity of interest. The \code{by} argument allows us to specify the increment of the time sequence to simulate values at. 
 
-<<TVCModel2_1, eval=FALSE, tidy=FALSE>>=
-Sim3 <- coxsimtvc(obj = M2, b = "qmv", btvc = "Lqmv",
-                  qi = "First Difference", Xj = 1, tfun = "log", 
-                  from = 80, to = 2000, by = 5, nsim = 100)  
+<<TVCModel2_1, tidy=FALSE, message=FALSE>>=
+Sim3 <- coxsimtvc(obj = M2, b = "qmv", btvc = "qmv_log",
+                    qi = "First Difference", Xj = 1,
+                    tfun = "log", from = 80, to = 2000, by = 10)
 @
 
-Once we have created the \code{Sim3} object containing the simulations, we can simply use the \code{simGG} method to plot the results. In this example, we adjusted the median line size with the \code{lsize = 0.5} argument. This makes this particular plot clearer. Finally, the \code{legend = FALSE} argument hides the legend describing the fitted value comparisons that are being made between $x_{j}$ and $x_{l}$. A legend would be fairly uninformative in this case as we are only comparing the values 1 and 0.\footnote{The default is to show the legend. The \code{legend} argument follows the \pkg{ggplot2} syntax for creating plot guides, so to show the legend use \code{legend = "legend"}.} Finally, in we added a title to the whole plot using the \code{title} argument.
+Once we have created the \code{Sim3} object containing the simulations, we can simply use the \code{simGG} method to plot the results. In this example, we adjust the median line size with the \code{lsize = 0.5} argument. This makes this particular plot clearer. The \code{legend = FALSE} argument hides the legend describing the fitted value comparisons that are being made between $x_{j}$ and $x_{l}$. A legend is uninformative in this case as we are only comparing the values one and zero. The default is to show the legend. The \code{legend} argument follows the \pkg{ggplot2} syntax for creating plot guides, so to show the legend use \code{legend = "legend"}.
 
 <<TVCModel2_2, eval=FALSE, tidy=FALSE>>=
-simGG(Sim3, xlab = "\nTime in Days", title = "Central Interval\n", 
-      type = "ribbons", lsize = 0.5, legend = FALSE, alpha = 0.3)    
+simGG(Sim3, xlab = "\nTime in Days", type = "ribbons", lsize = 0.5, 
+      legend = FALSE, alpha = 0.3)    
 @
 
-We can clearly see in the left panel of Figure~\ref{TVCQMV}\footnote{The figures' ribbons extend across the middle or shortest probability 95 percent interval of the simulations. \\ As in Licht's \citeyearpar{Licht2011} original the time period plotted is truncated from 80 to 2000 to make the estimates more easily interpretable.} that QMV increases the probability of passing a directive early in the deliberation process (almost by 300 percent at about 80 days). But as the deliberation time increases, the effect decreases and then becomes negative at about 1000 days. Finally, the rate of decrease levels off after 1000 days relative to before. 
-
-The right panel of Figure~\ref{TVCQMV} shows the shortest-probability interval for QMV simulated from \code{M2}. To create this we used all of the same code as above, except \code{spin = TRUE} was added to the \code{coxsimtvc} call. Notice that in this case, the central and shortest probability intervals are largely equivalent, because the underlying simulation distribution is fairly normally distributed. Also because \code{simGG} returns \pkg{ggplot2} \code{gg} model objects, we can use \code{grid.arrange} from the \pkg{gridExtra} package \citep{R-gridExtra} to combine the two plots into one figure.\footnote{If we placed the two plots created by \code{simGG} into their own objects called \code{Plot1} and \code{Plot2} then we could combine them into one figure using \code{gridExtra::grid.arrange(Plot1, Plot2, ncol = 2)}.}
+We can clearly see in Figure~\ref{TVCQMV}\footnote{The figures' ribbons extend across the central probability 95 percent interval of the simulations. \\ As in Licht's \citeyearpar{Licht2011} original the time period plotted is truncated from 80 to 2000 to make the estimates more easily interpretable.} that QMV increases the probability of passing a directive early in the deliberation process (almost by 250 percent at about 80 days). But as the deliberation time increases, the effect decreases and then becomes negative at about 1,000 days. 
 
 \begin{figure}
 
-<<TVCModelComb, eval=T, tidy=FALSE, echo=FALSE, message=F, warning=F, fig.width=7, fig.height=4, out.width='0.95\\linewidth', dev='pdf'>>=
-## Create simtvc object for first difference (central interval)
-Sim3_1 <- coxsimtvc(obj = M2, b = "qmv", btvc = "Lqmv",  
-                    qi = "First Difference", Xj = 1,
-                    tfun = "log", from = 80, to = 2000, 
-                    by = 5, ci = 0.95, nsim = 100)
+    %\includegraphics[width=0.96\textwidth]{figure/TVCModelComb.pdf}
 
-# Create simtvc object for first difference (SPIn)
-Sim3_2 <- coxsimtvc(obj = M2, b = "qmv", btvc = "Lqmv",
-                    qi = "First Difference", Xj = 1,
-                    tfun = "log", from = 80, to = 2000, 
-                    by = 5, ci = 0.95, spin = TRUE, nsim = 100)
-
-
+<<TVCModel1, tidy=FALSE, echo=FALSE, message=F, warning=F, fig.width=7, fig.height=4, out.width='0.95\\linewidth', dev='pdf'>>=
 # Create first difference plots
-Plot3_1 <- simGG(Sim3_1, xlab = "\nTime in Days", 
-                 title = "Central Interval\n", alpha = 0.3,
-                 type = "ribbons", lsize = 0.5, legend = FALSE)  
-                  
-Plot3_2 <- simGG(Sim3_2, ylab = "", xlab = "\nTime in Days",
-                 title = "SPIn\n", alpha = 0.3,
-                 type = "ribbons", lsize = 0.5, legend = FALSE)
-
-# Combine plots
-grid.arrange(Plot3_1, Plot3_2, ncol = 2) 
-######### Save M2 #############
-
+simGG(Sim3, xlab = "\nTime in Days", alpha = 0.3,
+      type = "ribbons", lsize = 0.5, legend = FALSE)
 @
 
     \caption{Simulated first differences for the effect of Qualified Majority Voting on the time it takes to pass legislation.}
@@ -457,13 +422,13 @@ grid.arrange(Plot3_1, Plot3_2, ncol = 2)
 
 \end{figure}
 
-Let's look at another example, this time with multiple comparisons plotted in one figure. Figure~\ref{BacklogRH} \footnote{It replicates the right panel of Licht's \citeyearpar{Licht2011} Figure 3 \citeyearpar[][237]{Licht2011}. One difference is that she estimates uncertainty from 10 draws of 1000 simulations, whereas Figure~\ref{BacklogRH} is based on one draw of 1000 simulations. The figure's ribbons extend across the middle 95 percent of the simulations.} shows the effect of different levels of legislative backlog (\code{backlog}) on directive deliberation time from 1200 to 7000 days after the directive was proposed. The effect shown is also modeled as a log-time interaction. The process for creating the plot is similar to what we have already seen. The only differences to note are that we entered a sequence of values for backlogged legislation for \code{Xj} in \code{coxsimtvc} ranging from 40 to 200 at increments of 40. This creates five separate sets of relative hazard simulations, one for each value of \code{Xj} compared to 0. Finally, we specified the legend name for the plot in the \code{simGG} call with the \code{leg.name} argument.
+Let's look at another example, this time with multiple comparisons plotted in one figure. Figure~\ref{BacklogRH}\footnote{It replicates the right panel of Licht's \citeyearpar{Licht2011} Figure 3 \citeyearpar[][237]{Licht2011}. One difference is that she estimates uncertainty from 10 draws of 1,000 simulations, whereas Figure~\ref{BacklogRH} is based on one draw of 1,000 simulations. The figure's ribbons extend across the middle 95 percent of the simulations.} shows the effect of different levels of legislative \code{backlog} on directive deliberation time from 1,200 to 7,000 days after the directive was proposed. The effect shown is also modeled as a log-time interaction. The process for creating the plot is similar to what we have already seen. The only differences to note are that we entered a sequence of values for backlogged legislation for \code{Xj} in \code{coxsimtvc} ranging from 40 to 200 at increments of 40. This creates five separate sets of relative hazard simulations, one for each value of \code{Xj} compared to zero. Finally, we specified the legend name for the plot in the \code{simGG} call with the \code{leg.name} argument.
 
 <<TVCBacklog1, echo=TRUE, tidy=FALSE, eval=FALSE>>=
-Sim4 <- coxsimtvc(obj = M2, b = "backlog", btvc = "Lbacklog",
+Sim4 <- coxsimtvc(obj = M2, b = "backlog", btvc = "backlog_log",
                   qi = "Relative Hazard", Xj = seq(40, 200, 40),
                   tfun = "log", from = 1200, to = 7000, by = 100,
-                  nsim = 100) 
+                  nsim = 200) 
 
 simGG(Sim4, xlab = "\nTime in Days", type = "ribbons",
       leg.name = "Backlogged \n Items")
@@ -471,12 +436,12 @@ simGG(Sim4, xlab = "\nTime in Days", type = "ribbons",
 
 \begin{figure}
 
-<<TVCBacklog2, tidy=FALSE, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE, fig.width=7, fig.height=4, out.width='0.95\\linewidth', dev='pdf'>>=
+<<TVCBacklog2, tidy=FALSE, echo=FALSE, message=F, warning=F, fig.width=7, fig.height=4, out.width='0.95\\linewidth', dev='pdf'>>=
 # Create simtvc object for relative hazard
-Sim4 <- coxsimtvc(obj = M2, b = "backlog", btvc = "Lbacklog",
+Sim4 <- coxsimtvc(obj = M2, b = "backlog", btvc = "backlog_log",
                   qi = "Relative Hazard", Xj = seq(40, 200, 40),
                   tfun = "log", from = 1200, to = 7000, by = 100,
-                  nsim = 100) 
+                  nsim = 200) 
 
 # Create relative hazard plot
 simGG(Sim4, xlab = "\nTime in Days", type = "ribbons",
@@ -486,17 +451,17 @@ simGG(Sim4, xlab = "\nTime in Days", type = "ribbons",
   \label{BacklogRH}
 \end{figure}
 
-The main conclusion we can draw from this presentation of the log-time interaction is that if a piece of legislation is not passed in the first 1200 or so days from when it was proposed, it is less likely that it will be passed if there is a large legislative backlog \cite[for more details see][236-237]{Licht2011}.  
+The main conclusion we can draw Figure~\ref{BacklogRH} is that if a piece of legislation is not passed in the first 1200 or so days from when it was proposed, it is less likely that it will be passed the larger the legislative backlog \cite[for more details see][p. 236-237]{Licht2011}.  
 
 In the previous examples, the simulation probability distributions are not strongly influenced by boundary effects or long upper tails. Because of this the central and shortest probability intervals are largely equivalent. The distributions are also relatively tight, which is indicated by fairly even visual weight across the distributions.
 
-\subsection{Nonlinear effects--penalized spline--example}
+\subsection{Nonlinear effects: penalized spline example}
 
-Let's now turn to look at how \pkg{simPH} can be used to simulate and plot quantities of interest estimated from penalized splines. To do this we will build on Keele \citeyearpar{Keele2010}. To demonstrate why we need to check for and explicitly model nonlinearity he replicated a study by \cite{Carpenter2002} on the time it takes the US Food and Drug Administration (FDA) to approve a new drug. Using the steps discussed above, he found that modeling nonlinearity with penalized splines rather than time-interactive effects was the more appropriate strategy for dealing with covariates that violated the proportional hazards assumption. This allowed him to draw conclusions that, for example, the number of FDA review staff increases the likelihood that a drug will be accepted, but that the effect diminishes after a threshold number of staff are assigned. 
+Let's now turn to look at how \pkg{simPH} can be used to simulate and plot quantities of interest estimated from penalized splines. To do this we will build on Keele \citeyearpar{Keele2010}. To demonstrate why we need to check for and explicitly model nonlinearity he replicated a study by \cite{Carpenter2002} on the time it takes the US Food and Drug Administration (FDA) to approve a new drug. Using the steps discussed above, he found that modeling nonlinearity with penalized splines rather than time-interactive effects was the more appropriate strategy for dealing with covariates that violated the proportional hazards assumption. This allowed him to draw conclusions that, for example, the number of FDA staff reviewing a drug's application increases the likelihood that it will be accepted, but that the effect diminishes after a threshold number of staff are assigned. 
 
-It has been difficult to examine and communicate the functional form, magnitude, and uncertainty surrounding spline effects. Coefficient tables are very cumbersome, because a spline fitted effect is estimated using multiple coefficients and standard errors for values of a variable in a given range, demarcated by the knots, on the hazard. Depending on the size of the ranges\footnote{With R's \code{pspline} function the range can effectively be adjusted by changing the spline's degrees of freedom.} there can quickly be many more coefficients than can be efficiently presented in a table and understood by a reader. In his results tables, Keele does not show spline coefficients and simply denotes their overall significance with standard significance stars. 
+It has been difficult to examine and communicate the functional form, magnitude, and uncertainty surrounding spline effects. Coefficient tables are very cumbersome, because a spline fitted effect is estimated using multiple coefficients, each for a different range of a covariate's values. Depending on the size of the ranges, many more coefficients are estimated than can be efficiently presented in a table and understood by a reader. Keele does not show spline coefficients in his results tables. Instead he simply denotes their overall statistical significance with standard significance stars. 
 
-In \proglang{R} you can plot estimated spline effects over a range of values with the \code{termplot} function. These plots, however, have a number of drawbacks. First, the plots show the log hazard ratio,\footnote{Log hazard ratios for a standard Cox PH model are given by: $\mathrm{log} \left\{\frac{h_{j}(t)}{h_{h}(t)}\right\} = \mathbf{\beta X}_{i}$ \cite[modified from][49]{boxsteffensmeier2004}.} which is not a particularly intuitive quantity to understand and is rarely reported in studies using Cox PH models. More importantly, to communicate uncertainty it plots standard errors, instead of the more widely used central confidence intervals. As such, casual readers could easily think the uncertainty around the spline estimates is smaller than it really is. The plots give no other information about the likely distribution of the estimated quantity of interest.
+In \proglang{R} you can plot estimated spline effects over a range of values with the \code{termplot} function. These plots, however, have a number of drawbacks. First, the plots show the log hazard ratio,\footnote{Log hazard ratios for a standard Cox PH model are given by: $\mathrm{log} \left\{\frac{h_{j}(t)}{h_{h}(t)}\right\} = \mathbf{\beta X}_{i}$ \cite[modified from][49]{boxsteffensmeier2004}.} which is not a particularly intuitive quantity to understand and is rarely reported in studies using Cox PH models. More importantly it attempts to communicate uncertainty by ploting standard errors, instead of more widely used confidence intervals. As such, casual readers could easily think the uncertainty around the spline estimates is smaller than it really is. The plots give no other information about the likely distribution of the estimated quantity of interest.
 
 \pkg{simPH} allows us to estimate quantities that we are more interested in like relative hazards, hazard rates over time, hazard ratios, and first differences. For example, let's simulate the hazard ratios for the effect of an additional drug review staff on the time it takes for a drug to be approved. Figure~\ref{Spline1}\footnote{The figure's points show the middle 95 percent of the simulations at each value of FDA staff. The line summarizing the central tendency of the distribution was created with a generalized additive model for integrated smoothness estimation.} shows the simulated hazard ratios over the full range of FDA staff per drug trial (\code{stafcder}) observed in Carpenter's data. Not only is this more informative than simply showing the coefficients and their standard errors that comprise the spline parameter estimates, it is also more informative than the current plotting method in \proglang{R}.
 
@@ -520,6 +485,7 @@ Now simulate the hazard ratios for a sequence of values with \code{coxsimSpline}
 XjFit <- seq(1100, 1700, by = 10)
 XlFit <- setXl(Xj = XjFit, diff = 1)
 
+
 Sim4 <- coxsimSpline(M3, bspline = "pspline(stafcder, df = 4)", 
                      bdata = CarpenterFdaData$stafcder,
                      qi = "Hazard Ratio",
@@ -530,7 +496,7 @@ simGG(Sim4, xlab = "\n Number of FDA Drug Review Staff",
         type = "lines")
 @ 
 
-There are a few syntax points to note. First, we created our vector of $x_{l}$ values using the \code{setXl} function. This simply takes a vector of $x_{j}$ values and creates a vector of corresponding $x_{l}$ values that are different from $x_{j}$ by a value we set with the \code{diff} argument. Second we tell \code{coxsimSpline} the term to estimate for using the \code{bspline} argument and the same syntax we used to enter the term as a penalized spline in the \code{coxph} call, i.e., \code{pspline(stafcder, df = 4)}. Third, we specified the vector containing the observed \code{stafcder} data with the \code{bdata} argument. This is important for \code{coxsimSpline} to be able to accurately find the spline knots.
+There are a few syntax points to note. First, we created our vector of $x_{l}$ values using the \code{setXl} function. This simply takes a vector of $x_{j}$ values and returns a vector of corresponding $x_{l}$ values that are different from $x_{j}$ by a value we set with the \code{diff} argument. Second, we tell \code{coxsimSpline} the term to estimate for using the \code{bspline} argument and the same syntax we used to enter the term as a penalized spline in the \code{coxph} call, i.e., \code{pspline(stafcder, df = 4)}. Third, we specified the vector containing the observed \code{stafcder} data with the \code{bdata} argument. This is important for \code{coxsimSpline} to be able to accurately find the spline knots.
 
 \begin{figure}
 
@@ -543,7 +509,7 @@ XlFit <- setXl(Xj = XjFit, diff = 1)
 Sim5 <- coxsimSpline(M3, bspline = "pspline(stafcder, df = 4)", 
                      bdata = CarpenterFdaData$stafcder,
                      qi = "Hazard Ratio",
-                     Xj = XjFit, Xl = XlFit, nsim = 100)
+                     Xj = XjFit, Xl = XlFit)
 
 # Plot simulated values
 Plot5_1 <- simGG(Sim5, xlab = "\n No. of FDA Drug Review Staff",
@@ -553,13 +519,12 @@ Plot5_1 <- simGG(Sim5, xlab = "\n No. of FDA Drug Review Staff",
 Plot5_1 <- Plot5_1 + scale_y_continuous(breaks = c(0, 20, 40, 60), 
                                      limits = c(0, 60))
 
-
 # Simulated Fitted Values: shortest probability interval
 Sim6 <- coxsimSpline(M3, bspline = "pspline(stafcder, df = 4)", 
                      bdata = CarpenterFdaData$stafcder,
                      qi = "Hazard Ratio",
                      Xj = XjFit, Xl = XlFit, 
-                     spin = TRUE, nsim = 100)
+                     spin = TRUE)
 
 # Plot simulated values
 Plot5_2 <- simGG(Sim6, xlab = "\n No. of FDA Drug Review Staff", ylab = "",
@@ -588,9 +553,11 @@ library("ggplot2")
 SimPlot1 + scale_y_continuous(breaks = c(0, 20, 40, 60), limits = c(0, 60))
 @  
 
+By simulating quantities of interest and plotting the results we can more adequately explore the estimated spline effects than we could have with previously available tools. In so doing we can bring into question the substantive significance of Keele's \citeyearpar{Keele2010} findings. Remember that Figure~\ref{Spline1} plots hazard ratios between an $x_{j}$ value that is only 1 unit (FDA review staff) greater than the $x_{l}$ value. Given that the observed drug review staff variable \code{stafcder} ranges from 996 to 1796, a one unit change is not really substantively meaningful. However, when we create simulations using only slightly larger differences between $x_{j}$ and $x_{l}$, e.g., \code{setXl(Xj = XjFit, diff = 5)}, we end up with very large (often infinite) quantity of interest values. \pkg{simPH} automatically reports and drops extreme values when running \code{coxsim} functions. This avoids crashes. The user can set the argument \code{extremesDrop = FALSE} in the \code{coxsim} function call to not drop extreme values if they wish to explore them in more detail.    
+
 \section[Conclusion]{Conclusion}
 
-This paper reviewed a number of insights about avoiding Cox Proportional Hazard model misspecification. Looking out for and properly estimating the interactions and nonlinearities that can cause biased estimates is crucial when using Cox Proportional Hazard models. Beyond creating biased estimates, they can actually be factors that we are interested in studying. Until now the tools for fully exploring them, including their associated uncertainty, have been lacking. Coefficient estimate tables are very difficult to interpret for these types of effects. The \pkg{Zelig} package for \proglang{R} comes closest to allowing us to estimate and communicate uncertainty from Cox Proportional Hazards models. However, it has limited or no ability to simulate quantities of interest for interactive and nonlinear estimated effects. So, this paper has demonstrated a new \proglang{R} package, \pkg{simPH}, that makes it considerably easier to effectively explore and present quantities of interest for interactive and nonlinear effects. It can also be used for simple linear effects, making it a useful all-round package for showing results from Cox Proportional Hazard models. The paper has also argued for and demonstrated the usefulness of visual weighting and shortest probability intervals for understanding results from these models. \pkg{simPH} fully supports these methods.
+Exploring and communicating quantities of interest and their associated uncertainty estimated from Cox PH models presents a number of difficulties. Quantities of interest are on nonlinear and asymmetric scales. Key types of covariate transformations that help address violations of the proportional hazards assumption are especially difficult to interpret using coefficient estimate tables and other previously available tools. The \pkg{Zelig} package for \proglang{R} comes closest to allowing us to estimate and communicate uncertainty from Cox Proportional Hazards models. However, it has limited or no ability to simulate quantities of interest for time-interactive and nonlinear estimated effects. So, this paper has demonstrated a new \proglang{R} package, \pkg{simPH}, that makes it easy to effectively explore and present quantities of interest for interactive and nonlinear effects. It can also be used for `vanilla' linear effects, making it a useful all-round package for showing results from Cox Proportional Hazard models. The paper has also argued for and demonstrated the usefulness of visual weighting and shortest probability intervals for understanding results from these models. \pkg{simPH} fully supports these methods.
 
 % Acknowledgments
 \section*{Acknowledgments}

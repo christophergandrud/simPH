@@ -1,13 +1,10 @@
 
 ## ----include=FALSE-------------------------------------------------------
 #### Load Packages ####
-library(knitr)
-#library(repmis)
-
-#Packages <- c("car", "knitr", "gridExtra", "repmis", "devtools",
-#            "MASS", "simPH", "SPIn", "stats", "survival", "Zelig", "ggplot2")
-
-#LoadandCite(Packages, file = "HRPackages.bib")
+library(simPH)
+library(survival)
+library(ggplot2)
+library(gridExtra)
 
 #### Load data ####
 # Load Carpenter (2002) data 
@@ -32,11 +29,6 @@ hmohiv <- read.table(
             sep = ",", header = TRUE)
 
 
-## ----internal, include=FALSE---------------------------------------------
-library(ggplot2)
-library(gridExtra)
-
-
 ## ----LinearModel1_2, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE----
 hmohiv$AgeMed <- hmohiv$age - 35 
 
@@ -47,7 +39,7 @@ M1 <- coxph(Surv(time, censor) ~ AgeMed + drug,
 
 
 ## ----LinearModel1_4, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE----
-Sim1 <- coxsimLinear(M1, b = "AgeMed", Xj = seq(-15, 19, by = 0.2), nsim = 100)
+Sim1 <- coxsimLinear(M1, b = "AgeMed", Xj = seq(-15, 19, by = 1))
 
 
 ## ----LinearModel1_5, eval=FALSE------------------------------------------
@@ -60,7 +52,7 @@ Sim1 <- coxsimLinear(M1, b = "AgeMed", Xj = seq(-15, 19, by = 0.2), nsim = 100)
 ##       alpha = 0.05, type = 'lines')
 
 
-## ----LinearModel1_7, tidy=FALSE, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE, fig.height=4, out.width='0.95\\linewidth', dev='pdf'----
+## ----LinearModel1_7, tidy=FALSE, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, out.width='0.95\\linewidth', dev='pdf'----
 # Plot results with simGG default
 Plot1_1 <- simGG(Sim1)
 
@@ -101,81 +93,53 @@ head(GolubEUPData[, 1:4])
 
 
 ## ----TVCModel1_2, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE----
-Golubtvc <- function(x){
-  tvc(data = GolubEUPData, b = x, tvar = "end", tfun = "log")
-}
-GolubEUPData$Lqmv <- Golubtvc("qmv")
-GolubEUPData$Lbacklog <- Golubtvc("backlog")
-GolubEUPData$Lcoop <- Golubtvc("coop")
-GolubEUPData$Lcodec <- Golubtvc("codec")
-GolubEUPData$Lqmvpostsea <- Golubtvc("qmvpostsea")
-GolubEUPData$Lthatcher <- Golubtvc("thatcher")
+BaseVars <- c('qmv', 'backlog', 'coop', 'codec', 'qmvpostsea', 'thatcher')
+GolubEUPData <- tvc(GolubEUPData, b = BaseVars, tvar = 'end', tfun = 'log')
+
+names(GolubEUPData)[18:23]
 
 
 ## ----TVCModel1_3, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE----
 M2 <- coxph(Surv(begin, end, event) ~ qmv + qmvpostsea + qmvpostteu +
-              coop + codec + eu9 + eu10 + eu12 + eu15 + thatcher + 
-              agenda + backlog + Lqmv + Lqmvpostsea + Lcoop + Lcodec +
-              Lthatcher + Lbacklog, 
+                coop + codec + eu9 + eu10 + eu12 + eu15 + thatcher + 
+                agenda + backlog + qmv_log + qmvpostsea_log + coop_log + 
+                codec_log + thatcher_log + backlog_log, 
             data = GolubEUPData, ties = "efron") 
 
 
-## ----TVCModel2_1, eval=FALSE, tidy=FALSE---------------------------------
-## Sim3 <- coxsimtvc(obj = M2, b = "qmv", btvc = "Lqmv",
-##                   qi = "First Difference", Xj = 1, tfun = "log",
-##                   from = 80, to = 2000, by = 5, nsim = 100)
+## ----TVCModel2_1, tidy=FALSE, message=FALSE------------------------------
+Sim3 <- coxsimtvc(obj = M2, b = "qmv", btvc = "qmv_log",
+                    qi = "First Difference", Xj = 1,
+                    tfun = "log", from = 80, to = 2000, by = 10)
 
 
 ## ----TVCModel2_2, eval=FALSE, tidy=FALSE---------------------------------
-## simGG(Sim3, xlab = "\nTime in Days", title = "Central Interval\n",
-##       type = "ribbons", lsize = 0.5, legend = FALSE, alpha = 0.3)
+## simGG(Sim3, xlab = "\nTime in Days", type = "ribbons", lsize = 0.5,
+##       legend = FALSE, alpha = 0.3)
 
 
-## ----TVCModelComb, eval=T, tidy=FALSE, echo=FALSE, message=F, warning=F, fig.width=7, fig.height=4, out.width='0.95\\linewidth', dev='pdf'----
-## Create simtvc object for first difference (central interval)
-Sim3_1 <- coxsimtvc(obj = M2, b = "qmv", btvc = "Lqmv",  
-                    qi = "First Difference", Xj = 1,
-                    tfun = "log", from = 80, to = 2000, 
-                    by = 5, ci = 0.95, nsim = 100)
-
-# Create simtvc object for first difference (SPIn)
-Sim3_2 <- coxsimtvc(obj = M2, b = "qmv", btvc = "Lqmv",
-                    qi = "First Difference", Xj = 1,
-                    tfun = "log", from = 80, to = 2000, 
-                    by = 5, ci = 0.95, spin = TRUE, nsim = 100)
-
-
+## ----TVCModel1, tidy=FALSE, echo=FALSE, message=F, warning=F, fig.width=7, fig.height=4, out.width='0.95\\linewidth', dev='pdf'----
 # Create first difference plots
-Plot3_1 <- simGG(Sim3_1, xlab = "\nTime in Days", 
-                 title = "Central Interval\n", alpha = 0.3,
-                 type = "ribbons", lsize = 0.5, legend = FALSE)  
-                  
-Plot3_2 <- simGG(Sim3_2, ylab = "", xlab = "\nTime in Days",
-                 title = "SPIn\n", alpha = 0.3,
-                 type = "ribbons", lsize = 0.5, legend = FALSE)
-
-# Combine plots
-grid.arrange(Plot3_1, Plot3_2, ncol = 2) 
-######### Save M2 #############
-
+simGG(Sim3, xlab = "\nTime in Days", alpha = 0.3,
+      type = "ribbons", lsize = 0.5, legend = FALSE)
 
 
 ## ----TVCBacklog1, echo=TRUE, tidy=FALSE, eval=FALSE----------------------
-## Sim4 <- coxsimtvc(obj = M2, b = "backlog", btvc = "Lbacklog",
+## Sim4 <- coxsimtvc(obj = M2, b = "backlog", btvc = "backlog_log",
 ##                   qi = "Relative Hazard", Xj = seq(40, 200, 40),
 ##                   tfun = "log", from = 1200, to = 7000, by = 100,
-##                   nsim = 100)
+##                   nsim = 200)
 ## 
 ## simGG(Sim4, xlab = "\nTime in Days", type = "ribbons",
 ##       leg.name = "Backlogged \n Items")
 
 
-## ----TVCBacklog2, tidy=FALSE, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE, fig.width=7, fig.height=4, out.width='0.95\\linewidth', dev='pdf'----
+## ----TVCBacklog2, tidy=FALSE, echo=FALSE, message=F, warning=F, fig.width=7, fig.height=4, out.width='0.95\\linewidth', dev='pdf'----
 # Create simtvc object for relative hazard
-Sim4 <- coxsimtvc(obj = M2, b = "backlog", btvc = "Lbacklog",
+Sim4 <- coxsimtvc(obj = M2, b = "backlog", btvc = "backlog_log",
                   qi = "Relative Hazard", Xj = seq(40, 200, 40),
                   tfun = "log", from = 1200, to = 7000, by = 100,
-                  nsim = 100) 
+                  nsim = 200) 
 
 # Create relative hazard plot
 simGG(Sim4, xlab = "\nTime in Days", type = "ribbons",
@@ -198,6 +162,7 @@ M3 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 +
 ## XjFit <- seq(1100, 1700, by = 10)
 ## XlFit <- setXl(Xj = XjFit, diff = 1)
 ## 
+## 
 ## Sim4 <- coxsimSpline(M3, bspline = "pspline(stafcder, df = 4)",
 ##                      bdata = CarpenterFdaData$stafcder,
 ##                      qi = "Hazard Ratio",
@@ -217,7 +182,7 @@ XlFit <- setXl(Xj = XjFit, diff = 1)
 Sim5 <- coxsimSpline(M3, bspline = "pspline(stafcder, df = 4)", 
                      bdata = CarpenterFdaData$stafcder,
                      qi = "Hazard Ratio",
-                     Xj = XjFit, Xl = XlFit, nsim = 100)
+                     Xj = XjFit, Xl = XlFit)
 
 # Plot simulated values
 Plot5_1 <- simGG(Sim5, xlab = "\n No. of FDA Drug Review Staff",
@@ -227,13 +192,12 @@ Plot5_1 <- simGG(Sim5, xlab = "\n No. of FDA Drug Review Staff",
 Plot5_1 <- Plot5_1 + scale_y_continuous(breaks = c(0, 20, 40, 60), 
                                      limits = c(0, 60))
 
-
 # Simulated Fitted Values: shortest probability interval
 Sim6 <- coxsimSpline(M3, bspline = "pspline(stafcder, df = 4)", 
                      bdata = CarpenterFdaData$stafcder,
                      qi = "Hazard Ratio",
                      Xj = XjFit, Xl = XlFit, 
-                     spin = TRUE, nsim = 100)
+                     spin = TRUE)
 
 # Plot simulated values
 Plot5_2 <- simGG(Sim6, xlab = "\n No. of FDA Drug Review Staff", ylab = "",
