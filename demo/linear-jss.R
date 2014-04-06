@@ -23,7 +23,7 @@ M1 <- coxph(Surv(time, censor) ~ AgeMed + drug,
             method = "breslow", data = hmohiv)
 
 # Simulate relative hazards
-Sim1 <- coxsimLinear(M1, b = "AgeMed", Xj = seq(-15, 19, by = 0.2))
+Sim1 <- coxsimLinear(M1, b = "AgeMed", Xj = seq(-15, 19, by = 1))
 
 # Plot results with simGG default
 Plot1_1 <- simGG(Sim1)

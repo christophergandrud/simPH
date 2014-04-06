@@ -97,7 +97,7 @@ To learn more about shortest probability intervals (and also for the source of t
 
 Liu, Y., Gelman, A., & Zheng, T. (2013). ["Simulation-efficient Shortest Probablility Intervals."](http://arxiv.org/pdf/1302.2142v1.pdf) Arvix. 
 
-**Also good:** Hyndman, R. J. (1996). ["Computing and Graphing Highest Density Regions."](http://www.jstor.org/stable/10.2307/2684423) The American Statistician, 50(2), 120–126.
+**Also good:** Hyndman, R. J. (1996). ["Computing and Graphing Highest Density Regions."](http://www.jstor.org/stable/10.2307/2684423) The American Statistician, 50(2): 120–126.
 
 ### Interpreting Interactions
 
@@ -109,7 +109,7 @@ Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. [“Understanding
 
 For an example of how non-proportional hazard results were often presented before **simPH** see (some of the problems I encountered in this paper were a major part of why I'm developing this package): 
 
-Gandrud, Christopher. 2013. [“The Diffusion of Financial Supervisory Governance Ideas.”](http://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362) Review of International Political Economy. 20(4):881-916.
+Gandrud, Christopher. 2013. [“The Diffusion of Financial Supervisory Governance Ideas.”](http://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362) Review of International Political Economy. 20(4): 881-916.
 
 ## Future Plans
 
