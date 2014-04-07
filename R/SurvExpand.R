@@ -39,8 +39,7 @@
 #' 
 #' @seealso \code{\link{tvc}}
 #' @import data.table
-#' @importFrom dplyr group_by
-#' @importFrom dplyr mutate
+#' @importFrom dplyr group_by mutate
 #' @importFrom DataCombine MoveFront
 #' @keywords utilities
 #' @export 

@@ -25,6 +25,7 @@ opts_chunk$set(fig.align='center', dev='png', prompt=TRUE, highlight=FALSE, back
 ## ----LinearModel1_1, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE----
 library("survival") 
 library("simPH")
+
 hmohiv <- read.table(
             "http://www.ats.ucla.edu/stat/r/examples/asa/hmohiv.csv", 
             sep = ",", header = TRUE)
@@ -40,7 +41,8 @@ M1 <- coxph(Surv(time, censor) ~ AgeMed + drug,
 
 
 ## ----LinearModel1_4, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE----
-Sim1 <- coxsimLinear(M1, b = "AgeMed", Xj = seq(-15, 19, by = 1))
+Sim1 <- coxsimLinear(M1, b = "AgeMed", Xj = seq(-15, 19, by = 1),
+                    nsim = 100)
 
 
 ## ----LinearModel1_5, eval=FALSE------------------------------------------
@@ -50,7 +52,7 @@ Sim1 <- coxsimLinear(M1, b = "AgeMed", Xj = seq(-15, 19, by = 1))
 ## ----LinearModel1_6, eval=FALSE, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE----
 ## simGG(Sim1, xlab = "\nYears of Age from the Sample Median (35)",
 ##       ylab = "Relative Hazard with Comparison\n to a 35 Year Old\n",
-##       alpha = 0.05, type = 'lines')
+##       alpha = 0.05, type = "lines")
 
 
 ## ----LinearModel1_7, tidy=FALSE, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, out.width='0.95\\linewidth', dev='pdf'----
@@ -60,14 +62,14 @@ Plot1_1 <- simGG(Sim1)
 # Plot results
 Plot1_2 <-simGG(Sim1, xlab = "\nYears of Age from the\n Sample Median (35)",
                 ylab = "Relative Hazard with Comparison\n to a 35 Year Old\n",
-                alpha = 0.05, type = 'lines')
+                alpha = 0.05, type = "lines")
 
 # Combine plots
 grid.arrange(Plot1_1, Plot1_2, ncol = 2)
 
 
 ## ----LinearModel1_8, tidy=FALSE, message=FALSE---------------------------
-Sim2 <- coxsimLinear(M1, b = "drug", Xj = 0:1)
+Sim2 <- coxsimLinear(M1, b = "drug", Xj = 0:1, nsim = 100)
 
 
 ## ----LinearModel1_9, tidy=FALSE, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7, fig.height=4, out.width='0.6\\linewidth', dev='pdf'----
@@ -95,15 +97,18 @@ head(GolubEUPData[, 1:4])
 
 ## ----TVCModel1_2, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE----
 BaseVars <- c('qmv', 'backlog', 'coop', 'codec', 'qmvpostsea', 'thatcher')
+
 GolubEUPData <- tvc(GolubEUPData, b = BaseVars, tvar = 'end', tfun = 'log')
 
 names(GolubEUPData)[18:23]
 
 
 ## ----TVCModel1_3, tidy=FALSE, echo=TRUE, message=FALSE, warning=FALSE----
-M2 <- coxph(Surv(begin, end, event) ~ qmv + qmvpostsea + qmvpostteu +
+M2 <- coxph(Surv(begin, end, event) ~ 
+                qmv + qmvpostsea + qmvpostteu +
                 coop + codec + eu9 + eu10 + eu12 + eu15 + thatcher + 
-                agenda + backlog + qmv_log + qmvpostsea_log + coop_log + 
+                agenda + backlog + 
+                qmv_log + qmvpostsea_log + coop_log + 
                 codec_log + thatcher_log + backlog_log, 
             data = GolubEUPData, ties = "efron") 
 
@@ -111,12 +116,13 @@ M2 <- coxph(Surv(begin, end, event) ~ qmv + qmvpostsea + qmvpostteu +
 ## ----TVCModel2_1, tidy=FALSE, message=FALSE------------------------------
 Sim3 <- coxsimtvc(obj = M2, b = "qmv", btvc = "qmv_log",
                     qi = "First Difference", Xj = 1,
-                    tfun = "log", from = 80, to = 2000, by = 10)
+                    tfun = "log", from = 80, to = 2000, by = 10,
+                    )
 
 
 ## ----TVCModel2_2, eval=FALSE, tidy=FALSE---------------------------------
 ## simGG(Sim3, xlab = "\nTime in Days", type = "ribbons", lsize = 0.5,
-##       legend = FALSE, alpha = 0.3)
+##       legend = FALSE, alpha = 0.3, nsim = 100)
 
 
 ## ----TVCModel1, tidy=FALSE, echo=FALSE, message=F, warning=F, fig.width=7, fig.height=4, out.width='0.95\\linewidth', dev='pdf'----
@@ -129,7 +135,7 @@ simGG(Sim3, xlab = "\nTime in Days", alpha = 0.3,
 ## Sim4 <- coxsimtvc(obj = M2, b = "backlog", btvc = "backlog_log",
 ##                   qi = "Relative Hazard", Xj = seq(40, 200, 40),
 ##                   tfun = "log", from = 1200, to = 7000, by = 100,
-##                   nsim = 200)
+##                   nsim = 100)
 ## 
 ## simGG(Sim4, xlab = "\nTime in Days", type = "ribbons",
 ##       leg.name = "Backlogged \n Items")
@@ -140,7 +146,7 @@ simGG(Sim3, xlab = "\nTime in Days", alpha = 0.3,
 Sim4 <- coxsimtvc(obj = M2, b = "backlog", btvc = "backlog_log",
                   qi = "Relative Hazard", Xj = seq(40, 200, 40),
                   tfun = "log", from = 1200, to = 7000, by = 100,
-                  nsim = 200) 
+                  nsim = 100) 
 
 # Create relative hazard plot
 simGG(Sim4, xlab = "\nTime in Days", type = "ribbons",
@@ -161,12 +167,12 @@ M3 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 +
 
 ## ----Spline1Fig1, eval=FALSE, tidy=FALSE---------------------------------
 ## XjFit <- seq(1100, 1700, by = 10)
-## XlFit <- setXl(Xj = XjFit, diff = 1)
 ## 
+## XlFit <- setXl(Xj = XjFit, diff = 1)
 ## 
 ## Sim4 <- coxsimSpline(M3, bspline = "pspline(stafcder, df = 4)",
 ##                      bdata = CarpenterFdaData$stafcder,
-##                      qi = "Hazard Ratio",
+##                      qi = "Hazard Ratio", nsim = 100,
 ##                      Xj = XjFit, Xl = XlFit)
 ## 
 ## simGG(Sim4, xlab = "\n Number of FDA Drug Review Staff",
@@ -182,7 +188,7 @@ XlFit <- setXl(Xj = XjFit, diff = 1)
 ## Simulated Fitted Values
 Sim5 <- coxsimSpline(M3, bspline = "pspline(stafcder, df = 4)", 
                      bdata = CarpenterFdaData$stafcder,
-                     qi = "Hazard Ratio",
+                     qi = "Hazard Ratio", nsim = 100,
                      Xj = XjFit, Xl = XlFit)
 
 # Plot simulated values
@@ -196,7 +202,7 @@ Plot5_1 <- Plot5_1 + scale_y_continuous(breaks = c(0, 20, 40, 60),
 # Simulated Fitted Values: shortest probability interval
 Sim6 <- coxsimSpline(M3, bspline = "pspline(stafcder, df = 4)", 
                      bdata = CarpenterFdaData$stafcder,
-                     qi = "Hazard Ratio",
+                     qi = "Hazard Ratio", nsim = 100,
                      Xj = XjFit, Xl = XlFit, 
                      spin = TRUE)
 
@@ -215,6 +221,6 @@ grid.arrange(Plot5_1, Plot5_2, ncol = 2)
 ## ----Spline2Fig1, eval=FALSE, tidy=FALSE---------------------------------
 ## library("ggplot2")
 ## 
-## SimPlot1 + scale_y_continuous(breaks = c(0, 20, 40, 60), limits = c(0, 60))
+## SimPlot + scale_y_continuous(breaks = c(0, 20, 40, 60), limits = c(0, 60))
 
 

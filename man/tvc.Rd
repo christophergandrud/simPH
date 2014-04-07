@@ -61,6 +61,7 @@ GolubEUPData$Lqmv <- tvc(GolubEUPData, b = 'qmv', tvar = 'end', tfun = 'log',
 
 # Create interactions for a vector of variables
 BaseVars <- c('qmv', 'backlog', 'coop', 'codec', 'qmvpostsea', 'thatcher')
+
 Test <- tvc(GolubEUPData, b = BaseVars, tvar = 'end', tfun = 'log')
 }
 \seealso{

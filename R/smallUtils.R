@@ -38,6 +38,7 @@
 #' 
 #' # Create interactions for a vector of variables
 #' BaseVars <- c('qmv', 'backlog', 'coop', 'codec', 'qmvpostsea', 'thatcher')
+#' 
 #' Test <- tvc(GolubEUPData, b = BaseVars, tvar = 'end', tfun = 'log')
 #'                                           
 #' @seealso \code{\link{SurvExpand}}, \code{\link{simGG.simtvc}}, 
@@ -48,8 +49,8 @@
 
 tvc <- function(data, b, tvar, tfun = "linear", pow = NULL, vector = FALSE)
 {
-    NumBs <- length(b)
     # Errors
+    NumBs <- length(b)
     if (NumBs != 1 & isTRUE(vector)){
       warning('If b > 1 then vector is reset to FALSE.', call. = FALSE)
       vector <- FALSE
@@ -77,7 +78,11 @@ tvc <- function(data, b, tvar, tfun = "linear", pow = NULL, vector = FALSE)
     }
     else if (!isTRUE(vector)){
       for (i in b){
-        newVar <- paste0(i, "_", tfun)
+        if (is.null(pow)){
+            newVar <- paste0(i, "_", tfun)
+        } else if (!is.null(pow)){
+          newVar <- paste0(i, "_", tfun, pow)
+        }
         data[, newVar] <- tvcCreate(data = data, b = i, tvar = tvar, tfun = tfun)
       }
       Out <- data
