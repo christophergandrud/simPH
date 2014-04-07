@@ -1,6 +1,7 @@
 
 ## ----include=FALSE-------------------------------------------------------
 #### Load Packages ####
+library(knitr)
 library(simPH)
 library(survival)
 library(ggplot2)
