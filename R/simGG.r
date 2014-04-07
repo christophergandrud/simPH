@@ -4,7 +4,8 @@
 #' @param ... arguments to be passed to methods.
 #' 
 #' @examples
-#' # Load Carpenter (2002) data
+#' \dontrun{
+#'  # Load Carpenter (2002) data
 #' data("CarpenterFdaData")
 #'
 #' # Load survival package
@@ -21,12 +22,13 @@
 #'
 #' # Plot simulations
 #' simGG(Sim1)
+#' }
 #' 
 #' @seealso \code{\link{simGG.siminteract}}, \code{\link{simGG.simtvc}}, 
 #' \code{\link{simGG.simlinear}}, \code{\link{simGG.simpoly}}, 
 #' \code{\link{simGG.simspline}}
-#' @export simGG  
-#' 
+#' @export simGG
+ 
 simGG <- function(obj, ...){
-  UseMethod("simGG", obj)
+    UseMethod("simGG", obj)
 }

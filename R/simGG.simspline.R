@@ -145,9 +145,10 @@
 #' 
 #' 
 #' @import ggplot2 
+#' @import mgcv
 #' @importFrom car scatter3d
 #' @method simGG simspline
-#' @S3method simGG simspline
+#' @export
 
 simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL, 
 							from = NULL, to = NULL, xlab = NULL, ylab = NULL, 

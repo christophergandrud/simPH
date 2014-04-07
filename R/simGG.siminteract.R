@@ -116,8 +116,9 @@
 #' you need to have choosen more than one fitted value for \code{X1} in \code{\link{coxsimInteract}}. 
 #'
 #' @import ggplot2
+#' @import mgcv
 #' @method simGG siminteract
-#' @S3method simGG siminteract
+#' @export
 #' 
 #' @seealso \code{\link{coxsimInteract}}, \code{\link{simGG.simlinear}}, 
 #' and \code{\link{ggplot2}}

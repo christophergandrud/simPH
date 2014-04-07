@@ -16,7 +16,7 @@
 #' These values are difficult to plot \code{\link{simGG}} and may prevent 
 #' \code{spin} from finding the central interval.
 #' 
-#' @importFrom plyr ddply transform
+#' @importFrom plyr ddply
 #' @keywords internals
 #' @noRd
 
@@ -81,20 +81,20 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi,
         Bottom <- (1 - ci)/2
         Top <- 1 - Bottom
         SimbPerc <- eval(parse(text = 
-         paste0("ddply(Simb, SubVar, transform, Lower = QI < quantile(QI,", 
+         paste0("ddply(Simb, SubVar, mutate, Lower = QI < quantile(QI,", 
                 Bottom, ", na.rm = TRUE))")))
         SimbPerc <- eval(parse(text = 
-         paste0("ddply(SimbPerc, SubVar, transform, Upper = QI > quantile(QI,", 
+         paste0("ddply(SimbPerc, SubVar, mutate, Upper = QI > quantile(QI,", 
                 Top, ", na.rm = TRUE))" )))
     }
 
     # Drop simulations outside of the shortest probability interval
     else if (isTRUE(spin)){
-        SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, transform,",
+        SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate,",
                         "Lower = QI < simPH:::SpinBounds(QI, conf = ", ci,
                          ", lb = ", lb, ", LowUp = 1))" )))
         SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar,", 
-                        "transform, Upper = QI > simPH:::SpinBounds(QI,",
+                        "mutate, Upper = QI > simPH:::SpinBounds(QI,",
                         "conf = ", ci, ", lb = ", lb, ", LowUp = 2))" )))
     }
 

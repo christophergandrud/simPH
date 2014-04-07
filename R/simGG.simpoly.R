@@ -96,8 +96,9 @@
 #' @return a \code{gg} \code{ggplot} class object
 #'
 #' @import ggplot2
+#' @import mgcv
 #' @method simGG simpoly
-#' @S3method simGG simpoly
+#' @export
 
 simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
                           title = NULL, method = "auto", spalette = "Set1", 

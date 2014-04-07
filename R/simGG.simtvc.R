@@ -107,9 +107,9 @@
 #' }
 #'
 #' @import ggplot2
-#' @export
+#' @import mgcv
 #' @method simGG simtvc
-#' @S3method simGG simtvc
+#' @export
 #'
 #' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive 
 #' Interpretation of Nonproportional Hazards in Event History Analysis.'' 

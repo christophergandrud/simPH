@@ -94,8 +94,9 @@
 #' rates.
 #'
 #' @import ggplot2
+#' @import mgcv
 #' @method simGG simlinear
-#' @S3method simGG simlinear
+#' @export
 #'
 #' @seealso \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}}, and 
 #' \code{\link{ggplot2}}

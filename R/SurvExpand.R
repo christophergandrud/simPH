@@ -38,7 +38,7 @@
 #' }
 #' 
 #' @seealso \code{\link{tvc}}
-#' @importFrom data.table
+#' @import data.table
 #' @importFrom dplyr group_by
 #' @importFrom dplyr mutate
 #' @importFrom DataCombine MoveFront

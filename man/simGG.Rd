@@ -14,7 +14,8 @@ simGG(obj, ...)
 A method for plotting simulation objects created by simPH
 }
 \examples{
-# Load Carpenter (2002) data
+\dontrun{
+ # Load Carpenter (2002) data
 data("CarpenterFdaData")
 
 # Load survival package
@@ -31,6 +32,7 @@ Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
 
 # Plot simulations
 simGG(Sim1)
+}
 }
 \seealso{
 \code{\link{simGG.siminteract}},
