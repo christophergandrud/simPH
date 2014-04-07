@@ -93,11 +93,6 @@
 #' effect, for time-varying hazard ratio graphs. No line is created for hazard 
 #' rates.
 #'
-#' @import ggplot2
-#' @import mgcv
-#' @method simGG simlinear
-#' @export
-#'
 #' @seealso \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}}, and 
 #' \code{\link{ggplot2}}
 #' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive 
@@ -109,6 +104,9 @@
 #'
 #' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and 
 #' FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
+#' @import ggplot2
+#' @import mgcv
+#' @export
 
 simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, 
 							ylab = NULL, title = NULL, method = "auto", 

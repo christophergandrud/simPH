@@ -114,11 +114,6 @@
 #'
 #' Note: if \code{qi = "Hazard Ratio"} or \code{qi = "First Difference"} then 
 #' you need to have choosen more than one fitted value for \code{X1} in \code{\link{coxsimInteract}}. 
-#'
-#' @import ggplot2
-#' @import mgcv
-#' @method simGG siminteract
-#' @export
 #' 
 #' @seealso \code{\link{coxsimInteract}}, \code{\link{simGG.simlinear}}, 
 #' and \code{\link{ggplot2}}
@@ -131,6 +126,9 @@
 #'
 #' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and 
 #' FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
+#' @import ggplot2
+#' @import mgcv
+#' @export
 
 simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, 
 							  ylab = NULL, title = NULL, method = "auto", 

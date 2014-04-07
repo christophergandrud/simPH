@@ -106,14 +106,12 @@
 #' simGG(Sim3, leg.name = "Comparision", from = 1200, type = 'lines')
 #' }
 #'
-#' @import ggplot2
-#' @import mgcv
-#' @method simGG simtvc
-#' @export
-#'
 #' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive 
 #' Interpretation of Nonproportional Hazards in Event History Analysis.'' 
 #' Political Analysis 19: 227-43.
+#' @import ggplot2
+#' @import mgcv
+#' @export
 
 simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 
                         title = NULL, method = "auto", spalette = "Set1", 
