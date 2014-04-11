@@ -95,7 +95,7 @@ Box-Steffensmeier, Janet M, and Suzanna De Boef. 2006. [“Repeated Events Survi
 
 To learn more about shortest probability intervals (and also for the source of the code that made this possible in **simPH**) see:
 
-Liu, Y., Gelman, A., & Zheng, T. (2013). ["Simulation-efficient Shortest Probablility Intervals."](http://arxiv.org/pdf/1302.2142v1.pdf) Arvix. 
+Liu, Y., Gelman, A., & Zheng, T. (2013). ["Simulation-efficient Shortest Probablility Intervals."](http://arxiv.org/pdf/1302.2142v1.pdf) Arvix.
 
 **Also good:** Hyndman, R. J. (1996). ["Computing and Graphing Highest Density Regions."](http://www.jstor.org/stable/10.2307/2684423) The American Statistician, 50(2): 120–126.
 
@@ -107,18 +107,18 @@ Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. [“Understanding
 
 ### The Olden Days
 
-For an example of how non-proportional hazard results were often presented before **simPH** see (some of the problems I encountered in this paper were a major part of why I'm developing this package): 
+For an example of how non-proportional hazard results were often presented before **simPH** see (some of the problems I encountered in this paper were a major part of why I'm developing this package):
 
 Gandrud, Christopher. 2013. [“The Diffusion of Financial Supervisory Governance Ideas.”](http://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362) Review of International Political Economy. 20(4): 881-916.
 
 ## Future Plans
 
-I intend to expand the quantities of interest that can be simulated and graphed for Cox PH models. I am also currently working on functions that can simulate and graph hazard ratios estimated from [Fine and Gray competing risks models](http://www.jstor.org/stable/2670170). 
+I intend to expand the quantities of interest that can be simulated and graphed for Cox PH models. I am also currently working on functions that can simulate and graph hazard ratios estimated from [Fine and Gray competing risks models](http://www.jstor.org/stable/2670170).
 
-I am also working on a way to graph hazard ratios with frailties. 
+I am also working on a way to graph hazard ratios with frailties.
 
 ---
 
 [<img src="http://media.tumblr.com/023c285c14ef01953d3b67ffe789004d/tumblr_inline_mor1uu2OOZ1qz4rgp.png" height = "100" align="right" />](http://nadrosia.tumblr.com/post/53520500877/made-in-berlin-badge-update)
 
-Licensed under [GPL-3](https://github.com/christophergandrud/simPH/blob/master/LICENSE.md) 
+Licensed under [GPL-3](https://github.com/christophergandrud/simPH/blob/master/LICENSE.md)

@@ -1,6 +1,6 @@
 \name{coxsimInteract}
 \alias{coxsimInteract}
-\title{Simulate quantities of interest for linear multiplicative interactions
+\title{Simulate quantities of interest for linear multiplicative interactions */
 from Cox Proportional Hazards models}
 \usage{
 coxsimInteract(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL,
