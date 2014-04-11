@@ -1,54 +1,54 @@
-#' Plot simulated linear, non-time interacted quantities of interest from Cox 
+#' Plot simulated linear, non-time interacted quantities of interest from Cox
 #' Proportional Hazards Models
 #'
 #' \code{simGG.simlinear} uses \link{ggplot2} to plot the quantities of interest
-#'  from \code{simlinear} objects, including relative hazards, first 
+#'  from \code{simlinear} objects, including relative hazards, first
 #' differences, hazard ratios, and hazard rates.
 #'
 #' @param obj a \code{simlinear} class object.
 #' @param xlab a label for the plot's x-axis.
-#' @param ylab a label of the plot's y-axis. The default uses the value of 
+#' @param ylab a label of the plot's y-axis. The default uses the value of
 #' \code{qi}.
-#' @param from numeric time to start the plot from. Only relevant if 
+#' @param from numeric time to start the plot from. Only relevant if
 #' \code{qi = "Hazard Rate"}.
-#' @param to numeric time to plot to. Only relevant if 
+#' @param to numeric time to plot to. Only relevant if
 #' \code{qi = "Hazard Rate"}.
 #' @param title the plot's main title.
-#' @param method what type of smoothing method to use to summarize the center 
+#' @param method what type of smoothing method to use to summarize the center
 #' of the simulation distribution.
-#' @param spalette colour palette for when there are multiple sets of 
-#' comparisons to plot. Default palette is \code{"Set1"}. See 
+#' @param spalette colour palette for when there are multiple sets of
+#' comparisons to plot. Default palette is \code{"Set1"}. See
 #' \code{\link{scale_colour_brewer}}.
-#' @param legend specifies what type of legend to include (if applicable). 
-#' The default is \code{legend = "legend"}. To hide the legend use 
+#' @param legend specifies what type of legend to include (if applicable).
+#' The default is \code{legend = "legend"}. To hide the legend use
 #' \code{legend = FALSE}. See the \code{\link{discrete_scale}} for more details.
 #' @param leg.name name of the legend (if applicable).
-#' @param lcolour character string colour of the smoothing line. The default is 
-#' hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if 
+#' @param lcolour character string colour of the smoothing line. The default is
+#' hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if
 #' \code{qi = "First Difference"}.
-#' @param lsize size of the smoothing line. Default is 1. See 
+#' @param lsize size of the smoothing line. Default is 1. See
 #' \code{\link{ggplot2}}.
-#' @param pcolour character string colour of the simulated points or ribbons 
-#' (when there are not multiple sets of simulations). Default is hexadecimal 
+#' @param pcolour character string colour of the simulated points or ribbons
+#' (when there are not multiple sets of simulations). Default is hexadecimal
 #' colour \code{pcolour = '#A6CEE3'}.
-#' @param psize size of the plotted simulation points. Default is 
+#' @param psize size of the plotted simulation points. Default is
 #' \code{psize = 1}. See \code{\link{ggplot2}}.
-#' @param alpha numeric. Alpha (e.g. transparency) for the points, lines, or 
-#' ribbons. Default is \code{alpha = 0.2}. See \code{\link{ggplot2}}. Note, if 
-#' \code{type = "lines"} or \code{type = "points"} then \code{alpah} sets the 
-#' maximum value per line or point at the center of the distribution. Lines or 
+#' @param alpha numeric. Alpha (e.g. transparency) for the points, lines, or
+#' ribbons. Default is \code{alpha = 0.2}. See \code{\link{ggplot2}}. Note, if
+#' \code{type = "lines"} or \code{type = "points"} then \code{alpah} sets the
+#' maximum value per line or point at the center of the distribution. Lines or
 #' points further from the center are more transparent the further they get from
-#' the middle. 
-#' @param type character string. Specifies how to plot the simulations. Can be 
-#' \code{points}, \code{lines}, or \code{ribbons}. If points then each 
-#' simulation value will be plotted. If \code{lines} is chosen then each 
-#' simulation is plotted using a different line. Note: any simulation with a 
+#' the middle.
+#' @param type character string. Specifies how to plot the simulations. Can be
+#' \code{points}, \code{lines}, or \code{ribbons}. If points then each
+#' simulation value will be plotted. If \code{lines} is chosen then each
+#' simulation is plotted using a different line. Note: any simulation with a
 #' value along its length that is outside of the specified central interval will
-#' be dropped. This is to create a smooth plot. If \code{type = "ribbons"} a 
-#' plot will be created with shaded areas ('ribbons') for the minimum and 
+#' be dropped. This is to create a smooth plot. If \code{type = "ribbons"} a
+#' plot will be created with shaded areas ('ribbons') for the minimum and
 #' maximum simulation values (i.e. the middle interval set with \code{qi} in \code{\link{coxsimSpline}}) as well as the central 50 percent of this area. It
-#'  also plots a line for the median value of the full area, so values in 
-#' \code{method} are ignored. One of the key advantages of using ribbons 
+#'  also plots a line for the median value of the full area, so values in
+#' \code{method} are ignored. One of the key advantages of using ribbons
 #' rather than points is that it creates plots with smaller file sizes.
 #' @param ... Additional arguments. (Currently ignored.)
 #'
@@ -56,23 +56,23 @@
 #'
 #' @examples
 #'
-#' 
+#'
 #' # Load survival package
 #' library(survival)
 #' # Load Carpenter (2002) data
 #' data("CarpenterFdaData")
-#' 
+#'
 #' # Estimate basic model
 #' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
 #'             deathrt1 + acutediz + hosp01  + hhosleng +
 #'             mandiz01 + femdiz01 + peddiz01 + orphdum +
 #'             vandavg3 + wpnoavg3 + condavg3 + orderent +
 #'             stafcder, data = CarpenterFdaData)
-#' 
+#'
 #' # Simulate and plot Hazard Ratios for stafcder variable
-#' Sim1 <- coxsimLinear(M1, b = "stafcder", 
-#'                      Xj = c(1237, 1600), 
-#'                      Xl = c(1000, 1000), 
+#' Sim1 <- coxsimLinear(M1, b = "stafcder",
+#'                      Xj = c(1237, 1600),
+#'                      Xl = c(1000, 1000),
 #'                      qi = "Hazard Ratio",
 #'                      spin = TRUE, ci = 0.99)
 #' # simGG(Sim1)
@@ -80,41 +80,41 @@
 #' \dontrun{
 #' # Simulate and plot Hazard Rate for stafcder variable
 #' Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
-#'                       qi = "Hazard Rate", 
+#'                       qi = "Hazard Rate",
 #'                       Xj = c(1237, 1600))
 #' simGG(Sim2, type = 'lines')
 #' }
 #'
-#' @details Uses \link{ggplot2} to plot the quantities of interest from 
-#' \code{simlinear} objects, including relative hazards, first differences, 
-#' hazard ratios, and hazard rates. If there are multiple strata, the 
+#' @details Uses \link{ggplot2} to plot the quantities of interest from
+#' \code{simlinear} objects, including relative hazards, first differences,
+#' hazard ratios, and hazard rates. If there are multiple strata, the
 #' quantities of interest will be plotted in a grid by strata.
-#' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no 
-#' effect, for time-varying hazard ratio graphs. No line is created for hazard 
+#' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no
+#' effect, for time-varying hazard ratio graphs. No line is created for hazard
 #' rates.
 #'
-#' @seealso \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}}, and 
+#' @seealso \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}}, and
 #' \code{\link{ggplot2}}
-#' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive 
-#' Interpretation of Nonproportional Hazards in Event History Analysis.'' 
+#' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive
+#' Interpretation of Nonproportional Hazards in Event History Analysis.''
 #' Political Analysis 19: 227-43.
 #'
-#' Keele, Luke. 2010. ''Proportionally Difficult: Testing for Nonproportional 
+#' Keele, Luke. 2010. ''Proportionally Difficult: Testing for Nonproportional
 #' Hazards in Cox Models.'' Political Analysis 18(2): 189-205.
 #'
-#' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and 
+#' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and
 #' FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
 #' @import ggplot2
 #' @import mgcv
 #' @export
 
-simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL, 
-							ylab = NULL, title = NULL, method = "auto", 
-							spalette = "Set1", legend = "legend", leg.name = "", 
-							lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", 
+simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
+							ylab = NULL, title = NULL, method = "auto",
+							spalette = "Set1", legend = "legend", leg.name = "",
+							lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
 							psize = 1, alpha = 0.2, type = "points", ...)
 {
-	Time <- HRate <- HRValue <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <- 
+	Time <- HRate <- HRValue <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <-
 		Median <- SimID <- NULL
 	if (!inherits(obj, "simlinear")){
     	stop("must be a simlinear object", call. = FALSE)
@@ -123,8 +123,8 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 	  message("The method argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
 	}
     # Find quantity of interest
-    qi <- class(obj)[[2]]  
-    
+    qi <- class(obj)[[2]]
+
     # Create y-axis label
     if (is.null(ylab)){
     	ylab <- paste(qi, "\n")
@@ -137,7 +137,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
     # Drop simulations that include outliers
     if (type == 'lines'){
    	    obj <- OutlierDrop(obj)
-    }    
+    }
 
 	# Alpha gradient based on percentile in the distribution
 	if (type != 'ribbons' & qi != 'Hazard Rate'){
@@ -147,7 +147,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 	}
 
     # Constrict time period to plot for hazard rate
-    if (qi == "Hazard Rate"){   
+    if (qi == "Hazard Rate"){
 	    if (!is.null(from)){
 			obj <- subset(obj, Time >= from)
 		}
@@ -166,7 +166,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 				geom_smooth(method = method, size = lsize, se = FALSE) +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 				xlab(xlab) + ylab(ylab) +
-				scale_colour_brewer(palette = spalette, name = leg.name, 
+				scale_colour_brewer(palette = spalette, name = leg.name,
 					guide = legend) +
 				ggtitle(title) +
 				theme_bw(base_size = 15)
@@ -174,7 +174,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 	      	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
 	        	geom_point(shape = 21, aes(alpha = PercRank), size = psize) +
 		        geom_smooth(method = method, size = lsize, se = FALSE) +
-		        scale_colour_brewer(palette = spalette, name = leg.name, 
+		        scale_colour_brewer(palette = spalette, name = leg.name,
 		        					guide = legend) +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 		        xlab(xlab) + ylab(ylab) +
@@ -183,9 +183,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			}
 		} else if (qi == "First Difference"){
 			ggplot(obj, aes(Xj, QI)) +
-		        geom_point(shape = 21, aes(alpha = PercRank), size = psize, 
+		        geom_point(shape = 21, aes(alpha = PercRank), size = psize,
 		        						   colour = pcolour) +
-		        geom_smooth(method = method, size = lsize, se = FALSE, 
+		        geom_smooth(method = method, size = lsize, se = FALSE,
 		        			color = lcolour) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -194,9 +194,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        theme_bw(base_size = 15)
 		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 		ggplot(obj, aes(Xj, QI)) +
-	        geom_point(shape = 21, aes(alpha = PercRank), size = psize, 
+	        geom_point(shape = 21, aes(alpha = PercRank), size = psize,
 	        						   colour = pcolour) +
-	        geom_smooth(method = method, size = lsize, se = FALSE, 
+	        geom_smooth(method = method, size = lsize, se = FALSE,
 	        			color = lcolour) +
 	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -211,23 +211,23 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 	  	if (!is.null(obj$Strata)) {
 			ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
 				facet_grid(. ~ Strata) +
-				geom_line(aes(group = interaction(SimID, factor(HRValue)), 
+				geom_line(aes(group = interaction(SimID, factor(HRValue)),
 							  alpha = PercRank), size = psize) +
-				geom_smooth(aes(colour = factor(HRValue)), method = method, 
+				geom_smooth(aes(colour = factor(HRValue)), method = method,
 								size = lsize, se = FALSE) +
 				xlab(xlab) + ylab(ylab) +
-				scale_colour_brewer(palette = spalette, name = leg.name, 
+				scale_colour_brewer(palette = spalette, name = leg.name,
 									guide = legend) +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 				ggtitle(title) +
 				theme_bw(base_size = 15)
     	} else if (is.null(obj$Strata)){
 	      	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
-	        	geom_line(aes(group = interaction(SimID, factor(HRValue)), 
+	        	geom_line(aes(group = interaction(SimID, factor(HRValue)),
 	        				  alpha = PercRank), shape = 21, size = psize) +
-		        geom_smooth(aes(colour = factor(HRValue)), method = method, 
+		        geom_smooth(aes(colour = factor(HRValue)), method = method,
 		        				size = lsize, se = FALSE) +
-		        scale_colour_brewer(palette = spalette, name = leg.name, 
+		        scale_colour_brewer(palette = spalette, name = leg.name,
 		        					guide = legend) +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 		        xlab(xlab) + ylab(ylab) +
@@ -236,9 +236,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			}
 		} else if (qi == "First Difference"){
 			ggplot(obj, aes(Xj, QI)) +
-		        geom_line(aes(group = SimID, alpha = PercRank), size = psize, 
+		        geom_line(aes(group = SimID, alpha = PercRank), size = psize,
 		        			  colour = pcolour) +
-		        geom_smooth(method = method, size = lsize, se = FALSE, 
+		        geom_smooth(method = method, size = lsize, se = FALSE,
 		        			color = lcolour) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -247,9 +247,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        theme_bw(base_size = 15)
 		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 		ggplot(obj, aes(Xj, QI)) +
-	        geom_line(aes(group = SimID, alpha = PercRank), size = psize, 
+	        geom_line(aes(group = SimID, alpha = PercRank), size = psize,
 	        			  colour = pcolour) +
-	        geom_smooth(method = method, size = lsize, se = FALSE, 
+	        geom_smooth(method = method, size = lsize, se = FALSE,
 	        			color = lcolour) +
 	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
 	        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
@@ -265,33 +265,33 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		if (qi == "Hazard Rate"){
 	  	if (!is.null(obj$Strata)) {
 			obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
-			ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue), 
+			ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue),
 							fill = factor(HRValue))) +
 				geom_line(size = lsize) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, 
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
 								linetype = 0) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, 
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
 								linetype = 0) +
 				facet_grid(. ~ Strata) +
 				xlab(xlab) + ylab(ylab) +
-		        scale_colour_brewer(palette = spalette, name = leg.name, 
+		        scale_colour_brewer(palette = spalette, name = leg.name,
 		        					guide = legend) +
-		        scale_fill_brewer(palette = spalette, name = leg.name, 
+		        scale_fill_brewer(palette = spalette, name = leg.name,
 		        				  guide = legend) +
 				ggtitle(title) +
 				theme_bw(base_size = 15)
     	} else if (is.null(obj$Strata)){
 			obj <- MinMaxLines(df = obj, hr = TRUE)
-	      	ggplot(obj, aes(Time, Median, colour = factor(HRValue), 
+	      	ggplot(obj, aes(Time, Median, colour = factor(HRValue),
 	      					fill = factor(HRValue))) +
 		        geom_line(size = lsize) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, 
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
 							linetype = 0) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, 
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
 							linetype = 0) +
-		        scale_colour_brewer(palette = spalette, name = leg.name, 
+		        scale_colour_brewer(palette = spalette, name = leg.name,
 		        					guide = legend) +
-		        scale_fill_brewer(palette = spalette, name = leg.name, 
+		        scale_fill_brewer(palette = spalette, name = leg.name,
 		        				  guide = legend) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
@@ -301,9 +301,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
 		        geom_line(size = lsize, colour = lcolour) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, 
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
 							fill = pcolour) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, 
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
 							fill = pcolour) +
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
@@ -313,9 +313,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
 		        geom_line(size = lsize, colour = lcolour) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha, 
+				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
 							fill = pcolour) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha, 
+				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
 							fill = pcolour) +
 	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
