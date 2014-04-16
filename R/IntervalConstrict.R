@@ -4,8 +4,8 @@
 #' simulations to user defined interval.
 #'
 #' @param Simb character string naming the data frame with the simulations.
-#' @param SubVar character vector the variable names to subset the simulations
-#' by.
+#' @param SubVar character vector of the variable names to subset the 
+#' simulations by.
 #' @param qi character vector naming the type of quantity of interest.
 #' @param spin logical for whether or not to use the shortest probability
 #' interval or the central interval.

@@ -371,4 +371,4 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
         }
         )
     }
-    }
+}

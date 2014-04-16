@@ -35,5 +35,5 @@ Suggests:
     knitr
 VignetteBuilder: knitr
 BuildVignettes: true
-Roxygen: list(wrap = FALSE)
+Roxygen: list(wrap = TRUE)
 LazyData: true
