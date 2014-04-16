@@ -28,8 +28,7 @@
 #' @seealso \code{\link{simGG.siminteract}}, \code{\link{simGG.simtvc}},
 #' \code{\link{simGG.simlinear}}, \code{\link{simGG.simpoly}},
 #' \code{\link{simGG.simspline}}
-#' @rdname simGG
 #' @export
 simGG <- function(obj, ...){
-    UseMethod("simGG")
+    UseMethod("simGG", obj)
 }

@@ -1,4 +1,4 @@
-#' Plot simulated linear multiplicative interactions from Cox Proportional
+r#' Plot simulated linear multiplicative interactions from Cox Proportional
 #' Hazards Models
 #'
 #' \code{simGG.siminteract} uses \link{ggplot2} to plot the quantities of
@@ -111,9 +111,9 @@
 #' effect, for time-varying hazard ratio graphs. No line is created for hazard
 #' rates.
 #'
-#'
 #' Note: if \code{qi = "Hazard Ratio"} or \code{qi = "First Difference"} then
-#' you need to have choosen more than one fitted value for \code{X1} in \code{\link{coxsimInteract}}.
+#' you need to have choosen more than one fitted value for \code{X1} in
+#' \code{\link{coxsimInteract}}.
 #'
 #' @seealso \code{\link{coxsimInteract}}, \code{\link{simGG.simlinear}},
 #' and \code{\link{ggplot2}}
@@ -128,15 +128,16 @@
 #' FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
 #' @import ggplot2
 #' @import mgcv
+#' @family simGG methods
 #' @export
 
 simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
-								ylab = NULL, title = NULL, method = "auto", 
-								spalette = "Set1", legend = "legend",
-								leg.name = "", lcolour = "#2B8CBE", lsize = 1,
-								pcolour = "#A6CEE3", psize = 1, alpha = 0.2,
-								type = "points", ...)
-	{
+                                ylab = NULL, title = NULL, method = "auto",
+                                spalette = "Set1", legend = "legend",
+                                leg.name = "", lcolour = "#2B8CBE", lsize = 1,
+                                pcolour = "#A6CEE3", psize = 1, alpha = 0.2,
+                                type = "points", ...)
+{
 	HRate <- Lower50 <- Upper50 <- Min <- Max <- Median <- NULL
 	Time <- QI <- HRValue <- X1 <- X2 <- SimID <- NULL
 	if (!inherits(obj, "siminteract")){
