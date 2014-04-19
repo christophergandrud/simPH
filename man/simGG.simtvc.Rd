@@ -149,9 +149,4 @@ Licht, Amanda A. 2011. ''Change Comes with Time:
 Substantive Interpretation of Nonproportional Hazards in
 Event History Analysis.'' Political Analysis 19: 227-43.
 }
-\seealso{
-Other simGG.methods: \code{\link{simGG.siminteract}};
-\code{\link{simGG.simlinear}}; \code{\link{simGG.simpoly}};
-\code{\link{simGG.simspline}}
-}
 

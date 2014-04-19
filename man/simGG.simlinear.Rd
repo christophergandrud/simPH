@@ -147,9 +147,5 @@ Political Science 46(3): 490-505.
 \seealso{
 \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}}, and
 \code{\link{ggplot2}}
-
-Other simGG.methods: \code{\link{simGG.siminteract}};
-\code{\link{simGG.simpoly}}; \code{\link{simGG.simspline}};
-\code{\link{simGG.simtvc}}
 }
 

@@ -131,7 +131,8 @@
 #' 
 #' @import ggplot2
 #' @import mgcv
-#' @family simGG methods
+#'
+#' @method simGG siminteract
 #' @export
 
 simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL, 

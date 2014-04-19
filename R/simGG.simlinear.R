@@ -106,7 +106,8 @@
 #' FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
 #' @import ggplot2
 #' @import mgcv
-#' @family simGG methods
+#'
+#' @method simGG simlinear
 #' @export
 
 simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,

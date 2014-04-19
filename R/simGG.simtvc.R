@@ -111,7 +111,8 @@
 #' Political Analysis 19: 227-43.
 #' @import ggplot2
 #' @import mgcv
-#' @family simGG methods
+#'
+#' @method simGG simtvc
 #' @export
 
 simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 

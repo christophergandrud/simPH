@@ -97,7 +97,8 @@
 #'
 #' @import ggplot2
 #' @import mgcv
-#' @family simGG methods
+#'
+#' @method simGG simpoly
 #' @export
 
 simGG.simpoly <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL, 

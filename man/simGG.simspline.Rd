@@ -194,9 +194,5 @@ Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
 \seealso{
 \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},
 \code{\link{ggplot2}}, and \code{\link{scatter3d}}
-
-Other simGG.methods: \code{\link{simGG.siminteract}};
-\code{\link{simGG.simlinear}}; \code{\link{simGG.simpoly}};
-\code{\link{simGG.simtvc}}
 }
 

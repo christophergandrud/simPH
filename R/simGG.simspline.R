@@ -147,7 +147,8 @@
 #' @import ggplot2
 #' @import mgcv
 #' @importFrom car scatter3d
-#' @family simGG methods
+#'
+#' @method simGG simspline
 #' @export
 
 simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,

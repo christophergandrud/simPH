@@ -134,9 +134,5 @@ simGG(Sim3, type = 'lines')
 }
 \seealso{
 \code{\link{coxsimPoly}} and \code{\link{ggplot2}}
-
-Other simGG.methods: \code{\link{simGG.siminteract}};
-\code{\link{simGG.simlinear}};
-\code{\link{simGG.simspline}}; \code{\link{simGG.simtvc}}
 }
 
