@@ -1,5 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.Rhistory
 
 # Git related
 ./.git*
@@ -8,6 +9,6 @@
 .travis.yml
 
 # Images
-img/*
+^img
 
 LICENSE.md
