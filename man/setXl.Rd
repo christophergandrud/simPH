@@ -6,19 +6,18 @@
 setXl(Xj, diff = 1)
 }
 \arguments{
-  \item{Xj}{numeric vector of fitted values for the
-  covariate of interest to simulate for.}
+\item{Xj}{numeric vector of fitted values for the covariate of interest to
+simulate for.}
 
-  \item{diff}{numeric vector of length 1. It specifies the
-  difference between \code{Xj} and \code{Xl}. \code{Xl} is
-  always smaller than \code{Xj}.}
+\item{diff}{numeric vector of length 1. It specifies the difference between
+\code{Xj} and \code{Xl}. \code{Xl} is always smaller than \code{Xj}.}
 }
 \value{
 a vector
 }
 \description{
-\code{setXl} creates a sequence of \code{Xl} values given a
-sequence of \code{Xj} values and a fixed difference.
+\code{setXl} creates a sequence of \code{Xl} values given a sequence of
+\code{Xj} values and a fixed difference.
 }
 \examples{
 # Set Xj

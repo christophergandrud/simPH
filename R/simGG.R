@@ -29,7 +29,7 @@
 #' \code{\link{simGG.simlinear}}, \code{\link{simGG.simpoly}},
 #' \code{\link{simGG.simspline}}
 #'
-#' @export simGG
+#' @export
 
 simGG <- function(obj, ...){
     UseMethod("simGG", obj)

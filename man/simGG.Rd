@@ -6,14 +6,12 @@
 simGG(obj, ...)
 }
 \arguments{
-  \item{obj}{an object created by one of simPH's simulation
-  commands.}
+\item{obj}{an object created by one of simPH's simulation commands.}
 
-  \item{...}{arguments to be passed to methods.}
+\item{...}{arguments to be passed to methods.}
 }
 \description{
-\code{simGG} a method for ploting simulation objects
-created by simPH.
+\code{simGG} a method for ploting simulation objects created by simPH.
 }
 \examples{
 \dontrun{
@@ -37,8 +35,8 @@ simGG(Sim1)
 }
 }
 \seealso{
-\code{\link{simGG.siminteract}},
-\code{\link{simGG.simtvc}}, \code{\link{simGG.simlinear}},
-\code{\link{simGG.simpoly}}, \code{\link{simGG.simspline}}
+\code{\link{simGG.siminteract}}, \code{\link{simGG.simtvc}},
+\code{\link{simGG.simlinear}}, \code{\link{simGG.simpoly}},
+\code{\link{simGG.simspline}}
 }
 

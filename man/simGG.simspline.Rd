@@ -10,126 +10,106 @@
   fit = "linear", type = "points", ...)
 }
 \arguments{
-  \item{obj}{a \code{simspline} class object}
+\item{obj}{a \code{simspline} class object}
 
-  \item{SmoothSpline}{logical whether or not to fit the
-  simulations with smoothing splines. Creates a smoother
-  plot. See \code{\link{smooth.spline}} for more
-  information. Note: currently the degrees of freedom are
-  set at 10.}
+\item{SmoothSpline}{logical whether or not to fit the simulations with
+smoothing splines. Creates a smoother plot. See \code{\link{smooth.spline}}
+for more information. Note: currently the degrees of freedom are set at 10.}
 
-  \item{FacetTime}{a numeric vector of points in time where
-  you would like to plot Hazard Rates in a facet grid. Only
-  relevant if \code{qi == 'Hazard Rate'}. Note: the values
-  of Facet Time must exactly match values of the
-  \code{time} element of \code{obj}.}
+\item{FacetTime}{a numeric vector of points in time where you would like to
+plot Hazard Rates in a facet grid. Only relevant if
+\code{qi == 'Hazard Rate'}. Note: the values of Facet Time must exactly
+match values of the \code{time} element of \code{obj}.}
 
-  \item{xlab}{a label for the plot's x-axis.}
+\item{xlab}{a label for the plot's x-axis.}
 
-  \item{ylab}{a label of the plot's y-axis. The default
-  uses the value of \code{qi}.}
+\item{ylab}{a label of the plot's y-axis. The default uses the value of
+\code{qi}.}
 
-  \item{zlab}{a label for the plot's z-axis. Only relevant
-  if \code{qi = "Hazard Rate"} and \code{FacetTime ==
-  NULL}.}
+\item{zlab}{a label for the plot's z-axis. Only relevant if
+\code{qi = "Hazard Rate"} and \code{FacetTime == NULL}.}
 
-  \item{from}{numeric time to start the plot from. Only
-  relevant if \code{qi = "Hazard Rate"}.}
+\item{from}{numeric time to start the plot from. Only relevant if
+\code{qi = "Hazard Rate"}.}
 
-  \item{to}{numeric time to plot to. Only relevant if
-  \code{qi = "Hazard Rate"}.}
+\item{to}{numeric time to plot to. Only relevant if
+\code{qi = "Hazard Rate"}.}
 
-  \item{title}{the plot's main title.}
+\item{title}{the plot's main title.}
 
-  \item{method}{what type of smoothing method to use to
-  summarize the center of the simulation distribution.}
+\item{method}{what type of smoothing method to use to summarize the center
+of the simulation distribution.}
 
-  \item{lcolour}{character string colour of the smoothing
-  line. The default is hexadecimal colour \code{lcolour =
-  '#2B8CBE'}. Only relevant if \code{qi = "Relative
-  Hazard"} or \code{qi = "First Difference"}.}
+\item{lcolour}{character string colour of the smoothing line. The default is
+hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if
+\code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.}
 
-  \item{lsize}{size of the smoothing line. Default is 1.
-  See \code{\link{ggplot2}}.}
+\item{lsize}{size of the smoothing line. Default is 1. See
+\code{\link{ggplot2}}.}
 
-  \item{pcolour}{character string colour of the simulated
-  points or ribbons (when there are not multiple sets of
-  simulations). Default is hexadecimal colour \code{pcolour
-  = '#A6CEE3'}. Only relevant if \code{qi = "Relative
-  Hazard"} or \code{qi = "First Difference"} or \code{qi =
-  "Hazard Rate"} with facets.}
+\item{pcolour}{character string colour of the simulated points or ribbons
+(when there are not multiple sets of simulations). Default is hexadecimal
+colour \code{pcolour = '#A6CEE3'}. Only relevant if
+\code{qi = "Relative Hazard"} or \code{qi = "First Difference"} or
+\code{qi = "Hazard Rate"} with facets.}
 
-  \item{psize}{size of the plotted simulation points.
-  Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
+\item{psize}{size of the plotted simulation points. Default is
+\code{psize = 1}. See \code{\link{ggplot2}}.}
 
-  \item{alpha}{numeric. Alpha (e.g. transparency) for the
-  points, lines, or ribbons. Default is \code{alpha = 0.2}.
-  See \code{\link{ggplot2}}. Note, if \code{type = "lines"}
-  or \code{type = "points"} then \code{alpah} sets the
-  maximum value per line or point at the center of the
-  distribution. Lines or points further from the center are
-  more transparent the further they get from the middle.}
+\item{alpha}{numeric. Alpha (e.g. transparency) for the points, lines, or
+ribbons. Default is \code{alpha = 0.2}. See \code{\link{ggplot2}}. Note, if
+\code{type = "lines"} or \code{type = "points"} then \code{alpah} sets the
+maximum value per line or point at the center of the distribution. Lines or
+points further from the center are more transparent the further they get
+from the middle.}
 
-  \item{surface}{plot surface. Default is \code{surface =
-  TRUE}. Only relevant if \code{qi == 'Hazard Rate'} and
-  \code{FacetTime = NULL}.}
+\item{surface}{plot surface. Default is \code{surface = TRUE}. Only relevant
+if \code{qi == 'Hazard Rate'} and \code{FacetTime = NULL}.}
 
-  \item{fit}{one or more of \code{"linear"},
-  \code{"quadratic"}, \code{"smooth"}, \code{"additive"};
-  to display fitted surface(s); partial matching is
-  supported e.g., \code{c("lin", "quad")}. Only relevant if
-  \code{qi == 'Relative Hazard'} and \code{FacetTime =
-  NULL}.}
+\item{fit}{one or more of \code{"linear"}, \code{"quadratic"},
+\code{"smooth"}, \code{"additive"}; to display fitted surface(s); partial
+matching is supported e.g., \code{c("lin", "quad")}. Only relevant if
+\code{qi == 'Relative Hazard'} and \code{FacetTime = NULL}.}
 
-  \item{type}{character string. Specifies how to plot the
-  simulations. Can be \code{points}, \code{lines}, or
-  \code{ribbons}. If points then each simulation value will
-  be plotted. If \code{lines} is chosen then each
-  simulation is plotted using a different line. Note: any
-  simulation with a value along its length that is outside
-  of the specified central interval will be dropped. This
-  is to create a smooth plot. If \code{type = "ribbons"} a
-  plot will be created with shaded areas ('ribbons') for
-  the minimum and maximum simulation values (i.e. the
-  middle interval set with \code{qi} in
-  \code{\link{coxsimSpline}}) as well as the central 50
-  percent of this area. It also plots a line for the median
-  value of the full area, so values in \code{method} are
-  ignored. One of the key advantages of using ribbons
-  rather than points is that it creates plots with smaller
-  file sizes.}
+\item{type}{character string. Specifies how to plot the simulations. Can be
+\code{points}, \code{lines}, or \code{ribbons}. If points then each
+simulation value will be plotted. If \code{lines} is chosen then each
+simulation is plotted using a different line. Note: any simulation with a
+value along its length that is outside of the specified central interval
+will be dropped. This is to create a smooth plot. If \code{type = "ribbons"}
+a plot will be created with shaded areas ('ribbons') for the minimum and
+maximum simulation values (i.e. the middle interval set with \code{qi} in
+\code{\link{coxsimSpline}}) as well as the central 50 percent of this area.
+It also plots a line for the median value of the full area, so values in
+\code{method} are ignored. One of the key advantages of using ribbons
+rather than points is that it creates plots with smaller file sizes.}
 
-  \item{...}{Additional arguments. (Currently ignored.)}
+\item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
-a \code{gg} \code{ggplot} class object. See
-\code{\link{scatter3d}} for values from \code{scatter3d}
-calls.
+a \code{gg} \code{ggplot} class object. See \code{\link{scatter3d}}
+for values from \code{scatter3d} calls.
 }
 \description{
-\code{simGG.simspline} uses \link{ggplot2} and
-\link{scatter3d} to plot quantities of interest from
-\code{simspline} objects, including relative hazards, first
-differences, hazard ratios, and hazard rates.
+\code{simGG.simspline} uses \link{ggplot2} and \link{scatter3d} to plot
+quantities of interest from \code{simspline} objects, including relative
+hazards, first differences, hazard ratios, and hazard rates.
 }
 \details{
-Uses \code{ggplot2} and \code{scatter3d} to plot the
-quantities of interest from \code{simspline} objects,
-including relative hazards, first differences, hazard
-ratios, and hazard rates. If currently does not support
+Uses \code{ggplot2} and \code{scatter3d} to plot the quantities of
+interest from \code{simspline} objects, including relative hazards, first
+differences, hazard ratios, and hazard rates. If currently does not support
 hazard rates for multiple strata.
 
-It can graph hazard rates as a 3D plot using
-\code{\link{scatter3d}} with the dimensions: Time, Hazard
-Rate, and the value of \code{Xj}. Ribbon plots are not
-available with 3D plots. You can also choose to plot hazard
-rates for a range of values of \code{Xj} in two dimensional
-plots at specific points in time. Each plot is arranged in
-a facet grid.
+It can graph hazard rates as a 3D plot using \code{\link{scatter3d}} with
+the dimensions: Time, Hazard Rate, and the value of \code{Xj}. Ribbon plots
+are not available with 3D plots. You can also choose to plot hazard rates
+for a range of values of \code{Xj} in two dimensional plots at specific
+points in time. Each plot is arranged in a facet grid.
 
-Note: A dotted line is created at y = 1 (0 for first
-difference), i.e. no effect, for time-varying hazard ratio
-graphs. No line is created for hazard rates.
+Note: A dotted line is created at y = 1 (0 for first difference), i.e. no
+effect, for time-varying hazard ratio graphs. No line is created for hazard
+rates.
 }
 \examples{
 \dontrun{

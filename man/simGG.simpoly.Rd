@@ -10,86 +10,76 @@ Hazards Models}
   pcolour = "#A6CEE3", psize = 1, alpha = 0.2, type = "points", ...)
 }
 \arguments{
-  \item{obj}{a \code{simpoly} class object.}
+\item{obj}{a \code{simpoly} class object.}
 
-  \item{xlab}{a label for the plot's x-axis.}
+\item{xlab}{a label for the plot's x-axis.}
 
-  \item{ylab}{a label of the plot's y-axis. The default
-  uses the value of \code{qi}.}
+\item{ylab}{a label of the plot's y-axis. The default uses the value of
+\code{qi}.}
 
-  \item{from}{numeric time to start the plot from. Only
-  relevant if \code{qi = "Hazard Rate"}.}
+\item{from}{numeric time to start the plot from. Only relevant if
+\code{qi = "Hazard Rate"}.}
 
-  \item{to}{numeric time to plot to. Only relevant if
-  \code{qi = "Hazard Rate"}.}
+\item{to}{numeric time to plot to. Only relevant if
+\code{qi = "Hazard Rate"}.}
 
-  \item{title}{the plot's main title.}
+\item{title}{the plot's main title.}
 
-  \item{method}{what type of smoothing method to use to
-  summarize the center of the simulation distribution.}
+\item{method}{what type of smoothing method to use to summarize the center
+of the simulation distribution.}
 
-  \item{spalette}{colour palette for when there are
-  multiple sets of comparisons to plot. Default palette is
-  \code{"Set1"}. See \code{\link{scale_colour_brewer}}.}
+\item{spalette}{colour palette for when there are multiple sets of
+comparisons to plot. Default palette is \code{"Set1"}. See
+\code{\link{scale_colour_brewer}}.}
 
-  \item{legend}{specifies what type of legend to include
-  (if applicable). The default is \code{legend = "legend"}.
-  To hide the legend use \code{legend = FALSE}. See the
-  \code{\link{discrete_scale}} for more details.}
+\item{legend}{specifies what type of legend to include (if applicable). The
+default is \code{legend = "legend"}. To hide the legend use
+\code{legend = FALSE}. See the \code{\link{discrete_scale}} for more details.}
 
-  \item{leg.name}{name of the legend (if applicable).}
+\item{leg.name}{name of the legend (if applicable).}
 
-  \item{lcolour}{character string colour of the smoothing
-  line. The default is hexadecimal colour \code{lcolour =
-  '#2B8CBE'}. Only relevant if \code{qi = "First
-  Difference"}.}
+\item{lcolour}{character string colour of the smoothing line. The default is
+hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if
+\code{qi = "First Difference"}.}
 
-  \item{lsize}{size of the smoothing line. Default is 1.
-  See \code{\link{ggplot2}}.}
+\item{lsize}{size of the smoothing line. Default is 1. See
+\code{\link{ggplot2}}.}
 
-  \item{pcolour}{character string colour of the simulated
-  points or ribbons (when there are not multiple sets of
-  simulations). Default is hexadecimal colour \code{pcolour
-  = '#A6CEE3'}.}
+\item{pcolour}{character string colour of the simulated points or ribbons
+(when there are not multiple sets of simulations). Default is hexadecimal
+colour \code{pcolour = '#A6CEE3'}.}
 
-  \item{psize}{size of the plotted simulation points.
-  Default is \code{psize = 1}. See \code{\link{ggplot2}}.}
+\item{psize}{size of the plotted simulation points. Default is
+\code{psize = 1}. See \code{\link{ggplot2}}.}
 
-  \item{alpha}{numeric. Alpha (e.g. transparency) for the
-  points, lines, or ribbons. Default is \code{alpha = 0.2}.
-  See \code{\link{ggplot2}}. Note, if \code{type = "lines"}
-  or \code{type = "points"} then \code{alpah} sets the
-  maximum value per line or point at the center of the
-  distribution. Lines or points further from the center are
-  more transparent the further they get from the middle.}
+\item{alpha}{numeric. Alpha (e.g. transparency) for the points, lines, or
+ribbons. Default is \code{alpha = 0.2}. See \code{\link{ggplot2}}. Note, if
+\code{type = "lines"} or \code{type = "points"} then \code{alpah} sets the
+maximum value per line or point at the center of the distribution. Lines or
+points further from the center are more transparent the further they get
+from the middle.}
 
-  \item{type}{character string. Specifies how to plot the
-  simulations. Can be \code{points}, \code{lines}, or
-  \code{ribbons}. If points then each simulation value will
-  be plotted. If \code{lines} is chosen then each
-  simulation is plotted using a different line. Note: any
-  simulation with a value along its length that is outside
-  of the specified central interval will be dropped. This
-  is to create a smooth plot. If \code{type = "ribbons"} a
-  plot will be created with shaded areas ('ribbons') for
-  the minimum and maximum simulation values (i.e. the
-  middle interval set with \code{qi} in
-  \code{\link{coxsimSpline}}) as well as the central 50
-  percent of this area. It also plots a line for the median
-  value of the full area, so values in \code{method} are
-  ignored. One of the key advantages of using ribbons
-  rather than points is that it creates plots with smaller
-  file sizes.}
+\item{type}{character string. Specifies how to plot the simulations. Can be
+\code{points}, \code{lines}, or \code{ribbons}. If points then each
+simulation value will be plotted. If \code{lines} is chosen then each
+simulation is plotted using a different line. Note: any simulation with a
+value along its length that is outside of the specified central interval
+will be dropped. This is to create a smooth plot. If \code{type = "ribbons"}
+a plot will be created with shaded areas ('ribbons') for the minimum and
+maximum simulation values (i.e. the middle interval set with \code{qi} in
+\code{\link{coxsimSpline}}) as well as the central 50 percent of this area.
+It also plots a line for the median value of the full area, so values in
+\code{method} are ignored. One of the key advantages of using ribbons
+rather than points is that it creates plots with smaller file sizes.}
 
-  \item{...}{Additional arguments. (Currently ignored.)}
+\item{...}{Additional arguments. (Currently ignored.)}
 }
 \value{
 a \code{gg} \code{ggplot} class object
 }
 \description{
-\code{simGG.simpoly} uses \link{ggplot2} to plot simulated
-relative quantities of interest from a \code{simpoly} class
-object.
+\code{simGG.simpoly} uses \link{ggplot2} to plot simulated relative
+quantities of interest from a \code{simpoly} class object.
 }
 \details{
 Uses \link{ggplot2} to plot the quantities of interest from

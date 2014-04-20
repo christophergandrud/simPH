@@ -7,40 +7,37 @@ equal interval continuous observations}
 SurvExpand(data, GroupVar, Time, Time2, event, messages = TRUE)
 }
 \arguments{
-  \item{data}{a data frame.}
+\item{data}{a data frame.}
 
-  \item{GroupVar}{a character string naming the unit
-  grouping variable.}
+\item{GroupVar}{a character string naming the unit grouping variable.}
 
-  \item{Time}{a character string naming the variable with
-  the interval start time.}
+\item{Time}{a character string naming the variable with the interval start
+time.}
 
-  \item{Time2}{a character string naming the variable with
-  the interval end time.}
+\item{Time2}{a character string naming the variable with the interval end
+time.}
 
-  \item{event}{a character string naming the event
-  variable. Note: must be numeric with 0 indicating no
-  event.}
+\item{event}{a character string naming the event variable. Note: must be
+numeric with 0 indicating no event.}
 
-  \item{messages}{logical indicating if you want messages
-  returned while the function is working.}
+\item{messages}{logical indicating if you want messages returned while the
+function is working.}
 }
 \value{
-Returns a data frame where observations have been expanded
-into equally spaced time intervals.
+Returns a data frame where observations have been expanded into
+equally spaced time intervals.
 }
 \description{
-\code{SurvExpand} convert a data frame of non-equal
-interval continuous observations into equal interval
-continuous observations. This is useful for creating
-time-interactions with \code{\link{tvc}}.
+\code{SurvExpand} convert a data frame of non-equal interval continuous
+observations into equal interval continuous observations. This is useful for
+creating time-interactions with \code{\link{tvc}}.
 }
 \details{
-The function primarily prepares data from the creation of
-accurate time-interactions with the \code{\link{tvc}}
-command. Note: the function will work best if your original
-time intervals are recorded in whole numbers. It also
-currently does not support repeated events data.
+The function primarily prepares data from the creation of accurate
+time-interactions with the \code{\link{tvc}} command.
+Note: the function will work best if your original time intervals are
+recorded in whole numbers. It also currently does not support repeated
+events data.
 }
 \examples{
 \dontrun{
