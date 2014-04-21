@@ -12,7 +12,8 @@
 #' \itemize{
 #'  \item{\code{\link{coxsimLinear}}: }{a function for simulating relative 
 #' hazards, first differences, hazard ratios, and hazard rates for linear, 
-#' non-time interacted covariates from Cox Proportional Hazard models.}
+#' non-time interacted covariates from Cox Proportional Hazard 
+#' (\code{\link{coxph}}) models.}
 #'  \item{\code{\link{coxsimtvc}}: }{a function for simulating time-interactive 
 #' hazards (relative hazards, first differences, and hazard ratios) for 
 #' covariates from Cox Proportional Hazard models. The function will calculate 
@@ -40,9 +41,9 @@
 #'  \item{\code{\link{SurvExpand}}: }{a function to convert a data frame of 
 #' non-equal interval continuous observations into equal interval continuous 
 #' observations.}
-#'  \item{\code{\link{tvc}}: }{a function to create time interaction variable 
-#' that can be used in a coxph model (or any other model with time 
-#' nteractions).}
+#'  \item{\code{\link{tvc}}: }{a function to create time interaction variables 
+#' that can be used in a \code{\link{coxph}} model (or any other model with time 
+#' interactions).}
 #'  \item{setXl: }{a function for setting valid \code{Xl} values given a 
 #'  sequence of fitted \code{Xj} values. This makes it more intituitive to find 
 #'  hazard ratios and first differences for comparisons between some \eqn{Xj} 
