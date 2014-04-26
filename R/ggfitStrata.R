@@ -69,7 +69,7 @@ ggfitStrata <- function(obj, byStrata = FALSE, xlab = "", ylab = "", title = "",
       geom_line() +
       geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha = I(0.1)) +
       xlab(xlab) + ylab(ylab) + ggtitle(title) +
-      theme_bw()
+      theme_linedraw()
       
   } else if (byStrata == TRUE){
     TempData$StrataC <- gsub("=", "", TempData$Strata)
@@ -88,7 +88,7 @@ ggfitStrata <- function(obj, byStrata = FALSE, xlab = "", ylab = "", title = "",
                                                 fill = rcolour) +
                                    xlab("") + ylab("") + 
                                    ggtitle(paste(i, "\n")) +
-                                   theme_bw()
+                                   theme_linedraw()
     }
   Grid <- do.call(grid.arrange, c(p, main = title, sub = xlab, left = ylab))
   }

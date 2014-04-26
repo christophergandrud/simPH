@@ -75,13 +75,15 @@
 #'                      Xl = c(1000, 1000),
 #'                      qi = "Hazard Ratio",
 #'                      spin = TRUE, ci = 0.99)
-#' # simGG(Sim1)
+#' 
+#' simGG(Sim1, method = "lm")
 #'
 #' \dontrun{
 #' # Simulate and plot Hazard Rate for stafcder variable
 #' Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
 #'                       qi = "Hazard Rate",
 #'                       Xj = c(1237, 1600))
+#' 
 #' simGG(Sim2, type = 'lines')
 #' }
 #'
@@ -171,7 +173,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 				scale_colour_brewer(palette = spalette, name = leg.name,
 					guide = legend) +
 				ggtitle(title) +
-				theme_bw(base_size = 15)
+				theme_linedraw(base_size = 15)
     	} else if (is.null(obj$Strata)){
 	      	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
 	        	geom_point(shape = 21, aes(alpha = PercRank), size = psize) +
@@ -181,7 +183,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 			}
 		} else if (qi == "First Difference"){
 			ggplot(obj, aes(Xj, QI)) +
@@ -193,7 +195,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 		ggplot(obj, aes(Xj, QI)) +
 	        geom_point(shape = 21, aes(alpha = PercRank), size = psize,
@@ -204,7 +206,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 	        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 	        xlab(xlab) + ylab(ylab) +
 	        ggtitle(title) +
-	        theme_bw(base_size = 15)
+	        theme_linedraw(base_size = 15)
 		}
 	}
 	# Plot lines
@@ -222,7 +224,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 									guide = legend) +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 				ggtitle(title) +
-				theme_bw(base_size = 15)
+				theme_linedraw(base_size = 15)
     	} else if (is.null(obj$Strata)){
 	      	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
 	        	geom_line(aes(group = interaction(SimID, factor(HRValue)),
@@ -234,7 +236,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 			}
 		} else if (qi == "First Difference"){
 			ggplot(obj, aes(Xj, QI)) +
@@ -246,7 +248,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 		ggplot(obj, aes(Xj, QI)) +
 	        geom_line(aes(group = SimID, alpha = PercRank), size = psize,
@@ -257,7 +259,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 	        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 	        xlab(xlab) + ylab(ylab) +
 	        ggtitle(title) +
-	        theme_bw(base_size = 15)
+	        theme_linedraw(base_size = 15)
 		}
 	}
 
@@ -281,7 +283,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        scale_fill_brewer(palette = spalette, name = leg.name,
 		        				  guide = legend) +
 				ggtitle(title) +
-				theme_bw(base_size = 15)
+				theme_linedraw(base_size = 15)
     	} else if (is.null(obj$Strata)){
 			obj <- MinMaxLines(df = obj, hr = TRUE)
 	      	ggplot(obj, aes(Time, Median, colour = factor(HRValue),
@@ -297,7 +299,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        				  guide = legend) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 		}
 		} else if (qi == "First Difference"){
 			obj <- MinMaxLines(df = obj)
@@ -310,7 +312,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 			obj <- MinMaxLines(df = obj)
 			ggplot(obj, aes(Xj, Median)) +
@@ -322,7 +324,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 		}
 		)
 	}

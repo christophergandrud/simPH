@@ -224,7 +224,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
 			ggplot(obj, aes(Xj, QI)) +
 		        geom_point(shape = 21,  aes(alpha = PercRank), size = psize,
@@ -235,7 +235,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 	    } else if (qi == "Hazard Rate" & is.null(FacetTime)){
 	    	with(obj, scatter3d(x = Time, y = QI, z = Xj,
     						  xlab = xlab, ylab = ylab, zlab = zlab,
@@ -263,7 +263,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
 		        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 	    }
     }
     # Plots lines
@@ -278,7 +278,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
     	        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
     	        xlab(xlab) + ylab(ylab) +
     	        ggtitle(title) +
-    	        theme_bw(base_size = 15)
+    	        theme_linedraw(base_size = 15)
     	} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
     		ggplot(obj, aes(Xj, QI)) +
     	        geom_line(aes(group = SimID, alpha = PercRank), size = psize,
@@ -289,7 +289,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
     	        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
     	        xlab(xlab) + ylab(ylab) +
     	        ggtitle(title) +
-    	        theme_bw(base_size = 15)
+    	        theme_linedraw(base_size = 15)
         } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
     		SubsetTime <- function(f){
     		  Time <- NULL
@@ -312,7 +312,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
     	        xlab(xlab) + ylab(ylab) +
     	        ggtitle(title) +
     	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-    	        theme_bw(base_size = 15)
+    	        theme_linedraw(base_size = 15)
         }
     }
     # Plots ribbons
@@ -330,7 +330,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
     	        xlab(xlab) + ylab(ylab) +
     	        ggtitle(title) +
     	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-    	        theme_bw(base_size = 15)
+    	        theme_linedraw(base_size = 15)
     	} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
     		obj <- MinMaxLines(df = obj)
     		ggplot(obj, aes(Xj, Median)) +
@@ -343,7 +343,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
             	xlab(xlab) + ylab(ylab) +
     	        ggtitle(title) +
     	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-    	        theme_bw(base_size = 15)
+    	        theme_linedraw(base_size = 15)
         } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
     		SubsetTime <- function(f){
     		  Time <- NULL
@@ -368,7 +368,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
     	        xlab(xlab) + ylab(ylab) +
     	        ggtitle(title) +
     	        guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-    	        theme_bw(base_size = 15)
+    	        theme_linedraw(base_size = 15)
         }
         )
     }

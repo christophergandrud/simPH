@@ -198,7 +198,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        					guide = legend) +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 	    	} else if (is.null(obj$strata)){
 		      	ggplot(obj, aes(x = Time, y = HRate, 
 		      					colour = factor(HRValue))) +
@@ -210,7 +210,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 			        xlab(xlab) + ylab(ylab) +
 			        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 			}
 		} 
 		else if (qi == "Marginal Effect"){
@@ -222,7 +222,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) + 
 			    xlab(xlab) + ylab(ylab) +
 			    ggtitle(title) +
-			    theme_bw(base_size = 15)
+			    theme_linedraw(base_size = 15)
 		} 
 		else if (qi == "First Difference"){
 			X1Unique <- obj[!duplicated(obj[, "X1"]), ]
@@ -240,7 +240,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 			        xlab(xlab) + ylab(ylab) +
 			        ggtitle(title) +
-			        theme_bw(base_size = 15)
+			        theme_linedraw(base_size = 15)
 		    }
 		} 
 		else if (qi == "Hazard Ratio"){
@@ -259,7 +259,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 			        xlab(xlab) + ylab(ylab) +
 			        ggtitle(title) +
-			        theme_bw(base_size = 15)
+			        theme_linedraw(base_size = 15)
 		    }
 	    }
 	}
@@ -278,7 +278,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        					guide = legend) +
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 	    	} else if (is.null(obj$strata)){
 		      	ggplot(obj, aes(x = Time, y = HRate, 
 		      					colour = factor(HRValue))) +
@@ -291,7 +291,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 			        xlab(xlab) + ylab(ylab) +
 			        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 			}
 		} 
 		else if (qi == "Marginal Effect"){
@@ -303,7 +303,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 			    xlab(xlab) + ylab(ylab) +
 			    ggtitle(title) +
-			    theme_bw(base_size = 15)
+			    theme_linedraw(base_size = 15)
 		} 
 		else if (qi == "First Difference"){
 			X1Unique <- obj[!duplicated(obj[, "X1"]), ]
@@ -321,7 +321,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			        xlab(xlab) + ylab(ylab) +
 			        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 			        ggtitle(title) +
-			        theme_bw(base_size = 15)
+			        theme_linedraw(base_size = 15)
 		    }
 		} 
 		else if (qi == "Hazard Ratio"){
@@ -340,7 +340,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
 			        xlab(xlab) + ylab(ylab) +
 			        ggtitle(title) +
-			        theme_bw(base_size = 15)
+			        theme_linedraw(base_size = 15)
 		    }
 	    }
 	}
@@ -364,7 +364,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        scale_fill_brewer(palette = spalette, name = leg.name, 
 		        				  guide = legend) +
 				ggtitle(title) +
-				theme_bw(base_size = 15)
+				theme_linedraw(base_size = 15)
 		} else if (is.null(obj$Strata)){
 			obj <- MinMaxLines(df = obj, hr = TRUE)
 	      	ggplot(obj, aes(Time, Median, colour = factor(HRValue), 
@@ -380,7 +380,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 		        				  guide = legend) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 			}
 		} 
 		else if (qi == "Marginal Effect"){
@@ -393,7 +393,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 								fill = pcolour) +
 		        xlab(xlab) + ylab(ylab) +
 		        ggtitle(title) +
-		        theme_bw(base_size = 15)
+		        theme_linedraw(base_size = 15)
 		} 
 		else if (qi == "Hazard Ratio" | qi == "First Difference"){
 			X1Unique <- obj[!duplicated(obj[, "X1"]), ]
@@ -415,7 +415,7 @@ simGG.siminteract <- function(obj, from = NULL, to = NULL, xlab = NULL,
 			        				  guide = legend) +
 			        xlab(xlab) + ylab(ylab) +
 			        ggtitle(title) +
-					theme_bw(base_size = 15)
+					theme_linedraw(base_size = 15)
 		    }
 	    }
 	    )

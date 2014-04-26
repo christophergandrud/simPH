@@ -1,3 +1,10 @@
+## Version 1.2.2
+
+Uses `theme_linetype` rather than `theme_bw` for the plots. Requires ggplot2
+version 1.0.0
+
+Minor documentation improvements.
+
 ## Version 1.2.1
 
 Minor documentation improvements.
