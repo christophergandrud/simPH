@@ -1,3 +1,9 @@
+## Version 1.2.2
+
+Added `PartialData` argument to `SurvExpand`. The argument allows the user to
+determine whether or not to only keep the expanded data needed to find the Cox
+partial likelihood.
+
 ## Version 1.2.1
 
 Minor documentation improvements.
