@@ -19,8 +19,22 @@ coefficients, multiplicative interactions, polynomials, penalised splines, and
 non-proportional hazards, as well as stratified survival curves from Cox
 Proportional Hazard models.
 
-For more information plus examples, please see this
-[working paper](http://ssrn.com/abstract=2318977).
+For more information plus examples, please see the
+[description paper](http://ssrn.com/abstract=2318977) forthcoming in the
+[Journal of Statisticsal Software](http://www.jstatsoft.org/).
+
+To cite the paper please use:
+
+```
+@article{simPH_JSS,
+    author = {Christopher Gandrud},
+    title = {simPH: An R Package for Illustrating Estimates from Cox
+        Proportional Hazard Models Including for Interactive and Nonlinear
+        Effects},
+    journal = {Journal of Statistical Software},
+    year = {forthcoming}
+}
+```
 
 ## Functions
 
