@@ -4,6 +4,12 @@ Added `PartialData` argument to `SurvExpand`. The argument allows the user to
 determine whether or not to only keep the expanded data needed to find the Cox
 partial likelihood.
 
+Made `MinMaxLines` a top level function that is useful for returning basic
+summary statistics from coxsim constricted simulation intervals. Using the
+argument `clean = TRUE` returns the simulations' medians, the minimum and
+maximum of the constricted intervals (as set in the `coxsim` call) and the lower
+and upper 50% of the constricted intervals.
+
 ## Version 1.2.1
 
 Minor documentation improvements.

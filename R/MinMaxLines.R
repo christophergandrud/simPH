@@ -1,11 +1,11 @@
 #' Transform the simulation object to include only the min and max of the
-#' constricted interval, as well as the lower and upper bounds of the middle 50
-#' percent of the constricted interval
+#' constricted intervals, as well as the lower and upper bounds of the middle 50
+#' percent of the constricted intervals
 #'
 #' \code{MinMaxLines} is an internal function to transform the simulation
-#' object to include only the min and max of the interval set by \code{ci} in
+#' object to include only the min and max of the intervals set by \code{ci} in
 #' the \code{coxsim} command, as well as the lower and upper bounds of the
-#' middle 50 percent of this interval. It also returns the median.
+#' middle 50 percent of these intervals. It also returns the medians.
 #'
 #' @param df a data frame or a simulation class object.
 #' @param byVars character vector of the variables to subset the data frame by.
@@ -16,6 +16,31 @@
 #' @param clean logical, whether or not to clean up the output data frame to
 #' only include \code{byVars}, \code{Min_CI}, \code{Lower50_CI}, \code{median},
 #' \code{Upper50_CI}, \code{Max_CI}.
+#'
+#' @examples
+#' # Load Carpenter (2002) data
+#' data("CarpenterFdaData")
+#'
+#' # Load survival package
+#' library(survival)
+#'
+#' # Run basic model
+#' M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
+#'            deathrt1 + acutediz + hosp01  + hhosleng +
+#'            mandiz01 + femdiz01 + peddiz01 + orphdum +
+#'            vandavg3 + wpnoavg3 + condavg3 + orderent +
+#'            stafcder, data = CarpenterFdaData)
+#'
+#'  # Simulate Hazard Ratios
+#'  Sim1 <- coxsimLinear(M1, b = "stafcder",
+#'                       Xj = c(1237, 1600),
+#'                       Xl = c(1000, 1000),
+#'                       qi = "Hazard Ratio",
+#'                       spin = TRUE, ci = 0.99)
+#'
+#' # Find summary statistics of the constricted interval
+#' Sum <- MinMaxLines(Sim1, clean = TRUE)
+#' head(Test)
 #'
 #' @importFrom plyr ddply
 #' @keywords internals
