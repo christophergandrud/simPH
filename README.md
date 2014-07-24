@@ -99,6 +99,10 @@ package's `plot.survfit` function. One major advantage is the ability to split
 the survival curves into multiple plots and arrange them in a grid. This makes
 it easier to examine many strata at once. Otherwise they can be very bunched up.
 
+- `MinMaxLines`: a function for summarising the constricted intervals from the
+simulations, including the median, upper and lower bounds of the intervals' and
+the middel 50% of these intervals.
+
 ## Installation
 
 The package is available on CRAN and can be installed in the normal R way.
