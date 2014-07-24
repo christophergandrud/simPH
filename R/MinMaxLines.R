@@ -40,57 +40,60 @@
 #'
 #' # Find summary statistics of the constricted interval
 #' Sum <- MinMaxLines(Sim1, clean = TRUE)
-#' head(Test)
+#' head(Sim1)
 #'
-#' @importFrom plyr ddply
+#' @importFrom dplyr regroup
+#' @importFrom dplyr ungroup
+#' @importFrom dplyr mutate
 #' @keywords internals
 #' @export
 
 MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
                         clean = FALSE){
     Xj <- QI <- Time <- HRValue <- HRate <- Strata <- NULL
-	if (class(df) != 'data.frame') class(df) <- 'data.frame'
+    if (class(df) != 'data.frame') class(df) <- 'data.frame'
     if (isTRUE(hr) & !isTRUE(strata)){
         byVars <- c("Time", "HRValue")
     }
     else if (isTRUE(hr) & !isTRUE(strata)){
         byVars <- c("Time", "HRValue", "Strata")
     }
+
+	byVars2 <- lapply(byVars, as.symbol)
+    df <- regroup(df, byVars2)
+
     if (!isTRUE(hr)){
-        Linesdf <- ddply(df, byVars, transform, Median = median(QI))
-        Linesdf <- ddply(Linesdf, byVars, transform, Max = max(QI))
-        Linesdf <- ddply(Linesdf, byVars, transform, Min = min(QI))
-        Linesdf <- ddply(Linesdf, byVars, transform,
-                        Lower50 = quantile(QI, 0.25))
-        Linesdf <- ddply(Linesdf, byVars, transform,
-                        Upper50 = quantile(QI, 0.75))
+        Linesdf <- mutate(df, Median = median(QI))
+        Linesdf <- mutate(Linesdf, Max = max(QI))
+        Linesdf <- mutate(Linesdf, Min = min(QI))
+        Linesdf <- mutate(Linesdf, Lower50 = quantile(QI, 0.25))
+        Linesdf <- mutate(Linesdf, Upper50 = quantile(QI, 0.75))
 
         Linesdf <- Linesdf[!duplicated(Linesdf[, byVars]), ]
     }
     else if (isTRUE(hr) & !isTRUE(strata)){
-        Linesdf <- ddply(df, byVars, transform, Median = median(HRate))
-        Linesdf <- ddply(Linesdf, byVars, transform, Max = max(HRate))
-        Linesdf <- ddply(Linesdf, byVars, transform, Min = min(HRate))
-        Linesdf <- ddply(Linesdf, byVars, transform,
-                        Lower50 = quantile(HRate, 0.25))
-        Linesdf <- ddply(Linesdf, byVars, transform,
-                        Upper50 = quantile(HRate, 0.75))
+        Linesdf <- mutate(df, Median = median(HRate))
+        Linesdf <- mutate(Linesdf, Max = max(HRate))
+        Linesdf <- mutate(Linesdf, Min = min(HRate))
+        Linesdf <- mutate(Linesdf, Lower50 = quantile(HRate, 0.25))
+        Linesdf <- mutate(Linesdf, Upper50 = quantile(HRate, 0.75))
 
         Linesdf <- Linesdf[!duplicated(Linesdf[, c(1, 3)]), ]
 
     }
     else if (isTRUE(hr) & isTRUE(strata)){
-        Linesdf <- ddply(df, byVars, transform, Median = median(HRate))
-        Linesdf <- ddply(Linesdf, byVars, transform, Max = max(HRate))
-        Linesdf <- ddply(Linesdf, byVars, transform, Min = min(HRate))
-        Linesdf <- ddply(Linesdf, byVars, transform,
-                        Lower50 = quantile(HRate, 0.25))
-        Linesdf <- ddply(Linesdf, byVars, transform,
-                        Upper50 = quantile(HRate, 0.75))
+        Linesdf <- mutate(df, Median = median(HRate))
+        Linesdf <- mutate(Linesdf, Max = max(HRate))
+        Linesdf <- mutate(Linesdf, Min = min(HRate))
+        Linesdf <- mutate(Linesdf, Lower50 = quantile(HRate, 0.25))
+        Linesdf <- mutate(Linesdf, Upper50 = quantile(HRate, 0.75))
 
         Linesdf <- Linesdf[!duplicated(
                             Linesdf[, c("Time", "HRValue", "Strata")]), ]
     }
+
+    Linesdf <- ungroup(Linesdf)
+
     if (isTRUE(clean)){
         Linesdf <- Linesdf[, c(byVars, 'Min', 'Lower50', 'Median', 'Upper50',
                                 'Max')]

@@ -75,7 +75,7 @@
 #'                      Xl = c(1000, 1000),
 #'                      qi = "Hazard Ratio",
 #'                      spin = TRUE, ci = 0.99)
-#' # simGG(Sim1)
+#' simGG(Sim1, method = 'lm')
 #'
 #' \dontrun{
 #' # Simulate and plot Hazard Rate for stafcder variable
@@ -111,19 +111,19 @@
 #' @export
 
 simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
-							ylab = NULL, title = NULL, method = "auto",
-							spalette = "Set1", legend = "legend", leg.name = "",
-							lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
-							psize = 1, alpha = 0.2, type = "points", ...)
+                            ylab = NULL, title = NULL, method = "auto",
+                            spalette = "Set1", legend = "legend", leg.name = "",
+                            lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
+                            psize = 1, alpha = 0.2, type = "points", ...)
 {
-	Time <- HRate <- HRValue <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <-
-		Median <- SimID <- NULL
-	if (!inherits(obj, "simlinear")){
+    Time <- HRate <- HRValue <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <-
+        Median <- SimID <- NULL
+    if (!inherits(obj, "simlinear")){
     	stop("must be a simlinear object", call. = FALSE)
     }
-	if (type == 'ribbons' & method != "auto"){
-	  message("The method argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
-	}
+    if (type == 'ribbons' & method != "auto"){
+      message("The method argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
+    }
     # Find quantity of interest
     qi <- class(obj)[[2]]
 
@@ -141,189 +141,189 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
    	    obj <- OutlierDrop(obj)
     }
 
-	# Alpha gradient based on percentile in the distribution
-	if (type != 'ribbons' & qi != 'Hazard Rate'){
-		obj <- PercRank(obj, xaxis = 'Xj')
-	} else if (type != 'ribbons' & qi == 'Hazard Rate'){
-		obj <- PercRank(obj, xaxis = 'Time', yaxis = 'HRate')
-	}
+    # Alpha gradient based on percentile in the distribution
+    if (type != 'ribbons' & qi != 'Hazard Rate'){
+        obj <- PercRank(obj, xaxis = 'Xj')
+    } else if (type != 'ribbons' & qi == 'Hazard Rate'){
+        obj <- PercRank(obj, xaxis = 'Time', yaxis = 'HRate')
+    }
 
     # Constrict time period to plot for hazard rate
     if (qi == "Hazard Rate"){
-	    if (!is.null(from)){
-			obj <- subset(obj, Time >= from)
-		}
-		if (!is.null(to)){
-	        	obj <- subset(obj, Time <= to)
-	    }
+        if (!is.null(from)){
+            obj <- subset(obj, Time >= from)
+        }
+        if (!is.null(to)){
+            	obj <- subset(obj, Time <= to)
+        }
     }
 
-	# Plot points
-	if (type == 'points'){
-		if (qi == "Hazard Rate"){
-	  	if (!is.null(obj$Strata)) {
-			ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
-				facet_grid(. ~ Strata) +
-				geom_point(aes(alpha = PercRank), size = psize) +
-				geom_smooth(method = method, size = lsize, se = FALSE) +
-		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-				xlab(xlab) + ylab(ylab) +
-				scale_colour_brewer(palette = spalette, name = leg.name,
-					guide = legend) +
-				ggtitle(title) +
-				theme_bw(base_size = 15)
+    # Plot points
+    if (type == 'points'){
+        if (qi == "Hazard Rate"){
+      	if (!is.null(obj$Strata)) {
+            ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
+                facet_grid(. ~ Strata) +
+                geom_point(aes(alpha = PercRank), size = psize) +
+                geom_smooth(method = method, size = lsize, se = FALSE) +
+                scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
+                xlab(xlab) + ylab(ylab) +
+                scale_colour_brewer(palette = spalette, name = leg.name,
+                    guide = legend) +
+                ggtitle(title) +
+                theme_bw(base_size = 15)
     	} else if (is.null(obj$Strata)){
-	      	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
-	        	geom_point(shape = 21, aes(alpha = PercRank), size = psize) +
-		        geom_smooth(method = method, size = lsize, se = FALSE) +
-		        scale_colour_brewer(palette = spalette, name = leg.name,
-		        					guide = legend) +
-		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-		        xlab(xlab) + ylab(ylab) +
-		        ggtitle(title) +
-		        theme_bw(base_size = 15)
-			}
-		} else if (qi == "First Difference"){
-			ggplot(obj, aes(Xj, QI)) +
-		        geom_point(shape = 21, aes(alpha = PercRank), size = psize,
-		        						   colour = pcolour) +
-		        geom_smooth(method = method, size = lsize, se = FALSE,
-		        			color = lcolour) +
-		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
-		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-		        xlab(xlab) + ylab(ylab) +
-		        ggtitle(title) +
-		        theme_bw(base_size = 15)
-		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
-		ggplot(obj, aes(Xj, QI)) +
-	        geom_point(shape = 21, aes(alpha = PercRank), size = psize,
-	        						   colour = pcolour) +
-	        geom_smooth(method = method, size = lsize, se = FALSE,
-	        			color = lcolour) +
-	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
-	        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-	        xlab(xlab) + ylab(ylab) +
-	        ggtitle(title) +
-	        theme_bw(base_size = 15)
-		}
-	}
-	# Plot lines
-	else if (type == 'lines'){
-		if (qi == "Hazard Rate"){
-	  	if (!is.null(obj$Strata)) {
-			ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
-				facet_grid(. ~ Strata) +
-				geom_line(aes(group = interaction(SimID, factor(HRValue)),
-							  alpha = PercRank), size = psize) +
-				geom_smooth(aes(colour = factor(HRValue)), method = method,
-								size = lsize, se = FALSE) +
-				xlab(xlab) + ylab(ylab) +
-				scale_colour_brewer(palette = spalette, name = leg.name,
-									guide = legend) +
-		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-				ggtitle(title) +
-				theme_bw(base_size = 15)
+          	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
+            	geom_point(shape = 21, aes(alpha = PercRank), size = psize) +
+                geom_smooth(method = method, size = lsize, se = FALSE) +
+                scale_colour_brewer(palette = spalette, name = leg.name,
+                					guide = legend) +
+                scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
+                xlab(xlab) + ylab(ylab) +
+                ggtitle(title) +
+                theme_bw(base_size = 15)
+            }
+        } else if (qi == "First Difference"){
+            ggplot(obj, aes(Xj, QI)) +
+                geom_point(shape = 21, aes(alpha = PercRank), size = psize,
+                						   colour = pcolour) +
+                geom_smooth(method = method, size = lsize, se = FALSE,
+                			color = lcolour) +
+                geom_hline(aes(yintercept = 0), linetype = "dotted") +
+                scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
+                xlab(xlab) + ylab(ylab) +
+                ggtitle(title) +
+                theme_bw(base_size = 15)
+        } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
+        ggplot(obj, aes(Xj, QI)) +
+            geom_point(shape = 21, aes(alpha = PercRank), size = psize,
+            						   colour = pcolour) +
+            geom_smooth(method = method, size = lsize, se = FALSE,
+            			color = lcolour) +
+            geom_hline(aes(yintercept = 1), linetype = "dotted") +
+            scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
+            xlab(xlab) + ylab(ylab) +
+            ggtitle(title) +
+            theme_bw(base_size = 15)
+        }
+    }
+    # Plot lines
+    else if (type == 'lines'){
+        if (qi == "Hazard Rate"){
+      	if (!is.null(obj$Strata)) {
+            ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
+                facet_grid(. ~ Strata) +
+                geom_line(aes(group = interaction(SimID, factor(HRValue)),
+                              alpha = PercRank), size = psize) +
+                geom_smooth(aes(colour = factor(HRValue)), method = method,
+                                size = lsize, se = FALSE) +
+                xlab(xlab) + ylab(ylab) +
+                scale_colour_brewer(palette = spalette, name = leg.name,
+                                    guide = legend) +
+                scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
+                ggtitle(title) +
+                theme_bw(base_size = 15)
     	} else if (is.null(obj$Strata)){
-	      	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
-	        	geom_line(aes(group = interaction(SimID, factor(HRValue)),
-	        				  alpha = PercRank), shape = 21, size = psize) +
-		        geom_smooth(aes(colour = factor(HRValue)), method = method,
-		        				size = lsize, se = FALSE) +
-		        scale_colour_brewer(palette = spalette, name = leg.name,
-		        					guide = legend) +
-		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-		        xlab(xlab) + ylab(ylab) +
-		        ggtitle(title) +
-		        theme_bw(base_size = 15)
-			}
-		} else if (qi == "First Difference"){
-			ggplot(obj, aes(Xj, QI)) +
-		        geom_line(aes(group = SimID, alpha = PercRank), size = psize,
-		        			  colour = pcolour) +
-		        geom_smooth(method = method, size = lsize, se = FALSE,
-		        			color = lcolour) +
-		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
-		        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-		        xlab(xlab) + ylab(ylab) +
-		        ggtitle(title) +
-		        theme_bw(base_size = 15)
-		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
-		ggplot(obj, aes(Xj, QI)) +
-	        geom_line(aes(group = SimID, alpha = PercRank), size = psize,
-	        			  colour = pcolour) +
-	        geom_smooth(method = method, size = lsize, se = FALSE,
-	        			color = lcolour) +
-	        geom_hline(aes(yintercept = 1), linetype = "dotted") +
-	        scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-	        xlab(xlab) + ylab(ylab) +
-	        ggtitle(title) +
-	        theme_bw(base_size = 15)
-		}
-	}
+          	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
+            	geom_line(aes(group = interaction(SimID, factor(HRValue)),
+            				  alpha = PercRank), shape = 21, size = psize) +
+                geom_smooth(aes(colour = factor(HRValue)), method = method,
+                				size = lsize, se = FALSE) +
+                scale_colour_brewer(palette = spalette, name = leg.name,
+                					guide = legend) +
+                scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
+                xlab(xlab) + ylab(ylab) +
+                ggtitle(title) +
+                theme_bw(base_size = 15)
+            }
+        } else if (qi == "First Difference"){
+            ggplot(obj, aes(Xj, QI)) +
+                geom_line(aes(group = SimID, alpha = PercRank), size = psize,
+                			  colour = pcolour) +
+                geom_smooth(method = method, size = lsize, se = FALSE,
+                			color = lcolour) +
+                geom_hline(aes(yintercept = 0), linetype = "dotted") +
+                scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
+                xlab(xlab) + ylab(ylab) +
+                ggtitle(title) +
+                theme_bw(base_size = 15)
+        } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
+        ggplot(obj, aes(Xj, QI)) +
+            geom_line(aes(group = SimID, alpha = PercRank), size = psize,
+            			  colour = pcolour) +
+            geom_smooth(method = method, size = lsize, se = FALSE,
+            			color = lcolour) +
+            geom_hline(aes(yintercept = 1), linetype = "dotted") +
+            scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
+            xlab(xlab) + ylab(ylab) +
+            ggtitle(title) +
+            theme_bw(base_size = 15)
+        }
+    }
 
-	# Plot ribbons
-	else if (type == 'ribbons'){
-		suppressWarnings(
-		if (qi == "Hazard Rate"){
-	  	if (!is.null(obj$Strata)) {
-			obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
-			ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue),
-							fill = factor(HRValue))) +
-				geom_line(size = lsize) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
-								linetype = 0) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
-								linetype = 0) +
-				facet_grid(. ~ Strata) +
-				xlab(xlab) + ylab(ylab) +
-		        scale_colour_brewer(palette = spalette, name = leg.name,
-		        					guide = legend) +
-		        scale_fill_brewer(palette = spalette, name = leg.name,
-		        				  guide = legend) +
-				ggtitle(title) +
-				theme_bw(base_size = 15)
+    # Plot ribbons
+    else if (type == 'ribbons'){
+        suppressWarnings(
+        if (qi == "Hazard Rate"){
+      	if (!is.null(obj$Strata)) {
+            obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
+            ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue),
+                            fill = factor(HRValue))) +
+                geom_line(size = lsize) +
+                geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
+                                linetype = 0) +
+                geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
+                                linetype = 0) +
+                facet_grid(. ~ Strata) +
+                xlab(xlab) + ylab(ylab) +
+                scale_colour_brewer(palette = spalette, name = leg.name,
+                					guide = legend) +
+                scale_fill_brewer(palette = spalette, name = leg.name,
+                				  guide = legend) +
+                ggtitle(title) +
+                theme_bw(base_size = 15)
     	} else if (is.null(obj$Strata)){
-			obj <- MinMaxLines(df = obj, hr = TRUE)
-	      	ggplot(obj, aes(Time, Median, colour = factor(HRValue),
-	      					fill = factor(HRValue))) +
-		        geom_line(size = lsize) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
-							linetype = 0) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
-							linetype = 0) +
-		        scale_colour_brewer(palette = spalette, name = leg.name,
-		        					guide = legend) +
-		        scale_fill_brewer(palette = spalette, name = leg.name,
-		        				  guide = legend) +
-		        xlab(xlab) + ylab(ylab) +
-		        ggtitle(title) +
-		        theme_bw(base_size = 15)
-		}
-		} else if (qi == "First Difference"){
-			obj <- MinMaxLines(df = obj)
-			ggplot(obj, aes(Xj, Median)) +
-		        geom_line(size = lsize, colour = lcolour) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
-							fill = pcolour) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
-							fill = pcolour) +
-		        geom_hline(aes(yintercept = 0), linetype = "dotted") +
-		        xlab(xlab) + ylab(ylab) +
-		        ggtitle(title) +
-		        theme_bw(base_size = 15)
-		} else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
-			obj <- MinMaxLines(df = obj)
-			ggplot(obj, aes(Xj, Median)) +
-		        geom_line(size = lsize, colour = lcolour) +
-				geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
-							fill = pcolour) +
-				geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
-							fill = pcolour) +
-	        	geom_hline(aes(yintercept = 1), linetype = "dotted") +
-		        xlab(xlab) + ylab(ylab) +
-		        ggtitle(title) +
-		        theme_bw(base_size = 15)
-		}
-		)
-	}
+            obj <- MinMaxLines(df = obj, hr = TRUE)
+          	ggplot(obj, aes(Time, Median, colour = factor(HRValue),
+          					fill = factor(HRValue))) +
+                geom_line(size = lsize) +
+                geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
+                            linetype = 0) +
+                geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
+                            linetype = 0) +
+                scale_colour_brewer(palette = spalette, name = leg.name,
+                					guide = legend) +
+                scale_fill_brewer(palette = spalette, name = leg.name,
+                				  guide = legend) +
+                xlab(xlab) + ylab(ylab) +
+                ggtitle(title) +
+                theme_bw(base_size = 15)
+        }
+        } else if (qi == "First Difference"){
+            obj <- MinMaxLines(df = obj)
+            ggplot(obj, aes(Xj, Median)) +
+                geom_line(size = lsize, colour = lcolour) +
+                geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
+                            fill = pcolour) +
+                geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
+                            fill = pcolour) +
+                geom_hline(aes(yintercept = 0), linetype = "dotted") +
+                xlab(xlab) + ylab(ylab) +
+                ggtitle(title) +
+                theme_bw(base_size = 15)
+        } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
+            obj <- MinMaxLines(df = obj)
+            ggplot(obj, aes(Xj, Median)) +
+                geom_line(size = lsize, colour = lcolour) +
+                geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
+                            fill = pcolour) +
+                geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
+                            fill = pcolour) +
+            	geom_hline(aes(yintercept = 1), linetype = "dotted") +
+                xlab(xlab) + ylab(ylab) +
+                ggtitle(title) +
+                theme_bw(base_size = 15)
+        }
+        )
+    }
 }

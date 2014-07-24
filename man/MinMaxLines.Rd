@@ -52,7 +52,7 @@ M1 <- coxph(Surv(acttime, censor) ~ prevgenx + lethal +
 
 # Find summary statistics of the constricted interval
 Sum <- MinMaxLines(Sim1, clean = TRUE)
-head(Test)
+head(Sim1)
 }
 \keyword{internals}
 
