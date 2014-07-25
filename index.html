@@ -31,13 +31,13 @@
         <h1>
 <a name="simph" class="anchor" href="#simph"><span class="octicon octicon-link"></span></a>simPH</h1>
 
-<p><img src="https://raw.githubusercontent.com/christophergandrud/simPH/master/img/plotbanner.png" height="40" width="1000"></p>
+<p><img src="img/plotbanner.png" height="40" width="1000"></p>
 
 <h3>
 <a name="christopher-gandrud" class="anchor" href="#christopher-gandrud"><span class="octicon octicon-link"></span></a>Christopher Gandrud</h3>
 
 <h3>
-<a name="version-12-" class="anchor" href="#version-12-"><span class="octicon octicon-link"></span></a>Version 1.2 <a href="https://travis-ci.org/christophergandrud/simPH"><img src="https://travis-ci.org/christophergandrud/simPH.png" alt="Build Status"></a>
+<a name="version-122-" class="anchor" href="#version-122-"><span class="octicon octicon-link"></span></a>Version 1.2.2 <a href="https://travis-ci.org/christophergandrud/simPH"><img src="https://travis-ci.org/christophergandrud/simPH.png" alt="Build Status"></a>
 </h3>
 
 <h4>
@@ -45,9 +45,27 @@
 
 <p><a href="https://github.com/christophergandrud/simPH/issues">https://github.com/christophergandrud/simPH/issues</a></p>
 
-<hr><p><strong>simPH</strong> is an R package for simulating and plotting quantities of interest (relative hazards, first differences, and hazard ratios) for linear coefficients, multiplicative interactions, polynomials, penalised splines, and non-proportional hazards, as well as stratified survival curves from Cox Proportional Hazard models.</p>
+<hr><p><strong>simPH</strong> is an R package for simulating and plotting quantities of interest
+(relative hazards, first differences, and hazard ratios) for linear
+coefficients, multiplicative interactions, polynomials, penalised splines, and
+non-proportional hazards, as well as stratified survival curves from Cox
+Proportional Hazard models.</p>
 
-<p>For more information plus examples, please see this <a href="http://ssrn.com/abstract=2318977">working paper</a>.</p>
+<p>For more information plus examples, please see the
+<a href="http://ssrn.com/abstract=2318977">description paper</a> forthcoming in the
+<a href="http://www.jstatsoft.org/">Journal of Statisticsal Software</a>.</p>
+
+<p>To cite the paper please use:</p>
+
+<pre><code>@article{simPH_JSS,
+    author = {Christopher Gandrud},
+    title = {simPH: An R Package for Illustrating Estimates from Cox
+        Proportional Hazard Models Including for Interactive and Nonlinear
+        Effects},
+    journal = {Journal of Statistical Software},
+    year = {forthcoming}
+}
+</code></pre>
 
 <h2>
 <a name="functions" class="anchor" href="#functions"><span class="octicon octicon-link"></span></a>Functions</h2>
@@ -58,41 +76,79 @@
 <a name="simulation-functions" class="anchor" href="#simulation-functions"><span class="octicon octicon-link"></span></a>Simulation Functions</h4>
 
 <ul>
-<li><p><code>coxsimLinear</code>: a function for simulating relative hazards, first differences, hazard ratios, and hazard rates for linear, non-time interacted covariates from Cox Proportional Hazard models.</p></li>
-<li><p><code>coxsimtvc</code>: a function for simulating time interactive hazards (relative hazards, first differences, and hazard ratios) for covariates from Cox Proportional Hazard models. The function will calculate time-interactive hazard ratios for multiple strata estimated from a stratified Cox Proportional Hazard model.</p></li>
-<li><p><code>coxsimSpline</code>: a function for simulating quantities of interest from penalised splines using multivariate normal distributions. Currently does not support simulating hazard rates from stratified models. <strong>Note:</strong> be extremely careful about the number of simulations you ask the function to find. It is very easy to ask for more than your computer can handle.</p></li>
-<li><p><code>coxsimPoly</code>: a function for simulating quantities of interest for a range of values for a polynomial nonlinear effect from Cox Proportional Hazard models.</p></li>
-<li><p><code>coxsimInteract</code>: a function for simulating quantities of interest for linear multiplicative interactions, including marginal effects and hazard rates.</p></li>
+<li><p><code>coxsimLinear</code>: a function for simulating relative hazards, first differences,
+hazard ratios, and hazard rates for linear, non-time interacted covariates from
+Cox Proportional Hazard models.</p></li>
+<li><p><code>coxsimtvc</code>: a function for simulating time interactive hazards (relative
+hazards, first differences, and hazard ratios) for covariates from Cox
+Proportional Hazard models. The function will calculate time-interactive hazard
+ratios for multiple strata estimated from a stratified Cox Proportional Hazard
+model.</p></li>
+<li><p><code>coxsimSpline</code>: a function for simulating quantities of interest from
+penalised splines using multivariate normal distributions. Currently does not
+support simulating hazard rates from stratified models. <strong>Note:</strong> be extremely
+careful about the number of simulations you ask the function to find. It is very
+easy to ask for more than your computer can handle.</p></li>
+<li><p><code>coxsimPoly</code>: a function for simulating quantities of interest for a range of
+values for a polynomial nonlinear effect from Cox Proportional Hazard models.</p></li>
+<li><p><code>coxsimInteract</code>: a function for simulating quantities of interest for linear
+multiplicative interactions, including marginal effects and hazard rates.</p></li>
 </ul><h4>
 <a name="plotting-functions" class="anchor" href="#plotting-functions"><span class="octicon octicon-link"></span></a>Plotting Functions</h4>
 
-<p>Results from these functions can be plotted using the <code>simGG</code> method. The syntax and capabilities of <code>simGG</code> varies depending on the <code>sim</code> object class you are using:</p>
+<p>Results from these functions can be plotted using the <code>simGG</code> method. The
+syntax and capabilities of <code>simGG</code> varies depending on the <code>sim</code> object class
+you are using:</p>
 
 <ul>
-<li><p><code>simGG.simlinear</code>: plots simulated linear time-constant hazards using <a href="http://ggplot2.org/">ggplot2</a>.</p></li>
-<li><p><code>simGG.simtvc</code>: uses <strong>ggplot2</strong> to graph the simulated time-varying relative hazards, first differences, hazard ratios or stratified hazard rates.</p></li>
-<li><p><code>simGG.simspline</code>: uses <strong>ggplot2</strong> and <code>scatter3d</code> (from the <a href="http://cran.r-project.org/web/packages/car/index.html">car</a> package) to plot quantities of interest from <code>simspline</code> objects, including relative hazards, first differences, hazard ratios, and hazard rates.</p></li>
-<li><p><code>simGG.simpoly</code>: uses <strong>ggplot2</strong> to graph the simulated polynomial quantities of interest.</p></li>
-<li><p><code>simGG.siminteract</code>: uses <strong>ggplot2</strong> to graph linear multiplicative interactions.</p></li>
+<li><p><code>simGG.simlinear</code>: plots simulated linear time-constant hazards using
+<a href="http://ggplot2.org/">ggplot2</a>.</p></li>
+<li><p><code>simGG.simtvc</code>: uses <strong>ggplot2</strong> to graph the simulated time-varying relative
+hazards, first differences, hazard ratios or stratified hazard rates.</p></li>
+<li><p><code>simGG.simspline</code>: uses <strong>ggplot2</strong> and <code>scatter3d</code> (from the
+<a href="http://cran.r-project.org/web/packages/car/index.html">car</a> package) to plot
+quantities of interest from <code>simspline</code> objects, including relative hazards,
+first differences, hazard ratios, and hazard rates.</p></li>
+<li><p><code>simGG.simpoly</code>: uses <strong>ggplot2</strong> to graph the simulated polynomial quantities
+of interest.</p></li>
+<li><p><code>simGG.siminteract</code>: uses <strong>ggplot2</strong> to graph linear multiplicative
+interactions.</p></li>
 </ul><h5>
 <a name="additional-styling" class="anchor" href="#additional-styling"><span class="octicon octicon-link"></span></a>Additional styling</h5>
 
-<p>Because in almost all cases <code>simGG</code> returns a <em>ggplot2</em> object, you can add additional aesthetic attributes in the normal <em>ggplot2</em> way. See the <a href="http://docs.ggplot2.org/current/">ggplot2 documentation for more details</a>.</p>
+<p>Because in almost all cases <code>simGG</code> returns a <em>ggplot2</em> object, you can add
+additional aesthetic attributes in the normal <em>ggplot2</em> way. See the
+<a href="http://docs.ggplot2.org/current/">ggplot2 documentation for more details</a>.</p>
 
 <h4>
 <a name="misc" class="anchor" href="#misc"><span class="octicon octicon-link"></span></a>Misc.</h4>
 
 <ul>
-<li><p><code>SurvExpand</code>: a function for converting a data frame of non-equal interval continuous observations into equal interval continuous observations. This is useful to do before creating time interactions.</p></li>
-<li><p><code>tvc</code>: a function for creating time interactions. Currently supports <code>'linear'</code>, natural <code>'log'</code>, and exponentiation (<code>'power'</code>).</p></li>
-<li><p><code>setXl</code>: a function for setting valid <code>Xl</code> values given a sequence of fitted <code>Xj</code> values. This makes it more intituitive to find hazard ratios and first differences for comparisons between some Xj fitted values and Xl values other than 0.</p></li>
-<li><p><code>ggfitStrata</code>: a function to plot fitted stratified survival curves estimated from <code>survfit</code> using <strong>ggplot2</strong>. This function builds on the <strong>survival</strong> package's <code>plot.survfit</code> function. One major advantage is the ability to split the survival curves into multiple plots and arrange them in a grid. This makes it easier to examine many strata at once. Otherwise they can be very bunched up.</p></li>
+<li><p><code>SurvExpand</code>: a function for converting a data frame of non-equal interval
+continuous observations into equal interval continuous observations. This is
+useful to do before creating time interactions.</p></li>
+<li><p><code>tvc</code>: a function for creating time interactions. Currently supports
+<code>'linear'</code>, natural <code>'log'</code>, and exponentiation (<code>'power'</code>).</p></li>
+<li><p><code>setXl</code>: a function for setting valid <code>Xl</code> values given a sequence of fitted
+<code>Xj</code> values. This makes it more intituitive to find hazard ratios and first
+differences for comparisons between some Xj fitted values and Xl values other
+than 0.</p></li>
+<li><p><code>ggfitStrata</code>: a function to plot fitted stratified survival curves estimated
+from <code>survfit</code> using <strong>ggplot2</strong>. This function builds on the <strong>survival</strong>
+package's <code>plot.survfit</code> function. One major advantage is the ability to split
+the survival curves into multiple plots and arrange them in a grid. This makes
+it easier to examine many strata at once. Otherwise they can be very bunched up.</p></li>
+<li><p><code>MinMaxLines</code>: a function for summarising the constricted intervals from the
+simulations, including the median, upper and lower bounds and
+the middel 50% of these intervals.</p></li>
 </ul><h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
 <p>The package is available on CRAN and can be installed in the normal R way.</p>
 
-<p>To install the development version use the <a href="https://github.com/hadley/devtools">devtools</a> function <code>install_github</code>. Here is the code for installing the most recent development version:</p>
+<p>To install the development version use the
+<a href="https://github.com/hadley/devtools">devtools</a> function <code>install_github</code>. Here
+is the code for installing the most recent development version:</p>
 
 <div class="highlight highlight-S"><pre>devtools<span class="o">::</span>install_github<span class="p">(</span><span class="s">'christophergandrud/simPH'</span><span class="p">)</span>
 </pre></div>
@@ -100,7 +156,10 @@
 <h2>
 <a name="tip" class="anchor" href="#tip"><span class="octicon octicon-link"></span></a>Tip</h2>
 
-<p>Before running the simulation and graph functions in this package carefully consider how many simulations you are about to make. Especially for hazard rates over long periods of time and with multiple strata, you can be asking <strong>simPH</strong> to run very many simulations. This will be computationally intensive. e</p>
+<p>Before running the simulation and graph functions in this package carefully
+consider how many simulations you are about to make. Especially for hazard rates
+over long periods of time and with multiple strata, you can be asking <strong>simPH</strong>
+to run very many simulations. This will be computationally intensive.</p>
 
 <h2>
 <a name="sources" class="anchor" href="#sources"><span class="octicon octicon-link"></span></a>Sources</h2>
@@ -108,46 +167,53 @@
 <h3>
 <a name="simulating-parameter-estimates" class="anchor" href="#simulating-parameter-estimates"><span class="octicon octicon-link"></span></a>Simulating Parameter Estimates</h3>
 
-<p>For more information about simulating parameter estimates to make interpretation of results easier see:</p>
+<p>For more information about simulating parameter estimates to make interpretation
+of results easier see:</p>
 
-<p>Licht, Amanda A. 2011. <a href="http://pan.oxfordjournals.org/content/19/2/227.abstract">“Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.”</a> Political Analysis 19: 227–43.</p>
+<p>Licht, Amanda A. 2011. <a href="http://pan.oxfordjournals.org/content/19/2/227.abstract">“Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.”</a> <em>Political Analysis</em> 19: 227–43.</p>
 
-<p>King, Gary, Michael Tomz, and Jason Wittenberg. 2000. <a href="http://www.jstor.org/stable/2669316">“Making the Most of Statistical Analyses: Improving Interpretation and Presentation.”</a> American Journal of Political Science 44(2): 347–61.</p>
+<p>King, Gary, Michael Tomz, and Jason Wittenberg. 2000. <a href="http://www.jstor.org/stable/2669316">“Making the Most of Statistical Analyses: Improving Interpretation and Presentation.”</a> <em>American Journal of Political Science</em> 44(2): 347–61.</p>
 
 <h3>
 <a name="stratified-cox-ph" class="anchor" href="#stratified-cox-ph"><span class="octicon octicon-link"></span></a>Stratified Cox PH</h3>
 
-<p>For more information about stratified Cox PH models (and frailties, which I am working to incorporate in future versions) see:</p>
+<p>For more information about stratified Cox PH models (and frailties, which I am
+working to incorporate in future versions) see:</p>
 
-<p>Box-Steffensmeier, Janet M, and Suzanna De Boef. 2006. <a href="http://onlinelibrary.wiley.com/doi/10.1002/sim.2434/abstract;jsessionid=28218243DD3D6E01A3D10EEE75D96675.d01t02">“Repeated Events Survival Models: the Conditional Frailty Model.”</a> Statistics in Medicine 25(20): 3518–33.</p>
+<p>Box-Steffensmeier, Janet M, and Suzanna De Boef. 2006. <a href="http://onlinelibrary.wiley.com/doi/10.1002/sim.2434/abstract;jsessionid=28218243DD3D6E01A3D10EEE75D96675.d01t02">“Repeated Events Survival Models: the Conditional Frailty Model.”</a> <em>Statistics in Medicine</em> 25(20): 3518–33.</p>
 
 <h3>
 <a name="shortest-probability-intervals" class="anchor" href="#shortest-probability-intervals"><span class="octicon octicon-link"></span></a>Shortest Probability Intervals</h3>
 
-<p>To learn more about shortest probability intervals (and also for the source of the code that made this possible in <strong>simPH</strong>) see:</p>
+<p>To learn more about shortest probability intervals (and also for the source of
+the code that made this possible in <strong>simPH</strong>) see:</p>
 
-<p>Liu, Y., Gelman, A., &amp; Zheng, T. (2013). <a href="http://arxiv.org/pdf/1302.2142v1.pdf">"Simulation-efficient Shortest Probablility Intervals."</a> Arvix.</p>
+<p>Liu, Y., Gelman, A., &amp; Zheng, T. (2013). <a href="http://arxiv.org/pdf/1302.2142v1.pdf">"Simulation-efficient Shortest Probablility Intervals."</a> <em>Arvix</em>.</p>
 
-<p><strong>Also good:</strong> Hyndman, R. J. (1996). <a href="http://www.jstor.org/stable/10.2307/2684423">"Computing and Graphing Highest Density Regions."</a> The American Statistician, 50(2): 120–126.</p>
+<p><strong>Also good:</strong> Hyndman, R. J. (1996). <a href="http://www.jstor.org/stable/10.2307/2684423">"Computing and Graphing Highest Density Regions."</a> <em>The American Statistician</em>, 50(2): 120–126.</p>
 
 <h3>
 <a name="interpreting-interactions" class="anchor" href="#interpreting-interactions"><span class="octicon octicon-link"></span></a>Interpreting Interactions</h3>
 
 <p>For more information about interpreting interaction terms:</p>
 
-<p>Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. <a href="http://pan.oxfordjournals.org/content/14/1/63.abstract">“Understanding Interaction Models: Improving Empirical Analyses.”</a> Political Analysis 14(1): 63–82.</p>
+<p>Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. <a href="http://pan.oxfordjournals.org/content/14/1/63.abstract">“Understanding Interaction Models: Improving Empirical Analyses.”</a> <em>Political Analysis</em> 14(1): 63–82.</p>
 
 <h3>
 <a name="the-olden-days" class="anchor" href="#the-olden-days"><span class="octicon octicon-link"></span></a>The Olden Days</h3>
 
-<p>For an example of how non-proportional hazard results were often presented before <strong>simPH</strong> see (some of the problems I encountered in this paper were a major part of why I'm developing this package):</p>
+<p>For an example of how non-proportional hazard results were often presented
+before <strong>simPH</strong> see (some of the problems I encountered in this paper were a
+major part of why I'm developing this package):</p>
 
-<p>Gandrud, Christopher. 2013. <a href="http://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362">“The Diffusion of Financial Supervisory Governance Ideas.”</a> Review of International Political Economy. 20(4): 881-916.</p>
+<p>Gandrud, Christopher. 2013. <a href="http://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362">“The Diffusion of Financial Supervisory Governance Ideas.”</a> <em>Review of International Political Economy</em>. 20(4): 881-916.</p>
 
 <h2>
 <a name="future-plans" class="anchor" href="#future-plans"><span class="octicon octicon-link"></span></a>Future Plans</h2>
 
-<p>I intend to expand the quantities of interest that can be simulated and graphed for Cox PH models. I am also currently working on functions that can simulate and graph hazard ratios estimated from <a href="http://www.jstor.org/stable/2670170">Fine and Gray competing risks models</a>.</p>
+<p>I intend to expand the quantities of interest that can be simulated and graphed
+for Cox PH models. I am also currently working on functions that can simulate
+and graph hazard ratios estimated from <a href="http://www.jstor.org/stable/2670170">Fine and Gray competing risks models</a>.</p>
 
 <p>I am also working on a way to graph hazard ratios with frailties.</p>
 
