@@ -10,8 +10,8 @@ argument `clean = TRUE` returns the simulations' medians, the minimum and
 maximum of the constricted intervals (as set in the `coxsim` call) and the lower
 and upper 50% of the constricted intervals.
 
-`MinMaxLines` also now relies on *dplyr* rather than *plyr* for speed
-improvements.
+`MinMaxLines` also now relies on *dplyr* rather than *plyr*. This improves
+performance.
 
 ## Version 1.2.1
 
