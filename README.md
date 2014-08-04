@@ -1,7 +1,7 @@
 simPH
 ======
 
-<img src="img/plotbanner.png" height="40" width="1000"></img>
+<img src="img/plotbanner.png" height="40" width="1000" alt="banner-image"></img>
 
 ### Christopher Gandrud
 
