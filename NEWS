@@ -4,6 +4,8 @@
 
 - Now requires dplyr 0.3.
 
+- coxsim objects now also given the class `data.frame`.
+
 ## Version 1.2.2
 
 - Added `PartialData` argument to `SurvExpand`. The argument allows the user to

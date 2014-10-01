@@ -103,7 +103,7 @@ useful to do before creating time interactions.
 `'linear'`, natural `'log'`, and exponentiation (`'power'`).
 
 - `setXl`: a function for setting valid `Xl` values given a sequence of fitted
-`Xj` values. This makes it more intituitive to find hazard ratios and first
+`Xj` values. This makes it more intuitive to find hazard ratios and first
 differences for comparisons between some Xj fitted values and Xl values other
 than 0.
 
@@ -115,7 +115,7 @@ it easier to examine many strata at once. Otherwise they can be very bunched up.
 
 - `MinMaxLines`: a function for summarising the constricted intervals from the
 simulations, including the median, upper and lower bounds and
-the middel 50% of these intervals.
+the middle 50% of these intervals.
 
 ## Installation
 
@@ -128,6 +128,15 @@ is the code for installing the most recent development version:
 ```{S}
 devtools::install_github('christophergandrud/simPH')
 ```
+
+For the current development version you will also need to install the development
+versions of **dplyr** and **lazyeval**:
+
+```{S}
+devtools::install_github('hadley/lazyeval')
+devtools::install_github('hadlye/dplyr')
+```
+
 
 ## Tip
 

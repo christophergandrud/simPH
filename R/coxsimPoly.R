@@ -1,4 +1,4 @@
-#' Simulate quantities of interest for a range of values for a polynomial 
+#' Simulate quantities of interest for a range of values for a polynomial
 #' nonlinear effect from Cox Proportional Hazards models
 #'
 #' \code{coxsimPoly} simulates quantities of interest for polynomial covariate
@@ -243,6 +243,6 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
       SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
       names(SimbPercSub) <- c("SimID", "Xj", "QI")
   }
-    class(SimbPercSub) <- c("simpoly", qi)
+    class(SimbPercSub) <- c("simpoly", qi, "data.frame")
     SimbPercSub
 }

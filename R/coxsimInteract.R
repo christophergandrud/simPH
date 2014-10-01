@@ -369,6 +369,6 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
                                   SimbPerc$X2, SimbPerc$QI)
         names(SimbPercSub) <- c("SimID", "X1", "X2", "QI")
     }
-    class(SimbPercSub) <- c("siminteract", qi)
+    class(SimbPercSub) <- c("siminteract", qi, "data.frame")
     SimbPercSub
 }

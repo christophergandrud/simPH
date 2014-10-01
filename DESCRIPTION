@@ -23,16 +23,17 @@ Imports:
     dplyr (>= 0.3),
     ggplot2,
     gridExtra,
+    lazyeval,
     MASS,
     mgcv,
     plyr,
     reshape2,
-    stats,
     stringr,
     survival,
     quadprog
 Suggests:
-    knitr
+    knitr,
+    stats
 VignetteBuilder: knitr
 BuildVignettes: true
 LazyData: true

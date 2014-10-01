@@ -40,16 +40,15 @@
 #'
 #' # Find summary statistics of the constricted interval
 #' Sum <- MinMaxLines(Sim1, clean = TRUE)
-#' head(Sim1)
 #'
-#' @importFrom dplyr group_by ungroup mutate
+#' @importFrom dplyr group_by_ ungroup mutate distinct_
+#' @import lazyeval
 #' @keywords internals
 #' @export
 
 MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
                         clean = FALSE){
     Xj <- QI <- Time <- HRValue <- HRate <- Strata <- NULL
-    if (class(df) != 'data.frame') class(df) <- 'data.frame'
     if (isTRUE(hr) & !isTRUE(strata)){
         byVars <- c("Time", "HRValue")
     }
@@ -57,8 +56,7 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
         byVars <- c("Time", "HRValue", "Strata")
     }
 
-    byVars2 <- lapply(byVars, as.symbol)
-    df <- group_by(df, byVars2)
+    df <- group_by_(df, byVars)
 
     if (!isTRUE(hr)){
         Linesdf <- mutate(df, Median = median(QI))
@@ -67,7 +65,7 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
         Linesdf <- mutate(Linesdf, Lower50 = quantile(QI, 0.25))
         Linesdf <- mutate(Linesdf, Upper50 = quantile(QI, 0.75))
 
-        Linesdf <- Linesdf[!duplicated(Linesdf[, byVars]), ]
+        Linesdf <- distinct_(Linesdf, .dots = byVars)
     }
     else if (isTRUE(hr) & !isTRUE(strata)){
         Linesdf <- mutate(df, Median = median(HRate))
@@ -76,8 +74,8 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
         Linesdf <- mutate(Linesdf, Lower50 = quantile(HRate, 0.25))
         Linesdf <- mutate(Linesdf, Upper50 = quantile(HRate, 0.75))
 
-        Linesdf <- Linesdf[!duplicated(Linesdf[, c(1, 3)]), ]
-
+        Linesdf <- distinct_(Linesdf, .dots = c(1, 3))
+        #Linesdf <- Linesdf[!duplicated(Linesdf[, c(1, 3)]), ]
     }
     else if (isTRUE(hr) & isTRUE(strata)){
         Linesdf <- mutate(df, Median = median(HRate))
@@ -86,8 +84,9 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
         Linesdf <- mutate(Linesdf, Lower50 = quantile(HRate, 0.25))
         Linesdf <- mutate(Linesdf, Upper50 = quantile(HRate, 0.75))
 
-        Linesdf <- Linesdf[!duplicated(
-                            Linesdf[, c("Time", "HRValue", "Strata")]), ]
+        Linesdf <- distinct(Linesdf, Time, HRValue, Strata)
+        #Linesdf <- Linesdf[!duplicated(
+        #                    Linesdf[, c("Time", "HRValue", "Strata")]), ]
     }
 
     Linesdf <- ungroup(Linesdf)
@@ -110,8 +109,7 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
 #' @param yaxis character string. The column that will form the y-axis in
 #' the plot.
 #'
-#' @importFrom dplyr group_by
-#' @importFrom dplyr mutate
+#' @importFrom dplyr group_by mutate
 #'
 #' @keywords internals
 #' @noRd

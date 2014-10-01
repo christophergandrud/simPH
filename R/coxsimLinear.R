@@ -307,6 +307,6 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
                              SimbPerc$QI)
     names(SimbPercSub) <- c("SimID", "Xj", "QI")
   }
-  class(SimbPercSub) <- c("simlinear", qi)
+  class(SimbPercSub) <- c("simlinear", qi, "data.frame")
   SimbPercSub
 }

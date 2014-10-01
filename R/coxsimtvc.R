@@ -302,6 +302,6 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL,
                                 SimbPerc$Comparison)
       names(SimbPercSub) <- c("SimID", "Time", "QI", "Comparison")
   }
-  class(SimbPercSub) <- c("simtvc", qi)
+  class(SimbPercSub) <- c("simtvc", qi, "data.frame")
   SimbPercSub
 }
