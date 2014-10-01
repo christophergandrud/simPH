@@ -42,7 +42,7 @@
 #' Sum <- MinMaxLines(Sim1, clean = TRUE)
 #' head(Sim1)
 #'
-#' @importFrom dplyr group_by_ ungroup mutate
+#' @importFrom dplyr group_by ungroup mutate
 #' @keywords internals
 #' @export
 
@@ -58,7 +58,7 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
     }
 
     byVars2 <- lapply(byVars, as.symbol)
-    df <- group_by_(df, byVars2)
+    df <- group_by(df, byVars2)
 
     if (!isTRUE(hr)){
         Linesdf <- mutate(df, Median = median(QI))
