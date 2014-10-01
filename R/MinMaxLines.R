@@ -42,9 +42,7 @@
 #' Sum <- MinMaxLines(Sim1, clean = TRUE)
 #' head(Sim1)
 #'
-#' @importFrom dplyr regroup
-#' @importFrom dplyr ungroup
-#' @importFrom dplyr mutate
+#' @importFrom dplyr group_by_ ungroup mutate
 #' @keywords internals
 #' @export
 
@@ -59,8 +57,8 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
         byVars <- c("Time", "HRValue", "Strata")
     }
 
-	byVars2 <- lapply(byVars, as.symbol)
-    df <- regroup(df, byVars2)
+    byVars2 <- lapply(byVars, as.symbol)
+    df <- group_by_(df, byVars2)
 
     if (!isTRUE(hr)){
         Linesdf <- mutate(df, Median = median(QI))
@@ -99,7 +97,7 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
                                 'Max')]
         names(Linesdf) <- c(byVars, 'Min_CI', 'Lower50_CI','Median',
                             'Upper50_CI', 'Max_CI')
-	}
+    }
     return(Linesdf)
 }
 
