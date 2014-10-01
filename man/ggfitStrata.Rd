@@ -34,7 +34,7 @@ arrange them in a grid. This makes it easier to examine many strata at once.
 Otherwise they can be very bunched up.
 
 Note: the strata legend labels need to be changed manually (see
-\code{\link{revalue}}) in the \code{survfit} object with the \code{strata}
+\code{revalue}) in the \code{survfit} object with the \code{strata}
 component.
 }
 \details{

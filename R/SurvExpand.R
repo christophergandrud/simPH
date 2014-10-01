@@ -138,7 +138,8 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, PartialData = TRUE,
     DataMerge <- data.table(DataMerge, key = 'UG', allow.cartisian = TRUE)
 
     FullComb <- FullLast[DataMerge, allow.cartesian = TRUE]
-    FullComb <- FullComb[, !c('allow.cartisian', 'allow.cartesian'), with = FALSE]
+    FullComb <- FullComb[, !c('allow.cartisian', 'allow.cartesian'),
+                        with = FALSE]
 
     if (isTRUE(messages)) message('Doing a final clean up.')
 

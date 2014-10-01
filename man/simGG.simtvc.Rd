@@ -75,8 +75,8 @@ a \code{gg} \code{ggplot} class object
 \details{
 Plots either a time-interactive hazard ratios, first differences,
 and relative hazards, or the hazard rates for multiple strata. Currently the
-strata legend labels need to be changed manually (see \code{\link{revalue}}
-in the \link{plyr} package) in the \code{simtvc} object with the
+strata legend labels need to be changed manually (see \code{revalue}
+in the plyr package) in the \code{simtvc} object with the
 \code{strata} component. Also, currently the x-axis tick marks and break
 labels must be adjusted manually for non-linear functions of time.
 Note: A dotted line is created at y = 1 (0 for first difference), i.e. no

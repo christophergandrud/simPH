@@ -6,6 +6,8 @@
 
 - coxsim objects now also given the class `data.frame`.
 
+- No longer depends on plyr.
+
 ## Version 1.2.2
 
 - Added `PartialData` argument to `SurvExpand`. The argument allows the user to

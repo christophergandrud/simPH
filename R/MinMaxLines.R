@@ -56,7 +56,7 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
         byVars <- c("Time", "HRValue", "Strata")
     }
 
-    df <- group_by_(df, byVars)
+    df <- group_by_(df, .dots = byVars)
 
     if (!isTRUE(hr)){
         Linesdf <- mutate(df, Median = median(QI))

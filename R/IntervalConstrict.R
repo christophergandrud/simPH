@@ -4,7 +4,7 @@
 #' simulations to user defined interval.
 #'
 #' @param Simb character string naming the data frame with the simulations.
-#' @param SubVar character vector of the variable names to subset the 
+#' @param SubVar character vector of the variable names to subset the
 #' simulations by.
 #' @param qi character vector naming the type of quantity of interest.
 #' @param spin logical for whether or not to use the shortest probability
@@ -16,7 +16,7 @@
 #' \code{spin = TRUE}. These values are difficult to plot \code{\link{simGG}}
 #' and may prevent \code{spin} from finding the central interval.
 #'
-#' @importFrom plyr ddply
+#' @importFrom dplyr group_by mutate
 #' @keywords internals
 #' @noRd
 
@@ -77,24 +77,26 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi,
         lb <- -Inf
     }
 
+    Simb <- group_by_(Simb, .dots = SubVar)
+
     if (!isTRUE(spin)){
         Bottom <- (1 - ci)/2
         Top <- 1 - Bottom
         SimbPerc <- eval(parse(text =
-         paste0("ddply(Simb, SubVar, mutate, Lower = QI < quantile(QI,",
-                Bottom, ", na.rm = TRUE))")))
+                        paste0("mutate(Simb, Lower = QI < quantile(QI,",
+                            Bottom, ", na.rm = TRUE))")))
         SimbPerc <- eval(parse(text =
-         paste0("ddply(SimbPerc, SubVar, mutate, Upper = QI > quantile(QI,",
-                Top, ", na.rm = TRUE))" )))
+                        paste0("mutate(SimbPerc, Upper = QI > quantile(QI,",
+                            Top, ", na.rm = TRUE))")))
     }
 
     # Drop simulations outside of the shortest probability interval
     else if (isTRUE(spin)){
-        SimbPerc <- eval(parse(text = paste0("ddply(Simb, SubVar, mutate,",
-                        "Lower = QI < simPH:::SpinBounds(QI, conf = ", ci,
-                         ", lb = ", lb, ", LowUp = 1))" )))
-        SimbPerc <- eval(parse(text = paste0("ddply(SimbPerc, SubVar,",
-                        "mutate, Upper = QI > simPH:::SpinBounds(QI,",
+        SimbPerc <- eval(parse(text =
+                        paste0("mutate(Simb, Lower = QI < simPH:::SpinBounds(QI, conf = ",
+                        ci, ", lb = ", lb, ", LowUp = 1))" )))
+        SimbPerc <- eval(parse(text =
+                        paste0("mutate(SimbPerc, Upper = QI > simPH:::SpinBounds(QI,",
                         "conf = ", ci, ", lb = ", lb, ", LowUp = 2))" )))
     }
 

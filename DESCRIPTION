@@ -26,7 +26,6 @@ Imports:
     lazyeval,
     MASS,
     mgcv,
-    plyr,
     reshape2,
     stringr,
     survival,

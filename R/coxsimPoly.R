@@ -93,7 +93,6 @@
 #' @importFrom reshape2 melt
 #' @importFrom MASS mvrnorm
 #' @importFrom survival basehaz
-#' @importFrom plyr rename
 #' @export
 
 coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
@@ -218,7 +217,7 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
     if (qi != "Hazard Rate"){
         SubVar <- "Xjl"
     } else if (qi == "Hazard Rate"){
-        Simb <- rename(Simb, replace = c("Xjl" = "HRValue"))
+        names(Simb)[names(Simb) == "Xjl"] <- "HRValue"
         SubVar <- c("SimID", "time", "HRValue")
     }
 
