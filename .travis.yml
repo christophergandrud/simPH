@@ -9,6 +9,8 @@ before_script:
   - ./travis-tool.sh bootstrap
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh assertthat
+  - ./travis-tool.sh github_package hadley/lazyeval
+  - ./travis-tool.sh github_package hadley/dplyr
 notifications:
   email:
     - christopher.gandrud@gmail.com
