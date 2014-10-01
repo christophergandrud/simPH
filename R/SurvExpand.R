@@ -41,7 +41,7 @@
 #'
 #' @seealso \code{\link{tvc}}
 #' @import data.table
-#' @importFrom dplyr group_by mutate
+#' @importFrom dplyr group_by mutate ungroup
 #' @importFrom DataCombine MoveFront
 #' @keywords utilities
 #' @export
@@ -117,6 +117,7 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, PartialData = TRUE,
                                     Time2, '))')))
     DGroup <- DGroup[, c(GroupVar, 'FinalTime')]
     names(DGroup) <- c('UG', 'FinalTime')
+    DGroup <- ungroup(DGroup)
     DGroup <- DGroup[!duplicated(DGroup$UG, DGroup$FinalTime), ]
     DGroup <- data.table(DGroup, key = 'UG', allow.cartesian = TRUE)
     FullLast <- FullSub[DGroup, allow.cartesian = TRUE]

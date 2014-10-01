@@ -1,123 +1,129 @@
+## Version 1.2.3
+
+- Minor changes to `SurvExpand` to work with dplyr 0.3.
+
+- Now requires dplyr 0.3.
+
 ## Version 1.2.2
 
-Added `PartialData` argument to `SurvExpand`. The argument allows the user to
+- Added `PartialData` argument to `SurvExpand`. The argument allows the user to
 determine whether or not to only keep the expanded data needed to find the Cox
 partial likelihood.
 
-Made `MinMaxLines` a top level function that is useful for returning basic
+- Made `MinMaxLines` a top level function that is useful for returning basic
 summary statistics from coxsim constricted simulation intervals. Using the
 argument `clean = TRUE` returns the simulations' medians, the minimum and
 maximum of the constricted intervals (as set in the `coxsim` call) and the lower
 and upper 50% of the constricted intervals.
 
-`MinMaxLines` also now relies on *dplyr* rather than *plyr*. This improves
+- `MinMaxLines` also now relies on *dplyr* rather than *plyr*. This improves
 performance.
 
 ## Version 1.2.1
 
-Minor documentation improvements.
+- Minor documentation improvements.
 
 ## Version 1.2
 
-!!!! `smoother` argument for `simGG` is deprecated. Use `method` instead.
+- !!!! `smoother` argument for `simGG` is deprecated. Use `method` instead.
 The functionality is exactly the same. !!!!
 
-`tvc` now accepts a vector of variable names.
+- `tvc` now accepts a vector of variable names.
 
-jss-example demo added.
+- jss-example demo added.
 
-simPH-overview vignette added.
+- simPH-overview vignette added.
 
-`extremesDrop` argument added to `coxsim` functions. This drops simulated
+- `extremesDrop` argument added to `coxsim` functions. This drops simulated
 quantity of interest values that are Inf/NA/NaN/>1000000. These can create
 problems with plotting and finding the `spin`.
 
-Small utility `setXl` created that makes it easier to set `Xl` values.
+- Small utility `setXl` created that makes it easier to set `Xl` values.
 
-Automatic `bspline` cleaning features added for `coxsimSpline`.
+- Automatic `bspline` cleaning features added for `coxsimSpline`.
 
-Minor documentation improvements.
+- Minor documentation improvements.
 
-Internal code cleaning.
+- Internal code cleaning.
 
 ## Version 1.1.1
 
-`coxsimPoly` is able to simulate quantities of interest for only the polynomial
+- `coxsimPoly` is able to simulate quantities of interest for only the polynomial
 terms without the linear component. Feature request from Mattia Valente.
 
-Minor error message improvements.
+- Minor error message improvements.
 
 ## Version 1.1
 
-Added `SurvExpand` for converting a data frame of non-equal interval continuous
+- Added `SurvExpand` for converting a data frame of non-equal interval continuous
 observations into equal interval continuous observations. This is very useful if
 you intend to create time interactions. Thanks to Mintao Nie and an anonymous
 reviewer for the suggestion.
 
-Roxyegen documentation improvements.
+- Roxyegen documentation improvements.
 
 ## Version 1.0
 
-Added `type` argument to `simGG.spline`. Allows the user to plot using `points`,
+- Added `type` argument to `simGG.spline`. Allows the user to plot using `points`,
 `ribbons`, or `lines`. NOTE: the `ribbons` standalone argument is depricated.
 
-Added `SmoothSpline` argument to `simGG.simspline` to use smoothing splines on
+- Added `SmoothSpline` argument to `simGG.simspline` to use smoothing splines on
 the simulations. Creates a smoother graph.
 
-Uses `mvrnorm` from the `MASS` package instead of `rmultnorm` to draw the
+- Uses `mvrnorm` from the `MASS` package instead of `rmultnorm` to draw the
 simulations.
 
-Documentation and other internal improvements.
+- Documentation and other internal improvements.
 
 ## Version 0.8.6
 
-Documentation improvements.
+- Documentation improvements.
 
 ## Version 0.8.5
 
-Added the ability to choose whether or not to exponentiate marginal effects for `coxsimInteract` with the `expMarg` argument.
+- Added the ability to choose whether or not to exponentiate marginal effects for `coxsimInteract` with the `expMarg` argument.
 
 ## Version 0.8.4
 
-Minor bug fix for `simGG.siminteract`.
+- Minor bug fix for `simGG.siminteract`.
 
 ## Version 0.8.3
 
-License change and minor message changes.
+- License change and minor message changes.
 
 ## Version 0.8.2
 
-Added `legend` argument to allow the user to hide plot legends, when applicable.
+- Added `legend` argument to allow the user to hide plot legends, when applicable.
 
-Minor aesthetic updates and documentation clarifications.
+- Minor aesthetic updates and documentation clarifications.
 
 ## Version 0.8.1
 
-Minor changes for CRAN check.
+- Minor changes for CRAN check.
 
 ## Version 0.8
 
-Added the argument `ribbons` to the simGG method. This produces a plot with
+- Added the argument `ribbons` to the simGG method. This produces a plot with
 shaded areas ('ribbons') for the minimum and maximum simulation values as well
 as the central 50% of this area. It also plots a line for the median value of
 this area. (Thanks to Jeff Chwieroth for the suggestion.)
 
-Internal improvements to minimise the size of simulation output objects and
+- Internal improvements to minimise the size of simulation output objects and
 improve performance if qi = "Hazard Rate".
 
-A number of bug fixes.
+- A number of bug fixes.
 
 ## Version 0.7.3
 
-Documentation improvements.
+- Documentation improvements.
 
 ## Version 0.7.2
 
-Clean up for CRAN.
+- Clean up for CRAN.
 
 ## Version 0.7.1
 
-Added an error message to `coxsimSpline` if white spaces are not entered before
+- Added an error message to `coxsimSpline` if white spaces are not entered before
 and after equal (=) signs in the `bspline` argument.
 
 ## Version 0.7
