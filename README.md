@@ -7,6 +7,8 @@ simPH
 
 ### Version 1.2.3 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH)
 
+[![DOI](https://zenodo.org/badge/5350/christophergandrud/simPH.png)](http://dx.doi.org/10.5281/zenodo.11961)
+
 #### Please report any bugs to:
 
 <https://github.com/christophergandrud/simPH/issues>
