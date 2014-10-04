@@ -129,15 +129,6 @@ is the code for installing the most recent development version:
 devtools::install_github('christophergandrud/simPH')
 ```
 
-For the current development version you will also need to install the development
-versions of **dplyr** and **lazyeval**:
-
-```{S}
-devtools::install_github('hadley/lazyeval')
-devtools::install_github('hadlye/dplyr')
-```
-
-
 ## Tip
 
 Before running the simulation and graph functions in this package carefully
