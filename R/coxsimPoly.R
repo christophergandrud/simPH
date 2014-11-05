@@ -138,7 +138,7 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
     VC <- vcov(obj)
 
     # Draw covariate estimates from the multivariate normal distribution
-  Drawn <- mvrnorm(n = nsim, mu = Coef, Sigma = VC)
+    Drawn <- mvrnorm(n = nsim, mu = Coef, Sigma = VC)
     DrawnDF <- data.frame(Drawn)
     dfn <- names(DrawnDF)
 
