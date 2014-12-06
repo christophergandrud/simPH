@@ -27,7 +27,7 @@ Imports:
     MASS,
     mgcv,
     reshape2,
-    stringr,
+    stringr (<= 0.7),
     survival,
     quadprog
 Suggests:
