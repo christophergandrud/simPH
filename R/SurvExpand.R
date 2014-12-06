@@ -94,7 +94,7 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, PartialData = TRUE,
     UniGroup <- data.table(UniGroup, key = "FakeID", allow.cartesian = TRUE)
 
     Full <- UniGroup[FullTimes, allow.cartesian = TRUE]
-    Full <- Full[, !c('allow.cartesian.1', 'FakeID'), with = FALSE]
+    Full <- Full[, c('UG', 'FT'), with = FALSE]
     Full <- setkey(Full, key = 'UG')
 
     if (isTRUE(messages)) message('\nExpanding data.\n')
@@ -119,12 +119,12 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, PartialData = TRUE,
     DGroup <- group_by(DGroup, UG)
     DGroup <- select(DGroup, UG, FinalTime)
     DGroup <- distinct(DGroup, FinalTime)
-    DGroup <- ungroup(DGroup)
+    DGroup <- data.frame(DGroup)
 
     DGroup <- data.table(DGroup, key = 'UG', allow.cartesian = TRUE)
     FullLast <- FullSub[DGroup, allow.cartesian = TRUE]
     FullLast <- FullLast[FT <= FinalTime]
-    FullLast <- FullLast[, !c('allow.cartesian.1'), with = FALSE]
+    FullLast <- FullLast[, c('UG', 'FT', 'FinalTime'), with = FALSE]
 
     # Create new time interval start variable
     FullLast <- FullLast[, 'ST' := FT - 1]
@@ -138,7 +138,7 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, PartialData = TRUE,
     DataMerge <- data.table(DataMerge, key = 'UG', allow.cartisian = TRUE)
 
     FullComb <- FullLast[DataMerge, allow.cartesian = TRUE]
-    FullComb <- FullComb[, !c('allow.cartisian', 'allow.cartesian'),
+    FullComb <- FullComb[, !c('allow.cartisian'),
                         with = FALSE]
 
     if (isTRUE(messages)) message('Doing a final clean up.')

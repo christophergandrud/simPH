@@ -1,3 +1,7 @@
+## Version 1.2.4
+
+Bug fix for `coxsimSpline` where the `SimID` was not correctly identified.
+
 ## Version 1.2.3
 
 - Minor changes to `SurvExpand` to work with dplyr 0.3.
