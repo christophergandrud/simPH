@@ -109,7 +109,7 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi,
 #'
 #' @param SimIn data frame
 #'
-#' @importFrom dplyr group_by mutate
+#' @importFrom dplyr group_by mutate select
 #'
 #' @keywords internals
 #' @noRd
@@ -123,8 +123,9 @@ OutlierDrop <- function(SimIn){
     SimIn$dummy <- 1
     Sims <- dplyr::group_by(SimIn, SimID)
     Sims <- dplyr::mutate(Sims, Rows = sum(dummy))
+    Sims <- data.frame(Sims)
     MaxRows <- max(Sims$Rows)
-    Sims <- as.data.frame(Sims)
     Sims <- subset(Sims, Rows == MaxRows)
+    Sims <- select(Sims, -Rows, -dummy)
     Sims
 }

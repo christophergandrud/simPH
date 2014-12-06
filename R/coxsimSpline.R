@@ -118,244 +118,235 @@
 #' @importFrom reshape2 melt
 #' @importFrom survival basehaz
 #' @importFrom MASS mvrnorm
+#' @importFrom dplyr %>% rename
 #' @export
 
 coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
                          Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE,
                          extremesDrop = TRUE)
 {
-	strata <- QI <- NULL
-	# Ensure that qi is valid
-	qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate",
-	            "Hazard Ratio")
-	TestqiOpts <- qi %in% qiOpts
-	if (!isTRUE(TestqiOpts)){
-		stop("Invalid qi type. qi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'.",
-			call. = FALSE)
-	}
+    strata <- QI <- NULL
+    # Ensure that qi is valid
+    qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate",
+                "Hazard Ratio")
+    TestqiOpts <- qi %in% qiOpts
+    if (!isTRUE(TestqiOpts)){
+        stop("Invalid qi type. qi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'.",
+            call. = FALSE)
+    }
 
-	if (nsim > 10 & qi == "Hazard Rate"){
-		message(paste0("Warning: finding Hazard Rates for spline models with ",
-			nsim, " simulations per fitted value may take awhile.  Consider decreasing the number of simulations with nsim."))
-	}
+    if (nsim > 10 & qi == "Hazard Rate"){
+        message(paste0("Warning: finding Hazard Rates for spline models with ",
+            nsim, " simulations per fitted value may take awhile.  Consider decreasing the number of simulations with nsim."))
+    }
 
-	if (is.null(Xl) & qi != "Hazard Rate"){
-		Xl <- rep(0, length(Xj))
-		message("All Xl set to 0.")
-	} else if (!is.null(Xl) & qi == "Relative Hazard") {
-		Xl <- rep(0, length(Xj))
-		message("All Xl set to 0.")
-	}
+    if (is.null(Xl) & qi != "Hazard Rate"){
+        Xl <- rep(0, length(Xj))
+        message("All Xl set to 0.")
+    } else if (!is.null(Xl) & qi == "Relative Hazard") {
+        Xl <- rep(0, length(Xj))
+        message("All Xl set to 0.")
+    }
 
-	# Standardise pspline term with white space around '='
-	Before <- grepl(pattern = "[^ ]=", x = bspline)
-	if (isTRUE(Before)) bspline <- gsub(pattern = "=", replacement = ' =',
-	                        		   x = bspline)
-	bspline <- gsub(pattern = "[^ ]=", replacement = ' =', x = bspline)
-	After <- grepl(pattern = "=[^ ]", x = bspline)
-	if (isTRUE(After)) bspline <- gsub(pattern = "=", replacement = '= ',
-	                        		   x = bspline)
+    # Standardise pspline term with white space around '='
+    Before <- grepl(pattern = "[^ ]=", x = bspline)
+    if (isTRUE(Before)) bspline <- gsub(pattern = "=", replacement = ' =',
+                                       x = bspline)
+    bspline <- gsub(pattern = "[^ ]=", replacement = ' =', x = bspline)
+    After <- grepl(pattern = "=[^ ]", x = bspline)
+    if (isTRUE(After)) bspline <- gsub(pattern = "=", replacement = '= ',
+                                       x = bspline)
 
-	# Find term number
-	TermNum <- names(obj$pterms)
-	bterm <- match(bspline, TermNum)
-	if (is.na(bterm)){
-		stop(paste0("Unable to find ", bspline, "."), call. = FALSE)
-	}
+    # Find term number
+    TermNum <- names(obj$pterms)
+    bterm <- match(bspline, TermNum)
+    if (is.na(bterm)){
+        stop(paste0("Unable to find ", bspline, "."), call. = FALSE)
+    }
 
-	# Extract boundary knots for default Boundary.knots = range(x) &
-	# number of knots
-	#### Note: these can also be found with
-	# get("cbase", environment(obj$printfun[[1]]))
-	# (replace 1 with the spline term number)
-	#### From:
-	# http://r.789695.n4.nabble.com/help-on-pspline-in-coxph-td3431829.html
-	OA <- obj$assign
-	ListKnots <- OA[bterm]
-	NumKnots <- length(unlist(ListKnots))
-	KnotIntervals <- levels(cut(bdata, breaks = NumKnots))
+    # Extract boundary knots for default Boundary.knots = range(x) &
+    # number of knots
+    #### Note: these can also be found with
+    # get("cbase", environment(obj$printfun[[1]]))
+    # (replace 1 with the spline term number)
+    #### From:
+    # http://r.789695.n4.nabble.com/help-on-pspline-in-coxph-td3431829.html
+    OA <- obj$assign
+    ListKnots <- OA[bterm]
+    NumKnots <- length(unlist(ListKnots))
+    KnotIntervals <- levels(cut(bdata, breaks = NumKnots))
 
     # Create simulation ID variable
     SimID <- 1:nsim
 
-	# Parameter estimates & Variance/Covariance matrix
-	Coef <- matrix(obj$coefficients)
-	VC <- vcov(obj)
+    # Parameter estimates & Variance/Covariance matrix
+    Coef <- matrix(obj$coefficients)
+    VC <- vcov(obj)
 
-	# Draw covariate estimates from the multivariate normal distribution
-	Drawn <- mvrnorm(n = nsim, mu = Coef, Sigma = VC)
-	DrawnDF <- data.frame(Drawn)
-	dfn <- names(DrawnDF)
+    # Draw covariate estimates from the multivariate normal distribution
+    Drawn <- mvrnorm(n = nsim, mu = Coef, Sigma = VC)
+    DrawnDF <- data.frame(Drawn)
+    dfn <- names(DrawnDF)
 
-	# Subset data frame to only spline variable coefficients.
-	bword <- word(bspline, 1)
-	b <- str_replace(bword, "pspline\\(", "")
-	b <- str_replace(b, ",", "")
+    # Subset data frame to only spline variable coefficients.
+    bword <- word(bspline, 1)
+    b <- str_replace(bword, "pspline\\(", "")
+    b <- str_replace(b, ",", "")
 
-	NamesLoc <- function(p){
-	  Temp <- paste0("ps.", b, ".", p)
-	  match(Temp, dfn)
-	}
+    NamesLoc <- function(p){
+      Temp <- paste0("ps.", b, ".", p)
+      match(Temp, dfn)
+    }
 
-	UpLim <- 2 + NumKnots
-	CoeNum <- as.numeric(3:UpLim)
-	NameCoe <- sapply(CoeNum, NamesLoc, simplify = TRUE)
-	DrawnDF <- data.frame(DrawnDF[, NameCoe])
+    UpLim <- 2 + NumKnots
+    CoeNum <- as.numeric(3:UpLim)
+    NameCoe <- sapply(CoeNum, NamesLoc, simplify = TRUE)
+    DrawnDF <- data.frame(DrawnDF[, NameCoe])
 
-	# Match coefficients to knot interval
-	IntervalStartAbs <- "\\(-?[0-9]*.[0-9]*e?\\+?[0-9]*,"
-	IntervalFinishAbs <- ",-?[0-9]*.[0-9]*e?\\+?[0-9]*\\]"
-	IntervalStart <- str_match(KnotIntervals, IntervalStartAbs)
-	IntervalStart <- str_replace(IntervalStart, "\\(", "")
-	IntervalStart <- str_replace(IntervalStart, ",", "")
-	IntervalStart <- as.numeric(IntervalStart)
+    # Match coefficients to knot interval
+    IntervalStartAbs <- "\\(-?[0-9]*.[0-9]*e?\\+?[0-9]*,"
+    IntervalFinishAbs <- ",-?[0-9]*.[0-9]*e?\\+?[0-9]*\\]"
+    IntervalStart <- str_match(KnotIntervals, IntervalStartAbs)
+    IntervalStart <- str_replace(IntervalStart, "\\(", "")
+    IntervalStart <- str_replace(IntervalStart, ",", "")
+    IntervalStart <- as.numeric(IntervalStart)
 
-	IntervalFinish <- str_match(KnotIntervals, IntervalFinishAbs)
-	IntervalFinish <- str_replace(IntervalFinish, "\\]", "")
-	IntervalFinish <- str_replace(IntervalFinish, ",", "")
-	IntervalFinish <- as.numeric(IntervalFinish)
+    IntervalFinish <- str_match(KnotIntervals, IntervalFinishAbs)
+    IntervalFinish <- str_replace(IntervalFinish, "\\]", "")
+    IntervalFinish <- str_replace(IntervalFinish, ",", "")
+    IntervalFinish <- as.numeric(IntervalFinish)
 
-	CoefIntervals <- data.frame(names(DrawnDF), IntervalStart, IntervalFinish)
-	names(CoefIntervals) <- c("CoefName", "IntervalStart", "IntervalFinish")
+    CoefIntervals <- data.frame(names(DrawnDF), IntervalStart, IntervalFinish)
+    names(CoefIntervals) <- c("CoefName", "IntervalStart", "IntervalFinish")
 
-	# Melt Drawn DF to long format
+    # Melt Drawn DF to long format
     DrawnDF <- data.frame(SimID, DrawnDF)
-	TempDF <- suppressMessages(data.frame(melt(DrawnDF,
-		                       id.vars = 'SimID')))
-	names(TempDF) <- c("SimID", "CoefName", "Coef")
+    TempDF <- suppressMessages(data.frame(melt(DrawnDF,
+                               id.vars = 'SimID')))
+    names(TempDF) <- c("SimID", "CoefName", "Coef")
 
-	# Merge with CoefIntervals
-	CoefIntervalsDT <- data.table(CoefIntervals, key = "CoefName")
-	TempDT <- data.table(TempDF, key = "CoefName")
-	TempCombDT <- TempDT[CoefIntervalsDT]
-	TempDF <- data.frame(TempCombDT)
+    # Merge with CoefIntervals
+    CoefIntervalsDT <- data.table(CoefIntervals, key = "CoefName")
+    TempDT <- data.table(TempDF, key = "CoefName")
+    TempCombDT <- TempDT[CoefIntervalsDT]
+    TempDF <- data.frame(TempCombDT)
 
-	# Merge in fitted X values
-	MergeX <- function(f){
-		X <- NULL
-		CombinedDF <- data.frame()
-		for (i in f){
-		  Temps <- TempDF
-		  Temps$X <- ifelse(TempDF[, 'IntervalStart'] < i & i <=
-		  	                TempDF[, 'IntervalFinish'], i, NA)
-		  Temps <- subset(Temps, !is.na(X))
-		  CombinedDF <- rbind(CombinedDF, Temps)
-		}
-		CombinedDF
-	}
+    # Merge in fitted X values
+    MergeX <- function(f){
+        X <- NULL
+        CombinedDF <- data.frame()
+        for (i in f){
+          Temps <- TempDF
+          Temps$X <- ifelse(TempDF[, 'IntervalStart'] < i & i <=
+                              TempDF[, 'IntervalFinish'], i, NA)
+          Temps <- subset(Temps, !is.na(X))
+          CombinedDF <- rbind(CombinedDF, Temps)
+        }
+        CombinedDF
+    }
 
-	# Find quantities of interest
-	if (qi == "Hazard Ratio"){
-	  	if (length(Xj) != length(Xl)){
-	      stop("Xj and Xl must be the same length.", call. = FALSE)
-	    }
-      Simbj <- MergeX(Xj)
-      names(Simbj) <- c("CoefName", "SimID", "Coef", "IntervalStart",
-                        "IntervalFinish", "Xj")
-		  Simbl <- MergeX(Xl)
-	    names(Simbl) <- c("CoefName", 'SimID', "Coef", "IntervalStart",
-                        "IntervalFinish", "Xl")
-	 	  Xs <- data.frame(Xj, Xl)
-	    Simbj <- merge(Simbj, Xs, by = "Xj")
-	    Simbj$Comparison <- paste(Simbj$Xj, "vs.", Simbj$Xl)
-	    Simbj$QI <- exp((Simbj$Xj * Simbj$Coef) - (Simbl$Xl * Simbl$Coef))
-	    Simb <- Simbj
-	} else if (qi == "Relative Hazard"){
-		Simb <- MergeX(Xj)
-	    names(Simb) <- c("CoefName", "SimID", "Coef", "IntervalStart",
-	    	             "IntervalFinish", "Xj")
-	    Simb$QI <- exp(Simb$Xj * Simb$Coef)
-	}
-	else if (qi == "First Difference"){
-	  	if (length(Xj) != length(Xl)){
-	      stop("Xj and Xl must be the same length.", call. = FALSE)
-	    }
-	    else {
-			Simbj <- MergeX(Xj)
-		    names(Simbj) <- c("CoefName", "SimID",  "Coef", "IntervalStart",
-						      "IntervalFinish", "Xj")
-			Simbl <- MergeX(Xl)
-		    names(Simbl) <- c("CoefName", "SimID", "Coef", "IntervalStart",
-		    	              "IntervalFinish", "Xl")
+    # Find quantities of interest
+    if (qi == "Hazard Ratio"){
+          if (length(Xj) != length(Xl)){
+          stop("Xj and Xl must be the same length.", call. = FALSE)
+        }
+        Simbj <- MergeX(Xj) %>% rename(Xj = X)
+        Simbl <- MergeX(Xl) %>% rename(Xl = X)
+        Xs <- data.frame(Xj, Xl)
+        Simbj <- merge(Simbj, Xs, by = "Xj")
+        Simbj$Comparison <- paste(Simbj$Xj, "vs.", Simbj$Xl)
+        Simbj$QI <- exp((Simbj$Xj * Simbj$Coef) - (Simbl$Xl * Simbl$Coef))
+        Simb <- Simbj
+    } else if (qi == "Relative Hazard"){
+        Simb <- MergeX(Xj) %>% rename(Xj = X)
+        Simb$QI <- exp(Simb$Xj * Simb$Coef)
+    }
+    else if (qi == "First Difference"){
+          if (length(Xj) != length(Xl)){
+          stop("Xj and Xl must be the same length.", call. = FALSE)
+        }
+        else {
+            Simbj <- MergeX(Xj) %>% rename(Xj = X)
+            Simbl <- MergeX(Xl) %>% rename(Xl = X)
 
-		 	Xs <- data.frame(Xj, Xl)
-		    Simbj <- merge(Simbj, Xs, by = "Xj")
-		    Simbj$Comparison <- paste(Simbj$Xj, "vs.", Simbj$Xl)
+            Xs <- data.frame(Xj, Xl)
+            Simbj <- merge(Simbj, Xs, by = "Xj")
+            Simbj$Comparison <- paste(Simbj$Xj, "vs.", Simbj$Xl)
 
-		 	Simbj$QI <- (exp((Simbj$Xj * Simbj$Coef) -
-		 		        (Simbl$Xl * Simbl$Coef)) - 1) * 100
-			Simb <- Simbj
-		}
-	}
-	else if (qi == "Hazard Rate"){
-		Xl <- NULL
-      message("Xl is ignored. All variables' values other than b fitted at 0.")
-		Simb <- MergeX(Xj)
-	    names(Simb) <- c("CoefName", "SimID", "Coef", "IntervalStart",
-	    	             "IntervalFinish", "Xj")
-	 	Simb$HR <- exp(Simb$Xj * Simb$Coef)
-	  	bfit <- basehaz(obj)
-	  	## Currently does not support strata
-	  	if (!is.null(bfit$strata)){
-	  		stop("coxsimSpline currently does not support strata.",
-	  			call. = FALSE)
-	  	}
-	  	bfit$FakeID <- 1
-	  	Simb$FakeID <- 1
-		bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
-		SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
-      Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
-      # Create warning message
-      Rows <- nrow(Simb)
-      if (Rows > 2000000){
-        message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
-      }
-      Simb$QI <- Simb$hazard * Simb$HR
-      if (is.null(Simb$strata)){
-        Simb <- Simb[, list(time, SimID, Xj, QI)]
-      } else if (!is.null(Simb$strata)){
-        Simb <- Simb[, list(time, SimID, Xj, QI, strata)]
-      }
-      Simb <- data.frame(Simb)
-	}
+             Simbj$QI <- (exp((Simbj$Xj * Simbj$Coef) -
+                         (Simbl$Xl * Simbl$Coef)) - 1) * 100
+            Simb <- Simbj
+        }
+    }
+    else if (qi == "Hazard Rate"){
+        Xl <- NULL
+        message("Xl is ignored. All variables' values other than b fitted at 0.")
+        Simb <- MergeX(Xj) %>% rename(Xj = X)
+        Simb$HR <- exp(Simb$Xj * Simb$Coef)
+        bfit <- basehaz(obj)
+        ## Currently does not support strata
+        if (!is.null(bfit$strata)){
+            stop("coxsimSpline currently does not support strata.",
+                call. = FALSE)
+        }
+        bfit$FakeID <- 1
+        Simb$FakeID <- 1
+        bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+        SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+        Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
+        
+        # Create warning message
+        Rows <- nrow(Simb)
+        if (Rows > 2000000){
+        message(paste("There are", Rows, 
+            "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
+        }
+        Simb$QI <- Simb$hazard * Simb$HR
+        if (is.null(Simb$strata)){
+            Simb <- Simb[, list(time, SimID, Xj, QI)]
+        } else if (!is.null(Simb$strata)){
+            Simb <- Simb[, list(time, SimID, Xj, QI, strata)]
+        }
+        Simb <- data.frame(Simb)
+    }
 
-	# Drop simulations outside of 'confidence bounds'
-	if (qi != "Hazard Rate"){
-		SubVar <- "Xj"
-	} else if (qi == "Hazard Rate"){
-		SubVar <- c("time", "Xj")
-	}
+    # Drop simulations outside of 'confidence bounds'
+    if (qi != "Hazard Rate"){
+        SubVar <- "Xj"
+    } else if (qi == "Hazard Rate"){
+        SubVar <- c("time", "Xj")
+    }
 
-	# Drop simulations outside of the middle
-	SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
-								  qi = qi, spin = spin, ci = ci,
-								  extremesDrop = extremesDrop)
+    # Drop simulations outside of the middle
+    SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
+                                  qi = qi, spin = spin, ci = ci,
+                                  extremesDrop = extremesDrop)
 
-  # Final clean up
+    # Final clean up
     # Subset simspline object & create a data frame of important variables
-	if (qi == "Hazard Rate"){
-		if (is.null(SimbPerc$strata)){
-			SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
-				SimbPerc$QI, SimbPerc$Xj)
-			names(SimbPercSub) <- c("SimID", "Time", "QI", "Xj")
-		}
-		# Currently does not support strata
-		else if (!is.null(SimbPerc$strata)) {
-			stop("coxsimSpline currently doesn't support Hazard Rates when there are multiple stata. Sorry.",
-			    call. = FALSE)
-		}
-	} else if (qi == "Hazard Ratio"){
-	  	SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI,
+    if (qi == "Hazard Rate"){
+        if (is.null(SimbPerc$strata)){
+            SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
+                SimbPerc$QI, SimbPerc$Xj)
+            names(SimbPercSub) <- c("SimID", "Time", "QI", "Xj")
+        }
+        # Currently does not support strata
+        else if (!is.null(SimbPerc$strata)) {
+            stop("coxsimSpline currently doesn't support Hazard Rates when there are multiple stata. Sorry.",
+                call. = FALSE)
+        }
+    } else if (qi == "Hazard Ratio"){
+          SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI,
                                 SimbPerc$Comparison)
-	  	names(SimbPercSub) <- c("SimID", "Xj", "QI", "Comparison")
-	} else if (qi == "Relative Hazard"){
-	  	SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
-	  	names(SimbPercSub) <- c("SimID", "Xj", "QI")
-	} else if (qi == "First Difference"){
-		SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI,
-			SimbPerc$Comparison)
-		names(SimbPercSub) <- c("SimID", "Xj", "QI", "Comparison")
-	}
-  class(SimbPercSub) <- c("simspline", qi, "data.frame")
-  SimbPercSub
+          names(SimbPercSub) <- c("SimID", "Xj", "QI", "Comparison")
+    } else if (qi == "Relative Hazard"){
+          SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
+          names(SimbPercSub) <- c("SimID", "Xj", "QI")
+    } else if (qi == "First Difference"){
+        SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI,
+            SimbPerc$Comparison)
+        names(SimbPercSub) <- c("SimID", "Xj", "QI", "Comparison")
+    }
+    class(SimbPercSub) <- c("simspline", qi, "data.frame")
+    SimbPercSub
 }
