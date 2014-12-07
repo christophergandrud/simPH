@@ -125,7 +125,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
                          Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE,
                          extremesDrop = TRUE)
 {
-    strata <- QI <- NULL
+    strata <- QI <- X <- NULL
     # Ensure that qi is valid
     qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate",
                 "Hazard Ratio")
