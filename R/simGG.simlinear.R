@@ -119,7 +119,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
     Time <- HRate <- HRValue <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <-
         Median <- SimID <- NULL
     if (!inherits(obj, "simlinear")){
-    	stop("must be a simlinear object", call. = FALSE)
+        stop("must be a simlinear object", call. = FALSE)
     }
     if (type == 'ribbons' & method != "auto"){
       message("The method argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
@@ -129,16 +129,16 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
 
     # Create y-axis label
     if (is.null(ylab)){
-    	ylab <- paste(qi, "\n")
+        ylab <- paste(qi, "\n")
     } else {
-    	ylab <- ylab
+        ylab <- ylab
     }
     # Convert obj to data frame
     class(obj) <- "data.frame"
 
     # Drop simulations that include outliers
     if (type == 'lines'){
-   	    obj <- OutlierDrop(obj)
+           obj <- OutlierDrop(obj)
     }
 
     # Alpha gradient based on percentile in the distribution
@@ -154,14 +154,14 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
             obj <- subset(obj, Time >= from)
         }
         if (!is.null(to)){
-            	obj <- subset(obj, Time <= to)
+                obj <- subset(obj, Time <= to)
         }
     }
 
     # Plot points
     if (type == 'points'){
         if (qi == "Hazard Rate"){
-      	if (!is.null(obj$Strata)) {
+          if (!is.null(obj$Strata)) {
             ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
                 facet_grid(. ~ Strata) +
                 geom_point(aes(alpha = PercRank), size = psize) +
@@ -172,12 +172,12 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
                     guide = legend) +
                 ggtitle(title) +
                 theme_bw(base_size = 15)
-    	} else if (is.null(obj$Strata)){
-          	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
-            	geom_point(shape = 21, aes(alpha = PercRank), size = psize) +
+        } else if (is.null(obj$Strata)){
+              ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
+                geom_point(shape = 21, aes(alpha = PercRank), size = psize) +
                 geom_smooth(method = method, size = lsize, se = FALSE) +
                 scale_colour_brewer(palette = spalette, name = leg.name,
-                					guide = legend) +
+                                    guide = legend) +
                 scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
                 xlab(xlab) + ylab(ylab) +
                 ggtitle(title) +
@@ -186,9 +186,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
         } else if (qi == "First Difference"){
             ggplot(obj, aes(Xj, QI)) +
                 geom_point(shape = 21, aes(alpha = PercRank), size = psize,
-                						   colour = pcolour) +
+                                           colour = pcolour) +
                 geom_smooth(method = method, size = lsize, se = FALSE,
-                			color = lcolour) +
+                            color = lcolour) +
                 geom_hline(aes(yintercept = 0), linetype = "dotted") +
                 scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
                 xlab(xlab) + ylab(ylab) +
@@ -197,9 +197,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
         } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
         ggplot(obj, aes(Xj, QI)) +
             geom_point(shape = 21, aes(alpha = PercRank), size = psize,
-            						   colour = pcolour) +
+                                       colour = pcolour) +
             geom_smooth(method = method, size = lsize, se = FALSE,
-            			color = lcolour) +
+                        color = lcolour) +
             geom_hline(aes(yintercept = 1), linetype = "dotted") +
             scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
             xlab(xlab) + ylab(ylab) +
@@ -210,7 +210,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
     # Plot lines
     else if (type == 'lines'){
         if (qi == "Hazard Rate"){
-      	if (!is.null(obj$Strata)) {
+          if (!is.null(obj$Strata)) {
             ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue))) +
                 facet_grid(. ~ Strata) +
                 geom_line(aes(group = interaction(SimID, factor(HRValue)),
@@ -223,14 +223,14 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
                 scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
                 ggtitle(title) +
                 theme_bw(base_size = 15)
-    	} else if (is.null(obj$Strata)){
-          	ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
-            	geom_line(aes(group = interaction(SimID, factor(HRValue)),
-            				  alpha = PercRank), shape = 21, size = psize) +
+        } else if (is.null(obj$Strata)){
+              ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
+                geom_line(aes(group = interaction(SimID, factor(HRValue)),
+                              alpha = PercRank), shape = 21, size = psize) +
                 geom_smooth(aes(colour = factor(HRValue)), method = method,
-                				size = lsize, se = FALSE) +
+                                size = lsize, se = FALSE) +
                 scale_colour_brewer(palette = spalette, name = leg.name,
-                					guide = legend) +
+                                    guide = legend) +
                 scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
                 xlab(xlab) + ylab(ylab) +
                 ggtitle(title) +
@@ -239,9 +239,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
         } else if (qi == "First Difference"){
             ggplot(obj, aes(Xj, QI)) +
                 geom_line(aes(group = SimID, alpha = PercRank), size = psize,
-                			  colour = pcolour) +
+                              colour = pcolour) +
                 geom_smooth(method = method, size = lsize, se = FALSE,
-                			color = lcolour) +
+                            color = lcolour) +
                 geom_hline(aes(yintercept = 0), linetype = "dotted") +
                 scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
                 xlab(xlab) + ylab(ylab) +
@@ -250,9 +250,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
         } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
         ggplot(obj, aes(Xj, QI)) +
             geom_line(aes(group = SimID, alpha = PercRank), size = psize,
-            			  colour = pcolour) +
+                          colour = pcolour) +
             geom_smooth(method = method, size = lsize, se = FALSE,
-            			color = lcolour) +
+                        color = lcolour) +
             geom_hline(aes(yintercept = 1), linetype = "dotted") +
             scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
             xlab(xlab) + ylab(ylab) +
@@ -265,7 +265,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
     else if (type == 'ribbons'){
         suppressWarnings(
         if (qi == "Hazard Rate"){
-      	if (!is.null(obj$Strata)) {
+          if (!is.null(obj$Strata)) {
             obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
             ggplot(obj, aes(x = Time, y = HRate, colour = factor(HRValue),
                             fill = factor(HRValue))) +
@@ -277,24 +277,24 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
                 facet_grid(. ~ Strata) +
                 xlab(xlab) + ylab(ylab) +
                 scale_colour_brewer(palette = spalette, name = leg.name,
-                					guide = legend) +
+                                    guide = legend) +
                 scale_fill_brewer(palette = spalette, name = leg.name,
-                				  guide = legend) +
+                                  guide = legend) +
                 ggtitle(title) +
                 theme_bw(base_size = 15)
-    	} else if (is.null(obj$Strata)){
+        } else if (is.null(obj$Strata)){
             obj <- MinMaxLines(df = obj, hr = TRUE)
-          	ggplot(obj, aes(Time, Median, colour = factor(HRValue),
-          					fill = factor(HRValue))) +
+              ggplot(obj, aes(Time, Median, colour = factor(HRValue),
+                              fill = factor(HRValue))) +
                 geom_line(size = lsize) +
                 geom_ribbon(aes(ymin = Lower50, ymax = Upper50), alpha = alpha,
                             linetype = 0) +
                 geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
                             linetype = 0) +
                 scale_colour_brewer(palette = spalette, name = leg.name,
-                					guide = legend) +
+                                    guide = legend) +
                 scale_fill_brewer(palette = spalette, name = leg.name,
-                				  guide = legend) +
+                                  guide = legend) +
                 xlab(xlab) + ylab(ylab) +
                 ggtitle(title) +
                 theme_bw(base_size = 15)
@@ -319,7 +319,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, xlab = NULL,
                             fill = pcolour) +
                 geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
                             fill = pcolour) +
-            	geom_hline(aes(yintercept = 1), linetype = "dotted") +
+                geom_hline(aes(yintercept = 1), linetype = "dotted") +
                 xlab(xlab) + ylab(ylab) +
                 ggtitle(title) +
                 theme_bw(base_size = 15)

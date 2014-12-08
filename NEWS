@@ -1,3 +1,7 @@
+## Version 1.2.5
+
+Minor documentation and internal code improvements.
+
 ## Version 1.2.4
 
 Bug fix for `coxsimSpline` where the `SimID` was not correctly identified.
