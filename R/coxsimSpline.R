@@ -194,8 +194,8 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
     b <- str_replace(b, ",", "")
 
     NamesLoc <- function(p){
-      Temp <- paste0("ps.", b, ".", p)
-      match(Temp, dfn)
+        Temp <- paste0("ps.", b, ".", p)
+        match(Temp, dfn)
     }
 
     UpLim <- 2 + NumKnots
@@ -294,11 +294,11 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
         bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
         SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
         Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
-        
+
         # Create warning message
         Rows <- nrow(Simb)
         if (Rows > 2000000){
-        message(paste("There are", Rows, 
+        message(paste("There are", Rows,
             "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
         }
         Simb$QI <- Simb$hazard * Simb$HR
