@@ -1,10 +1,16 @@
+## Version 1.2.6
+
+- No longer depends on DataCombine.
+
+- Minor documentation improvements.
+
 ## Version 1.2.5
 
-Minor documentation and internal code improvements.
+- Minor documentation and internal code improvements.
 
 ## Version 1.2.4
 
-Bug fix for `coxsimSpline` where the `SimID` was not correctly identified.
+- Bug fix for `coxsimSpline` where the `SimID` was not correctly identified.
 
 Addressed minor bug in `SurvExpand` from data.table.
 

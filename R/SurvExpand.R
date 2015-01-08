@@ -27,7 +27,6 @@
 #' events data.
 #'
 #' @examples
-#' \dontrun{
 #' # Load Golub & Steunenberg (2007) Data
 #' data("GolubEUPData")
 #'
@@ -37,12 +36,10 @@
 #' # Expand data
 #' GolubEUPDataExpand <- SurvExpand(GolubEUPData, GroupVar = 'caseno',
 #'                        Time = 'begin', Time2 = 'end', event = 'event')
-#' }
 #'
 #' @seealso \code{\link{tvc}}
 #' @import data.table
 #' @importFrom dplyr group_by mutate select distinct
-#' @importFrom DataCombine MoveFront
 #' @keywords utilities
 #' @export
 
