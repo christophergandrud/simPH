@@ -7,8 +7,8 @@ Description: The package simulates and plots quantities of interest (relative
     non-proportional hazards, as well as stratified survival curves from Cox
     Proportional Hazard models. It also simulates and plots marginal effects
     for multiplicative interactions.
-Version: 1.2.6
-Date: 2015-1-8
+Version: 1.2.6.1
+Date: 2015-1-31
 Authors@R: as.person(c(
     "Christopher Gandrud <christopher.gandrud@gmail.com> [aut, cre, cph]"
     ))
