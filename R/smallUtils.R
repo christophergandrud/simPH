@@ -215,11 +215,13 @@ MoveFront <- function(data, Var, exact = TRUE, ignore.case = NULL, fixed = NULL)
 #' Convert a coxsim class object into a data frame
 #'
 #' @param x a \code{coxsim} class object.
+#' @param ... arguments to pass to \code{data.frame}.
 #'
 #' @export
 
-as.data.frame.coxsim <- function(x) {
+as.data.frame.coxsim <- function(x, ...) {
     out <- x$sims
+    out <- data.frame(out, ...)
     out
 }
 

@@ -124,7 +124,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
                             psize = 1, alpha = 0.2, type = "points", ...)
 {
     Time <- HRate <- HRValue <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <-
-        Median <- SimID <- NULL
+        Median <- SimID <- xaxis <- NULL
     if (!inherits(obj, "simlinear")){
         stop("must be a simlinear object", call. = FALSE)
     }

@@ -49,6 +49,9 @@
 MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
                         clean = FALSE){
     Xj <- QI <- Time <- HRValue <- HRate <- Strata <- NULL
+
+    df <- as.data.frame(df)
+
     if (isTRUE(hr) & !isTRUE(strata)){
         byVars <- c("Time", "HRValue")
     }
