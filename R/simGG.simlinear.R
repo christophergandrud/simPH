@@ -82,6 +82,7 @@
 #'                      qi = "Hazard Ratio",
 #'                      spin = TRUE, ci = 0.99)
 #' simGG(Sim1, method = 'lm', rug_position = 'jitter')
+#' simGG(Sim1, method = 'lm', type = 'ribbons', rug_position = 'jitter')
 #'
 #' \dontrun{
 #' # Simulate and plot Hazard Rate for stafcder variable
@@ -286,8 +287,10 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
         if (qi == "Hazard Rate"){
             if (!is.null(obj$Strata)) {
                 obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
+                .e <- environment()
                 p <- ggplot(obj, aes(x = Time, y = HRate,
-                            colour = factor(HRValue), fill = factor(HRValue))) +
+                            colour = factor(HRValue), fill = factor(HRValue)),
+                            environment = .e) +
                         geom_line(size = lsize) +
                         geom_ribbon(aes(ymin = Lower50, ymax = Upper50),
                                     alpha = alpha, linetype = 0) +
@@ -303,8 +306,9 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
                         theme_bw(base_size = 15)
             } else if (is.null(obj$Strata)){
                 obj <- MinMaxLines(df = obj, hr = TRUE)
+                .e <- environment()
                 p <- ggplot(obj, aes(Time, Median, colour = factor(HRValue),
-                                  fill = factor(HRValue))) +
+                                  fill = factor(HRValue)), environment = .e) +
                         geom_line(size = lsize) +
                         geom_ribbon(aes(ymin = Lower50, ymax = Upper50),
                                     alpha = alpha, linetype = 0) +
@@ -320,7 +324,8 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
             }
         } else if (qi == "First Difference"){
             obj <- MinMaxLines(df = obj)
-            p <- ggplot(obj, aes(Xj, Median)) +
+            .e <- environment()
+            p <- ggplot(obj, aes(Xj, Median), environment = .e) +
                     geom_line(size = lsize, colour = lcolour) +
                     geom_ribbon(aes(ymin = Lower50, ymax = Upper50),
                                 alpha = alpha, fill = pcolour) +
@@ -332,7 +337,8 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
                     theme_bw(base_size = 15)
         } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
             obj <- MinMaxLines(df = obj)
-            p <- ggplot(obj, aes(Xj, Median)) +
+            .e <- environment()
+            p <- ggplot(obj, aes(Xj, Median), environment = .e) +
                     geom_line(size = lsize, colour = lcolour) +
                     geom_ribbon(aes(ymin = Lower50, ymax = Upper50),
                                 alpha = alpha, fill = pcolour) +
@@ -346,7 +352,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
         )
     }
     if (isTRUE(rug) & qi != 'Hazard Rate'){
-        p <- p + geom_rug(data = rugger, aes(x = xaxis), sides = "b",
+        p <- p + geom_rug(data = rugger, aes(x = xaxis, y = QI), sides = "b",
                     position = rug_position, colour = pcolour)
     }
     return(p)

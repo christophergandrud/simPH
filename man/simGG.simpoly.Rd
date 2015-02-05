@@ -123,7 +123,7 @@ Sim2 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Ratio",
           nsim = 100)
 
 # Plot simulations
-simGG(Sim2, type = 'ribbons')
+simGG(Sim2, type = 'ribbons', rug_position = 'jitter')
 
 Sim3 <- coxsimPoly(M1, b = "natreg", qi = "Hazard Rate",
            pow = 3, Xj = c(1, 150), nsim = 100)
