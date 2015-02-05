@@ -198,7 +198,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
         else if (qi == "Hazard Ratio"){
           if (is.null(X1) | is.null(X2)){
             stop("For Hazard Ratios both X1 and X2 should be specified.",
-            	call. = FALSE)
+                call. = FALSE)
           } else {
             Xs <- merge(X1, X2)
             names(Xs) <- c("X1", "X2")
@@ -244,8 +244,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
         }
     }
 
-  # If the user wants to calculate Hazard Rates using means for fitting all
-  #covariates other than b.
+    # If the user wants to calculate Hazard Rates using means for fitting all
+    #covariates other than b.
     else if (isTRUE(means)){
         if (is.null(X1) | is.null(X2)){
             stop("For Hazard Rates, both X1 and X2 should be specified.",
@@ -369,6 +369,13 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
                                   SimbPerc$X2, SimbPerc$QI)
         names(SimbPercSub) <- c("SimID", "X1", "X2", "QI")
     }
-    class(SimbPercSub) <- c("siminteract", qi, "data.frame")
-    SimbPercSub
+
+    # Add in distribution of b
+    rug <- model.frame(obj)[, c(b1, b2)]
+    out <- list(sims = SimbPercSub, rug = rug)
+
+    class(out) <- c("siminteract", qi, "coxsim")
+    attr(out, 'b1') <- b1
+    attr(out, 'b2') <- b2
+    out
 }

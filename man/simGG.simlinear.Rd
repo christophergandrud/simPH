@@ -121,7 +121,7 @@ Sim1 <- coxsimLinear(M1, b = "stafcder",
                      qi = "Hazard Ratio",
                      spin = TRUE, ci = 0.99)
 simGG(Sim1, method = 'lm', rug_position = 'jitter')
-simGG(Sim1, method = 'lm', type = 'ribbons', rug_position = 'jitter')
+simGG(Sim1, type = 'ribbons', rug_position = 'jitter')
 
 \dontrun{
 # Simulate and plot Hazard Rate for stafcder variable

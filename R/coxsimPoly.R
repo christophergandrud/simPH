@@ -247,7 +247,6 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
     rug <- model.frame(obj)[, b]
     out <- list(sims = SimbPercSub, rug = rug)
 
-
     class(out) <- c("simpoly", qi, "coxsim")
     attr(out, 'xaxis') <- b
     out

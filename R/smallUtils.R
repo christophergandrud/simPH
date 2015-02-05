@@ -227,13 +227,20 @@ as.data.frame.coxsim <- function(x, ...) {
 
 #' Extract values for rug plot
 #' @param obj a \code{coxsim} class object.
-#' @param x a character value for the x-axis value.
+#' @param x a character string for the x-axis value.
+#' @param rug_var character string. When rug is a data frame, then variable to
+#' extract.
 #'
 #' @keywords internals
 #' @noRd
 
-rugExtract <- function(obj, x = "Xj") {
-    xaxis <- obj$rug
+rugExtract <- function(obj, x = "Xj", rug_var) {
+    if (!is.data.frame(obj$rug)) {
+        xaxis <- obj$rug
+    }
+    else if (is.data.frame(obj$rug)){
+        xaxis <- obj$rug[, rug_var]
+    }
     xaxis.df <- data.frame(xaxis = xaxis, QI = 1) # Meaningless QI for ggplot
 
     xaxis.df <- subset(xaxis.df, xaxis >= min(obj$sims[, x]) &

@@ -2,6 +2,9 @@
 
 - `simGG` now includes rug plots.
 
+- For `simGG` plots with a covariate represented on the x-axis,
+the variable name is printed by default on the plot.
+
 - `as.data.frame.coxsim` added to convert the output of a coxsim function to
 a data frame
 

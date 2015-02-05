@@ -5,16 +5,25 @@
 \title{Plot simulated linear multiplicative interactions from Cox Proportional
 Hazards Models}
 \usage{
-\method{simGG}{siminteract}(obj, from = NULL, to = NULL, xlab = NULL,
-  ylab = NULL, title = NULL, method = "auto", spalette = "Set1",
-  legend = "legend", leg.name = "", lcolour = "#2B8CBE", lsize = 1,
-  pcolour = "#A6CEE3", psize = 1, alpha = 0.2, type = "points", ...)
+\method{simGG}{siminteract}(obj, from = NULL, rug = TRUE,
+  rug_position = "identity", to = NULL, xlab = NULL, ylab = NULL,
+  title = NULL, method = "auto", spalette = "Set1", legend = "legend",
+  leg.name = "", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
+  psize = 1, alpha = 0.2, type = "points", ...)
 }
 \arguments{
 \item{obj}{a \code{siminteract} class object}
 
 \item{from}{numeric time to start the plot from. Only relevant if
 \code{qi = "Hazard Rate"}.}
+
+\item{rug}{logical indicating whether or not to include a rug plot showing
+the distribution of values in the sample used to estimate the \code{coxph}
+model. Only relevant when the quantity of interest is not
+\code{"Hazard Rate"}.}
+
+\item{rug_position}{character string. The position adjustment to use for
+overlapping points in the rug plot. Use \code{"jitter"} to jitter the points.}
 
 \item{to}{numeric time to plot to. Only relevant if
 \code{qi = "Hazard Rate"}.}
@@ -114,6 +123,7 @@ Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
 
 # Plot quantities of interest
 simGG(Sim1)
+simGG(Sim1, type = 'ribbons', rug_position = 'jitter')
 
 \dontrun{
 # Change the order of the covariates to make a more easily
@@ -140,9 +150,9 @@ Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
 # Plot quantities of interest
 simGG(Sim1, xlab = "\\nprevgenx",
        ylab = "Marginal Effect of lethal\\n")
-simGG(Sim2, ribbons = TRUE)
+simGG(Sim2, type = 'ribbons')
 simGG(Sim3)
-simGG(Sim4, to = 150, ribbons = TRUE, legend = FALSE)
+simGG(Sim4, to = 150, type = 'ribbons', legend = FALSE)
 }
 }
 \references{
