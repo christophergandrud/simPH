@@ -100,6 +100,7 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
         names(Linesdf) <- c(byVars, 'Min_CI', 'Lower50_CI','Median',
                             'Upper50_CI', 'Max_CI')
     }
+    class(Linesdf) <- 'data.frame'
     return(Linesdf)
 }
 

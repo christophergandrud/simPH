@@ -81,7 +81,7 @@
 #'                      Xl = c(1000, 1000),
 #'                      qi = "Hazard Ratio",
 #'                      spin = TRUE, ci = 0.99)
-#' simGG(Sim1, method = 'lm')
+#' simGG(Sim1, method = 'lm', rug_position = 'jitter')
 #'
 #' \dontrun{
 #' # Simulate and plot Hazard Rate for stafcder variable
@@ -347,7 +347,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
     }
     if (isTRUE(rug) & qi != 'Hazard Rate'){
         p <- p + geom_rug(data = rugger, aes(x = xaxis), sides = "b",
-                            position = rug_position, colour = pcolour)
+                    position = rug_position, colour = pcolour)
     }
     return(p)
 }

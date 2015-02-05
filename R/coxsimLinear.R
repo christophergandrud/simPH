@@ -71,8 +71,8 @@
 #'                       ci = 0.99)
 #' }
 #'
-#' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},
-#' and \code{\link{coxph}}
+#' @seealso \code{\link{simGG.simlinear}}, \code{\link{survival}},
+#' \code{\link{strata}}, and \code{\link{coxph}}
 #'
 #' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive
 #' Interpretation of Nonproportional Hazards in Event History Analysis.''

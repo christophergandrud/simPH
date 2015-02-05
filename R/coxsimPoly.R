@@ -34,7 +34,8 @@
 #' These values are difficult to plot \code{\link{simGG}} and may prevent
 #' \code{spin} from finding the central interval.
 #'
-#' @return a \code{simpoly} class object.
+#' @return a \code{simpoly}, \code{coxsim} object
+#'
 #' @details Simulates quantities of interest for polynomial covariate effects.
 #' For example if a nonlinear effect is modeled with a second order
 #' polynomial--i.e. \eqn{\beta_{1}x_{i} + \beta_{2}x_{i}^{2}}{\beta[1]x[i] +
@@ -88,8 +89,8 @@
 #' Shortest Probability Intervals.'' Arvix.
 #' \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 #'
-#' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},
-#' and \code{\link{coxph}}
+#' @seealso \code{\link{simGG.simpoly}}, \code{\link{survival}},
+#' \code{\link{strata}}, and \code{\link{coxph}}
 #' @importFrom reshape2 melt
 #' @importFrom MASS mvrnorm
 #' @importFrom survival basehaz
@@ -241,6 +242,13 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
         SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
         names(SimbPercSub) <- c("SimID", "Xj", "QI")
     }
-    class(SimbPercSub) <- c("simpoly", qi, "data.frame")
-    SimbPercSub
+
+    # Add in distribution of b
+    rug <- model.frame(obj)[, b]
+    out <- list(sims = SimbPercSub, rug = rug)
+
+
+    class(out) <- c("simpoly", qi, "coxsim")
+    attr(out, 'xaxis') <- b
+    out
 }

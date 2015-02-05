@@ -106,7 +106,7 @@ Shortest Probability Intervals.'' Arvix.
 \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 }
 \seealso{
-\code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},
-and \code{\link{coxph}}
+\code{\link{simGG.simlinear}}, \code{\link{survival}},
+\code{\link{strata}}, and \code{\link{coxph}}
 }
 

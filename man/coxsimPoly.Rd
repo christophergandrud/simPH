@@ -50,7 +50,7 @@ These values are difficult to plot \code{\link{simGG}} and may prevent
 \code{spin} from finding the central interval.}
 }
 \value{
-a \code{simpoly} class object.
+a \code{simpoly}, \code{coxsim} object
 }
 \description{
 \code{coxsimPoly} simulates quantities of interest for polynomial covariate
@@ -113,7 +113,7 @@ Shortest Probability Intervals.'' Arvix.
 \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 }
 \seealso{
-\code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},
-and \code{\link{coxph}}
+\code{\link{simGG.simpoly}}, \code{\link{survival}},
+\code{\link{strata}}, and \code{\link{coxph}}
 }
 
