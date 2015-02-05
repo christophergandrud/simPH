@@ -9,7 +9,7 @@
 #' used in \code{obj}. It should be exactly the same as how you entered it in
 #' \code{\link{coxph}}. You also need to enter a white spece before and after
 #' all equal (\code{=}) signs.
-#' @param bdata a numeric vector of splined variable's values.
+#' @param bdata a numeric vector of the splined variable's values.
 #' @param qi quantity of interest to simulate. Values can be
 #' \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"},
 #' and \code{"Hazard Rate"}. The default is \code{qi = "Relative Hazard"}.

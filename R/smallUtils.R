@@ -211,3 +211,30 @@ MoveFront <- function(data, Var, exact = TRUE, ignore.case = NULL, fixed = NULL)
     }
     return(data)
 }
+
+#' Convert a coxsim class object into a data frame
+#'
+#' @param x a \code{coxsim} class object.
+#'
+#' @export
+
+as.data.frame.coxsim <- function(x) {
+    out <- x$sims
+    out
+}
+
+#' Extract values for rug plot
+#' @param obj a \code{coxsim} class object.
+#' @param x a character value for the x-axis value.
+#'
+#' @keywords internals
+#' @noRd
+
+rugExtract <- function(obj, x = "Xj") {
+    xaxis <- obj$rug
+    xaxis.df <- data.frame(xaxis = xaxis, QI = 1) # Meaningless QI for ggplot
+
+    xaxis.df <- subset(xaxis.df, xaxis >= min(obj$sims[, x]) &
+                                    xaxis <= max(obj$sims[, x]))
+    return(xaxis.df)
+}

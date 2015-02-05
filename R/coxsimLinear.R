@@ -32,11 +32,11 @@
 #' Hazard Rates.
 #' @param extremesDrop logical whether or not to drop simulated quantity of
 #' interest values that are \code{Inf}, \code{NA}, \code{NaN} and
-#' \eqn{> 1000000} for \code{spin = FALSE} or \eqn{> 800} for \code{spin = TRUE}.
-#' These values are difficult to plot \code{\link{simGG}} and may prevent
-#' \code{spin} from finding the central interval.
+#' \eqn{> 1000000} for \code{spin = FALSE} or \eqn{> 800} for
+#' \code{spin = TRUE}. These values are difficult to plot \code{\link{simGG}}
+#' and may prevent \code{spin} from finding the central interval.
 #'
-#' @return a \code{simlinear} object
+#' @return a \code{simlinear}, \code{coxsim} object
 #'
 #' @description Simulates relative hazards, first differences, hazard ratios,
 #' and hazard rates for linear, non-time interacted covariates from Cox
@@ -139,10 +139,10 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
 
   # If all values aren't set for calculating the hazard rate
   if (!isTRUE(means)){
-  	# Subset simulations to only include b
-  	bpos <- match(b, dfn)
-  	Simb <- data.frame(SimID, DrawnDF[, bpos])
-  	names(Simb) <- c("SimID", "Coef")
+      # Subset simulations to only include b
+      bpos <- match(b, dfn)
+      Simb <- data.frame(SimID, DrawnDF[, bpos])
+      names(Simb) <- c("SimID", "Coef")
 
     # Find quantity of interest
     if (qi == "Relative Hazard"){
@@ -156,15 +156,15 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
         stop("Xj and Xl must be the same length.", call. = FALSE)
       }
       else {
-  	    Xs <- data.frame(Xj, Xl)
-  	    Simb <- merge(Simb, Xs)
-  	    Simb$QI<- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
+          Xs <- data.frame(Xj, Xl)
+          Simb <- merge(Simb, Xs)
+          Simb$QI<- (exp((Simb$Xj - Simb$Xl) * Simb$Coef) - 1) * 100
       }
     }
     else if (qi == "Hazard Ratio"){
-    	Xs <- data.frame(Xj, Xl)
+        Xs <- data.frame(Xj, Xl)
         Simb <- merge(Simb, Xs)
-  	  Simb$QI<- exp((Simb$Xj - Simb$Xl) * Simb$Coef)
+        Simb$QI<- exp((Simb$Xj - Simb$Xl) * Simb$Coef)
     }
     else if (qi == "Hazard Rate"){
         Xl <- NULL
@@ -198,115 +198,119 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
     }
   }
 
-  # If the user wants to calculate Hazard Rates using means for fitting
-  # all covariates other than b.
-  else if (isTRUE(means)){
-    Xl <- NULL
-    message("Xl ignored")
+    # If the user wants to calculate Hazard Rates using means for fitting
+    # all covariates other than b.
+    else if (isTRUE(means)){
+        Xl <- NULL
+        message("Xl ignored")
 
-    # Set all values of b at means for data used in the analysis
-    NotB <- setdiff(names(DrawnDF), b)
-    MeanValues <- data.frame(obj$means)
-    FittedMeans <- function(Z){
-      ID <- 1:nsim
-      Temp <- data.frame(ID)
-      for (i in Z){
-        BarValue <- MeanValues[i, ]
-        DrawnCoef <- DrawnDF[, i]
-        FittedCoef <- outer(DrawnCoef, BarValue)
-        FCMolten <- data.frame(melt(FittedCoef))
-        Temp <- cbind(Temp, FCMolten[,3])
-      }
-      Names <- c("ID", Z)
-      names(Temp) <- Names
-      Temp <- Temp[, -1]
-      return(Temp)
+        # Set all values of b at means for data used in the analysis
+        NotB <- setdiff(names(DrawnDF), b)
+        MeanValues <- data.frame(obj$means)
+        FittedMeans <- function(Z){
+            ID <- 1:nsim
+            Temp <- data.frame(ID)
+            for (i in Z){
+                BarValue <- MeanValues[i, ]
+                DrawnCoef <- DrawnDF[, i]
+                FittedCoef <- outer(DrawnCoef, BarValue)
+                FCMolten <- data.frame(melt(FittedCoef))
+                Temp <- cbind(Temp, FCMolten[,3])
+            }
+            Names <- c("ID", Z)
+            names(Temp) <- Names
+            Temp <- Temp[, -1]
+            return(Temp)
+        }
+        FittedComb <- FittedMeans(NotB)
+        ExpandFC <- do.call(rbind, rep(list(FittedComb), length(Xj)))
+
+        # Set fitted values for Xj
+        bpos <- match(b, dfn)
+        Simb <- data.frame(DrawnDF[, bpos])
+
+        Xs <- data.frame(Xj)
+        Xs$HRValue <- paste(Xs[, 1])
+
+        Simb <- merge(Simb, Xs)
+        Simb$CombB <- Simb[, 1] * Simb[, 2]
+        Simb <- Simb[, 2:4]
+
+        Simb <- cbind(Simb, ExpandFC)
+        Simb$Sum <- rowSums(Simb[, c(-1, -2)])
+        Simb$HR <- exp(Simb$Sum)
+
+        bfit <- basehaz(obj)
+        bfit$FakeID <- 1
+        Simb$FakeID <- 1
+        bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+        SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+        Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
+        # Create warning message
+        Rows <- nrow(Simb)
+        if (Rows > 2000000){
+          message(paste("There are", Rows,
+                    "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
+        }
+        Simb$QI <- Simb$hazard * Simb$HR
+        if (is.null(Simb$strata)){
+            Simb <- Simb[, list(time, Xj, QI, HRValue)]
+        } else if (!is.null(Simb$strata)){
+            Simb <- Simb[, list(time, Xj, QI, HRValue, strata)]
+        }
+        Simb <- data.frame(Simb)
     }
-    FittedComb <- FittedMeans(NotB)
-    ExpandFC <- do.call(rbind, rep(list(FittedComb), length(Xj)))
 
-    # Set fitted values for Xj
-    bpos <- match(b, dfn)
-    Simb <- data.frame(DrawnDF[, bpos])
-
-    Xs <- data.frame(Xj)
-    Xs$HRValue <- paste(Xs[, 1])
-
-    Simb <- merge(Simb, Xs)
-    Simb$CombB <- Simb[, 1] * Simb[, 2]
-    Simb <- Simb[, 2:4]
-
-    Simb <- cbind(Simb, ExpandFC)
-    Simb$Sum <- rowSums(Simb[, c(-1, -2)])
-    Simb$HR <- exp(Simb$Sum)
-
-    bfit <- basehaz(obj)
-    bfit$FakeID <- 1
-    Simb$FakeID <- 1
-    bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
-    SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
-    Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
-    # Create warning message
-    Rows <- nrow(Simb)
-    if (Rows > 2000000){
-      message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
+    # Drop simulations outside of 'confidence bounds'
+    if (qi != "Hazard Rate"){
+        SubVar <- "Xj"
+    } else if (qi == "Hazard Rate"){
+        SubVar <- c("time", "Xj")
     }
-    Simb$QI <- Simb$hazard * Simb$HR
-    if (is.null(Simb$strata)){
-      Simb <- Simb[, list(time, Xj, QI, HRValue)]
-    } else if (!is.null(Simb$strata)){
-      Simb <- Simb[, list(time, Xj, QI, HRValue, strata)]
-    }
-    Simb <- data.frame(Simb)
-  }
 
-  # Drop simulations outside of 'confidence bounds'
-  if (qi != "Hazard Rate"){
-  	SubVar <- "Xj"
-  } else if (qi == "Hazard Rate"){
-  	SubVar <- c("time", "Xj")
-  }
-
-  # Drop simulations outside of the middle
-  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
+    # Drop simulations outside of the middle
+    SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
                                 qi = qi, spin = spin, ci = ci,
                                 extremesDrop = extremesDrop)
 
-  # Final clean up
-  # Subset simlinear object & create a data frame of important variables
-  if (qi == "Hazard Rate" & !isTRUE(means)){
-    if (is.null(obj$strata)){
-      SimbPercSub <- data.frame(SimbPerc$SimID,
-                              SimbPerc$time, SimbPerc$QI,
-                              SimbPerc$HRValue)
-      names(SimbPercSub) <- c("SimID", "Time", "HRate",
-                            "HRValue")
-    } else if (!is.null(SimbPerc$strata)) {
-    SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
-                    SimbPerc$QI, SimbPerc$strata,
-                    SimbPerc$HRValue)
-    names(SimbPercSub) <- c("SimID", "Time", "HRate",
-                          "Strata", "HRValue")
-    }
-  } else if (qi == "Hazard Rate" & isTRUE(means)){
-    if (is.null(obj$strata)){
-      SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI,
-                              SimbPerc$HRValue)
-      names(SimbPercSub) <- c("Time", "HRate",
-                            "HRValue")
-    } else if (!is.null(SimbPerc$strata)) {
-    SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
-                    SimbPerc$QI, SimbPerc$strata,
-                    SimbPerc$HRValue)
-    names(SimbPercSub) <- c("SimID", "Time", "HRate",
-                          "Strata", "HRValue")
-    }
-  } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" |
-            qi == "First Difference"){
-    SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj,
-                             SimbPerc$QI)
+    # Final clean up
+    # Subset simlinear object & create a data frame of important variables
+    if (qi == "Hazard Rate" & !isTRUE(means)){
+        if (is.null(obj$strata)){
+            SimbPercSub <- data.frame(SimbPerc$SimID,
+                                      SimbPerc$time, SimbPerc$QI,
+                                      SimbPerc$HRValue)
+            names(SimbPercSub) <- c("SimID", "Time", "HRate", "HRValue")
+        } else if (!is.null(SimbPerc$strata)) {
+            SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
+                                    SimbPerc$QI, SimbPerc$strata,
+                                    SimbPerc$HRValue)
+            names(SimbPercSub) <- c("SimID", "Time", "HRate", "Strata",
+                                    "HRValue")
+        }
+    } else if (qi == "Hazard Rate" & isTRUE(means)){
+        if (is.null(obj$strata)){
+            SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI,
+                                      SimbPerc$HRValue)
+            names(SimbPercSub) <- c("Time", "HRate", "HRValue")
+        } else if (!is.null(SimbPerc$strata)) {
+            SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
+                                    SimbPerc$QI, SimbPerc$strata,
+                                    SimbPerc$HRValue)
+                            names(SimbPercSub) <- c("SimID", "Time", "HRate",
+                                                  "Strata", "HRValue")
+        }
+    } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" |
+                qi == "First Difference"){
+        SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
     names(SimbPercSub) <- c("SimID", "Xj", "QI")
-  }
-  class(SimbPercSub) <- c("simlinear", qi, "data.frame")
-  SimbPercSub
+    }
+
+    # Add in distribution of b
+    rug <- model.frame(obj)[, b]
+    out <- list(sims = SimbPercSub, rug = rug)
+
+    class(out) <- c("simlinear", qi, "coxsim")
+    attr(out, 'xaxis') <- b
+    out
 }

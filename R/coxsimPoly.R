@@ -99,39 +99,39 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
                        Xj = NULL, Xl = NULL, nsim = 1000, ci = 0.95,
                        spin = FALSE, extremesDrop = TRUE)
 {
-  strata <- QI <- SimID <-  NULL
-  # Ensure that qi is valid
-  qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate",
+    strata <- QI <- SimID <-  NULL
+    # Ensure that qi is valid
+    qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate",
              "Hazard Ratio")
-  TestqiOpts <- qi %in% qiOpts
-  if (!isTRUE(TestqiOpts)){
-    stop("Invalid qi type.\nqi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'.",
-      call. = FALSE)
-  }
-  # Ensure that b is declared
-  if (is.null(b)) stop('Need to declare b.', call. = FALSE)
+    TestqiOpts <- qi %in% qiOpts
+    if (!isTRUE(TestqiOpts)){
+        stop("Invalid qi type.\nqi must be 'Relative Hazard', 'Hazard Rate', 'First Difference', or 'Hazard Ratio'.",
+        call. = FALSE)
+    }
+    # Ensure that b is declared
+    if (is.null(b)) stop('Need to declare b.', call. = FALSE)
 
-  # Find base variable if polynomial entered
-  PolyOnly <- grepl(pattern = 'I\\(.*\\^', x = b)
-  if (isTRUE(PolyOnly)){
-    message('Simulations of the quantity of interest will not include the linear term, if any exist in the model.\n')
-    b <- gsub(pattern = '^I\\(', replacement = '', x = b)
-    b <- gsub(pattern = '\\^.*$', replacement = '', x = b)
-  }
+    # Find base variable if polynomial entered
+    PolyOnly <- grepl(pattern = 'I\\(.*\\^', x = b)
+    if (isTRUE(PolyOnly)){
+        message('Simulations of the quantity of interest will not include the linear term, if any exist in the model.\n')
+        b <- gsub(pattern = '^I\\(', replacement = '', x = b)
+        b <- gsub(pattern = '\\^.*$', replacement = '', x = b)
+    }
 
-  # Find X_{jl}
-  if (length(Xj) != length(Xl) & !is.null(Xl)){
-  	stop("Xj and Xl must be the same length.", call. = FALSE)
-  }	else if (is.null(Xl)) {
-  	message("All Xl set at 0.")
-  	Xjl <- Xj
-  } else {
-  	Xbound <- cbind(Xj, Xl)
-  	Xjl <- Xbound[, 1] - Xbound[, 2]
-  }
+    # Find X_{jl}
+    if (length(Xj) != length(Xl) & !is.null(Xl)){
+        stop("Xj and Xl must be the same length.", call. = FALSE)
+    } else if (is.null(Xl)) {
+        message("All Xl set at 0.")
+        Xjl <- Xj
+    } else {
+        Xbound <- cbind(Xj, Xl)
+        Xjl <- Xbound[, 1] - Xbound[, 2]
+    }
 
-  # Create simulation ID variable
-  SimID <- 1:nsim
+    # Create simulation ID variable
+    SimID <- 1:nsim
 
     # Parameter estimates & Variance/Covariance matrix
     Coef <- matrix(obj$coefficients)
@@ -147,73 +147,71 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
     NamesLoc <- function(p){
         Temp <- paste0("I.", b, ".", p, ".")
         match(Temp, dfn)
-  	}
+    }
     pows <- as.numeric(2:pow)
-  NamePow <- sapply(pows, NamesLoc, simplify = TRUE)
+    NamePow <- sapply(pows, NamesLoc, simplify = TRUE)
 
-  if (!isTRUE(PolyOnly)){
-    NamePow <- c(bpos, NamePow)
-  }
+    if (!isTRUE(PolyOnly)) NamePow <- c(bpos, NamePow)
 
-  Drawn <- data.frame(Drawn[, NamePow])
-  VNames <- names(Drawn)
-  powFull <- as.numeric(1:pow)
+    Drawn <- data.frame(Drawn[, NamePow])
+    VNames <- names(Drawn)
+    powFull <- as.numeric(1:pow)
 
     # Function to Multiply covariates by polynomials
-  	Fitted <- function(VN, x, p){
-  		Temp <- outer(Drawn[, VN], x^p)
-  		TempDF <- data.frame(melt(Temp))
-  		TempDF <- TempDF[, 'value']
-  		TempDF
-  	}
+    Fitted <- function(VN, x, p){
+        Temp <- outer(Drawn[, VN], x^p)
+        TempDF <- data.frame(melt(Temp))
+        TempDF <- TempDF[, 'value']
+        TempDF
+    }
 
     Simb <- data.frame()
-  	for (i in Xjl){
-  		TempComb <- mapply(Fitted, VN = VNames, x = i, p = powFull)
-  		TempComb <- data.frame(TempComb)
-  		TempComb$Xjl <- i
-  		TempComb$SimID <- SimID
-  		Simb <- rbind(Simb, TempComb)
-  	}
+    for (i in Xjl){
+        TempComb <- mapply(Fitted, VN = VNames, x = i, p = powFull)
+        TempComb <- data.frame(TempComb)
+        TempComb$Xjl <- i
+        TempComb$SimID <- SimID
+        Simb <- rbind(Simb, TempComb)
+    }
 
-   	# Create combined quantities of interest
+    # Create combined quantities of interest
     if (length(NamePow) > 1){
-      UnExp <- rowSums(Simb[, VNames])
+        UnExp <- rowSums(Simb[, VNames])
     }
     else if (length(NamePow) == 1) UnExp = Simb[, VNames]
 
     if (qi == "Relative Hazard"){
-      Simb$QI <- exp(UnExp)
-  	} else if (qi == "Hazard Ratio"){
-  		Simb$QI <- exp(UnExp)
-  	}
-  	else if (qi == "First Difference"){
-  		Simb$QI <- (exp(UnExp) - 1) * 100
-  	}
-  	else if (qi == "Hazard Rate"){
-  		Simb$HR <- exp(UnExp)
-  	  	bfit <- basehaz(obj)
-  	  	bfit$FakeID <- 1
-  	  	Simb$FakeID <- 1
+        Simb$QI <- exp(UnExp)
+    } else if (qi == "Hazard Ratio"){
+        Simb$QI <- exp(UnExp)
+    }
+    else if (qi == "First Difference"){
+        Simb$QI <- (exp(UnExp) - 1) * 100
+    }
+    else if (qi == "Hazard Rate"){
+        Simb$HR <- exp(UnExp)
+        bfit <- basehaz(obj)
+        bfit$FakeID <- 1
+        Simb$FakeID <- 1
         bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
         SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
         Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
         # Create warning message
         Rows <- nrow(Simb)
         if (Rows > 2000000){
-          message(paste("There are", Rows,
+            message(paste("There are", Rows,
             "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
         }
         Simb$QI <- Simb$hazard * Simb$HR
         if (is.null(Simb$strata)){
-          Simb <- Simb[, list(SimID, time, Xjl, QI)]
+            Simb <- Simb[, list(SimID, time, Xjl, QI)]
         } else if (!is.null(Simb$strata)){
-          Simb <- Simb[, list(SimID, time, Xjl, QI, strata)]
+        Simb <- Simb[, list(SimID, time, Xjl, QI, strata)]
         }
         Simb <- data.frame(Simb)
-  	}
+    }
 
-  	# Drop simulations outside of 'confidence bounds'
+    # Drop simulations outside of 'confidence bounds'
     if (qi != "Hazard Rate"){
         SubVar <- "Xjl"
     } else if (qi == "Hazard Rate"){
@@ -221,27 +219,28 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
         SubVar <- c("SimID", "time", "HRValue")
     }
 
-  # Drop simulations outside of the middle
-  SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
+    # Drop simulations outside of the middle
+    SimbPerc <- IntervalConstrict(Simb = Simb, SubVar = SubVar,
                                 qi = qi, spin = spin, ci = ci,
                                 extremesDrop = extremesDrop)
 
     # Clean up
-  if (qi == "Hazard Rate"){
-    if (is.null(SimbPerc$strata)){
-      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
-                                SimbPerc$QI, SimbPerc$HRValue)
-      names(SimbPercSub) <- c("SimID", "Time", "HRate", "HRValue")
-    } else if (!is.null(SimbPerc$strata)) {
-    SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time, SimbPerc$QI,
-                              SimbPerc$strata, SimbPerc$HRValue)
-    names(SimbPercSub) <- c("SimID", "Time", "HRate", "Strata", "HRValue")
+    if (qi == "Hazard Rate"){
+        if (is.null(SimbPerc$strata)){
+            SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
+                                    SimbPerc$QI, SimbPerc$HRValue)
+            names(SimbPercSub) <- c("SimID", "Time", "HRate", "HRValue")
+        } else if (!is.null(SimbPerc$strata)) {
+            SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
+                                SimbPerc$QI, SimbPerc$strata, SimbPerc$HRValue)
+            names(SimbPercSub) <- c("SimID", "Time", "HRate", "Strata",
+                                    "HRValue")
+        }
+    } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" |
+            qi == "First Difference"){
+        SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
+        names(SimbPercSub) <- c("SimID", "Xj", "QI")
     }
-  } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" |
-             qi == "First Difference"){
-      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
-      names(SimbPercSub) <- c("SimID", "Xj", "QI")
-  }
     class(SimbPercSub) <- c("simpoly", qi, "data.frame")
     SimbPercSub
 }

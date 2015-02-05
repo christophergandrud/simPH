@@ -5,10 +5,11 @@
 \title{Plot simulated linear, non-time interacted quantities of interest from Cox
 Proportional Hazards Models}
 \usage{
-\method{simGG}{simlinear}(obj, from = NULL, to = NULL, xlab = NULL,
-  ylab = NULL, title = NULL, method = "auto", spalette = "Set1",
-  legend = "legend", leg.name = "", lcolour = "#2B8CBE", lsize = 1,
-  pcolour = "#A6CEE3", psize = 1, alpha = 0.2, type = "points", ...)
+\method{simGG}{simlinear}(obj, from = NULL, to = NULL, rug = TRUE,
+  rug_position = "identity", xlab = NULL, ylab = NULL, title = NULL,
+  method = "auto", spalette = "Set1", legend = "legend", leg.name = "",
+  lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", psize = 1,
+  alpha = 0.2, type = "points", ...)
 }
 \arguments{
 \item{obj}{a \code{simlinear} class object.}
@@ -18,6 +19,14 @@ Proportional Hazards Models}
 
 \item{to}{numeric time to plot to. Only relevant if
 \code{qi = "Hazard Rate"}.}
+
+\item{rug}{logical indicating whether or not to include a rug plot showing
+the distribution of values in the sample used to estimate the \code{coxph}
+model. Only relevant when the quantity of interest is not
+\code{"Hazard Rate"}.}
+
+\item{rug_position}{character string. The position adjustment to use for
+overlapping points in the rug plot. Use \code{"jitter"} to jitter the points.}
 
 \item{xlab}{a label for the plot's x-axis.}
 
