@@ -13,6 +13,8 @@ the variable name is printed by default on the plot.
 - `as.data.frame.coxsim` added to convert the output of a coxsim function to
 a data frame
 
+- `simGG.simspline` no longer supports scatter3d plots for Hazard Rates.
+
 - Bug fixes in `simGG.simspline` with Hazard Rates.
 
 - Minor internal code and documentation improvements.
