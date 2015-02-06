@@ -253,11 +253,10 @@ rugExtract <- function(obj, x = "Xj", rug_var) {
 #' @keywords internals
 #' @noRd
 
-SubsetTime <- function(f){
+SubsetTime <- function(f, Temps = obj){
     Time <- NULL
     CombObjdf <- data.frame()
     for (i in f){
-        Temps <- obj
         TempsSub <- subset(Temps, Time == i)
         CombObjdf <- rbind(CombObjdf, TempsSub)
     }

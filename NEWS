@@ -1,5 +1,8 @@
 ## Version 1.3
 
+- !!!!NOTE!!!!: This version alters default behaviour and
+functionality in a way that could break your code.
+
 - `simGG` now includes rug plots.
 
     + Note that for `simGG.simtvc` that rug plots are not produced. All x-axes

@@ -63,8 +63,8 @@
 #' differences, hazard ratios, and hazard rates. If currently does not support
 #' hazard rates for multiple strata.
 #'
-#' You can to plot hazard rates for a range of values of \code{Xj} in two 
-#' dimensional plots at specific points in time. Each plot is arranged in a 
+#' You can to plot hazard rates for a range of values of \code{Xj} in two
+#' dimensional plots at specific points in time. Each plot is arranged in a
 #' facet grid.
 #'
 #' Note: A dotted line is created at y = 1 (0 for first difference), i.e. no
@@ -123,7 +123,7 @@
 #'                     Xl = seq(1099, 1699, by = 10), ci = 0.90)
 #'
 #' # Plot simulated Hazard Ratios
-#' simGG(Sim3, xlab = "\nFDA Drug Review Staff", alpha = 0.2)
+#' simGG(Sim3, xlab = "\nFDA Drug Review Staff", type = 'ribbons', alpha = 0.2)
 #' simGG(Sim3, xlab = "\nFDA Drug Review Staff", alpha = 0.2,
 #'       SmoothSpline = TRUE, type = 'points')
 #' }
@@ -156,15 +156,15 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
         message(paste0('The resulting plot may look strange.',
                 '\nI suggest using SmoothSpline = TRUE if type = "lines".'))
     }
-    
+
+    # Find quantity of interest
+    qi <- class(obj)[[2]]
+
     if (is.null(FacetTime) & qi == 'Hazard Rate') {
         stop('FacetTime must be specified with hazard rates. scatter3d no longer
              supported.',
              .call = FALSE)
     }
-    
-    # Find quantity of interest
-    qi <- class(obj)[[2]]
 
     # Create y-axis label
     if (is.null(ylab)) ylab <- paste(qi, "\n")
@@ -225,7 +225,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
                     xlab(xlab) + ylab(ylab) + ggtitle(title) +
                     theme_bw(base_size = 15)
         } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
-            objSub <- SubsetTime(FacetTime)
+            objSub <- SubsetTime(f = FacetTime, Temps = obj)
             p <- ggplot(objSub, aes(Xj, QI)) +
                     geom_point(shape = 21,  aes(alpha = PercRank), size = psize,
                                 colour = pcolour) +
@@ -262,7 +262,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
                     xlab(xlab) + ylab(ylab) + ggtitle(title) +
                     theme_bw(base_size = 15)
         } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
-            objSub <- SubsetTime(FacetTime)
+            objSub <- SubsetTime(f = FacetTime, Temps = obj)
             p <- ggplot(objSub, aes(Xj, QI)) +
                     geom_line(aes(group = SimID, alpha = PercRank),
                         size = psize, colour = pcolour) +
@@ -306,7 +306,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
                         list(alpha = 1))) +
                     theme_bw(base_size = 15)
         } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
-            objSub <- SubsetTime(FacetTime)
+            objSub <- SubsetTime(f = FacetTime, Temps = obj)
             objSub <- MinMaxLines(df = objSub, byVars = c("Xj", "Time"))
             p <- ggplot(objSub, aes(Xj, Median)) +
                     geom_line(size = lsize, colour = lcolour) +

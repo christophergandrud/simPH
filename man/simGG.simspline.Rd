@@ -152,7 +152,7 @@ Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
                     Xl = seq(1099, 1699, by = 10), ci = 0.90)
 
 # Plot simulated Hazard Ratios
-simGG(Sim3, xlab = "\\nFDA Drug Review Staff", alpha = 0.2)
+simGG(Sim3, xlab = "\\nFDA Drug Review Staff", type = 'ribbons', alpha = 0.2)
 simGG(Sim3, xlab = "\\nFDA Drug Review Staff", alpha = 0.2,
       SmoothSpline = TRUE, type = 'points')
 }
