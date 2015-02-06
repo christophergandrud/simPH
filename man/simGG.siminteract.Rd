@@ -150,7 +150,7 @@ Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
 # Plot quantities of interest
 simGG(Sim1, xlab = "\\nprevgenx",
        ylab = "Marginal Effect of lethal\\n")
-simGG(Sim2, type = 'ribbons')
+simGG(Sim2, type = 'ribbons', rug_position = 'jitter')
 simGG(Sim3)
 simGG(Sim4, to = 150, type = 'ribbons', legend = FALSE)
 }

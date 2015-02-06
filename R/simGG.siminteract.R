@@ -105,7 +105,7 @@
 #' # Plot quantities of interest
 #' simGG(Sim1, xlab = "\nprevgenx",
 #'        ylab = "Marginal Effect of lethal\n")
-#' simGG(Sim2, type = 'ribbons')
+#' simGG(Sim2, type = 'ribbons', rug_position = 'jitter')
 #' simGG(Sim3)
 #' simGG(Sim4, to = 150, type = 'ribbons', legend = FALSE)
 #' }
@@ -138,6 +138,7 @@
 #'
 #' @import ggplot2
 #' @import mgcv
+#' @importFrom dplyr rename
 #'
 #' @method simGG siminteract
 #' @export
@@ -217,8 +218,10 @@ simGG.siminteract <- function(obj, from = NULL,
     if (type == 'points'){
         if (qi == "Hazard Rate"){
             if (!is.null(obj$strata)) {
-                  p <- ggplot(obj, aes(x = Time, y = HRate,
-                            colour = factor(HRValue))) +
+                obj$HRValue <- as.factor(obj$HRValue)
+                .e <- environment()
+                p <- ggplot(obj, aes(x = Time, y = HRate,
+                            colour = HRValue), environment = .e) +
                     geom_point(aes(alpha = PercRank), size = psize) +
                     geom_smooth(method = method, size = lsize, se = FALSE) +
                     facet_grid(.~ Strata) +
@@ -228,8 +231,10 @@ simGG.siminteract <- function(obj, from = NULL,
                     xlab(xlab) + ylab(ylab) + ggtitle(title) +
                     theme_bw(base_size = 15)
             } else if (is.null(obj$strata)){
+                obj$HRValue <- as.factor(obj$HRValue)
+                .e <- environment()
                 p <- ggplot(obj, aes(x = Time, y = HRate,
-                              colour = factor(HRValue))) +
+                              colour = HRValue), environment = .e) +
                         geom_point(shape = 21, aes(alpha = PercRank),
                             size = psize) +
                         geom_smooth(method = method, size = lsize,
@@ -257,8 +262,10 @@ simGG.siminteract <- function(obj, from = NULL,
             if (nrow(X1Unique) <= 1){
                 message("X1 must have more than one fitted value.")
             } else {
-                p <- ggplot(obj, aes(X1, QI, colour = factor(X2),
-                                group = factor(X2))) +
+                obj$X2 <- as.factor(obj$X2)
+                .e <- environment()
+                p <- ggplot(obj, aes(X1, QI, colour = X2, group = X2),
+                            environment = .e) +
                         geom_point(shape = 21, aes(alpha = PercRank),
                                                   size = psize) +
                         geom_smooth(method = method, size = lsize, se = FALSE) +
@@ -276,8 +283,10 @@ simGG.siminteract <- function(obj, from = NULL,
             if (nrow(X1Unique) <= 1){
                 message("X1 must have more than one fitted value.")
             } else {
-                p <- ggplot(obj, aes(X1, QI, colour = factor(X2),
-                            group = factor(X2))) +
+                obj$X2 <- as.factor(obj$X2)
+                .e <- environment()
+                p <- ggplot(obj, aes(X1, QI, colour = X2, group = X2),
+                        environment = .e) +
                         geom_point(shape = 21, aes(alpha = PercRank),
                            size = psize) +
                         geom_smooth(method = method, size = lsize, se = FALSE) +
@@ -295,11 +304,13 @@ simGG.siminteract <- function(obj, from = NULL,
     else if (type == 'lines'){
         if (qi == "Hazard Rate"){
             if (!is.null(obj$strata)) {
-                p <- ggplot(obj, aes(x = Time, y = HRate,
-                        colour = factor(HRValue))) +
+                obj$HRValue <- as.factor(obj$HRValue)
+                .e <- environment()
+                p <- ggplot(obj, aes(x = Time, y = HRate, colour = HRValue),
+                        environment = .e) +
                         geom_line(aes(group = interaction(SimID, HRValue),
                                       alpha = PercRank), size = psize) +
-                        geom_smooth(aes(group = factor(HRValue)),
+                        geom_smooth(aes(group = HRValue),
                             method = method, size = lsize, se = FALSE) +
                         facet_grid(.~ Strata) +
                         scale_colour_brewer(palette = spalette, name = leg.name,
@@ -309,17 +320,20 @@ simGG.siminteract <- function(obj, from = NULL,
                         xlab(xlab) + ylab(ylab) + ggtitle(title) +
                         theme_bw(base_size = 15)
             } else if (is.null(obj$strata)){
-                p <- ggplot(obj, aes(x = Time, y = HRate,
-                                  colour = factor(HRValue))) +
-                    geom_line(aes(group = SimID, alpha = PercRank), shape = 21,
-                                  size = psize) +
-                    geom_smooth(aes(group = factor(HRValue)), method = method,
-                                    size = lsize, se = FALSE) +
-                    scale_colour_brewer(palette = spalette, name = leg.name,
-                                        guide = legend) +
-                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                    theme_bw(base_size = 15)
+                obj$HRValue <- as.factor(obj$HRValue)
+                .e <- environment()
+                p <- ggplot(obj, aes(x = Time, y = HRate, colour = HRValue),
+                        environment = .e) +
+                        geom_line(aes(group = SimID, alpha = PercRank),
+                            shape = 21, size = psize) +
+                        geom_smooth(aes(group = HRValue),
+                            method = method, size = lsize, se = FALSE) +
+                        scale_colour_brewer(palette = spalette, name = leg.name,
+                            guide = legend) +
+                        scale_alpha_continuous(range = c(0, alpha),
+                            guide = FALSE) +
+                        xlab(xlab) + ylab(ylab) + ggtitle(title) +
+                        theme_bw(base_size = 15)
             }
         }
         else if (qi == "Marginal Effect"){
@@ -338,10 +352,12 @@ simGG.siminteract <- function(obj, from = NULL,
             if (nrow(X1Unique) <= 1){
                 message("X1 must have more than one fitted value.")
             } else {
-                p <- ggplot(obj, aes(X1, QI, colour = factor(X2))) +
-                        geom_line(aes(group = interaction(SimID, factor(X2)),
+                obj$X2 <- as.factor(obj$X2)
+                .e <- environment()
+                p <- ggplot(obj, aes(X1, QI, colour = X2), environment = .e) +
+                        geom_line(aes(group = interaction(SimID, X2),
                                       alpha = PercRank), size = psize) +
-                        geom_smooth(aes(group = factor(X2)), method = method,
+                        geom_smooth(aes(group = X2), method = method,
                                         size = lsize, se = FALSE) +
                         geom_hline(aes(yintercept = 0), linetype = "dotted") +
                         scale_colour_brewer(palette = spalette, name = leg.name,
@@ -357,10 +373,11 @@ simGG.siminteract <- function(obj, from = NULL,
             if (nrow(X1Unique) <= 1){
                 message("X1 must have more than one fitted value.")
             } else {
-                p <- ggplot(obj, aes(X1, QI, colour = factor(X2))) +
-                        geom_line(aes(group = interaction(SimID, factor(X2)),
+                obj$X2 <- as.factor(obj$X2)
+                p <- ggplot(obj, aes(X1, QI, colour = X2)) +
+                        geom_line(aes(group = interaction(SimID, X2),
                                       alpha = PercRank), size = psize) +
-                        geom_smooth(aes(group = factor(X2)), method = method,
+                        geom_smooth(aes(group = X2), method = method,
                                         size = lsize, se = FALSE) +
                         geom_hline(aes(yintercept = 1), linetype = "dotted") +
                         scale_colour_brewer(palette = spalette, name = leg.name,
@@ -378,9 +395,10 @@ simGG.siminteract <- function(obj, from = NULL,
         if (qi == "Hazard Rate"){
             if (!is.null(obj$strata)) {
                 obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
+                obj$HRValue <- as.factor(obj$HRValue)
                 .e <- environment()
                 p <- ggplot(obj, aes(x = Time, y = HRate,
-                    colour = factor(HRValue), fill = factor(HRValue)),
+                    colour = HRValue, fill = HRValue),
                     environment = .e) +
                         geom_line(size = lsize, alpha = alpha) +
                         geom_ribbon(aes(ymin = Lower50, ymax = Upper50),
@@ -396,9 +414,10 @@ simGG.siminteract <- function(obj, from = NULL,
                         theme_bw(base_size = 15)
             } else if (is.null(obj$Strata)){
                 obj <- MinMaxLines(df = obj, hr = TRUE)
+                obj$HRValue <- as.factor(obj$HRValue)
                 .e <- environment()
-                p <- ggplot(obj, aes(Time, Median, colour = factor(HRValue),
-                        fill = factor(HRValue)), environment = .e) +
+                p <- ggplot(obj, aes(Time, Median, colour = HRValue,
+                        fill = HRValue), environment = .e) +
                         geom_line(size = lsize) +
                         geom_ribbon(aes(ymin = Lower50, ymax = Upper50),
                             alpha = alpha, linetype = 0) +
@@ -432,8 +451,10 @@ simGG.siminteract <- function(obj, from = NULL,
                 message("X1 must have more than one fitted value.")
             } else {
                 obj <- MinMaxLines(df = obj, byVars = c("X1", "X2"))
-                p <- ggplot(obj, aes(X1, Median, colour = factor(X2),
-                            fill = factor(X2)), environment = environment()) +
+                obj$X2 <- as.factor(obj$X2)
+                .e <- environment()
+                p <- ggplot(obj, aes(X1, Median, colour = X2,
+                            fill = X2), environment = .e) +
                         geom_line(size = lsize) +
                         geom_ribbon(aes(ymin = Lower50, ymax = Upper50),
                                         alpha = alpha, linetype = 0) +
