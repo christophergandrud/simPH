@@ -121,7 +121,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
         stop("must be a simpoly object", call. = FALSE)
     }
     if (type == 'ribbons' & method != "auto"){
-        message("The method argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
+        message("The method argument is ignored if type = 'ribbons'. Central tendency summarised with the median.")
     }
     # Find quantity of interest
     qi <- class(obj)[[2]]

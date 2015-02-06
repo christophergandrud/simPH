@@ -164,7 +164,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
         stop("must be a simspline object", call. = FALSE)
     }
     if (type == 'ribbons' & method != "auto"){
-      message("The method argument is ignored if ribbons = TRUE. Central tendency summarised with the median.")
+      message("The method argument is ignored if type = 'ribbons'. Central tendency summarised with the median.")
     }
     if (type == 'lines' & !isTRUE(SmoothSpline)){
         message(paste0('The resulting plot may look strange.',

@@ -73,7 +73,6 @@
 #' The resulting simulation values can be plotted using \code{\link{simGG}}.
 #'
 #' @examples
-#' \dontrun{
 #' # Load Golub & Steunenberg (2007) Data
 #' data("GolubEUPData")
 #'
@@ -89,7 +88,7 @@
 #' GolubEUPData <- tvc(GolubEUPData, b = BaseVars, tvar = 'end', tfun = 'log')
 #'
 #' # Run Cox PH Model
-#' M2 <- coxph(Surv(begin, end, event) ~ qmv + qmvpostsea + qmvpostteu +
+#' M1 <- coxph(Surv(begin, end, event) ~ qmv + qmvpostsea + qmvpostteu +
 #'                 coop + codec + eu9 + eu10 + eu12 + eu15 + thatcher +
 #'                 agenda + backlog + qmv_log + qmvpostsea_log + coop_log +
 #'                 codec_log + thatcher_log + backlog_log,
@@ -100,6 +99,7 @@
 #'                    tfun = "log", from = 80, to = 2000,
 #'                    Xj = 1, by = 15, ci = 0.99, nsim = 100)
 #'
+#' \dontrun{
 #' # Create simtvc object for First Difference
 #' Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "qmv_log",
 #'                  qi = "First Difference", Xj = 1,
@@ -143,122 +143,122 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL,
                       from, to, by = 1, ci = 0.95, spin = FALSE,
                       extremesDrop = TRUE)
 {
-  HRValue <- strata <- QI <- NULL
-  # Ensure that qi is valid
-  qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate",
-              "Hazard Ratio")
-  TestqiOpts <- qi %in% qiOpts
-  if (!isTRUE(TestqiOpts)){
+    HRValue <- strata <- QI <- NULL
+    # Ensure that qi is valid
+    qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate",
+                "Hazard Ratio")
+    TestqiOpts <- qi %in% qiOpts
+    if (!isTRUE(TestqiOpts)){
     stop("Invalid qi type. qi must be 'Relative Hazard', 'First Difference',
-         'Hazard Rate', or 'Hazard Ratio'.",
-         call. = FALSE)
-  }
+        'Hazard Rate', or 'Hazard Ratio'.",
+        call. = FALSE)
+    }
 
-  if (is.null(Xl) & qi != "Hazard Rate"){
-    Xl <- rep(0, length(Xj))
-    message("All Xl set to 0.")
-  } else if (!is.null(Xl) & qi == "Relative Hazard") {
-    message("All Xl set to 0.")
-  }
+    if (is.null(Xl) & qi != "Hazard Rate"){
+        Xl <- rep(0, length(Xj))
+        message("All Xl set to 0.")
+    } else if (!is.null(Xl) & qi == "Relative Hazard") {
+        message("All Xl set to 0.")
+    }
 
-  # Create time function
-  tfunOpts <- c("linear", "log", "power")
-  TestforTOpts <- tfun %in% tfunOpts
-  if (!isTRUE(TestforTOpts)){
-    stop("Must specify tfun as 'linear', 'log', or 'power'", call. = FALSE)
-  }
+    # Create time function
+    tfunOpts <- c("linear", "log", "power")
+    TestforTOpts <- tfun %in% tfunOpts
+    if (!isTRUE(TestforTOpts)){
+        stop("Must specify tfun as 'linear', 'log', or 'power'", call. = FALSE)
+    }
 
-  if (tfun == "linear"){
-    tf <- seq(from = from, to = to, by = by)
-  } else if (tfun == "log"){
-    tf <- log(seq(from = from, to = to, by = by))
-  } else if (tfun == "power"){
-    tf <- (seq(from = from, to = to, by = by))^pow
-  }
+    if (tfun == "linear"){
+        tf <- seq(from = from, to = to, by = by)
+    } else if (tfun == "log"){
+        tf <- log(seq(from = from, to = to, by = by))
+    } else if (tfun == "power"){
+        tf <- (seq(from = from, to = to, by = by))^pow
+    }
 
-  # Create simulation ID variable
-  SimID <- 1:nsim
+    # Create simulation ID variable
+    SimID <- 1:nsim
 
-  # Parameter estimates & Varance/Covariance matrix
-  Coef <- matrix(obj$coefficients)
-  VC <- vcov(obj)
+    # Parameter estimates & Varance/Covariance matrix
+    Coef <- matrix(obj$coefficients)
+    VC <- vcov(obj)
 
-  # Draw values from the multivariate normal distribution
-  Drawn <- mvrnorm(n = nsim, mu = Coef, Sigma = VC)
-  DrawnDF <- data.frame(Drawn)
-  dfn <- names(DrawnDF)
+    # Draw values from the multivariate normal distribution
+    Drawn <- mvrnorm(n = nsim, mu = Coef, Sigma = VC)
+    DrawnDF <- data.frame(Drawn)
+    dfn <- names(DrawnDF)
 
-  # Extract simulations for variables of interest
-  bpos <- match(b, dfn)
-  btvcpos <- match(btvc, dfn)
+    # Extract simulations for variables of interest
+    bpos <- match(b, dfn)
+    btvcpos <- match(btvc, dfn)
 
-  Drawn <- data.frame(Drawn[, c(bpos, btvcpos)])
-  Drawn$SimID <- SimID
+    Drawn <- data.frame(Drawn[, c(bpos, btvcpos)])
+    Drawn$SimID <- SimID
 
-  # Multiply time function with btvc
-  TVSim <- outer(Drawn[,2], tf)
-  TVSim <- data.frame(melt(TVSim))
-  names(TVSim) <- c("SimID", "time", "TVC")
-  time <- 1:length(tf)
-  TempDF <- data.frame(time, tf)
-  TVSim <- merge(TVSim, TempDF)
+    # Multiply time function with btvc
+    TVSim <- outer(Drawn[,2], tf)
+    TVSim <- data.frame(melt(TVSim))
+    names(TVSim) <- c("SimID", "time", "TVC")
+    time <- 1:length(tf)
+    TempDF <- data.frame(time, tf)
+    TVSim <- merge(TVSim, TempDF)
 
-  # Combine with non TVC version of the variable
-  TVSim <- merge(Drawn, TVSim, by = "SimID")
-  TVSim$CombCoef <- TVSim[[2]] + TVSim$TVC
+    # Combine with non TVC version of the variable
+    TVSim <- merge(Drawn, TVSim, by = "SimID")
+    TVSim$CombCoef <- TVSim[[2]] + TVSim$TVC
 
-  # Find quantity of interest
+    # Find quantity of interest
   if (qi == "Relative Hazard"){
-      Xs <- data.frame(Xj)
-      names(Xs) <- c("Xj")
-      Xs$Comparison <- paste(Xs[, 1])
-      Simb <- merge(TVSim, Xs)
-      Simb$QI <- exp(Simb$CombCoef * Simb$Xj)
-  } else if (qi == "First Difference"){
-    if (length(Xj) != length(Xl)){
-      stop("Xj and Xl must be the same length.", call. = FALSE)
-    } else {
-      TVSim$QI <- exp(TVSim$CombCoef)
-      Xs <- data.frame(Xj, Xl)
-      Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-      Simb <- merge(TVSim, Xs)
-      Simb$QI <- (exp((Simb$Xj - Simb$Xl) * Simb$CombCoef) - 1) * 100
+        Xs <- data.frame(Xj)
+        names(Xs) <- c("Xj")
+        Xs$Comparison <- paste(Xs[, 1])
+        Simb <- merge(TVSim, Xs)
+        Simb$QI <- exp(Simb$CombCoef * Simb$Xj)
+    } else if (qi == "First Difference"){
+        if (length(Xj) != length(Xl)){
+            stop("Xj and Xl must be the same length.", call. = FALSE)
+        } else {
+            TVSim$QI <- exp(TVSim$CombCoef)
+            Xs <- data.frame(Xj, Xl)
+            Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
+            Simb <- merge(TVSim, Xs)
+            Simb$QI <- (exp((Simb$Xj - Simb$Xl) * Simb$CombCoef) - 1) * 100
+        }
+    } else if (qi == "Hazard Ratio"){
+        if (length(Xj) != length(Xl)){
+            stop("Xj and Xl must be the same length.", call. = FALSE)
+        } else {
+            Xs <- data.frame(Xj, Xl)
+            Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
+            Simb <- merge(TVSim, Xs)
+            Simb$QI <- exp((Simb$Xj - Simb$Xl) * Simb$CombCoef)
+        }
+    } else if (qi == "Hazard Rate"){
+        Xl <- NULL
+        message("Xl is ignored.")
+        Xs <- data.frame(Xj)
+        Xs$HRValue <- paste(Xs[, 1])
+        Simb <- merge(TVSim, Xs)
+        Simb$HR <- exp(Simb$Xj * Simb$CombCoef)
+        bfit <- basehaz(obj)
+        bfit$FakeID <- 1
+        Simb$FakeID <- 1
+        bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
+        SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
+        Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
+        # Create warning message
+        Rows <- nrow(Simb)
+        if (Rows > 2000000){
+            message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
+        }
+        Simb$QI <- Simb$hazard * Simb$HR
+        if (is.null(Simb$strata)){
+            Simb <- Simb[, list(SimID, time, tf, Xj, QI, HRValue)]
+        } else if (!is.null(Simb$strata)){
+            Simb <- Simb[, list(SimID, time, tf, Xj, QI, HRValue, strata)]
+        }
+        Simb <- data.frame(Simb)
     }
-  } else if (qi == "Hazard Ratio"){
-     if (length(Xj) != length(Xl)){
-      stop("Xj and Xl must be the same length.", call. = FALSE)
-    } else {
-      Xs <- data.frame(Xj, Xl)
-      Xs$Comparison <- paste(Xs[, 1], "vs.", Xs[, 2])
-      Simb <- merge(TVSim, Xs)
-      Simb$QI <- exp((Simb$Xj - Simb$Xl) * Simb$CombCoef)
-    }
-  } else if (qi == "Hazard Rate"){
-      Xl <- NULL
-      message("Xl is ignored.")
-      Xs <- data.frame(Xj)
-      Xs$HRValue <- paste(Xs[, 1])
-      Simb <- merge(TVSim, Xs)
-      Simb$HR <- exp(Simb$Xj * Simb$CombCoef)
-      bfit <- basehaz(obj)
-      bfit$FakeID <- 1
-      Simb$FakeID <- 1
-      bfitDT <- data.table(bfit, key = "FakeID", allow.cartesian = TRUE)
-      SimbDT <- data.table(Simb, key = "FakeID", allow.cartesian = TRUE)
-      Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
-      # Create warning message
-      Rows <- nrow(Simb)
-      if (Rows > 2000000){
-        message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
-      }
-      Simb$QI <- Simb$hazard * Simb$HR
-      if (is.null(Simb$strata)){
-        Simb <- Simb[, list(SimID, time, tf, Xj, QI, HRValue)]
-      } else if (!is.null(Simb$strata)){
-        Simb <- Simb[, list(SimID, time, tf, Xj, QI, HRValue, strata)]
-      }
-      Simb <- data.frame(Simb)
-  }
 
   # Drop simulations outside of 'confidence bounds'
   SubVar <- c("time", "Xj")
@@ -268,40 +268,43 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL,
                                 qi = qi, spin = spin, ci = ci,
                                 extremesDrop = extremesDrop)
 
-  # Create real time variable
-  if (tfun == "linear"){
-    SimbPerc$RealTime <- SimbPerc$tf
-  } else if (tfun == "log"){
-    SimbPerc$RealTime <- exp(SimbPerc$tf)
-  } else if (tfun == "power"){
-    SimbPerc$RealTime <- SimbPerc$tf^(1/pow)
-  }
-
-  # Final clean up
-  # Subset simtvc object & create data frame of important variables
-  if (qi == "Hazard Rate"){
-    if (is.null(SimbPerc$strata)){
-      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI,
-                                SimbPerc$HRValue)
-      names(SimbPercSub) <- c("SimID", "Time", "HRate", "HRValue")
-    } else if (!is.null(SimbPerc$strata)) {
-      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI,
-                                SimbPerc$strata, SimbPerc$HRValue)
-      names(SimbPercSub) <- c("SimID", "Time", "HRate", "Strata", "HRValue")
+    # Create real time variable
+    if (tfun == "linear"){
+        SimbPerc$RealTime <- SimbPerc$tf
+    } else if (tfun == "log"){
+        SimbPerc$RealTime <- exp(SimbPerc$tf)
+    } else if (tfun == "power"){
+        SimbPerc$RealTime <- SimbPerc$tf^(1/pow)
     }
-  } else if (qi == "Hazard Ratio"){
-      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI,
+
+    # Final clean up
+    # Subset simtvc object & create data frame of important variables
+    if (qi == "Hazard Rate"){
+        if (is.null(SimbPerc$strata)){
+            SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime,
+                                SimbPerc$QI,
+            SimbPerc$HRValue)
+            names(SimbPercSub) <- c("SimID", "Time", "HRate", "HRValue")
+        } else if (!is.null(SimbPerc$strata)) {
+            SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime,
+                            SimbPerc$QI,
+            SimbPerc$strata, SimbPerc$HRValue)
+            names(SimbPercSub) <- c("SimID", "Time", "HRate", "Strata",
+                                    "HRValue")
+        }
+    } else if (qi == "Hazard Ratio"){
+        SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI,
                                 SimbPerc$Comparison)
-      names(SimbPercSub) <- c("SimID", "Time", "QI", "Comparison")
-  } else if (qi == "Relative Hazard"){
-      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI,
-                                SimbPerc$Xj)
-      names(SimbPercSub) <- c("SimID", "Time", "QI", "Xj")
-  } else if (qi == "First Difference"){
-      SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime, SimbPerc$QI,
-                                SimbPerc$Comparison)
-      names(SimbPercSub) <- c("SimID", "Time", "QI", "Comparison")
-  }
-  class(SimbPercSub) <- c("simtvc", qi, "data.frame")
-  SimbPercSub
+        names(SimbPercSub) <- c("SimID", "Time", "QI", "Comparison")
+    } else if (qi == "Relative Hazard"){
+        SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime,
+            SimbPerc$QI, SimbPerc$Xj)
+        names(SimbPercSub) <- c("SimID", "Time", "QI", "Xj")
+    } else if (qi == "First Difference"){
+        SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$RealTime,
+                            SimbPerc$QI, SimbPerc$Comparison)
+        names(SimbPercSub) <- c("SimID", "Time", "QI", "Comparison")
+    }
+    class(SimbPercSub) <- c("simtvc", qi, "data.frame")
+    SimbPercSub
 }

@@ -2,6 +2,9 @@
 
 - `simGG` now includes rug plots.
 
+    + Note that for `simGG.simtvc` that rug plots are not produced. All x-axes
+are Time.
+
 - For `simGG` plots with a covariate represented on the x-axis,
 the variable name is printed by default on the plot.
 
