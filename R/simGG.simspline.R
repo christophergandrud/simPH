@@ -12,15 +12,21 @@
 #' plot Hazard Rates in a facet grid. Only relevant if
 #' \code{qi == 'Hazard Rate'}. Note: the values of Facet Time must exactly
 #' match values of the \code{time} element of \code{obj}.
+#' @param from numeric time to start the plot from. Only relevant if
+#' \code{qi = "Hazard Rate"}.
+#' @param to numeric time to plot to. Only relevant if
+#' \code{qi = "Hazard Rate"}.
+#' @param rug logical indicating whether or not to include a rug plot showing
+#' the distribution of values in the sample used to estimate the \code{coxph}
+#' model. Only relevant when the quantity of interest is not
+#' \code{"Hazard Rate"}.
+#' @param rug_position character string. The position adjustment to use for
+#' overlapping points in the rug plot. Use \code{"jitter"} to jitter the points.
 #' @param xlab a label for the plot's x-axis.
 #' @param ylab a label of the plot's y-axis. The default uses the value of
 #' \code{qi}.
 #' @param zlab a label for the plot's z-axis. Only relevant if
 #' \code{qi = "Hazard Rate"} and \code{FacetTime == NULL}.
-#' @param from numeric time to start the plot from. Only relevant if
-#' \code{qi = "Hazard Rate"}.
-#' @param to numeric time to plot to. Only relevant if
-#' \code{qi = "Hazard Rate"}.
 #' @param title the plot's main title.
 #' @param method what type of smoothing method to use to summarize the center
 #' of the simulation distribution.
@@ -95,7 +101,7 @@
 #'                     Xl = seq(1099, 1699, by = 10), spin = TRUE)
 #'
 #' # Plot relative hazard
-#' simGG(Sim1, alpha = 0.5)
+#' simGG(Sim1, alpha = 0.5, rug_position = 'jitter')
 #'
 #' \dontrun{
 #' # Simulate Hazard Rate for orderent
@@ -139,7 +145,9 @@
 #' @export
 
 simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
-                            from = NULL, to = NULL, xlab = NULL, ylab = NULL,
+                            from = NULL, to = NULL,
+                            rug = TRUE, rug_position = "identity",
+                            xlab = NULL, ylab = NULL,
                             zlab = NULL, title = NULL, method = "auto",
                             lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
                             psize = 1, alpha = 0.2, type = "lines", ...)
@@ -169,18 +177,25 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
     # Create y-axis label
     if (is.null(ylab)) ylab <- paste(qi, "\n")
 
+    # Create x-axis label
+    if (qi != "Hazard Rate"){
+        if (is.null(xlab)) xlab <- paste("\n", attr(obj, "xaxis"))
+
+        # Extract rug values
+        rugger <- rugExtract(obj)
+    }
     # Convert obj to data frame
     obj <- as.data.frame(obj)
 
     # Drop simulations that include outliers
-    obj <- simPH:::OutlierDrop(obj)
+    obj <- OutlierDrop(obj)
 
     # Smooth simulations if SmoothSpline = TRUE
     if (isTRUE(SmoothSpline)){
         if (qi != 'Hazard Rate'){
             obj <- SmoothSimulations(obj)
         } else if (qi == 'Hazard Rate'){
-            obj <- simPH:::SmoothSimulations(obj, xaxis = 'Time')
+            obj <- SmoothSimulations(obj, xaxis = 'Time')
         }
     }
 
@@ -188,7 +203,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
     if (type != 'ribbons' & qi != 'Hazard Rate'){
         obj <- PercRank(obj, xaxis = 'Xj')
     } else if (type != 'ribbons' & qi == 'Hazard Rate'){
-        obj <- simPH:::PercRank(obj, xaxis = 'Time', yaxis = 'HRate')
+        obj <- PercRank(obj, xaxis = 'Time', yaxis = 'HRate')
     }
 
     # Constrict time period to plot for hazard rate
@@ -211,9 +226,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
                     geom_smooth(method = method, size = lsize, se = FALSE,
                                 color = lcolour) +
                     geom_hline(aes(yintercept = 0), linetype = "dotted") +
-                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                    theme_bw(base_size = 15)
+                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
         } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
             p <- ggplot(obj, aes(Xj, QI)) +
                     geom_point(shape = 21,  aes(alpha = PercRank), size = psize,
@@ -221,9 +234,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
                     geom_smooth(method = method, size = lsize, se = FALSE,
                                 color = lcolour) +
                     geom_hline(aes(yintercept = 1), linetype = "dotted") +
-                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                    theme_bw(base_size = 15)
+                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
         } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
             objSub <- SubsetTime(f = FacetTime, Temps = obj)
             p <- ggplot(objSub, aes(Xj, QI)) +
@@ -233,10 +244,8 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
                                 color = lcolour) +
                     facet_grid(.~Time) +
                     scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    xlab(xlab) + ylab(ylab) + ggtitle(title) +
                     guides(colour = guide_legend(override.aes =
-                        list(alpha = 1))) +
-                    theme_bw(base_size = 15)
+                        list(alpha = 1)))
         }
     }
     # Plots lines
@@ -248,9 +257,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
                     geom_smooth(method = method, size = lsize, se = FALSE,
                         color = lcolour) +
                     geom_hline(aes(yintercept = 0), linetype = "dotted") +
-                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                    theme_bw(base_size = 15)
+                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
         } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
             p <- ggplot(obj, aes(Xj, QI)) +
                     geom_line(aes(group = SimID, alpha = PercRank),
@@ -258,9 +265,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
                     geom_smooth(method = method, size = lsize, se = FALSE,
                         color = lcolour) +
                     geom_hline(aes(yintercept = 1), linetype = "dotted") +
-                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                    theme_bw(base_size = 15)
+                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
         } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
             objSub <- SubsetTime(f = FacetTime, Temps = obj)
             p <- ggplot(objSub, aes(Xj, QI)) +
@@ -270,10 +275,8 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
                         color = lcolour) +
                     facet_grid(.~Time) +
                     scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    xlab(xlab) + ylab(ylab) + ggtitle(title) +
                     guides(colour = guide_legend(override.aes =
-                        list(alpha = 1))) +
-                    theme_bw(base_size = 15)
+                        list(alpha = 1)))
         }
     }
     # Plots ribbons
@@ -281,34 +284,33 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
         suppressWarnings(
         if (qi == "First Difference"){
             obj <- MinMaxLines(df = obj)
-            p <- ggplot(obj, aes(Xj, Median)) +
+            .e <- environment()
+            p <- ggplot(obj, aes(Xj, Median), environment = .e) +
                     geom_line(size = lsize, colour = lcolour) +
                     geom_ribbon(aes(ymin = Lower50, ymax = Upper50),
                         alpha = alpha, fill = pcolour) +
                     geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
                         fill = pcolour) +
                     geom_hline(aes(yintercept = 0), linetype = "dotted") +
-                    xlab(xlab) + ylab(ylab) + ggtitle(title) +
                     guides(colour = guide_legend(override.aes =
-                        list(alpha = 1))) +
-                    theme_bw(base_size = 15)
+                        list(alpha = 1)))
         } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
             obj <- MinMaxLines(df = obj)
-            p <- ggplot(obj, aes(Xj, Median)) +
+            .e <- environment()
+            p <- ggplot(obj, aes(Xj, Median), environment = .e) +
                     geom_line(size = lsize, colour = lcolour) +
                     geom_ribbon(aes(ymin = Lower50, ymax = Upper50),
                         alpha = alpha, fill = pcolour) +
                     geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
                         fill = pcolour) +
                     geom_hline(aes(yintercept = 1), linetype = "dotted") +
-                    xlab(xlab) + ylab(ylab) + ggtitle(title) +
                     guides(colour = guide_legend(override.aes =
-                        list(alpha = 1))) +
-                    theme_bw(base_size = 15)
+                        list(alpha = 1)))
         } else if (qi == "Hazard Rate" & !is.null(FacetTime)){
             objSub <- SubsetTime(f = FacetTime, Temps = obj)
             objSub <- MinMaxLines(df = objSub, byVars = c("Xj", "Time"))
-            p <- ggplot(objSub, aes(Xj, Median)) +
+            .e <- environment()
+            p <- ggplot(objSub, aes(Xj, Median), environment = .e) +
                     geom_line(size = lsize, colour = lcolour) +
                     geom_ribbon(aes(ymin = Lower50, ymax = Upper50),
                         alpha = alpha, fill = pcolour) +
@@ -316,12 +318,16 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
                         fill = pcolour) +
                     geom_hline(aes(yintercept = 0), linetype = "dotted") +
                     facet_grid(.~Time) +
-                    xlab(xlab) + ylab(ylab) + ggtitle(title) +
                     guides(colour = guide_legend(override.aes =
-                        list(alpha = 1))) +
-                    theme_bw(base_size = 15)
+                        list(alpha = 1)))
         }
         )
+    }
+    p <- p + xlab(xlab) + ylab(ylab) + ggtitle(title) + theme_bw(base_size = 15)
+
+    if (isTRUE(rug) & qi != 'Hazard Rate'){
+        p <- p + geom_rug(data = rugger, aes(x = xaxis, y = QI), sides = "b",
+                    position = rug_position, colour = pcolour)
     }
     return(p)
 }

@@ -5,9 +5,10 @@
 \title{Plot simulated penalised spline hazards from Cox Proportional Hazards Models}
 \usage{
 \method{simGG}{simspline}(obj, SmoothSpline = TRUE, FacetTime = NULL,
-  from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL,
-  title = NULL, method = "auto", lcolour = "#2B8CBE", lsize = 1,
-  pcolour = "#A6CEE3", psize = 1, alpha = 0.2, type = "lines", ...)
+  from = NULL, to = NULL, rug = TRUE, rug_position = "identity",
+  xlab = NULL, ylab = NULL, zlab = NULL, title = NULL,
+  method = "auto", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
+  psize = 1, alpha = 0.2, type = "lines", ...)
 }
 \arguments{
 \item{obj}{a \code{simspline} class object}
@@ -26,6 +27,14 @@ match values of the \code{time} element of \code{obj}.}
 
 \item{to}{numeric time to plot to. Only relevant if
 \code{qi = "Hazard Rate"}.}
+
+\item{rug}{logical indicating whether or not to include a rug plot showing
+the distribution of values in the sample used to estimate the \code{coxph}
+model. Only relevant when the quantity of interest is not
+\code{"Hazard Rate"}.}
+
+\item{rug_position}{character string. The position adjustment to use for
+overlapping points in the rug plot. Use \code{"jitter"} to jitter the points.}
 
 \item{xlab}{a label for the plot's x-axis.}
 
@@ -124,7 +133,7 @@ Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
                     Xl = seq(1099, 1699, by = 10), spin = TRUE)
 
 # Plot relative hazard
-simGG(Sim1, alpha = 0.5)
+simGG(Sim1, alpha = 0.5, rug_position = 'jitter')
 
 \dontrun{
 # Simulate Hazard Rate for orderent

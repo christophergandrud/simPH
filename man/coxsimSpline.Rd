@@ -14,8 +14,7 @@ spline. These can be plotted with \code{\link{simGG}}.}
 
 \item{bspline}{a character string of the full \code{\link{pspline}} call
 used in \code{obj}. It should be exactly the same as how you entered it in
-\code{\link{coxph}}. You also need to enter a white spece before and after
-all equal (\code{=}) signs.}
+\code{\link{coxph}}.}
 
 \item{bdata}{a numeric vector of the splined variable's values.}
 
@@ -89,7 +88,6 @@ Currently \code{coxsimSpline} does not support simulating hazard rates form
 multiple stratified models.
 }
 \examples{
-\dontrun{
 # Load Carpenter (2002) data
 data("CarpenterFdaData")
 
@@ -105,6 +103,7 @@ M1 <- coxph(Surv(acttime, censor) ~  prevgenx + lethal + deathrt1 +
            pspline(condavg3, df = 4) + pspline(orderent, df = 4) +
            pspline(stafcder, df = 4), data = CarpenterFdaData)
 
+\dontrun{
 # Simulate Relative Hazards for orderent
 Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
                     bdata = CarpenterFdaData$stafcder,
@@ -112,12 +111,12 @@ Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
                     Xj = seq(1100, 1700, by = 10),
                     Xl = seq(1099, 1699, by = 10), spin = TRUE)
 
+}
 # Simulate Hazard Rates for orderent
 Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
                        bdata = CarpenterFdaData$orderent,
                        qi = "Hazard Rate",
                        Xj = seq(2, 53, by = 3), nsim = 100)
-}
 }
 \references{
 Luke Keele, "Replication data for: Proportionally Difficult:

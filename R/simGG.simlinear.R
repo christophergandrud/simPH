@@ -6,9 +6,6 @@
 #' differences, hazard ratios, and hazard rates.
 #'
 #' @param obj a \code{simlinear} class object.
-#' @param xlab a label for the plot's x-axis.
-#' @param ylab a label of the plot's y-axis. The default uses the value of
-#' \code{qi}.
 #' @param from numeric time to start the plot from. Only relevant if
 #' \code{qi = "Hazard Rate"}.
 #' @param to numeric time to plot to. Only relevant if
@@ -19,6 +16,9 @@
 #' \code{"Hazard Rate"}.
 #' @param rug_position character string. The position adjustment to use for
 #' overlapping points in the rug plot. Use \code{"jitter"} to jitter the points.
+#' @param xlab a label for the plot's x-axis.
+#' @param ylab a label of the plot's y-axis. The default uses the value of
+#' \code{qi}.
 #' @param title the plot's main title.
 #' @param method what type of smoothing method to use to summarize the center
 #' of the simulation distribution.

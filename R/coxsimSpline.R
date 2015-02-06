@@ -7,8 +7,7 @@
 #' spline. These can be plotted with \code{\link{simGG}}.
 #' @param bspline a character string of the full \code{\link{pspline}} call
 #' used in \code{obj}. It should be exactly the same as how you entered it in
-#' \code{\link{coxph}}. You also need to enter a white spece before and after
-#' all equal (\code{=}) signs.
+#' \code{\link{coxph}}.
 #' @param bdata a numeric vector of the splined variable's values.
 #' @param qi quantity of interest to simulate. Values can be
 #' \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"},
@@ -68,7 +67,6 @@
 #' multiple stratified models.
 #'
 #' @examples
-#' \dontrun{
 #' # Load Carpenter (2002) data
 #' data("CarpenterFdaData")
 #'
@@ -84,6 +82,7 @@
 #'            pspline(condavg3, df = 4) + pspline(orderent, df = 4) +
 #'            pspline(stafcder, df = 4), data = CarpenterFdaData)
 #'
+#' \dontrun{
 #' # Simulate Relative Hazards for orderent
 #' Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
 #'                     bdata = CarpenterFdaData$stafcder,
@@ -91,12 +90,12 @@
 #'                     Xj = seq(1100, 1700, by = 10),
 #'                     Xl = seq(1099, 1699, by = 10), spin = TRUE)
 #'
+#' }
 #' # Simulate Hazard Rates for orderent
 #' Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
 #'                        bdata = CarpenterFdaData$orderent,
 #'                        qi = "Hazard Rate",
 #'                        Xj = seq(2, 53, by = 3), nsim = 100)
-#' }
 #'
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},
 #' and \code{\link{coxph}}
@@ -347,6 +346,13 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
             SimbPerc$Comparison)
         names(SimbPercSub) <- c("SimID", "Xj", "QI", "Comparison")
     }
-    class(SimbPercSub) <- c("simspline", qi, "data.frame")
-    SimbPercSub
+    # Add in distribution of b
+    b <- gsub('^pspline\\(', '', bspline)
+    b <- gsub(',.*)$', '', b)
+    rug <- bdata
+    out <- list(sims = SimbPercSub, rug = rug)
+
+    class(out) <- c("simspline", qi, "coxsim")
+    attr(out, 'xaxis') <- b
+    out
 }
