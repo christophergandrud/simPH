@@ -144,10 +144,10 @@ Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
 
 # Create a time grid plot
 # Find all points in time where baseline hazard was found
-unique(Sim2$Time)
+unique(Sim2$sims$Time)
 
 # Round time values so they can be exactly matched with FacetTime
-Sim2$Time <- round(Sim2$Time, digits = 2)
+Sim2$sims$Time <- round(Sim2$sims$Time, digits = 2)
 
 # Create plot
 simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36),
