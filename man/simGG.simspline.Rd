@@ -113,7 +113,6 @@ effect, for time-varying hazard ratio graphs. No line is created for hazard
 rates.
 }
 \examples{
-\dontrun{
 # Load Carpenter (2002) data
 data("CarpenterFdaData")
 
@@ -136,14 +135,15 @@ Sim1 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
                     Xj = seq(1100, 1700, by = 10),
                     Xl = seq(1099, 1699, by = 10), spin = TRUE)
 
+# Plot relative hazard
+simGG(Sim1, alpha = 0.5)
+
+\dontrun{
 # Simulate Hazard Rate for orderent
 Sim2 <- coxsimSpline(M1, bspline = "pspline(orderent, df = 4)",
                     bdata = CarpenterFdaData$orderent,
                     qi = "Hazard Rate",
                     Xj = seq(1, 30, by = 2), ci = 0.9, nsim = 10)
-
-# Plot relative hazard
-simGG(Sim1, alpha = 0.5)
 
 # 3D plot hazard rate
 simGG(Sim2, zlab = "orderent", fit = "quadratic")
@@ -157,7 +157,7 @@ Sim2$Time <- round(Sim2$Time, digits = 2)
 
 # Create plot
 simGG(Sim2, FacetTime = c(6.21, 25.68, 100.64, 202.36),
-       ribbons = TRUE, alpha = 0.5)
+       type = 'ribbons', alpha = 0.5)
 
 # Simulated Fitted Values of stafcder
 Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",

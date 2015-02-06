@@ -247,3 +247,19 @@ rugExtract <- function(obj, x = "Xj", rug_var) {
                                     xaxis <= max(obj$sims[, x]))
     return(xaxis.df)
 }
+
+#' For simGG.simspline
+#'
+#' @keywords internals
+#' @noRd
+
+SubsetTime <- function(f){
+    Time <- NULL
+    CombObjdf <- data.frame()
+    for (i in f){
+        Temps <- obj
+        TempsSub <- subset(Temps, Time == i)
+        CombObjdf <- rbind(CombObjdf, TempsSub)
+    }
+    CombObjdf
+}

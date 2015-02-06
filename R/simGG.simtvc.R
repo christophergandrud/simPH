@@ -376,4 +376,5 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
         }
         )
     }
+    return(p)
 }

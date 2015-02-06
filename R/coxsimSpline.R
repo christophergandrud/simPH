@@ -262,8 +262,8 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
         Simb$QI <- exp(Simb$Xj * Simb$Coef)
     }
     else if (qi == "First Difference"){
-          if (length(Xj) != length(Xl)){
-          stop("Xj and Xl must be the same length.", call. = FALSE)
+            if (length(Xj) != length(Xl)){
+            stop("Xj and Xl must be the same length.", call. = FALSE)
         }
         else {
             Simbj <- MergeX(Xj) %>% rename(Xj = X)
@@ -273,7 +273,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
             Simbj <- merge(Simbj, Xs, by = "Xj")
             Simbj$Comparison <- paste(Simbj$Xj, "vs.", Simbj$Xl)
 
-             Simbj$QI <- (exp((Simbj$Xj * Simbj$Coef) -
+            Simbj$QI <- (exp((Simbj$Xj * Simbj$Coef) -
                          (Simbl$Xl * Simbl$Coef)) - 1) * 100
             Simb <- Simbj
         }
@@ -336,12 +336,12 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
                 call. = FALSE)
         }
     } else if (qi == "Hazard Ratio"){
-          SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI,
-                                SimbPerc$Comparison)
-          names(SimbPercSub) <- c("SimID", "Xj", "QI", "Comparison")
+        SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI,
+                            SimbPerc$Comparison)
+        names(SimbPercSub) <- c("SimID", "Xj", "QI", "Comparison")
     } else if (qi == "Relative Hazard"){
-          SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
-          names(SimbPercSub) <- c("SimID", "Xj", "QI")
+        SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
+        names(SimbPercSub) <- c("SimID", "Xj", "QI")
     } else if (qi == "First Difference"){
         SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI,
             SimbPerc$Comparison)
