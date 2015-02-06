@@ -100,7 +100,7 @@
 #'                   by = 15, ci = 0.99)
 #'
 #' # Create plots
-#' simGG(Sim2, type = 'ribbons')
+#' simGG(Sim2, type = 'points')
 #' simGG(Sim3, leg.name = "Comparision", from = 1200, type = 'lines')
 #' }
 #'
@@ -116,7 +116,7 @@
 simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
                         title = NULL, method = "auto", spalette = "Set1",
                         legend = "legend", leg.name = "", lsize = 1, psize = 1,
-                        alpha = 0.2, type = "lines", ...)
+                        alpha = 0.2, type = "ribbons", ...)
 {
     Time <- HRate <- HRValue <- QI <- Comparison <- Xj <- Lower50 <- Upper50 <-
     Min <- Max <- Median <- SimID <- NULL

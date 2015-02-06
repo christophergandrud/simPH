@@ -76,7 +76,7 @@
 #'            pow = 3, Xj = seq(1, 150, by = 5), nsim = 100)
 #'
 #' # Plot simulations
-#' simGG(Sim1, type = 'lines', rug_position = 'jitter')
+#' simGG(Sim1, rug_position = 'jitter')
 #'
 #' \dontrun{
 #' # Simulate simpoly Hazard Ratio with spin probibility interval
@@ -113,7 +113,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                         title = NULL, method = "auto", spalette = "Set1",
                         legend = "legend", leg.name = "", lcolour = "#2B8CBE",
                         lsize = 1, pcolour = "#A6CEE3", psize = 1,
-                        alpha = 0.2, type = "lines", ...)
+                        alpha = 0.2, type = "ribbons", ...)
 {
     Time <- HRValue <- HRate <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <-
     Median <- SimID <- xaxis <- NULL

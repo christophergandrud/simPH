@@ -19,7 +19,6 @@ Depends:
     R (>= 3.0.2)
 License: GPL-3
 Imports:
-    car,
     data.table (>= 1.9.2),
     dplyr (>= 0.3),
     ggplot2,

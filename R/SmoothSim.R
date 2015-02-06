@@ -37,7 +37,7 @@ SmoothOneSim <- function(x, y, df = 10){
 #' @noRd
 SmoothSimulations <- function(SimIn, xaxis = "Xj"){
     # CRAN nonsense
-    SimID <- Xj <- QI <- NULL
+    xtemp <- SimID <- Xj <- QI <- NULL
 
     names(SimIn)[names(SimIn) == xaxis] <- 'xtemp'
 

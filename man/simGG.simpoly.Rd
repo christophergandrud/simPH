@@ -9,7 +9,7 @@ Hazards Models}
   rug_position = "identity", xlab = NULL, ylab = NULL, title = NULL,
   method = "auto", spalette = "Set1", legend = "legend", leg.name = "",
   lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", psize = 1,
-  alpha = 0.2, type = "lines", ...)
+  alpha = 0.2, type = "ribbons", ...)
 }
 \arguments{
 \item{obj}{a \code{simpoly} class object.}
@@ -114,7 +114,7 @@ Sim1 <- coxsimPoly(M1, b = "natreg", qi = "First Difference",
            pow = 3, Xj = seq(1, 150, by = 5), nsim = 100)
 
 # Plot simulations
-simGG(Sim1, type = 'lines', rug_position = 'jitter')
+simGG(Sim1, rug_position = 'jitter')
 
 \dontrun{
 # Simulate simpoly Hazard Ratio with spin probibility interval

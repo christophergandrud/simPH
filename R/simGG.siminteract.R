@@ -78,7 +78,7 @@
 #'
 #' # Plot quantities of interest
 #' simGG(Sim1)
-#' simGG(Sim1, type = 'ribbons', rug_position = 'jitter')
+#' simGG(Sim1, rug_position = 'jitter')
 #'
 #' \dontrun{
 #' # Change the order of the covariates to make a more easily
@@ -107,7 +107,7 @@
 #'        ylab = "Marginal Effect of lethal\n")
 #' simGG(Sim2, type = 'ribbons', rug_position = 'jitter')
 #' simGG(Sim3)
-#' simGG(Sim4, to = 150, type = 'ribbons', legend = FALSE)
+#' simGG(Sim4, to = 150, type = 'lines', legend = FALSE)
 #' }
 #'
 #' @details Uses \link{ggplot2} to plot the quantities of interest from
@@ -150,7 +150,7 @@ simGG.siminteract <- function(obj, from = NULL,
                             spalette = "Set1", legend = "legend",
                             leg.name = "", lcolour = "#2B8CBE", lsize = 1,
                             pcolour = "#A6CEE3", psize = 1, alpha = 0.2,
-                            type = "lines", ...)
+                            type = "ribbons", ...)
     {
     HRate <- Lower50 <- Upper50 <- Min <- Max <- Median <-
     Time <- QI <- HRValue <- X1 <- X2 <- SimID <- xaxis <- NULL

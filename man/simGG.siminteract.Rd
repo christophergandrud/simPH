@@ -9,7 +9,7 @@ Hazards Models}
   rug_position = "identity", to = NULL, xlab = NULL, ylab = NULL,
   title = NULL, method = "auto", spalette = "Set1", legend = "legend",
   leg.name = "", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
-  psize = 1, alpha = 0.2, type = "lines", ...)
+  psize = 1, alpha = 0.2, type = "ribbons", ...)
 }
 \arguments{
 \item{obj}{a \code{siminteract} class object}
@@ -123,7 +123,7 @@ Sim1 <- coxsimInteract(M1, b1 = "lethal", b2 = "prevgenx",
 
 # Plot quantities of interest
 simGG(Sim1)
-simGG(Sim1, type = 'ribbons', rug_position = 'jitter')
+simGG(Sim1, rug_position = 'jitter')
 
 \dontrun{
 # Change the order of the covariates to make a more easily
@@ -152,7 +152,7 @@ simGG(Sim1, xlab = "\\nprevgenx",
        ylab = "Marginal Effect of lethal\\n")
 simGG(Sim2, type = 'ribbons', rug_position = 'jitter')
 simGG(Sim3)
-simGG(Sim4, to = 150, type = 'ribbons', legend = FALSE)
+simGG(Sim4, to = 150, type = 'lines', legend = FALSE)
 }
 }
 \references{
