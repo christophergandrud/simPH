@@ -100,6 +100,7 @@ strata \eqn{k}, \code{coxsimtvc} uses:
 The resulting simulation values can be plotted using \code{\link{simGG}}.
 }
 \examples{
+\dontrun{
 # Load Golub & Steunenberg (2007) Data
 data("GolubEUPData")
 
@@ -126,7 +127,6 @@ Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "qmv_log",
                    tfun = "log", from = 80, to = 2000,
                    Xj = 1, by = 15, ci = 0.99, nsim = 100)
 
-\dontrun{
 # Create simtvc object for First Difference
 Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "qmv_log",
                  qi = "First Difference", Xj = 1,

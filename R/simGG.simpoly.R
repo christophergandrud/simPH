@@ -127,11 +127,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
     qi <- class(obj)[[2]]
 
     # Create y-axis label
-    if (is.null(ylab)){
-        ylab <- paste(qi, "\n")
-    } else {
-        ylab <- ylab
-    }
+    if (is.null(ylab)) ylab <- paste(qi, "\n")
 
     # Create x-axis label
     if (qi != "Hazard Rate"){

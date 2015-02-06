@@ -128,7 +128,7 @@ simGG(Sim1, type = 'ribbons', rug_position = 'jitter')
 Sim2 <- coxsimLinear(M1, b = "stafcder", nsim = 100,
                       qi = "Hazard Rate",
                       Xj = c(1237, 1600))
-simGG(Sim2, type = 'lines')
+simGG(Sim2, type = 'points')
 }
 }
 \references{

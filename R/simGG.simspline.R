@@ -137,7 +137,7 @@
 #' # Plot simulated Hazard Ratios
 #' simGG(Sim3, xlab = "\nFDA Drug Review Staff", alpha = 0.2)
 #' simGG(Sim3, xlab = "\nFDA Drug Review Staff", alpha = 0.2,
-#'       SmoothSpline = TRUE, type = 'lines')
+#'       SmoothSpline = TRUE, type = 'points')
 #' }
 #'
 #' @seealso \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},
@@ -174,11 +174,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
     qi <- class(obj)[[2]]
 
     # Create y-axis label
-    if (is.null(ylab)){
-        ylab <- paste(qi, "\n")
-    } else {
-        ylab <- ylab
-    }
+    if (is.null(ylab)) ylab <- paste(qi, "\n")
 
     # Convert obj to data frame
     obj <- as.data.frame(obj)
@@ -338,5 +334,5 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
         }
         )
     }
-    return(p)
+    if (qi != "Hazard Rate" & !is.null(FacetTime)) return(p)
 }

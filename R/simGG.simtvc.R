@@ -131,12 +131,9 @@ simGG.simtvc <- function(obj, from = NULL, to = NULL, xlab = NULL, ylab = NULL,
     qi <- class(obj)[[2]]
 
     # Create y-axis label
-    if (is.null(ylab)){
-        ylab <- paste(qi, "\n")
-    } else {
-        ylab <- ylab
-    }
+    if (is.null(ylab)) ylab <- paste(qi, "\n")
 
+    # Create x-axis label
     if (is.null(xlab)) xlab <- '\n Time'
 
     # Convert obj to data frame

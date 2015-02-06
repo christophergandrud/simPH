@@ -85,6 +85,7 @@ effect, for time-varying hazard ratio graphs. No line is created for hazard
 rates.
 }
 \examples{
+\dontrun{
 # Load Golub & Steunenberg (2007) Data
 data("GolubEUPData")
 
@@ -114,7 +115,6 @@ Sim1 <- coxsimtvc(obj = M1, b = "qmv", btvc = "qmv_log",
 # Create plot
 simGG(Sim1, legend = FALSE)
 
-\dontrun{
 # Create simtvc object for First Difference
 Sim2 <- coxsimtvc(obj = M1, b = "qmv", btvc = "qmv_log",
                  qi = "First Difference", Xj = 1,
