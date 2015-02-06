@@ -8,7 +8,7 @@
   from = NULL, to = NULL, xlab = NULL, ylab = NULL, zlab = NULL,
   title = NULL, method = "auto", lcolour = "#2B8CBE", lsize = 1,
   pcolour = "#A6CEE3", psize = 1, alpha = 0.2, surface = TRUE,
-  fit = "linear", type = "points", ...)
+  fit = "linear", type = "lines", ...)
 }
 \arguments{
 \item{obj}{a \code{simspline} class object}

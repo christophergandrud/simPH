@@ -156,7 +156,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
                             zlab = NULL, title = NULL, method = "auto",
                             lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
                             psize = 1, alpha = 0.2, surface = TRUE,
-                            fit = "linear", type = "points", ...)
+                            fit = "linear", type = "lines", ...)
 {
     Time <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <- Median <-
     SimID <- NULL
@@ -204,6 +204,7 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
 
     # Constrict time period to plot for hazard rate
     if (qi == "Hazard Rate"){
+        if (is.null(xlab)) xlab <- '\nTime'
         if (!is.null(from)){
             obj <- subset(obj, Time >= from)
         }
@@ -337,4 +338,5 @@ simGG.simspline <- function(obj, SmoothSpline = TRUE, FacetTime = NULL,
         }
         )
     }
+    return(p)
 }

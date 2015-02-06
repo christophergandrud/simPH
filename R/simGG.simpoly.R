@@ -113,7 +113,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                         title = NULL, method = "auto", spalette = "Set1",
                         legend = "legend", leg.name = "", lcolour = "#2B8CBE",
                         lsize = 1, pcolour = "#A6CEE3", psize = 1,
-                        alpha = 0.2, type = "points", ...)
+                        alpha = 0.2, type = "lines", ...)
 {
     Time <- HRValue <- HRate <- Xj <- QI <- Lower50 <- Upper50 <- Min <- Max <-
     Median <- SimID <- xaxis <- NULL
@@ -157,11 +157,14 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
     }
 
     # Constrict time period to plot for hazard rate
-    if (!is.null(from)){
-        obj <- subset(obj, Time >= from)
-    }
-    if (!is.null(to)){
-        obj <- subset(obj, Time <= to)
+    if (qi == "Hazard Rate"){
+        if (is.null(xlab)) xlab <- '\nTime'
+        if (!is.null(from)){
+            obj <- subset(obj, Time >= from)
+        }
+        if (!is.null(to)){
+            obj <- subset(obj, Time <= to)
+        }
     }
 
     # Plot points
@@ -173,22 +176,16 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                     geom_point(aes(alpha = PercRank), size = psize) +
                     geom_smooth(method = method, size = lsize, se = FALSE) +
                     facet_grid(.~ Strata) +
-                    xlab(xlab) + ylab(ylab) +
                     scale_colour_brewer(palette = spalette, name = leg.name,
                                       guide = legend) +
-                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    ggtitle(title) +
-                    theme_bw(base_size = 15)
+                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
             } else if (is.null(obj$strata)){
                 p <- ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
                     geom_point(shape = 21, aes(alpha = PercRank), size = psize) +
                     geom_smooth(method = method, size = lsize, se = FALSE) +
                     scale_colour_brewer(palette = spalette, name = leg.name,
                                         guide = legend) +
-                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    xlab(xlab) + ylab(ylab) +
-                    ggtitle(title) +
-                    theme_bw(base_size = 15)
+                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
             }
         } else if (qi == "First Difference"){
             p <- ggplot(obj, aes(Xj, QI)) +
@@ -197,10 +194,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                     geom_smooth(method = method, size = lsize, se = FALSE,
                               color = lcolour) +
                     geom_hline(aes(yintercept = 0), linetype = "dotted") +
-                    xlab(xlab) + ylab(ylab) +
-                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    ggtitle(title) +
-                    theme_bw(base_size = 15)
+                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
         } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
             p <- ggplot(obj, aes(Xj, QI)) +
                     geom_point(shape = 21, aes(alpha = PercRank),
@@ -209,10 +203,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                               color = lcolour) +
                     scale_alpha_continuous(range = c(0, alpha),
                                             guide = FALSE) +
-                    geom_hline(aes(yintercept = 1), linetype = "dotted") +
-                    xlab(xlab) + ylab(ylab) +
-                    ggtitle(title) +
-                    theme_bw(base_size = 15)
+                    geom_hline(aes(yintercept = 1), linetype = "dotted")
         }
     }
     # Plot lines
@@ -227,13 +218,10 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                         geom_smooth(aes(colour = factor(HRValue)),
                             method = method, size = lsize, se = FALSE) +
                         facet_grid(.~ Strata) +
-                        xlab(xlab) + ylab(ylab) +
                         scale_colour_brewer(palette = spalette,
                                 name = leg.name, guide = legend) +
                         scale_alpha_continuous(range = c(0, alpha),
-                                guide = FALSE) +
-                        ggtitle(title) +
-                        theme_bw(base_size = 15)
+                                guide = FALSE)
             } else if (is.null(obj$strata)){
                 p <- ggplot(obj, aes(Time, HRate,
                         colour = factor(HRValue))) +
@@ -245,9 +233,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                         scale_colour_brewer(palette = spalette,
                             name = leg.name, guide = legend) +
                         scale_alpha_continuous(range = c(0, alpha),
-                            guide = FALSE) +
-                        xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                        theme_bw(base_size = 15)
+                            guide = FALSE)
             }
         } else if (qi == "First Difference"){
             p <- ggplot(obj, aes(Xj, QI)) +
@@ -256,21 +242,15 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                     geom_smooth(method = method, size = lsize, se = FALSE,
                               color = lcolour) +
                     geom_hline(aes(yintercept = 0), linetype = "dotted") +
-                    xlab(xlab) + ylab(ylab) +
                     scale_alpha_continuous(range = c(0, alpha),
-                        guide = FALSE) +
-                    ggtitle(title) +
-                    theme_bw(base_size = 15)
+                        guide = FALSE)
         } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
             p <- ggplot(obj, aes(Xj, QI)) +
                 geom_line(aes(group = SimID, alpha = PercRank),
                     size = psize, colour = pcolour) +
                 geom_smooth(method = method, size = lsize, se = FALSE,
                     color = lcolour) +
-                geom_hline(aes(yintercept = 1), linetype = "dotted") +
-                xlab(xlab) + ylab(ylab) +
-                ggtitle(title) +
-                theme_bw(base_size = 15)
+                geom_hline(aes(yintercept = 1), linetype = "dotted")
         }
     }
     # Plot ribbons
@@ -289,13 +269,10 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                         geom_ribbon(aes(ymin = Min, ymax = Max),
                             alpha = alpha, linetype = 0) +
                         facet_grid(. ~ Strata) +
-                        xlab(xlab) + ylab(ylab) +
                         scale_colour_brewer(palette = spalette,
                             name = leg.name, guide = legend) +
                         scale_fill_brewer(palette = spalette,
-                            name = leg.name, guide = legend) +
-                        ggtitle(title) +
-                        theme_bw(base_size = 15)
+                            name = leg.name, guide = legend)
             } else if (is.null(obj$Strata)){
                 obj <- MinMaxLines(df = obj, hr = TRUE)
                 .e <- environment()
@@ -308,10 +285,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                                     linetype = 0) +
                     scale_colour_brewer(palette = spalette,
                         name = leg.name) +
-                    scale_fill_brewer(palette = spalette, name = leg.name) +
-                    xlab(xlab) + ylab(ylab) +
-                    ggtitle(title) +
-                    theme_bw(base_size = 15)
+                    scale_fill_brewer(palette = spalette, name = leg.name)
             }
         } else if (qi == "First Difference"){
             obj <- MinMaxLines(df = obj)
@@ -322,10 +296,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                     alpha = alpha, fill = pcolour) +
                 geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
                                 fill = pcolour) +
-                geom_hline(aes(yintercept = 0), linetype = "dotted") +
-                xlab(xlab) + ylab(ylab) +
-                ggtitle(title) +
-                theme_bw(base_size = 15)
+                geom_hline(aes(yintercept = 0), linetype = "dotted")
         } else if (qi == "Hazard Ratio" | qi == "Relative Hazard"){
             obj <- MinMaxLines(df = obj)
             .e <- environment()
@@ -335,13 +306,12 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                     alpha = alpha, fill = pcolour) +
                 geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
                                 fill = pcolour) +
-                geom_hline(aes(yintercept = 1), linetype = "dotted") +
-                xlab(xlab) + ylab(ylab) +
-                ggtitle(title) +
-                theme_bw(base_size = 15)
+                geom_hline(aes(yintercept = 1), linetype = "dotted")
         }
         )
     }
+    p <- p + xlab(xlab) + ylab(ylab) + ggtitle(title) + theme_bw(base_size = 15)
+
     if (isTRUE(rug) & qi != 'Hazard Rate'){
         p <- p + geom_rug(data = rugger, aes(x = xaxis, y = QI), sides = "b",
                     position = rug_position, colour = pcolour)

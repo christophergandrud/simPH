@@ -150,7 +150,7 @@ simGG.siminteract <- function(obj, from = NULL,
                             spalette = "Set1", legend = "legend",
                             leg.name = "", lcolour = "#2B8CBE", lsize = 1,
                             pcolour = "#A6CEE3", psize = 1, alpha = 0.2,
-                            type = "points", ...)
+                            type = "lines", ...)
     {
     HRate <- Lower50 <- Upper50 <- Min <- Max <- Median <-
     Time <- QI <- HRValue <- X1 <- X2 <- SimID <- xaxis <- NULL
@@ -206,6 +206,7 @@ simGG.siminteract <- function(obj, from = NULL,
 
     # Constrict time period to plot for hazard rate
     if (qi == "Hazard Rate"){
+        if (is.null(xlab)) xlab <- '\nTime'
         if (!is.null(from)){
             obj <- subset(obj, Time >= from)
         }
@@ -227,9 +228,7 @@ simGG.siminteract <- function(obj, from = NULL,
                     facet_grid(.~ Strata) +
                     scale_colour_brewer(palette = spalette, name = leg.name,
                                         guide = legend) +
-                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                    theme_bw(base_size = 15)
+                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
             } else if (is.null(obj$strata)){
                 obj$HRValue <- as.factor(obj$HRValue)
                 .e <- environment()
@@ -242,9 +241,7 @@ simGG.siminteract <- function(obj, from = NULL,
                         scale_colour_brewer(palette = spalette,
                             name = leg.name, guide = legend) +
                         scale_alpha_continuous(range = c(0, alpha),
-                            guide = FALSE) +
-                        xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                        theme_bw(base_size = 15)
+                            guide = FALSE)
             }
         }
         else if (qi == "Marginal Effect"){
@@ -253,9 +250,7 @@ simGG.siminteract <- function(obj, from = NULL,
                                colour = pcolour) +
                     geom_smooth(method = method, size = lsize, se = FALSE,
                                 color = lcolour) +
-                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                    theme_bw(base_size = 15)
+                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
         }
         else if (qi == "First Difference"){
             X1Unique <- obj[!duplicated(obj[, "X1"]), ]
@@ -273,9 +268,7 @@ simGG.siminteract <- function(obj, from = NULL,
                         scale_colour_brewer(palette = spalette, name = leg.name,
                                             guide = legend) +
                         scale_alpha_continuous(range = c(0, alpha),
-                            guide = FALSE) +
-                        xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                        theme_bw(base_size = 15)
+                            guide = FALSE)
             }
         }
         else if (qi == "Hazard Ratio"){
@@ -294,9 +287,7 @@ simGG.siminteract <- function(obj, from = NULL,
                         scale_colour_brewer(palette = spalette, name = leg.name,
                             guide = legend) +
                         scale_alpha_continuous(range = c(0, alpha),
-                            guide = FALSE) +
-                        xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                        theme_bw(base_size = 15)
+                            guide = FALSE)
             }
         }
     }
@@ -316,9 +307,7 @@ simGG.siminteract <- function(obj, from = NULL,
                         scale_colour_brewer(palette = spalette, name = leg.name,
                                             guide = legend) +
                         scale_alpha_continuous(range = c(0, alpha),
-                            guide = FALSE) +
-                        xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                        theme_bw(base_size = 15)
+                            guide = FALSE)
             } else if (is.null(obj$strata)){
                 obj$HRValue <- as.factor(obj$HRValue)
                 .e <- environment()
@@ -331,9 +320,7 @@ simGG.siminteract <- function(obj, from = NULL,
                         scale_colour_brewer(palette = spalette, name = leg.name,
                             guide = legend) +
                         scale_alpha_continuous(range = c(0, alpha),
-                            guide = FALSE) +
-                        xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                        theme_bw(base_size = 15)
+                            guide = FALSE)
             }
         }
         else if (qi == "Marginal Effect"){
@@ -342,10 +329,7 @@ simGG.siminteract <- function(obj, from = NULL,
                         size = psize, colour = pcolour) +
                     geom_smooth(method = method, size = lsize, se = FALSE,
                                 color = lcolour) +
-                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
-                    xlab(xlab) + ylab(ylab) +
-                    ggtitle(title) +
-                    theme_bw(base_size = 15)
+                    scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
         }
         else if (qi == "First Difference"){
             X1Unique <- obj[!duplicated(obj[, "X1"]), ]
@@ -362,10 +346,8 @@ simGG.siminteract <- function(obj, from = NULL,
                         geom_hline(aes(yintercept = 0), linetype = "dotted") +
                         scale_colour_brewer(palette = spalette, name = leg.name,
                                             guide = legend) +
-                        xlab(xlab) + ylab(ylab) +
                         scale_alpha_continuous(range = c(0, alpha),
-                            guide = FALSE) + ggtitle(title) +
-                        theme_bw(base_size = 15)
+                            guide = FALSE)
             }
         }
         else if (qi == "Hazard Ratio"){
@@ -383,9 +365,7 @@ simGG.siminteract <- function(obj, from = NULL,
                         scale_colour_brewer(palette = spalette, name = leg.name,
                                             guide = legend) +
                         scale_alpha_continuous(range = c(0, alpha),
-                            guide = FALSE) +
-                        xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                        theme_bw(base_size = 15)
+                            guide = FALSE)
             }
         }
     }
@@ -409,9 +389,7 @@ simGG.siminteract <- function(obj, from = NULL,
                         scale_colour_brewer(palette = spalette, name = leg.name,
                                             guide = legend) +
                         scale_fill_brewer(palette = spalette, name = leg.name,
-                                          guide = legend) +
-                        xlab(xlab) + ylab(ylab) + ggtitle(title) +
-                        theme_bw(base_size = 15)
+                                          guide = legend)
             } else if (is.null(obj$Strata)){
                 obj <- MinMaxLines(df = obj, hr = TRUE)
                 obj$HRValue <- as.factor(obj$HRValue)
@@ -426,10 +404,7 @@ simGG.siminteract <- function(obj, from = NULL,
                         scale_colour_brewer(palette = spalette, name = leg.name,
                                             guide = legend) +
                         scale_fill_brewer(palette = spalette, name = leg.name,
-                                          guide = legend) +
-                        xlab(xlab) + ylab(ylab) +
-                        ggtitle(title) +
-                        theme_bw(base_size = 15)
+                                          guide = legend)
             }
         }
         else if (qi == "Marginal Effect"){
@@ -440,10 +415,7 @@ simGG.siminteract <- function(obj, from = NULL,
                     geom_ribbon(aes(ymin = Lower50, ymax = Upper50),
                         alpha = alpha, fill = pcolour) +
                     geom_ribbon(aes(ymin = Min, ymax = Max), alpha = alpha,
-                                    fill = pcolour) +
-                    xlab(xlab) + ylab(ylab) +
-                    ggtitle(title) +
-                    theme_bw(base_size = 15)
+                                    fill = pcolour)
         }
         else if (qi == "Hazard Ratio" | qi == "First Difference"){
             X1Unique <- obj[!duplicated(obj[, "X1"]), ]
@@ -464,14 +436,13 @@ simGG.siminteract <- function(obj, from = NULL,
                         scale_colour_brewer(palette = spalette, name = leg.name,
                                             guide = legend) +
                         scale_fill_brewer(palette = spalette, name = leg.name,
-                                          guide = legend) +
-                        xlab(xlab) + ylab(ylab) +
-                        ggtitle(title) +
-                        theme_bw(base_size = 15)
+                                          guide = legend)
             }
         }
         )
     }
+    p <- p + xlab(xlab) + ylab(ylab) + ggtitle(title) + theme_bw(base_size = 15)
+
     if (isTRUE(rug) & qi != 'Hazard Rate'){
         p <- p + geom_rug(data = rugger, aes(x = xaxis, y = QI), sides = "b",
                     position = rug_position, colour = pcolour)

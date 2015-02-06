@@ -9,7 +9,7 @@ Hazards Models}
   rug_position = "identity", to = NULL, xlab = NULL, ylab = NULL,
   title = NULL, method = "auto", spalette = "Set1", legend = "legend",
   leg.name = "", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
-  psize = 1, alpha = 0.2, type = "points", ...)
+  psize = 1, alpha = 0.2, type = "lines", ...)
 }
 \arguments{
 \item{obj}{a \code{siminteract} class object}
