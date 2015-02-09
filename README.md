@@ -78,8 +78,7 @@ you are using:
 - `simGG.simtvc`: uses **ggplot2** to graph the simulated time-varying relative
 hazards, first differences, hazard ratios or stratified hazard rates.
 
-- `simGG.simspline`: uses **ggplot2** and `scatter3d` (from the
-[car](http://cran.r-project.org/web/packages/car/index.html) package) to plot
+- `simGG.simspline`: uses **ggplot2** to plot
 quantities of interest from `simspline` objects, including relative hazards,
 first differences, hazard ratios, and hazard rates.
 
