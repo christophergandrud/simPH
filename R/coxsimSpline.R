@@ -100,7 +100,11 @@
 #' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},
 #' and \code{\link{coxph}}
 #'
-#' @references Luke Keele, "Replication data for: Proportionally Difficult:
+#' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating
+#' Estimates from Cox Proportional Hazard Models Including for Interactive and
+#' Nonlinear Effects. Journal of Statistical Software. 65(3)1-20.
+#'
+#' Luke Keele, "Replication data for: Proportionally Difficult:
 #' Testing for Nonproportional Hazards In Cox Models", 2010,
 #' \url{http://hdl.handle.net/1902.1/17068} V1 [Version].
 #'

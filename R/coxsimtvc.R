@@ -123,7 +123,11 @@
 #' @importFrom MASS mvrnorm
 #' @export
 #'
-#' @references Golub, Jonathan, and Bernard Steunenberg. 2007. ''How Time
+#' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating
+#' Estimates from Cox Proportional Hazard Models Including for Interactive and
+#' Nonlinear Effects. Journal of Statistical Software. 65(3)1-20.
+#'
+#' Golub, Jonathan, and Bernard Steunenberg. 2007. ''How Time
 #' Affects EU Decision-Making.'' European Union Politics 8(4): 555-66.
 #'
 #' Licht, Amanda A. 2011. ''Change Comes with Time: Substantive Interpretation

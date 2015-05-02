@@ -75,7 +75,11 @@
 #'               pow = 3, Xj = seq(1, 150, by = 5), spin = TRUE)
 #' }
 #'
-#' @references Keele, Luke. 2010. ''Proportionally Difficult: Testing for
+#' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating
+#' Estimates from Cox Proportional Hazard Models Including for Interactive and
+#' Nonlinear Effects. Journal of Statistical Software. 65(3)1-20.
+#'
+#' Keele, Luke. 2010. ''Proportionally Difficult: Testing for
 #' Nonproportional Hazards in Cox Models.'' Political Analysis 18(2): 189-205.
 #'
 #' Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, and

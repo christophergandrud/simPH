@@ -69,6 +69,10 @@ opts_chunk$set(fig.align='center', dev='png', prompt=TRUE, highlight=FALSE, back
 
 \begin{document}
 
+Note: updated from \cite{gandrud2015}.
+
+\vspace{0.5cm}
+
 The \cite{cox1972} Proportional Hazards (PH) model is used in a wide range of disciplines, including epidemiology and political science, to study time to event data. However, many poorly communicate quantities of interest and associated uncertainty estimated with these models. This is especially true when estimates are generated from interactions and nonlinearly transformed continuous variables. These transformations can be especially useful in Cox PH models for correctly specify models that would otherwise have nonproportional hazards, a key violation of the Cox PH model. These effects are extremely hard to interpret using coefficient tables and available computational tools. In addition, estimated uncertainty around quantities of interest from Cox PH models is difficult to assess because they are on asymmetric and nonlinear scales.
 
 This article aims to improve the use of Cox PH models. It first briefly discusses what a Cox PH model is and previous research on how time interactions and nonlinear effects can be helpful for correctly specifying models that would otherwise violate the proportional hazards assumption (PHA). Second, it advocates using shortest probability intervals and visual-weighting to display simulated quantities of interest from interactive, nonlinear, and even `vanilla' linear estimates from Cox PH models. The latter type of interval is often more appropriate for Cox PH model results. Third, it demonstrates how the new \proglang{R} \citep{CiteR} package \pkg{simPH} \citep{R-simPH} makes it easy to implement these techniques. The package is freely available on the Comprehensive \proglang{R} Archive Network. Quantities of interest \pkg{simPH} can simulate and plot include hazard ratios, first differences, relative hazards, marginal effects, and hazard rates from linear, linear multiplicative interactions between covariates, time interactions, and nonlinear coefficients for continuous variables. Hypothetical and empirical examples are used to illustrate \pkg{simPH}'s syntax and capabilities.
@@ -122,7 +126,7 @@ Relative hazards are given by:
 %
 In this situation the covariate $x_{l}$ is zero. Relative hazards represent the change in the hazard when $x$ is `switched on'. As such, relative hazards are a special case of the hazard ratio \citep[p. 231]{Licht2011}. They are the expected change in the hazard when $x$ is fitted at a value different from zero compared to when $x$ is zero.
 
-\subsection[Nonproportional and nonlinear effects]{Correcting nonproportional hazards with nonlinear transformations of continuous variables}
+\subsection[Nonproportional and nonlinear effects]{Correcting nonproportional hazards with nonlinear transformations}
 
 Un-modeled time-interactive effects are not the only cause of PHA violations. Building on \cite{Grambsch1994} and \cite{Therneau2000}, \cite{Keele2010} points out that common diagnostic tests will also indicate PHA violations if the model is misspecified for other reasons, such as omitting important covariates, using a proportional hazards model when another survival model is more appropriate, or including a continuous covariate as linear when its effect is actually nonlinear.
 
@@ -158,7 +162,7 @@ where $g(x)$ is the penalized spline function. For our post-estimation purposes 
     g(x) = \beta_{k_{1}}(x)_{1+} + \beta_{k_{2}}(x)_{2+} + \beta_{k_{3}}(x)_{3+} + \ldots + \beta_{k_{n}}(x)_{n+},
 \end{equation}
 %
-where $k$ are the equally spaced spline knots with values inside of the range of observed $x$ and $n$ is the number of knots. $x_{c+}$ indicates that:
+where $k_1, \dots, k_n$ are the equally spaced spline knots with values inside of the range of observed $x$ and $n$ is the number of knots. $x_{c+}$ indicates that:
 %
 \begin{equation}
     (x)_{c+} =

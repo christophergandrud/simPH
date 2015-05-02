@@ -138,6 +138,10 @@
 #' \code{\link{ggplot2}}
 #'
 #'
+#' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating
+#' Estimates from Cox Proportional Hazard Models Including for Interactive and
+#' Nonlinear Effects. Journal of Statistical Software. 65(3)1-20.
+#'
 #' @import ggplot2
 #' @import mgcv
 #'

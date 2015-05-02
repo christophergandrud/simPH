@@ -29,6 +29,10 @@
 #' \code{\link{simGG.simlinear}}, \code{\link{simGG.simpoly}},
 #' \code{\link{simGG.simspline}}
 #'
+#' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating
+#' Estimates from Cox Proportional Hazard Models Including for Interactive and
+#' Nonlinear Effects. Journal of Statistical Software. 65(3)1-20.
+#'
 #' @export
 
 simGG <- function(obj, ...){

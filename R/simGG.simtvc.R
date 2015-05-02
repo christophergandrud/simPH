@@ -104,7 +104,11 @@
 #' simGG(Sim3, leg.name = "Comparision", from = 1200, type = 'lines')
 #' }
 #'
-#' @references Licht, Amanda A. 2011. ''Change Comes with Time: Substantive
+#' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating
+#' Estimates from Cox Proportional Hazard Models Including for Interactive and
+#' Nonlinear Effects. Journal of Statistical Software. 65(3)1-20.
+#'
+#' Licht, Amanda A. 2011. ''Change Comes with Time: Substantive
 #' Interpretation of Nonproportional Hazards in Event History Analysis.''
 #' Political Analysis 19: 227-43.
 #' @import ggplot2

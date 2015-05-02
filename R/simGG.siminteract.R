@@ -126,7 +126,12 @@
 #'
 #' @seealso \code{\link{coxsimInteract}}, \code{\link{simGG.simlinear}},
 #' and \code{\link{ggplot2}}
-#' @references Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006.
+#'
+#' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating
+#' Estimates from Cox Proportional Hazard Models Including for Interactive and
+#' Nonlinear Effects. Journal of Statistical Software. 65(3)1-20.
+#'
+#' Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006.
 #' ''Understanding Interaction Models: Improving Empirical Analyses.'' Political
 #'  Analysis 14(1): 63-82.
 #'

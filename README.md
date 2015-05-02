@@ -5,7 +5,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 1.3 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH)
+### Version 1.3.1 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH)
 
 [![DOI](https://zenodo.org/badge/5350/christophergandrud/simPH.png)](http://dx.doi.org/10.5281/zenodo.11961)
 
@@ -34,7 +34,10 @@ To cite the paper please use:
         Proportional Hazard Models Including for Interactive and Nonlinear
         Effects},
     journal = {Journal of Statistical Software},
-    year = {forthcoming}
+    year = {2015},
+    volume = {65},
+    issue = {3},
+    pages = {1--20}
 }
 ```
 
