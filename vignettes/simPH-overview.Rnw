@@ -1,11 +1,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % simPH: Showing Estimates from Cox Proportional Hazard Models
 % Christopher Gandrud
-% 7 April 2014
+% 4 May 2015
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[nojss]{jss}
-\usepackage{amsmath}
+\usepackage{amsmath,amsfonts,amssymb}
 
 %\VignetteIndexEntry{An overview of simPH}
 %\VignetteEngine{knitr::knitr}
@@ -69,7 +69,7 @@ opts_chunk$set(fig.align='center', dev='png', prompt=TRUE, highlight=FALSE, back
 
 \begin{document}
 
-Note: updated from \cite{gandrud2015}.
+\textbf{Note}: updated from \cite{gandrud2015}.
 
 \vspace{0.5cm}
 
@@ -83,7 +83,7 @@ This article aims to improve the use of Cox PH models. It first briefly discusse
 Let's start by briefly looking at the basic mechanics of the Cox PH model. The Cox PH model is a semi-parametric survival model that allows us to examine how specified factors influence the rate of a particular event happening, e.g., infection, death, the adoption of a public policy, at a particular point in time given that the event has not already occurred. This rate is commonly referred to as the hazard rate ($h_{i}(t)$). The hazard rate for unit $i$ at time $t$ is estimated with the Cox PH model using:
 %
 \begin{equation}
-    h(t|\mathbf{X}_{i})=h_{0}(t)\mathrm{e}^{(\mathbf{\beta X}_{i})},
+    h(t|\mathbf{X}_{i}) = h_{0}(t)\mathrm{e}^{(\mathbf{\beta^\intercal X}_{i})},
 \end{equation}
 %
 where $h_{0}(t)$ is the baseline hazard, i.e., the instantaneous rate of a transition at time $t$ when all of the covariates are zero. $\mathbf{\beta}$ is a vector of coefficients and $\mathbf{X}_{i}$ is the vector of covariates for unit $i$.
@@ -95,7 +95,7 @@ We are often interested in how a covariate changes the rate of an event happenin
 Time-interactions and nonlinear continuous variable transformations are particularly important when using Cox PH models as they can correct for violations of the proportional hazards assumption. The PHA is one of the most important sources of estimation bias in Cox PH models. It has been discussed at length by \cite{Licht2011}, \cite{BoxSteffensmeier2001}, and \cite{boxsteffensmeier2004}. The proportional hazards assumption is that the hazards of two units experiencing an event are proportional to one another and that this relationship is constant over time. Formally, for the PHA to hold the hazard for units $j$ and $l$ must be:
 %
 \begin{equation}
-    \frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{\beta\prime(x_{j} - x_{l})}.
+    \frac{h_{j}(t)}{h_{l}(t)} = \mathrm{e}^{\beta^\intercal(\mathbf{X}_{j} - \mathbf{X}_{l})}.
 \end{equation}
 %
 for all points in time. This is also the equation for the hazard ratio between $x_{j}$ and $x_{l}$. If the proportional hazards assumption is violated and measures are not taken to correct for the violation, then researchers may create biased parameter estimates and statistical tests with lower power \citep{Therneau1990,Keele2010}. Beyond these statistical problems, not adjusting for violations of the PHA can prevent researchers from finding evidence for phenomena they are interested in studying, including how an effect changes over time and whether or not it changes nonlinearly over the range of a continuous variable's values.
@@ -107,7 +107,7 @@ There are a number of widely used tests to examine if the PHA has been violated.
 If a covariate is determined to violate the PHA, Box-Steffensmeier and co-authors \citep[see][]{BoxSteffensmeier2003,boxsteffensmeier2004} suggest directly modeling the relationship between the variable and time. This usually entails including an interaction between the variable and some function of time, such as the natural logarithm or some exponent. The decision to use a particular functional form should be guided by theory and will likely also be influenced by findings in the data. If $f(t)$ is some function of time then a simple model estimating the hazard rate for unit $i$ with one time-interaction is given by:
 %
 \begin{equation}
-    h_{i}(t|\mathbf{x}_{i})=h_{0}(t)\mathrm{e}^{(\beta_{1}x_{i} + \beta_{2}f(t)x_{i})}.
+    h_{i}(t|x_{i})=h_{0}(t)\mathrm{e}^{(\beta_{1}x_{i} + \beta_{2}f(t)x_{i})}.
 \end{equation}
 
 Like any other interaction effect \cite[see][]{Brambor2006} extra care should be taken when interpreting the $\beta_{1}$ and $\beta_{2}$ parameter estimates and their associated uncertainty. We cannot simply interpret the effect by looking at $\beta_{1}$ or $\beta_{2}$ in isolation. They need to be combined. \cite{Licht2011} argues that post-estimation simulation techniques should be employed to substantively interpret these combined coefficients and the uncertainty surrounding them. Let's briefly look at ways to calculate combined effects. In the next section, we will look at showing our uncertainty about the combined effects using simulations.
@@ -140,7 +140,7 @@ How can we effectively examine and communicate both the point estimates of and o
 
 \subsection{Post estimation simulations}
 
-Following \cite{King2000}, \cite{Licht2011} proposes post-estimation simulation techniques to make it easier to estimate the uncertainty surrounding quantities of interest for time interactions like first differences and relative hazards. See \citet[352-353]{King2000} for a discussion of alternative approaches including fully Bayesian Markov-Chain Monte Carlo techniques and bootstraping. The main difference between these three approaches is how the parameters are drawn. Using the post-estimation simulation technique, we first find the parameter point estimates for $\hat{\beta_{1}}$ and $\hat{\beta_{2}}$. Second, we draw $n$ values of $\beta_{1}$ and $\beta_{2}$ from multivariate normal distributions with means $\beta_{1}$ and $\beta_{2}$ and variance specified by the parameters' estimated covariance. Third, we use these simulated values to calculate a quantity of interest, such as the first difference or relative hazard, for a range of times as well as specified values of $x_{j}$ and $x_{l}$ (as appropriate). Finally, we plot the results. Using this simulation technique allows us to estimate full time-interactive effects, how they change over time, substantively evaluate the effects, and show the uncertainty surrounding the estimates.
+Following \cite{King2000}, \cite{Licht2011} proposes post-estimation simulation techniques to make it easier to estimate the uncertainty surrounding quantities of interest for time interactions like first differences and relative hazards. See \citet[352-353]{King2000} for a discussion of alternative approaches including fully Bayesian Markov-Chain Monte Carlo techniques and bootstraping. The main difference between these three approaches is how the parameters are drawn. Using the post-estimation simulation technique, we first find the parameter point estimates for $\hat{\beta_{1}}$ and $\hat{\beta_{2}}$. Second, we draw $n$ values of $\beta_{1}$ and $\beta_{2}$ from multivariate normal distributions with means $\hat{\beta_{1}}$ and $\hat{\beta_{2}}$ and variance specified by the parameters' estimated covariance. Third, we use these simulated values to calculate a quantity of interest, such as the first difference or relative hazard, for a range of times as well as specified values of $x_{j}$ and $x_{l}$ (as appropriate). Finally, we plot the results. Using this simulation technique allows us to estimate full time-interactive effects, how they change over time, substantively evaluate the effects, and show the uncertainty surrounding the estimates.
 
 We can easily extend this simulation technique to quantities of interest for other estimated effect types. For example if a nonlinear effect is modeled with a second order polynomial, i.e., $\beta_{1}x_{i} + \beta_{2}x_{i}^{2}$, we can once again draw $n$ simulations from the multivariate normal distribution for both $\beta_{1}$ and $\beta_{2}$. Then we simply calculate quantities of interest for a range of values and plot the results as before. We find the first difference for a second order polynomial with:
 %
@@ -153,7 +153,7 @@ where $x_{j-l} = x_{j} - x_{l}$. Note we will not be showing the estimated effec
 We can use a similar procedure for splines. Penalized splines \citep{Eilers1996} are a commonly used way of showing more complex nonlinear effects than polynomials \cite[see][]{Keele2008}. They involve ``linear combinations of B-spline basis functions'' \citep[p. 5]{Strasak2009} joined at points in the range of observed values of $x$ called ``knots'' \citep[p. 50]{Keele2008}. A Cox PH model with one penalized spline is given by:
 %
 \begin{equation}
-    h(t|\mathbf{X}_{i})=h_{0}(t)\mathrm{e}^{g(x)},
+    h(t|x_{i})=h_{0}(t)\mathrm{e}^{g(x_{i})},
 \end{equation}
 %
 where $g(x)$ is the penalized spline function. For our post-estimation purposes $g(x)$ is basically a series of linearly combined coefficients such that:

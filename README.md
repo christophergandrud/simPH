@@ -95,7 +95,7 @@ interactions.
 
 Because in almost all cases `simGG` returns a *ggplot2* object, you can add
 additional aesthetic attributes in the normal *ggplot2* way. See the
-[ggplot2 documentation for more details](http://docs.ggplot2.org/current/).
+[ggplot2 documentation for more details](http://docs.ggplot2.org).
 
 #### Misc.
 
