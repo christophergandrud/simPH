@@ -1,34 +1,25 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>simPH by christophergandrud</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1>simPH</h1>
-        <p>Tools for simulating and graphing results from proportional hazards survival models.</p>
+    <section class="page-header">
+      <h1 class="project-name">simPH</h1>
+      <h2 class="project-tagline">Tools for simulating and graphing results from proportional hazards survival models.</h2>
+      <a href="https://github.com/christophergandrud/simPH" class="btn">View on GitHub</a>
+      <a href="https://github.com/christophergandrud/simPH/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/christophergandrud/simPH/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-        <p class="view"><a href="https://github.com/christophergandrud/simPH">View the Project on GitHub <small>christophergandrud/simPH</small></a></p>
-
-
-        <ul>
-          <li><a href="https://github.com/christophergandrud/simPH/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/christophergandrud/simPH/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/christophergandrud/simPH">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
+    <section class="main-content">
+      <h1>
 <a id="simph" class="anchor" href="#simph" aria-hidden="true"><span class="octicon octicon-link"></span></a>simPH</h1>
 
 <p><img src="img/plotbanner.png" height="40" width="1000" alt="banner-image"></p>
@@ -37,7 +28,7 @@
 <a id="christopher-gandrud" class="anchor" href="#christopher-gandrud" aria-hidden="true"><span class="octicon octicon-link"></span></a>Christopher Gandrud</h3>
 
 <h3>
-<a id="version-126-" class="anchor" href="#version-126-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Version 1.2.6 <a href="https://travis-ci.org/christophergandrud/simPH"><img src="https://travis-ci.org/christophergandrud/simPH.png" alt="Build Status"></a>
+<a id="version-131-" class="anchor" href="#version-131-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Version 1.3.1 <a href="https://travis-ci.org/christophergandrud/simPH"><img src="https://travis-ci.org/christophergandrud/simPH.png" alt="Build Status"></a>
 </h3>
 
 <p><a href="http://dx.doi.org/10.5281/zenodo.11961"><img src="https://zenodo.org/badge/5350/christophergandrud/simPH.png" alt="DOI"></a></p>
@@ -57,7 +48,7 @@ Proportional Hazard models.</p>
 
 <p>For more information plus examples, please see the
 <a href="http://ssrn.com/abstract=2318977">description paper</a> forthcoming in the
-<a href="http://www.jstatsoft.org/">Journal of Statisticsal Software</a>.</p>
+<a href="http://www.jstatsoft.org/">Journal of Statistical Software</a>.</p>
 
 <p>To cite the paper please use:</p>
 
@@ -67,7 +58,10 @@ Proportional Hazard models.</p>
         Proportional Hazard Models Including for Interactive and Nonlinear
         Effects},
     journal = {Journal of Statistical Software},
-    year = {forthcoming}
+    year = {2015},
+    volume = {65},
+    issue = {3},
+    pages = {1--20}
 }
 </code></pre>
 
@@ -111,8 +105,7 @@ you are using:</p>
 <a href="http://ggplot2.org/">ggplot2</a>.</p></li>
 <li><p><code>simGG.simtvc</code>: uses <strong>ggplot2</strong> to graph the simulated time-varying relative
 hazards, first differences, hazard ratios or stratified hazard rates.</p></li>
-<li><p><code>simGG.simspline</code>: uses <strong>ggplot2</strong> and <code>scatter3d</code> (from the
-<a href="http://cran.r-project.org/web/packages/car/index.html">car</a> package) to plot
+<li><p><code>simGG.simspline</code>: uses <strong>ggplot2</strong> to plot
 quantities of interest from <code>simspline</code> objects, including relative hazards,
 first differences, hazard ratios, and hazard rates.</p></li>
 <li><p><code>simGG.simpoly</code>: uses <strong>ggplot2</strong> to graph the simulated polynomial quantities
@@ -126,7 +119,7 @@ interactions.</p></li>
 
 <p>Because in almost all cases <code>simGG</code> returns a <em>ggplot2</em> object, you can add
 additional aesthetic attributes in the normal <em>ggplot2</em> way. See the
-<a href="http://docs.ggplot2.org/current/">ggplot2 documentation for more details</a>.</p>
+<a href="http://docs.ggplot2.org">ggplot2 documentation for more details</a>.</p>
 
 <h4>
 <a id="misc" class="anchor" href="#misc" aria-hidden="true"><span class="octicon octicon-link"></span></a>Misc.</h4>
@@ -160,7 +153,7 @@ the middle 50% of these intervals.</p></li>
 <a href="https://github.com/hadley/devtools">devtools</a> function <code>install_github</code>. Here
 is the code for installing the most recent development version:</p>
 
-<div class="highlight highlight-S"><pre>devtools::install_github(<span class="pl-s1"><span class="pl-pds">'</span>christophergandrud/simPH<span class="pl-pds">'</span></span>)</pre></div>
+<div class="highlight highlight-S"><pre>devtools::install_github(<span class="pl-s"><span class="pl-pds">'</span>christophergandrud/simPH<span class="pl-pds">'</span></span>)</pre></div>
 
 <h2>
 <a id="tip" class="anchor" href="#tip" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tip</h2>
@@ -179,9 +172,11 @@ to run very many simulations. This will be computationally intensive.</p>
 <p>For more information about simulating parameter estimates to make interpretation
 of results easier see:</p>
 
-<p>Licht, Amanda A. 2011. <a href="http://pan.oxfordjournals.org/content/19/2/227.abstract">“Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.”</a> <em>Political Analysis</em> 19: 227–43.</p>
+<p>Licht, Amanda A. 2011. <a href="http://pan.oxfordjournals.org/content/19/2/227.abstract">“Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.”</a>
+<em>Political Analysis</em> 19: 227–43.</p>
 
-<p>King, Gary, Michael Tomz, and Jason Wittenberg. 2000. <a href="http://www.jstor.org/stable/2669316">“Making the Most of Statistical Analyses: Improving Interpretation and Presentation.”</a> <em>American Journal of Political Science</em> 44(2): 347–61.</p>
+<p>King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
+<a href="http://www.jstor.org/stable/2669316">“Making the Most of Statistical Analyses: Improving Interpretation and Presentation.”</a> <em>American Journal of Political Science</em> 44(2): 347–61.</p>
 
 <h3>
 <a id="stratified-cox-ph" class="anchor" href="#stratified-cox-ph" aria-hidden="true"><span class="octicon octicon-link"></span></a>Stratified Cox PH</h3>
@@ -197,16 +192,22 @@ working to incorporate in future versions) see:</p>
 <p>To learn more about shortest probability intervals (and also for the source of
 the code that made this possible in <strong>simPH</strong>) see:</p>
 
-<p>Liu, Y., Gelman, A., &amp; Zheng, T. (2013). <a href="http://arxiv.org/pdf/1302.2142v1.pdf">"Simulation-efficient Shortest Probablility Intervals."</a> <em>Arvix</em>.</p>
+<p>Liu, Y., Gelman, A., &amp; Zheng, T. (2013).
+<a href="http://arxiv.org/pdf/1302.2142v1.pdf">"Simulation-efficient Shortest Probablility Intervals."</a>
+<em>Arvix</em>.</p>
 
-<p><strong>Also good:</strong> Hyndman, R. J. (1996). <a href="http://www.jstor.org/stable/10.2307/2684423">"Computing and Graphing Highest Density Regions."</a> <em>The American Statistician</em>, 50(2): 120–126.</p>
+<p><strong>Also good:</strong> Hyndman, R. J. (1996).
+<a href="http://www.jstor.org/stable/10.2307/2684423">"Computing and Graphing Highest Density Regions."</a>
+<em>The American Statistician</em>, 50(2): 120–126.</p>
 
 <h3>
 <a id="interpreting-interactions" class="anchor" href="#interpreting-interactions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Interpreting Interactions</h3>
 
 <p>For more information about interpreting interaction terms:</p>
 
-<p>Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006. <a href="http://pan.oxfordjournals.org/content/14/1/63.abstract">“Understanding Interaction Models: Improving Empirical Analyses.”</a> <em>Political Analysis</em> 14(1): 63–82.</p>
+<p>Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006.
+<a href="http://pan.oxfordjournals.org/content/14/1/63.abstract">“Understanding Interaction Models: Improving Empirical Analyses.”</a>
+<em>Political Analysis</em> 14(1): 63–82.</p>
 
 <h3>
 <a id="the-olden-days" class="anchor" href="#the-olden-days" aria-hidden="true"><span class="octicon octicon-link"></span></a>The Olden Days</h3>
@@ -215,28 +216,32 @@ the code that made this possible in <strong>simPH</strong>) see:</p>
 before <strong>simPH</strong> see (some of the problems I encountered in this paper were a
 major part of why I'm developing this package):</p>
 
-<p>Gandrud, Christopher. 2013. <a href="http://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362">“The Diffusion of Financial Supervisory Governance Ideas.”</a> <em>Review of International Political Economy</em>. 20(4): 881-916.</p>
+<p>Gandrud, Christopher. 2013. <a href="http://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362">“The Diffusion of Financial Supervisory Governance Ideas.”</a>
+<em>Review of International Political Economy</em>. 20(4): 881-916.</p>
 
 <h2>
 <a id="future-plans" class="anchor" href="#future-plans" aria-hidden="true"><span class="octicon octicon-link"></span></a>Future Plans</h2>
 
 <p>I intend to expand the quantities of interest that can be simulated and graphed
 for Cox PH models. I am also currently working on functions that can simulate
-and graph hazard ratios estimated from <a href="http://www.jstor.org/stable/2670170">Fine and Gray competing risks models</a>.</p>
+and graph hazard ratios estimated from
+<a href="http://www.jstor.org/stable/2670170">Fine and Gray competing risks models</a>.</p>
 
 <p>I am also working on a way to graph hazard ratios with frailties.</p>
 
 <hr>
 
 <p>Licensed under <a href="https://github.com/christophergandrud/simPH/blob/master/LICENSE.md">GPL-3</a></p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/christophergandrud">christophergandrud</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/christophergandrud/simPH">simPH</a> is maintained by <a href="https://github.com/christophergandrud">christophergandrud</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-              <script type="text/javascript">
+
+    </section>
+
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
@@ -249,3 +254,4 @@ and graph hazard ratios estimated from <a href="http://www.jstor.org/stable/2670
 
   </body>
 </html>
+
