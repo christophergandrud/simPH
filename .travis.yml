@@ -10,12 +10,6 @@ before_script:
   - ./travis-tool.sh bootstrap
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh assertthat
-  - ./travis-tool.sh github_package jimhester/covr
-
-script: ./travis-tool.sh run_tests
-
-after_success:
-  - Rscript -e 'library(covr);coveralls()'
 
 notifications:
   email:
