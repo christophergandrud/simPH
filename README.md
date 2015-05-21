@@ -5,7 +5,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 1.3.1 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/simPH)
+### Version 1.3.2 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/simPH)
 
 #### Please report any bugs to:
 

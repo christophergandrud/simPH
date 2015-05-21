@@ -129,13 +129,14 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, PartialData = TRUE,
 
     # Create new time interval start variable
     FullLast <- FullLast[, 'ST' := FT - 1]
+    FullLast <- setkey(FullLast, key = 'UG')
 
     # Merge with original data and create new time intervals
     DataMerge <- data
     Names <- c(GroupVar, Time, Time2, event)
     Names2 <- c('UG', 'StartT', 'FinishT', 'Event')
     DataMerge <- MoveFront(DataMerge, Names)
-    colnames(DataMerge)[1:4] <- Names2
+    DataMerge <- setnames(DataMerge, old = 1:4, new = Names2)
     DataMerge <- data.table(DataMerge, key = 'UG', allow.cartisian = TRUE)
 
     FullComb <- FullLast[DataMerge, allow.cartesian = TRUE]
