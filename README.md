@@ -20,7 +20,7 @@ non-proportional hazards, as well as stratified survival curves from Cox
 Proportional Hazard models.
 
 For more information plus examples, please see the
-[description paper](http://ssrn.com/abstract=2318977) forthcoming in the
+[description paper](http://ssrn.com/abstract=2318977) in the
 [Journal of Statistical Software](http://www.jstatsoft.org/).
 
 To cite the paper please use:
