@@ -27,10 +27,12 @@ data("CarpenterFdaData")
 ## The data is included with simPH
 data("GolubEUPData")
 
-options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
+options(prompt = "R> ", continue = "+  ",
+        width = 70, useFancyQuotes = FALSE)
 
 ##### Set Chunk Options ####
-opts_chunk$set(fig.align='center', dev='png', prompt=TRUE, highlight=FALSE, background="white")
+opts_chunk$set(fig.align='center', dev='png', prompt=TRUE,
+                highlight=FALSE, background="white")
 @
 
 % Author/Title
