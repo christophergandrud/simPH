@@ -120,6 +120,20 @@ Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
                        X1 = 90, X2 = 1, qi = "Hazard Rate",
                        means = TRUE)
 }
+
+# Example with a categorical variable
+# Download data from: http://www.ats.ucla.edu/stat/r/examples/asa/asa_ch4_r.htm
+library(rio)
+hmohiv <- import("http://www.ats.ucla.edu/stat/r/examples/asa/hmohiv.csv")
+
+# Create category lables
+hmohiv$drug <- factor(hmohiv$drug, labels = c('not treated', 'treated'))
+
+M3 <- coxph(Surv(time,censor) ~ drug*age, data = hmohiv)
+
+# Note: Use relevant coefficient name as shown in model summary, e.g.
+# 'drugtreated'.
+Sim5 <- coxsimInteract(M3, b1 = "drugtreated", b2 = 'age', X2 = 20:54)
 }
 \references{
 Gandrud, Christopher. 2015. simPH: An R Package for Illustrating

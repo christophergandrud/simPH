@@ -94,6 +94,20 @@
 #'                        X1 = 90, X2 = 1, qi = "Hazard Rate",
 #'                        means = TRUE)
 #' }
+#' 
+#' # Example with a categorical variable
+#' # Download data
+#' library(rio)
+#' hmohiv <- import("http://www.ats.ucla.edu/stat/r/examples/asa/hmohiv.csv")
+#' 
+#' # Create category lables
+#' hmohiv$drug <- factor(hmohiv$drug, labels = c('not treated', 'treated'))
+#' 
+#' M3 <- coxph(Surv(time,censor) ~ drug*age, data = hmohiv)
+#' 
+#' # Note: Use relevant coefficient name as shown in model summary, e.g. 
+#' # 'drugtreated'.
+#' Sim5 <- coxsimInteract(M3, b1 = "drugtreated", b2 = 'age', X2 = 20:54)
 #'
 #' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating
 #' Estimates from Cox Proportional Hazard Models Including for Interactive and
@@ -133,16 +147,16 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
     qiOpts <- c("Marginal Effect", "First Difference", "Hazard Ratio",
                 "Hazard Rate")
     TestqiOpts <- qi %in% qiOpts
-    if (!isTRUE(TestqiOpts)){
+    if (!isTRUE(TestqiOpts)) {
         stop("Invalid qi type. qi must be 'Marginal Effect', 'First Difference', 'Hazard Ratio', or 'Hazard Rate'.",
             call. = FALSE)
     }
     MeansMessage <- NULL
-    if (isTRUE(means) & length(obj$coefficients) == 3){
+    if (isTRUE(means) & length(obj$coefficients) == 3) {
         means <- FALSE
         MeansMessage <- FALSE
         message("Note: means reset to FALSE. The model only includes the interaction variables.")
-    } else if (isTRUE(means) & length(obj$coefficients) > 3){
+    } else if (isTRUE(means) & length(obj$coefficients) > 3) {
         MeansMessage <- TRUE
     }
 
@@ -376,7 +390,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
     }
 
     # Add in distribution of b
-    rug <- model.frame(obj)[, c(b1, b2)]
+    rug_names <- names(model.frame(obj)) %in% c(b1, b2)
+    rug <- model.frame(obj)[, rug_names]
     out <- list(sims = SimbPercSub, rug = rug)
 
     class(out) <- c("siminteract", qi, "coxsim")
