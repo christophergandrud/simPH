@@ -140,7 +140,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
                            extremesDrop = TRUE)
 {
     HRValue <- strata <- QI <- SimID <- NULL
-    if (qi != "Hazard Rate" & isTRUE(means)){
+    if (qi != "Hazard Rate" & isTRUE(means)) {
         stop("means can only be TRUE when qi = 'Hazard Rate'.", call. = FALSE)
     }
     # Ensure that qi is valid
@@ -179,30 +179,30 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
     NamesInt <- c(bpos, binter)
 
     # If all values aren't set for calculating the hazard rate
-    if (!isTRUE(means)){
+    if (!isTRUE(means)) {
 
         # Subset data frame to only include interaction constitutive terms and
         Simb <- data.frame(SimID, Drawn[, NamesInt])
 
         # Find quantity of interest
-        if (qi == "Marginal Effect"){
-            if (!is.null(X1)){
+        if (qi == "Marginal Effect") {
+            if (!is.null(X1)) {
                 stop("For Marginal Effects only X2 should be specified.",
                     call. = FALSE)
             } else{
                 X2df <- data.frame(X2)
                 names(X2df) <- c("X2")
                 Simb <- merge(Simb, X2df)
-        if (isTRUE(expMarg)){
+        if (isTRUE(expMarg)) {
                   Simb$QI <- exp(Simb[, 2] + (Simb[, 4] * Simb[, 5]))
         }
-        else if (!isTRUE(expMarg)){
+        else if (!isTRUE(expMarg)) {
           Simb$QI <- Simb[, 2] + (Simb[, 4] * Simb[, 5])
         }
             }
         }
-        else if (qi == "First Difference"){
-          if (is.null(X1) | is.null(X2)){
+        else if (qi == "First Difference") {
+          if (is.null(X1) | is.null(X2)) {
             stop("For First Differences both X1 and X2 should be specified.",
                 call. = FALSE)
           } else{
@@ -214,8 +214,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
                        (Simb$X1 * Simb$X2 * Simb[, 4]) - 1) * 100)
           }
         }
-        else if (qi == "Hazard Ratio"){
-          if (is.null(X1) | is.null(X2)){
+        else if (qi == "Hazard Ratio") {
+          if (is.null(X1) | is.null(X2)) {
             stop("For Hazard Ratios both X1 and X2 should be specified.",
                 call. = FALSE)
           } else {
@@ -227,12 +227,12 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
                        (Simb$X1 * Simb$X2 * Simb[, 4])))
           }
         }
-        else if (qi == "Hazard Rate"){
-            if (is.null(X1) | is.null(X2)){
+        else if (qi == "Hazard Rate") {
+            if (is.null(X1) | is.null(X2)) {
                 stop("For Hazard Rates, both X1 and X2 should be specified.",
                      call. = FALSE)
             }
-            if (isTRUE(MeansMessage)){
+            if (isTRUE(MeansMessage)) {
                 message("All variables' values other than b1, b2, and b1*b2 are fitted at 0.")
             }
             Xs <- data.frame(X1, X2)
@@ -250,13 +250,13 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
             Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
             # Create warning message
             Rows <- nrow(Simb)
-            if (Rows > 2000000){
+            if (Rows > 2000000) {
               message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
             }
             Simb$QI <- Simb$hazard * Simb$HR
-            if (is.null(Simb$strata)){
+            if (is.null(Simb$strata)) {
               Simb <- Simb[, list(SimID, time, QI, HRValue)]
-            } else if (!is.null(Simb$strata)){
+            } else if (!is.null(Simb$strata)) {
               Simb <- Simb[, list(SimID, time, QI, HRValue, strata)]
             }
             Simb <- data.frame(Simb)
@@ -265,12 +265,12 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
 
     # If the user wants to calculate Hazard Rates using means for fitting all
     #covariates other than b.
-    else if (isTRUE(means)){
-        if (is.null(X1) | is.null(X2)){
+    else if (isTRUE(means)) {
+        if (is.null(X1) | is.null(X2)) {
             stop("For Hazard Rates, both X1 and X2 should be specified.",
                  call. = FALSE)
         }
-        if (length(X1) != 1 | length(X2) != 1){
+        if (length(X1) != 1 | length(X2) != 1) {
             stop("For coxsimInteract only one value of X1 and one value of X2 can be specified.",
                 call. = FALSE)
         }
@@ -281,10 +281,10 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
         # Set all values of b at means for data used in the analysis
         NotB <- setdiff(names(DrawnDF), c(b1, b2, binter))
         MeanValues <- data.frame(obj$means)
-        FittedMeans <- function(Z){
+        FittedMeans <- function(Z) {
             ID <- 1:nsim
             Temp <- data.frame(ID)
-            for (i in Z){
+            for (i in Z) {
                 BarValue <- MeanValues[i, ]
                 DrawnCoef <- DrawnDF[, i]
                 FittedCoef <- outer(DrawnCoef, BarValue)
@@ -319,25 +319,25 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
         Simb <- SimbDT[bfitDT, allow.cartesian = TRUE]
         # Create warning message
         Rows <- nrow(Simb)
-        if (Rows > 2000000){
+        if (Rows > 2000000) {
           message(paste("There are", Rows,
                   "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
         }
         Simb$QI <- Simb$hazard * Simb$HR
-        if (is.null(Simb$strata)){
+        if (is.null(Simb$strata)) {
           Simb <- Simb[, list(time, QI, HRValue)]
-        } else if (!is.null(Simb$strata)){
+        } else if (!is.null(Simb$strata)) {
           Simb <- Simb[, list(time, QI, HRValue, strata)]
         }
         Simb <- data.frame(Simb)
     }
 
     # Drop simulations outside of 'confidence bounds'
-    if (qi == "First Difference" | qi == "Hazard Ratio"){
+    if (qi == "First Difference" | qi == "Hazard Ratio") {
         SubVar <- "X1"
-    } else if (qi == "Marginal Effect"){
+    } else if (qi == "Marginal Effect") {
         SubVar <- "X2"
-    } else if (qi == "Hazard Rate"){
+    } else if (qi == "Hazard Rate") {
         SubVar <- "time"
     }
 
@@ -347,8 +347,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
                                   extremesDrop = extremesDrop)
 
     # Final clean up
-    if (qi == "Hazard Rate" & !isTRUE(means)){
-        if (is.null(obj$strata)){
+    if (qi == "Hazard Rate" & !isTRUE(means)) {
+        if (is.null(obj$strata)) {
             SimbPercSub <- data.frame(SimbPerc$SimID,
                                       SimbPerc$time, SimbPerc$QI,
                                       SimbPerc$HRValue)
@@ -361,8 +361,8 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
         names(SimbPercSub) <- c("SimID", "Time", "HRate",
                                 "Strata", "HRValue")
         }
-    } else if (qi == "Hazard Rate" & isTRUE(means)){
-        if (is.null(obj$strata)){
+    } else if (qi == "Hazard Rate" & isTRUE(means)) {
+        if (is.null(obj$strata)) {
             SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI,
                                       SimbPerc$HRValue)
             names(SimbPercSub) <- c("Time", "HRate",
@@ -374,15 +374,15 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
         names(SimbPercSub) <- c("SimID", "Time", "HRate",
                                 "Strata", "HRValue")
         }
-    } else if (qi == "Hazard Ratio"){
+    } else if (qi == "Hazard Ratio") {
         SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$X1, SimbPerc$X2,
                                   SimbPerc$QI, SimbPerc$Comparison)
         names(SimbPercSub) <- c("SimID", "X1", "X2", "QI", "Comparison")
-    } else if (qi == "Marginal Effect"){
+    } else if (qi == "Marginal Effect") {
         spalette <- NULL
         SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$X2, SimbPerc$QI)
         names(SimbPercSub) <- c("SimID", "X2", "QI")
-    } else if (qi == "First Difference"){
+    } else if (qi == "First Difference") {
         colour <- NULL
         SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$X1,
                                   SimbPerc$X2, SimbPerc$QI)

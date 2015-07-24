@@ -122,7 +122,7 @@ Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
 }
 
 # Example with a categorical variable
-# Download data from: http://www.ats.ucla.edu/stat/r/examples/asa/asa_ch4_r.htm
+# Download data
 library(rio)
 hmohiv <- import("http://www.ats.ucla.edu/stat/r/examples/asa/hmohiv.csv")
 
