@@ -118,6 +118,7 @@
 #' and \code{\link{coxph}}
 #'
 #' @import data.table
+#' @importFrom stats vcov
 #' @importFrom survival basehaz
 #' @importFrom MASS mvrnorm
 #' @export

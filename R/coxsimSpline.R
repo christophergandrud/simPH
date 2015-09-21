@@ -118,6 +118,7 @@
 #'
 #' @import data.table
 #' @importFrom stringr word str_match str_replace
+#' @importFrom stats vcov
 #' @importFrom survival basehaz
 #' @importFrom MASS mvrnorm
 #' @importFrom dplyr %>% rename
@@ -127,7 +128,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
                          Xl = 0, nsim = 1000, ci = 0.95, spin = FALSE,
                          extremesDrop = TRUE)
 {
-    strata <- QI <- X <- NULL
+    strata <- QI <- X <- time <- NULL
     # Ensure that qi is valid
     qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate",
                 "Hazard Ratio")

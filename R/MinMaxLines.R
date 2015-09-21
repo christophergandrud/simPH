@@ -43,6 +43,7 @@
 #'
 #' @importFrom dplyr group_by_ ungroup mutate distinct_
 #' @import lazyeval
+#' @importFrom stats median quantile
 #' @keywords internals
 #' @export
 

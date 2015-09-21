@@ -14,7 +14,7 @@
 #'Hastie, T. J. and Tibshirani, R. J. (1990) Generalized Additive Models.
 #' Chapman and Hall.
 #'
-#' @importFrom stats smooth.spline
+#' @importFrom stats smooth.spline fitted
 #' @keywords internals
 #' @noRd
 

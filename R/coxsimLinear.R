@@ -91,6 +91,7 @@
 #' \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 #'
 #' @import data.table
+#' @importFrom stats vcov model.frame
 #' @importFrom survival basehaz
 #' @importFrom MASS mvrnorm
 #' @export
@@ -99,7 +100,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
                         means = FALSE, nsim = 1000, ci = 0.95, spin = FALSE,
                         extremesDrop = TRUE)
 {
-  HRValue <- strata <- QI <- SimID <- NULL
+  HRValue <- strata <- QI <- SimID <- time <- NULL
   if (qi != "Hazard Rate" & isTRUE(means)){
     stop("means can only be TRUE when qi = 'Hazard Rate'.", call. = FALSE)
   }

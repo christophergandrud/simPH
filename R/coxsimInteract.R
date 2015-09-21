@@ -129,6 +129,7 @@
 #' and \code{\link{coxph}},
 #' @return a \code{siminteract} class object
 #' @import data.table
+#' @importFrom stats vcov model.frame
 #' @importFrom survival basehaz
 #' @importFrom MASS mvrnorm
 #' @export
@@ -138,7 +139,7 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
                            nsim = 1000, ci = 0.95, spin = FALSE,
                            extremesDrop = TRUE)
 {
-    HRValue <- strata <- QI <- SimID <- NULL
+    HRValue <- strata <- QI <- SimID <- time <- NULL
     if (qi != "Hazard Rate" & isTRUE(means)) {
         stop("means can only be TRUE when qi = 'Hazard Rate'.", call. = FALSE)
     }

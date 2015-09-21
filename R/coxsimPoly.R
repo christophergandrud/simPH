@@ -97,6 +97,7 @@
 #' \code{\link{strata}}, and \code{\link{coxph}}
 #'
 #' @importFrom MASS mvrnorm
+#' @importFrom stats vcov model.frame
 #' @importFrom survival basehaz
 #' @export
 
@@ -104,7 +105,7 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
                        Xj = NULL, Xl = NULL, nsim = 1000, ci = 0.95,
                        spin = FALSE, extremesDrop = TRUE)
 {
-    strata <- QI <- SimID <-  NULL
+    strata <- QI <- SimID <- time <- NULL
     # Ensure that qi is valid
     qiOpts <- c("Relative Hazard", "First Difference", "Hazard Rate",
              "Hazard Ratio")
