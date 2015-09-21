@@ -91,7 +91,6 @@
 #' \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 #'
 #' @import data.table
-#' @importFrom reshape2 melt
 #' @importFrom survival basehaz
 #' @importFrom MASS mvrnorm
 #' @export

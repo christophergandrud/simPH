@@ -95,7 +95,7 @@
 #'
 #' @seealso \code{\link{simGG.simpoly}}, \code{\link{survival}},
 #' \code{\link{strata}}, and \code{\link{coxph}}
-#' @importFrom reshape2 melt
+#'
 #' @importFrom MASS mvrnorm
 #' @importFrom survival basehaz
 #' @export

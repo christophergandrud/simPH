@@ -118,7 +118,6 @@
 #'
 #' @import data.table
 #' @importFrom stringr word str_match str_replace
-#' @importFrom reshape2 melt
 #' @importFrom survival basehaz
 #' @importFrom MASS mvrnorm
 #' @importFrom dplyr %>% rename

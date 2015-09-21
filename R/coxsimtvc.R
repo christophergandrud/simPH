@@ -118,7 +118,6 @@
 #' and \code{\link{coxph}}
 #'
 #' @import data.table
-#' @importFrom reshape2 melt
 #' @importFrom survival basehaz
 #' @importFrom MASS mvrnorm
 #' @export
