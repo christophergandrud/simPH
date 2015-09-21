@@ -1,10 +1,16 @@
+## Version 1.3.4
+
+- Internally, `melt` is loaded from the data.table package rather than 
+reshape2 (which is no longer a dependency). This should provide speed 
+improvements.
+
 ## Version 1.3.3
 
 - `coxsimInteract` can now handle interactions with categorical variables.
 
 ## Version 1.3.2
 
-- Minor internal changes to `SurvExpand` that improve speed and stability.
+- Minor internal changes to `SurvExpand` that improves speed and stability.
 
 ## Version 1.3.1
 
@@ -128,8 +134,9 @@ reviewer for the suggestion.
 
 ## Version 1.0
 
-- Added `type` argument to `simGG.spline`. Allows the user to plot using `points`,
-`ribbons`, or `lines`. NOTE: the `ribbons` standalone argument is depricated.
+- Added `type` argument to `simGG.spline`. Allows the user to plot using 
+`points`, `ribbons`, or `lines`. NOTE: the `ribbons` standalone argument is 
+depricated.
 
 - Added `SmoothSpline` argument to `simGG.simspline` to use smoothing splines on
 the simulations. Creates a smoother graph.
@@ -145,7 +152,8 @@ simulations.
 
 ## Version 0.8.5
 
-- Added the ability to choose whether or not to exponentiate marginal effects for `coxsimInteract` with the `expMarg` argument.
+- Added the ability to choose whether or not to exponentiate marginal effects 
+for `coxsimInteract` with the `expMarg` argument.
 
 ## Version 0.8.4
 
@@ -187,8 +195,8 @@ improve performance if qi = "Hazard Rate".
 
 ## Version 0.7.1
 
-- Added an error message to `coxsimSpline` if white spaces are not entered before
-and after equal (=) signs in the `bspline` argument.
+- Added an error message to `coxsimSpline` if white spaces are not entered 
+before and after equal (=) signs in the `bspline` argument.
 
 ## Version 0.7
 
@@ -198,7 +206,8 @@ and after equal (=) signs in the `bspline` argument.
 interest. Also, bug fixes.
 
 - `spin = TRUE` works for quantities of interest when Xj - Xl = 0, i.e. in
-situations when all of the simulated quantities are 1 (or 0 for First Differences).
+situations when all of the simulated quantities are 1 (or 0 for First 
+Differences).
 
 - Documentation improvements.
 
