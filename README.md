@@ -5,7 +5,10 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 1.3.4 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/simPH)
+### Version 1.3.4 
+[![CRAN Version](http://www.r-pkg.org/badges/version/simPH)](http://cran.r-project.org/package=simPH)
+[![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) 
+![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/simPH)
 
 #### Please report any bugs to:
 
