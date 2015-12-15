@@ -1,7 +1,12 @@
+## Version 1.3.5
+
+- Minor documentation change removing links to ggplot2 documenation
+that no longer exists from version 2.0.0.
+
 ## Version 1.3.4
 
-- Internally, `melt` is loaded from the data.table package rather than 
-reshape2 (which is no longer a dependency). This should provide speed 
+- Internally, `melt` is loaded from the data.table package rather than
+reshape2 (which is no longer a dependency). This should provide speed
 improvements.
 
 ## Version 1.3.3
@@ -134,8 +139,8 @@ reviewer for the suggestion.
 
 ## Version 1.0
 
-- Added `type` argument to `simGG.spline`. Allows the user to plot using 
-`points`, `ribbons`, or `lines`. NOTE: the `ribbons` standalone argument is 
+- Added `type` argument to `simGG.spline`. Allows the user to plot using
+`points`, `ribbons`, or `lines`. NOTE: the `ribbons` standalone argument is
 depricated.
 
 - Added `SmoothSpline` argument to `simGG.simspline` to use smoothing splines on
@@ -152,7 +157,7 @@ simulations.
 
 ## Version 0.8.5
 
-- Added the ability to choose whether or not to exponentiate marginal effects 
+- Added the ability to choose whether or not to exponentiate marginal effects
 for `coxsimInteract` with the `expMarg` argument.
 
 ## Version 0.8.4
@@ -195,7 +200,7 @@ improve performance if qi = "Hazard Rate".
 
 ## Version 0.7.1
 
-- Added an error message to `coxsimSpline` if white spaces are not entered 
+- Added an error message to `coxsimSpline` if white spaces are not entered
 before and after equal (=) signs in the `bspline` argument.
 
 ## Version 0.7
@@ -206,7 +211,7 @@ before and after equal (=) signs in the `bspline` argument.
 interest. Also, bug fixes.
 
 - `spin = TRUE` works for quantities of interest when Xj - Xl = 0, i.e. in
-situations when all of the simulated quantities are 1 (or 0 for First 
+situations when all of the simulated quantities are 1 (or 0 for First
 Differences).
 
 - Documentation improvements.

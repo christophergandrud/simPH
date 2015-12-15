@@ -1,6 +1,6 @@
 #' Plot simulated penalised spline hazards from Cox Proportional Hazards Models
 #'
-#' \code{simGG.simspline} uses \link{ggplot2} to plot
+#' \code{simGG.simspline} uses ggplot2 to plot
 #' quantities of interest from \code{simspline} objects, including relative
 #' hazards, first differences, hazard ratios, and hazard rates.
 #'
@@ -34,16 +34,16 @@
 #' hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if
 #' \code{qi = "Relative Hazard"} or \code{qi = "First Difference"}.
 #' @param lsize size of the smoothing line. Default is 1. See
-#' \code{\link{ggplot2}}.
+#' \code{ggplot2}.
 #' @param pcolour character string colour of the simulated points or ribbons
 #' (when there are not multiple sets of simulations). Default is hexadecimal
 #' colour \code{pcolour = '#A6CEE3'}. Only relevant if
 #' \code{qi = "Relative Hazard"} or \code{qi = "First Difference"} or
 #' \code{qi = "Hazard Rate"} with facets.
 #' @param psize size of the plotted simulation points. Default is
-#' \code{psize = 1}. See \code{\link{ggplot2}}.
+#' \code{psize = 1}. See \code{ggplot2}.
 #' @param alpha numeric. Alpha (e.g. transparency) for the points, lines, or
-#' ribbons. Default is \code{alpha = 0.2}. See \code{\link{ggplot2}}. Note, if
+#' ribbons. Default is \code{alpha = 0.2}. See \code{ggplot2}. Note, if
 #' \code{type = "lines"} or \code{type = "points"} then \code{alpah} sets the
 #' maximum value per line or point at the center of the distribution. Lines or
 #' points further from the center are more transparent the further they get
@@ -135,7 +135,7 @@
 #' }
 #'
 #' @seealso \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},
-#' \code{\link{ggplot2}}
+#' \code{ggplot2}
 #'
 #'
 #' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating

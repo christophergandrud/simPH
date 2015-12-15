@@ -1,7 +1,7 @@
 #' Plot simulated polynomial quantities of interest from Cox Proportional
 #' Hazards Models
 #'
-#' \code{simGG.simpoly} uses \link{ggplot2} to plot simulated relative
+#' \code{simGG.simpoly} uses ggplot2 to plot simulated relative
 #' quantities of interest from a \code{simpoly} class object.
 #' @param obj a \code{simpoly} class object.
 #' @param xlab a label for the plot's x-axis.
@@ -31,14 +31,14 @@
 #' hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if
 #' \code{qi = "First Difference"}.
 #' @param lsize size of the smoothing line. Default is 1. See
-#' \code{\link{ggplot2}}.
+#' \code{ggplot2}.
 #' @param pcolour character string colour of the simulated points or ribbons
 #' (when there are not multiple sets of simulations). Default is hexadecimal
 #' colour \code{pcolour = '#A6CEE3'}.
 #' @param psize size of the plotted simulation points. Default is
-#' \code{psize = 1}. See \code{\link{ggplot2}}.
+#' \code{psize = 1}. See \code{ggplot2}.
 #' @param alpha numeric. Alpha (e.g. transparency) for the points, lines, or
-#' ribbons. Default is \code{alpha = 0.2}. See \code{\link{ggplot2}}. Note, if
+#' ribbons. Default is \code{alpha = 0.2}. See \code{ggplot2}. Note, if
 #' \code{type = "lines"} or \code{type = "points"} then \code{alpah} sets the
 #' maximum value per line or point at the center of the distribution. Lines or
 #' points further from the center are more transparent the further they get
@@ -94,10 +94,10 @@
 #' simGG(Sim3, type = 'lines')
 #' }
 #'
-#' @details Uses \link{ggplot2} to plot the quantities of interest from
+#' @details Uses ggplot2 to plot the quantities of interest from
 #' \code{simpoly} objects.
 #'
-#' @seealso \code{\link{coxsimPoly}} and \code{\link{ggplot2}}
+#' @seealso \code{\link{coxsimPoly}} and \code{ggplot2}
 #'
 #' @return a \code{gg} \code{ggplot} class object
 #'

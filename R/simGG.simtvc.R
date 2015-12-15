@@ -1,9 +1,9 @@
 #' Plot simulated time-interactive hazard ratios or stratified time-interactive
 #' hazard rates from Cox Proportional Hazards Models
 #'
-#' \code{simGG.simtvc} uses \link{ggplot2} to plot the simulated hazards from a
+#' \code{simGG.simtvc} uses ggplot2 to plot the simulated hazards from a
 #' \code{simtvc} class object created by \code{\link{coxsimtvc}} using
-#' \link{ggplot2}.
+#' ggplot2.
 #' @param obj a \code{simtvc} class object
 #' @param from numeric time to start the plot from.
 #' @param to numeric time to plot to.
@@ -21,11 +21,11 @@
 #' \code{legend = FALSE}. See the \code{\link{discrete_scale}} for more details.
 #' @param leg.name name of the legend (if applicable).
 #' @param lsize size of the smoothing line. Default is 1. See
-#' \code{\link{ggplot2}}.
+#' \code{ggplot2}.
 #' @param psize size of the plotted simulation points. Default is
-#' \code{psize = 1}. See \code{\link{ggplot2}}.
+#' \code{psize = 1}. See \code{ggplot2}.
 #' @param alpha numeric. Alpha (e.g. transparency) for the points, lines, or
-#' ribbons. Default is \code{alpha = 0.2}. See \code{\link{ggplot2}}. Note, if
+#' ribbons. Default is \code{alpha = 0.2}. See \code{ggplot2}. Note, if
 #' \code{type = "lines"} or \code{type = "points"} then \code{alpah} sets the
 #' maximum value per line or point at the center of the distribution. Lines or
 #' points further from the center are more transparent the further they get

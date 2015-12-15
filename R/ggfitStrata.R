@@ -1,7 +1,7 @@
 #' Graph fitted stratified survival curves from Cox Proportional Hazards models
 #'
 #' \code{ggfitStrata} graphs fitted survival curves created with
-#' \code{\link{survfit}} using \link{ggplot2}.
+#' \code{\link{survfit}} using ggplot2.
 #'
 #' @param obj a \code{survfit} object.
 #' @param byStrata logical, whether or not you want to include all of the
@@ -17,7 +17,7 @@
 #' (a bluish hexadecimal colour)
 #'
 #' @description This function largely improves \code{\link{plot.survfit}}. It
-#' plots the curves using \link{ggplot2} rather than base R graphics. One major
+#' plots the curves using ggplot2 rather than base R graphics. One major
 #' advantage is the ability to split the survival curves into multiple plots and
 #' arrange them in a grid. This makes it easier to examine many strata at once.
 #' Otherwise they can be very bunched up.
@@ -40,7 +40,7 @@
 #' # Plot strata in a grid
 #' ggfitStrata(M1Fit, byStrata = TRUE)
 #' }
-#' @seealso \code{\link{survfit}}, \code{\link{ggplot2}} and
+#' @seealso \code{\link{survfit}}, \code{ggplot2} and
 #' \code{\link{strata}}
 #' @import ggplot2
 #' @importFrom gridExtra grid.arrange

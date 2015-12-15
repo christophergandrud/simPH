@@ -1,7 +1,7 @@
 #' Plot simulated linear multiplicative interactions from Cox Proportional
 #' Hazards Models
 #'
-#' \code{simGG.siminteract} uses \link{ggplot2} to plot the quantities of
+#' \code{simGG.siminteract} uses ggplot2 to plot the quantities of
 #' interest from \code{siminteract} objects, including marginal effects, first
 #' differences, hazard ratios, and hazard rates.
 #'
@@ -33,14 +33,14 @@
 #' hexadecimal colour \code{lcolour = '#2B8CBE'}. Only relevant if
 #' \code{qi = "Marginal Effect"}.
 #' @param lsize size of the smoothing line. Default is 1. See
-#' \code{\link{ggplot2}}.
+#' \code{ggplot2}.
 #' @param pcolour character string colour of the simulated points or ribbons
 #' (when there are not multiple sets of simulations). Default is hexadecimal
 #' colour \code{pcolour = '#A6CEE3'}.
 #' @param psize size of the plotted simulation points. Default is
-#' \code{psize = 1}. See \code{\link{ggplot2}}.
+#' \code{psize = 1}. See \code{ggplot2}.
 #' @param alpha numeric. Alpha (e.g. transparency) for the points, lines, or
-#' ribbons. Default is \code{alpha = 0.2}. See \code{\link{ggplot2}}. Note, if
+#' ribbons. Default is \code{alpha = 0.2}. See \code{ggplot2}. Note, if
 #' \code{type = "lines"} or \code{type = "points"} then \code{alpah} sets the
 #' maximum value per line or point at the center of the distribution. Lines or
 #' points further from the center are more transparent the further they get
@@ -110,7 +110,7 @@
 #' simGG(Sim4, to = 150, type = 'lines', legend = FALSE)
 #' }
 #'
-#' @details Uses \link{ggplot2} to plot the quantities of interest from
+#' @details Uses ggplot2 to plot the quantities of interest from
 #' \code{siminteract} objects, including marginal effects, first differences,
 #' hazard ratios, and hazard rates. If there are multiple strata, the quantities
 #' of interest will be plotted in a grid by strata.
@@ -125,7 +125,7 @@
 #'
 #'
 #' @seealso \code{\link{coxsimInteract}}, \code{\link{simGG.simlinear}},
-#' and \code{\link{ggplot2}}
+#' and \code{ggplot2}
 #'
 #' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating
 #' Estimates from Cox Proportional Hazard Models Including for Interactive and
