@@ -23,23 +23,30 @@
 #' Otherwise they can be very bunched up.
 #'
 #' Note: the strata legend labels need to be changed manually (see
-#' \code{revalue}) in the \code{survfit} object with the \code{strata} 
+#' \code{revalue}) in the \code{survfit} object with the \code{strata}
 #' component.
 #'
 #' @examples
-#' \dontrun{
-#' # Load survival
+#' # Load packages
 #' library(survival)
+#' library(simPH)
+#' 
 #' # Subset data
 #' bladder1 <- bladder[bladder$enum < 5, ]
-#' # Estimate coxph model
-#' M1 <- coxph(Surv(stop, event) ~ (rx + size + number) * strata(enum) +
-#' cluster(id), bladder1)
-#' # Survfit
+#' 
+#' # Estimate coxph model (note that this model is for code illustration only)
+#' M1 <- coxph(Surv(stop, event) ~ (rx + size + number) + strata(enum) +
+#'                 cluster(id), bladder1)
+#' 
+#' # Find predicted values
 #' M1Fit <- survfit(M1)
+#' 
 #' # Plot strata in a grid
 #' ggfitStrata(M1Fit, byStrata = TRUE)
-#' }
+#' 
+#' # Plot all in one
+#' ggfitStrata(M1Fit, byStrata = FALSE)
+#' 
 #' @seealso \code{\link{survfit}}, \code{ggplot2} and
 #' \code{\link{strata}}
 #' @import ggplot2
@@ -49,36 +56,36 @@
 ggfitStrata <- function(obj, byStrata = FALSE, xlab = "", ylab = "", title = "",
                         lcolour = "#2C7FB8", rcolour = "#2C7FB8")
 {
-  Strata <- Lower <- Upper <- StrataC <- Time <- Survival <- NULL
-  sFit <- obj
-  time <- sFit$time
-  lower <- sFit$lower
-  upper <- sFit$upper
-  S <- sFit$surv
-  strata <- sFit$strata
-  strata <- factor(rep(names(strata), strata), levels = names(strata))
-  TempData <- data.frame(Time = time, Lower = lower,
-                         Upper = upper, Survival = S,
-                         Strata = strata)
+    Strata <- Lower <- Upper <- StrataC <- Time <- Survival <- NULL
+    sFit <- obj
+    time <- sFit$time
+    lower <- sFit$lower
+    upper <- sFit$upper
+    S <- sFit$surv
+    strata <- sFit$strata
+    strata <- factor(rep(names(strata), strata), levels = names(strata))
+    TempData <- data.frame(Time = time, Lower = lower,
+                            Upper = upper, Survival = S,
+                            Strata = strata)
 
-  if (byStrata == FALSE){
-    ggplot(data = TempData, aes(x = Time,
-                         y = Survival,
-                         color = Strata,
-                         fill = Strata)) +
-      geom_line() +
-      geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha = I(0.1)) +
-      xlab(xlab) + ylab(ylab) + ggtitle(title) +
-      theme_bw()
+    if (byStrata == FALSE){
+        ggplot(data = TempData, aes(x = Time,
+                                     y = Survival,
+                                     color = Strata,
+                                     fill = Strata)) +
+        geom_line() +
+        geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha = I(0.1)) +
+        xlab(xlab) + ylab(ylab) + ggtitle(title) +
+        theme_bw()
 
-  } else if (byStrata == TRUE){
-    TempData$StrataC <- gsub("=", "", TempData$Strata)
-    TempData$StrataC <- gsub(" ", "", TempData$StrataC)
-    eachStrata <- unique(TempData$StrataC)
-    p <- list()
-    for (i in eachStrata){
-      SubData <- subset(TempData, StrataC == i)
-      p[[i]] <- ggplot(data = SubData, aes(x = Time,
+    } else if (byStrata == TRUE){
+        TempData$StrataC <- gsub("=", "", TempData$Strata)
+        TempData$StrataC <- gsub(" ", "", TempData$StrataC)
+        eachStrata <- unique(TempData$StrataC)
+        p <- list()
+        for (i in eachStrata){
+        SubData <- subset(TempData, StrataC == i)
+        p[[i]] <- ggplot(data = SubData, aes(x = Time,
                                            y = Survival)) +
                                    geom_line(colour = lcolour) +
                                    geom_ribbon(aes(ymin = Lower,
@@ -89,7 +96,8 @@ ggfitStrata <- function(obj, byStrata = FALSE, xlab = "", ylab = "", title = "",
                                    xlab("") + ylab("") +
                                    ggtitle(paste(i, "\n")) +
                                    theme_bw()
+        }
+        Grid <- do.call(grid.arrange, c(p, top = title, bottom = xlab,
+                        left = ylab))
     }
-  Grid <- do.call(grid.arrange, c(p, main = title, sub = xlab, left = ylab))
-  }
 }

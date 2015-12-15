@@ -1,5 +1,8 @@
 ## Version 1.3.5
 
+- Fixed issues with `ggfitStrata` and its documentation caused by changes to
+the survival and gridExtra packages.
+
 - Minor documentation change removing links to ggplot2 documenation
 that no longer exists from version 2.0.0.
 

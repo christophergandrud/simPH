@@ -35,7 +35,7 @@ arrange them in a grid. This makes it easier to examine many strata at once.
 Otherwise they can be very bunched up.
 
 Note: the strata legend labels need to be changed manually (see
-\code{revalue}) in the \code{survfit} object with the \code{strata} 
+\code{revalue}) in the \code{survfit} object with the \code{strata}
 component.
 }
 \details{
@@ -43,19 +43,26 @@ component.
 \code{\link{survfit}} using ggplot2.
 }
 \examples{
-\dontrun{
-# Load survival
+# Load packages
 library(survival)
+library(simPH)
+
 # Subset data
 bladder1 <- bladder[bladder$enum < 5, ]
-# Estimate coxph model
-M1 <- coxph(Surv(stop, event) ~ (rx + size + number) * strata(enum) +
-cluster(id), bladder1)
-# Survfit
+
+# Estimate coxph model (note that this model is for code illustration only)
+M1 <- coxph(Surv(stop, event) ~ (rx + size + number) + strata(enum) +
+                cluster(id), bladder1)
+
+# Find predicted values
 M1Fit <- survfit(M1)
+
 # Plot strata in a grid
 ggfitStrata(M1Fit, byStrata = TRUE)
-}
+
+# Plot all in one
+ggfitStrata(M1Fit, byStrata = FALSE)
+
 }
 \seealso{
 \code{\link{survfit}}, \code{ggplot2} and
