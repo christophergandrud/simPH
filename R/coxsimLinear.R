@@ -171,8 +171,10 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
         Simb$QI<- exp((Simb$Xj - Simb$Xl) * Simb$Coef)
     }
     else if (qi == "Hazard Rate"){
-        Xl <- NULL
-        message("Xl is ignored.")
+        if (!is.null(Xl)) {
+            Xl <- NULL
+            message("Xl is ignored.")
+        }
 
         if (isTRUE(MeansMessage)){
           message("All variables values other than b are fitted at 0.")

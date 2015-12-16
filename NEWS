@@ -1,3 +1,8 @@
+## Version 1.3.6
+
+- Improve sim function messages so that `Xl` message
+is only shown if `Xl` is incorrectly specified.
+
 ## Version 1.3.5
 
 - Fixed issues with `ggfitStrata` and its documentation caused by changes to

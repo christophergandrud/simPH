@@ -238,8 +238,10 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL,
             Simb$QI <- exp((Simb$Xj - Simb$Xl) * Simb$CombCoef)
         }
     } else if (qi == "Hazard Rate"){
-        Xl <- NULL
-        message("Xl is ignored.")
+        if (!is.null(Xl)) {
+            Xl <- NULL
+            message("Xl is ignored.")
+        }
         Xs <- data.frame(Xj)
         Xs$HRValue <- paste(Xs[, 1])
         Simb <- merge(TVSim, Xs)
