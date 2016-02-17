@@ -163,9 +163,9 @@ Box-Steffensmeier, Janet M, and Suzanna De Boef. 2006. [“Repeated Events Survi
 To learn more about shortest probability intervals (and also for the source of
 the code that made this possible in **simPH**) see:
 
-Liu, Y., Gelman, A., & Zheng, T. (2013).
-["Simulation-efficient Shortest Probablility Intervals."](http://arxiv.org/pdf/1302.2142v1.pdf)
-*Arvix*.
+Liu, Y., Gelman, A., & Zheng, T. (2015).
+["Simulation-efficient Shortest Probablility Intervals."](http://www.stat.columbia.edu/~gelman/research/published/spin.pdf)
+*Statistics and Computing* 25:809-819.
 
 **Also good:** Hyndman, R. J. (1996).
 ["Computing and Graphing Highest Density Regions."](http://www.jstor.org/stable/10.2307/2684423)
