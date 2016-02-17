@@ -5,8 +5,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 1.3.6 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) [![CRAN Version](http://www.r-pkg.org/badges/version/simPH)](http://cran.r-project.org/package=simPH) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/simPH)
-![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/simPH)
+### Version 1.3.6 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) [![CRAN Version](http://www.r-pkg.org/badges/version/simPH)](http://cran.r-project.org/package=simPH) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/simPH)![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/simPH)
 
 #### Please report any bugs to:
 
@@ -21,7 +20,7 @@ non-proportional hazards, as well as stratified survival curves from Cox
 Proportional Hazard models.
 
 For more information plus examples, please see the
-[description paper](http://ssrn.com/abstract=2318977) in the
+[description paper](https://www.jstatsoft.org/article/view/v065i03) in the
 [Journal of Statistical Software](http://www.jstatsoft.org/).
 
 To cite the paper please use:
