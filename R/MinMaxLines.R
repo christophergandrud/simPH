@@ -63,32 +63,32 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
     df <- group_by_(df, .dots = byVars)
 
     if (!isTRUE(hr)){
-        Linesdf <- mutate(df, Median = median(QI))
-        Linesdf <- mutate(Linesdf, Max = max(QI))
-        Linesdf <- mutate(Linesdf, Min = min(QI))
-        Linesdf <- mutate(Linesdf, Lower50 = quantile(QI, 0.25))
-        Linesdf <- mutate(Linesdf, Upper50 = quantile(QI, 0.75))
+        Linesdf <- mutate(df, Median = median(QI),
+                        Max = max(QI),
+                        Min = min(QI),
+                        Lower50 = quantile(QI, 0.25),
+                        Upper50 = quantile(QI, 0.75))
 
-        Linesdf <- distinct_(Linesdf, .dots = byVars)
+        Linesdf <- distinct_(Linesdf, .dots = byVars, .keep_all = TRUE)
     }
     else if (isTRUE(hr) & !isTRUE(strata)){
-        Linesdf <- mutate(df, Median = median(HRate))
-        Linesdf <- mutate(Linesdf, Max = max(HRate))
-        Linesdf <- mutate(Linesdf, Min = min(HRate))
-        Linesdf <- mutate(Linesdf, Lower50 = quantile(HRate, 0.25))
-        Linesdf <- mutate(Linesdf, Upper50 = quantile(HRate, 0.75))
+        Linesdf <- mutate(df, Median = median(HRate),
+                          Max = max(QI),
+                          Min = min(QI),
+                          Lower50 = quantile(QI, 0.25),
+                          Upper50 = quantile(QI, 0.75))
 
-        Linesdf <- distinct_(Linesdf, .dots = c(1, 3))
+        Linesdf <- distinct_(Linesdf, .dots = c(1, 3), .keep_all = TRUE)
         #Linesdf <- Linesdf[!duplicated(Linesdf[, c(1, 3)]), ]
     }
     else if (isTRUE(hr) & isTRUE(strata)){
-        Linesdf <- mutate(df, Median = median(HRate))
-        Linesdf <- mutate(Linesdf, Max = max(HRate))
-        Linesdf <- mutate(Linesdf, Min = min(HRate))
-        Linesdf <- mutate(Linesdf, Lower50 = quantile(HRate, 0.25))
-        Linesdf <- mutate(Linesdf, Upper50 = quantile(HRate, 0.75))
+        Linesdf <- mutate(df, Median = median(HRate),
+                        Max = max(QI),
+                        Min = min(QI),
+                        Lower50 = quantile(QI, 0.25),
+                        Upper50 = quantile(QI, 0.75))
 
-        Linesdf <- distinct(Linesdf, Time, HRValue, Strata)
+        Linesdf <- distinct(Linesdf, Time, HRValue, Strata, .keep_all = TRUE)
         #Linesdf <- Linesdf[!duplicated(
         #                    Linesdf[, c("Time", "HRValue", "Strata")]), ]
     }
