@@ -5,7 +5,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 1.3.6 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) [![CRAN Version](http://www.r-pkg.org/badges/version/simPH)](http://cran.r-project.org/package=simPH) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/simPH)
+### Version 1.3.6 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) [![CRAN Version](http://www.r-pkg.org/badges/version/simPH)](http://cran.r-project.org/package=simPH) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/simPH)![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/simPH)
 
 #### Please report any bugs to:
 
@@ -20,7 +20,7 @@ non-proportional hazards, as well as stratified survival curves from Cox
 Proportional Hazard models.
 
 For more information plus examples, please see the
-[description paper](http://ssrn.com/abstract=2318977) in the
+[description paper](https://www.jstatsoft.org/article/view/v065i03) in the
 [Journal of Statistical Software](http://www.jstatsoft.org/).
 
 To cite the paper please use:
@@ -163,9 +163,9 @@ Box-Steffensmeier, Janet M, and Suzanna De Boef. 2006. [“Repeated Events Survi
 To learn more about shortest probability intervals (and also for the source of
 the code that made this possible in **simPH**) see:
 
-Liu, Y., Gelman, A., & Zheng, T. (2013).
-["Simulation-efficient Shortest Probablility Intervals."](http://arxiv.org/pdf/1302.2142v1.pdf)
-*Arvix*.
+Liu, Y., Gelman, A., & Zheng, T. (2015).
+["Simulation-efficient Shortest Probablility Intervals."](http://www.stat.columbia.edu/~gelman/research/published/spin.pdf)
+*Statistics and Computing* 25:809-819.
 
 **Also good:** Hyndman, R. J. (1996).
 ["Computing and Graphing Highest Density Regions."](http://www.jstor.org/stable/10.2307/2684423)
