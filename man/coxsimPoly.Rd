@@ -61,7 +61,7 @@ with \code{\link{simGG}}.
 Simulates quantities of interest for polynomial covariate effects.
 For example if a nonlinear effect is modeled with a second order
 polynomial--i.e. \eqn{\beta_{1}x_{i} + \beta_{2}x_{i}^{2}}{\beta[1]x[i] +
-\beta[2]x[i]^2}--we can once again draw \eqn{n} simulations from the
+\beta[2]x[i]^2}--we can draw \eqn{n} simulations from the
 multivariate normal distribution for both \eqn{\beta_{1}}{\beta[1]} and
 \eqn{\beta_{2}}{\beta[2]}. Then we simply calculate quantities of interest
 for a range of values and plot the results as before. For example, we find

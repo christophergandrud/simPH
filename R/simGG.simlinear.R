@@ -181,7 +181,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
     # Plot points
     if (type == 'points'){
         if (qi == "Hazard Rate"){
-          if (!is.null(obj$Strata)) {
+          if ('strata' %in% names(obj)) {
             p <- ggplot(obj, aes(x = Time, y = HRate,
                         colour = factor(HRValue))) +
                     facet_grid(. ~ Strata) +
@@ -190,7 +190,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
                     scale_alpha_continuous(range = c(0, alpha), guide = FALSE) +
                     scale_colour_brewer(palette = spalette, name = leg.name,
                         guide = legend)
-        } else if (is.null(obj$Strata)){
+        } else if (!('strata' %in% names(obj))){
             p <- ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
                     geom_point(shape = 21, aes(alpha = PercRank),
                                 size = psize) +
@@ -220,7 +220,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
     # Plot lines
     else if (type == 'lines'){
         if (qi == "Hazard Rate"){
-          if (!is.null(obj$Strata)) {
+          if ('strata' %in% names(obj)) {
             p <- ggplot(obj, aes(x = Time, y = HRate,
                         colour = factor(HRValue))) +
                     facet_grid(. ~ Strata) +
@@ -231,7 +231,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
                     scale_colour_brewer(palette = spalette, name = leg.name,
                                         guide = legend) +
                     scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
-        } else if (is.null(obj$Strata)){
+        } else if (!('strata' %in% names(obj))){
             p <- ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
                     geom_line(aes(group = interaction(SimID, factor(HRValue)),
                                   alpha = PercRank), shape = 21, size = psize) +
@@ -264,7 +264,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
     else if (type == 'ribbons'){
         suppressWarnings(
         if (qi == "Hazard Rate"){
-            if (!is.null(obj$Strata)) {
+            if ('strata' %in% names(obj)) {
                 obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
                 .e <- environment()
                 p <- ggplot(obj, aes(x = Time, y = HRate,
@@ -280,7 +280,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
                                             guide = legend) +
                         scale_fill_brewer(palette = spalette, name = leg.name,
                                           guide = legend)
-            } else if (is.null(obj$Strata)){
+            } else if (!('strata' %in% names(obj))){
                 obj <- MinMaxLines(df = obj, hr = TRUE)
                 .e <- environment()
                 p <- ggplot(obj, aes(Time, Median, colour = factor(HRValue),

@@ -254,9 +254,9 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
               message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
             }
             Simb$QI <- Simb$hazard * Simb$HR
-            if (is.null(Simb$strata)) {
+            if (!('strata' %in% names(Simb))) {
               Simb <- Simb[, list(SimID, time, QI, HRValue)]
-            } else if (!is.null(Simb$strata)) {
+            } else if ('strata' %in% names(Simb)) {
               Simb <- Simb[, list(SimID, time, QI, HRValue, strata)]
             }
             Simb <- data.frame(Simb)
@@ -324,9 +324,9 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
                   "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
         }
         Simb$QI <- Simb$hazard * Simb$HR
-        if (is.null(Simb$strata)) {
+        if (!('strata' %in% names(Simb))) {
           Simb <- Simb[, list(time, QI, HRValue)]
-        } else if (!is.null(Simb$strata)) {
+        } else if ('strata' %in% names(Simb)) {
           Simb <- Simb[, list(time, QI, HRValue, strata)]
         }
         Simb <- data.frame(Simb)
@@ -348,13 +348,13 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
 
     # Final clean up
     if (qi == "Hazard Rate" & !isTRUE(means)) {
-        if (is.null(obj$strata)) {
+        if (!('strata' %in% names(obj))) {
             SimbPercSub <- data.frame(SimbPerc$SimID,
                                       SimbPerc$time, SimbPerc$QI,
                                       SimbPerc$HRValue)
             names(SimbPercSub) <- c("SimID", "Time", "HRate",
                                     "HRValue")
-        } else if (!is.null(SimbPerc$strata)) {
+        } else if ('strata' %in% names(SimbPerc)) {
         SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
                         SimbPerc$QI, SimbPerc$strata,
                         SimbPerc$HRValue)
@@ -362,12 +362,12 @@ coxsimInteract <- function(obj, b1, b2, qi = "Marginal Effect", X1 = NULL,
                                 "Strata", "HRValue")
         }
     } else if (qi == "Hazard Rate" & isTRUE(means)) {
-        if (is.null(obj$strata)) {
+        if (!('strata' %in% names(obj))) {
             SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI,
                                       SimbPerc$HRValue)
             names(SimbPercSub) <- c("Time", "HRate",
                                     "HRValue")
-        } else if (!is.null(SimbPerc$strata)) {
+        } else if ('strata' %in% names(SimbPerc)) {
         SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
                         SimbPerc$QI, SimbPerc$strata,
                         SimbPerc$HRValue)

@@ -1,3 +1,11 @@
+## Version 1.3.7
+
+- Enable compatability with dplyr version 0.4.3.
+
+- Fixes bugs when finding hazard rates.
+
+- Minor internal code readability improvements.
+
 ## Version 1.3.6
 
 - Improve sim function messages so that `Xl` message
@@ -40,7 +48,7 @@ functionality in a way that could break your code.
 
 - `simGG` now includes rug plots.
 
-    + Note that for `simGG.simtvc` that rug plots are not produced. All x-axes
+    + Note that for `simGG.simtvc` rug plots are not produced. All x-axes
 are "Time".
 
 - `simGG` default type is now `ribbons`, rather than `points`.
@@ -266,7 +274,6 @@ Minor bug fix for `ci` argument.
 ## Version 0.04.6.1
 
 Minor change: now line drawn.
-
 
 ## Version 0.04.6
 

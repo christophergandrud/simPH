@@ -39,7 +39,7 @@
 #' @details Simulates quantities of interest for polynomial covariate effects.
 #' For example if a nonlinear effect is modeled with a second order
 #' polynomial--i.e. \eqn{\beta_{1}x_{i} + \beta_{2}x_{i}^{2}}{\beta[1]x[i] +
-#' \beta[2]x[i]^2}--we can once again draw \eqn{n} simulations from the
+#' \beta[2]x[i]^2}--we can draw \eqn{n} simulations from the
 #' multivariate normal distribution for both \eqn{\beta_{1}}{\beta[1]} and
 #' \eqn{\beta_{2}}{\beta[2]}. Then we simply calculate quantities of interest
 #' for a range of values and plot the results as before. For example, we find
@@ -99,6 +99,7 @@
 #' @importFrom MASS mvrnorm
 #' @importFrom stats vcov model.frame
 #' @importFrom survival basehaz
+#' @importFrom dplyr inner_join as_data_frame
 #' @export
 
 coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
@@ -209,9 +210,9 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
             "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
         }
         Simb$QI <- Simb$hazard * Simb$HR
-        if (is.null(Simb$strata)){
+        if (!('strata' %in% names(Simb))){
             Simb <- Simb[, list(SimID, time, Xjl, QI)]
-        } else if (!is.null(Simb$strata)){
+        } else if ('strata' %in% names(Simb)){
         Simb <- Simb[, list(SimID, time, Xjl, QI, strata)]
         }
         Simb <- data.frame(Simb)
@@ -232,11 +233,11 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
 
     # Clean up
     if (qi == "Hazard Rate"){
-        if (is.null(SimbPerc$strata)){
+        if (!('strata' %in% names(SimbPerc))){
             SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
                                     SimbPerc$QI, SimbPerc$HRValue)
             names(SimbPercSub) <- c("SimID", "Time", "HRate", "HRValue")
-        } else if (!is.null(SimbPerc$strata)) {
+        } else if ('strata' %in% names(SimbPerc)) {
             SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
                                 SimbPerc$QI, SimbPerc$strata, SimbPerc$HRValue)
             names(SimbPercSub) <- c("SimID", "Time", "HRate", "Strata",
@@ -244,6 +245,9 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
         }
     } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" |
             qi == "First Difference"){
+        merger_xj <- data.frame(Xj = Xj, Xjl = Xjl)
+        SimbPerc <- inner_join(SimbPerc, merger_xj, by = 'Xjl') %>%
+                        as_data_frame
         SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
         names(SimbPercSub) <- c("SimID", "Xj", "QI")
     }

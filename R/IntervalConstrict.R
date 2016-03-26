@@ -25,9 +25,9 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi,
                               extremesDrop = extremesDrop)
 {
     if (qi == "Hazard Rate" & isTRUE(spin)){
-    	message(paste("spin currently unsupported for Hazard Rates.",
+        message(paste("spin currently unsupported for Hazard Rates.",
                       "\nThe central interval will be found instead."))
-    	spin <- FALSE
+        spin <- FALSE
     }
     if (isTRUE(extremesDrop)){
         SimbNoExt <- Simb[!is.infinite(Simb$QI), ]

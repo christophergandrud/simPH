@@ -219,7 +219,7 @@ simGG.siminteract <- function(obj, from = NULL,
     # Plot points
     if (type == 'points'){
         if (qi == "Hazard Rate"){
-            if (!is.null(obj$strata)) {
+            if ('strata' %in% names(obj)) {
                 obj$HRValue <- as.factor(obj$HRValue)
                 .e <- environment()
                 p <- ggplot(obj, aes(x = Time, y = HRate,
@@ -230,7 +230,7 @@ simGG.siminteract <- function(obj, from = NULL,
                     scale_colour_brewer(palette = spalette, name = leg.name,
                                         guide = legend) +
                     scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
-            } else if (is.null(obj$strata)){
+            } else if (!('strata' %in% names(obj))){
                 obj$HRValue <- as.factor(obj$HRValue)
                 .e <- environment()
                 p <- ggplot(obj, aes(x = Time, y = HRate,
@@ -295,7 +295,7 @@ simGG.siminteract <- function(obj, from = NULL,
     # Plot lines
     else if (type == 'lines'){
         if (qi == "Hazard Rate"){
-            if (!is.null(obj$strata)) {
+            if ('strata' %in% names(obj)) {
                 obj$HRValue <- as.factor(obj$HRValue)
                 .e <- environment()
                 p <- ggplot(obj, aes(x = Time, y = HRate, colour = HRValue),
@@ -309,7 +309,7 @@ simGG.siminteract <- function(obj, from = NULL,
                                             guide = legend) +
                         scale_alpha_continuous(range = c(0, alpha),
                             guide = FALSE)
-            } else if (is.null(obj$strata)){
+            } else if (!('strata' %in% names(obj))){
                 obj$HRValue <- as.factor(obj$HRValue)
                 .e <- environment()
                 p <- ggplot(obj, aes(x = Time, y = HRate, colour = HRValue),
@@ -374,7 +374,7 @@ simGG.siminteract <- function(obj, from = NULL,
     else if (type == 'ribbons'){
         suppressWarnings(
         if (qi == "Hazard Rate"){
-            if (!is.null(obj$strata)) {
+            if ('strata' %in% names(obj)) {
                 obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
                 obj$HRValue <- as.factor(obj$HRValue)
                 .e <- environment()
@@ -391,7 +391,7 @@ simGG.siminteract <- function(obj, from = NULL,
                                             guide = legend) +
                         scale_fill_brewer(palette = spalette, name = leg.name,
                                           guide = legend)
-            } else if (is.null(obj$Strata)){
+            } else if (!('strata' %in% names(obj))){
                 obj <- MinMaxLines(df = obj, hr = TRUE)
                 obj$HRValue <- as.factor(obj$HRValue)
                 .e <- environment()

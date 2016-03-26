@@ -170,7 +170,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
     # Plot points
     if (type == 'points'){
         if (qi == "Hazard Rate"){
-            if (!is.null(obj$strata)) {
+            if ('strata' %in% names(obj)) {
             p <- ggplot(obj, aes(x = Time, y = HRate,
                         colour = factor(HRValue))) +
                     geom_point(aes(alpha = PercRank), size = psize) +
@@ -179,7 +179,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                     scale_colour_brewer(palette = spalette, name = leg.name,
                                       guide = legend) +
                     scale_alpha_continuous(range = c(0, alpha), guide = FALSE)
-            } else if (is.null(obj$strata)){
+            } else if (!('strata' %in% names(obj))){
                 p <- ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
                     geom_point(shape = 21, aes(alpha = PercRank), size = psize) +
                     geom_smooth(method = method, size = lsize, se = FALSE) +
@@ -209,7 +209,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
     # Plot lines
     else if (type == 'lines'){
         if (qi == "Hazard Rate"){
-            if (!is.null(obj$strata)) {
+            if ('strata' %in% names(obj)) {
                 p <- ggplot(obj, aes(x = Time, y = HRate,
                         colour = factor(HRValue))) +
                         geom_line(aes(group = interaction(SimID,
@@ -222,7 +222,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                                 name = leg.name, guide = legend) +
                         scale_alpha_continuous(range = c(0, alpha),
                                 guide = FALSE)
-            } else if (is.null(obj$strata)){
+            } else if (!('strata' %in% names(obj))){
                 p <- ggplot(obj, aes(Time, HRate,
                         colour = factor(HRValue))) +
                         geom_line(aes(group = interaction(SimID,
@@ -257,7 +257,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
     else if (type == 'ribbons'){
         suppressWarnings(
         if (qi == "Hazard Rate"){
-            if (!is.null(obj$Strata)) {
+            if ('strata' %in% names(obj)) {
                 obj <- MinMaxLines(df = obj, hr = TRUE, strata = TRUE)
                 .e <- environment()
                 p <- ggplot(obj, aes(x = Time, y = HRate,
@@ -273,7 +273,7 @@ simGG.simpoly <- function(obj, from = NULL, to = NULL,
                             name = leg.name, guide = legend) +
                         scale_fill_brewer(palette = spalette,
                             name = leg.name, guide = legend)
-            } else if (is.null(obj$Strata)){
+            } else if (!('strata' %in% names(obj))){
                 obj <- MinMaxLines(df = obj, hr = TRUE)
                 .e <- environment()
                 p <- ggplot(obj, aes(Time, Median, colour = factor(HRValue),

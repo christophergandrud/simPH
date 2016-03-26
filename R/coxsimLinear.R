@@ -195,9 +195,9 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
           message(paste("There are", Rows, "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
         }
         Simb$QI <- Simb$hazard * Simb$HR
-        if (is.null(Simb$strata)){
+        if (!('strata' %in% names(Simb))){
           Simb <- Simb[, list(SimID, time, Xj, QI, HRValue)]
-        } else if (!is.null(Simb$strata)){
+        } else if ('strata' %in% names(Simb)){
           Simb <- Simb[, list(SimID, time, Xj, QI, HRValue, strata)]
         }
         Simb <- data.frame(Simb)
@@ -259,9 +259,9 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
                     "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
         }
         Simb$QI <- Simb$hazard * Simb$HR
-        if (is.null(Simb$strata)){
+        if (!('strata' %in% names(Simb))){
             Simb <- Simb[, list(time, Xj, QI, HRValue)]
-        } else if (!is.null(Simb$strata)){
+        } else if ('strata' %in% names(Simb)){
             Simb <- Simb[, list(time, Xj, QI, HRValue, strata)]
         }
         Simb <- data.frame(Simb)
@@ -282,12 +282,12 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
     # Final clean up
     # Subset simlinear object & create a data frame of important variables
     if (qi == "Hazard Rate" & !isTRUE(means)){
-        if (is.null(obj$strata)){
+        if (!('strata' %in% names(obj))){
             SimbPercSub <- data.frame(SimbPerc$SimID,
                                       SimbPerc$time, SimbPerc$QI,
                                       SimbPerc$HRValue)
             names(SimbPercSub) <- c("SimID", "Time", "HRate", "HRValue")
-        } else if (!is.null(SimbPerc$strata)) {
+        } else if ('strata' %in% names(SimbPerc)) {
             SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
                                     SimbPerc$QI, SimbPerc$strata,
                                     SimbPerc$HRValue)
@@ -295,11 +295,11 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
                                     "HRValue")
         }
     } else if (qi == "Hazard Rate" & isTRUE(means)){
-        if (is.null(obj$strata)){
+        if (!('strata' %in% names(obj))){
             SimbPercSub <- data.frame(SimbPerc$time, SimbPerc$QI,
                                       SimbPerc$HRValue)
             names(SimbPercSub) <- c("Time", "HRate", "HRValue")
-        } else if (!is.null(SimbPerc$strata)) {
+        } else if ('strata' %in% names(SimbPerc)) {
             SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
                                     SimbPerc$QI, SimbPerc$strata,
                                     SimbPerc$HRValue)

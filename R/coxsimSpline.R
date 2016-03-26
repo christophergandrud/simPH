@@ -288,7 +288,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
         Simb$HR <- exp(Simb$Xj * Simb$Coef)
         bfit <- basehaz(obj)
         ## Currently does not support strata
-        if (!is.null(bfit$strata)){
+        if ('strata' %in% names(obj)){
             stop("coxsimSpline currently does not support strata.",
                 call. = FALSE)
         }
@@ -305,9 +305,9 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
             "simulations. This may take awhile. Consider using nsim to reduce the number of simulations."))
         }
         Simb$QI <- Simb$hazard * Simb$HR
-        if (is.null(Simb$strata)){
+        if (!('strata' %in% names(Simb))){
             Simb <- Simb[, list(time, SimID, Xj, QI)]
-        } else if (!is.null(Simb$strata)){
+        } else if ('strata' %in% names(Simb)){
             Simb <- Simb[, list(time, SimID, Xj, QI, strata)]
         }
         Simb <- data.frame(Simb)
@@ -328,13 +328,13 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
     # Final clean up
     # Subset simspline object & create a data frame of important variables
     if (qi == "Hazard Rate"){
-        if (is.null(SimbPerc$strata)){
+        if (!('strata' %in% names(SimbPerc))){
             SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$time,
                 SimbPerc$QI, SimbPerc$Xj)
             names(SimbPercSub) <- c("SimID", "Time", "QI", "Xj")
         }
         # Currently does not support strata
-        else if (!is.null(SimbPerc$strata)) {
+        else if ('strata' %in% names(SimbPerc)) {
             stop("coxsimSpline currently doesn't support Hazard Rates when there are multiple stata. Sorry.",
                 call. = FALSE)
         }
