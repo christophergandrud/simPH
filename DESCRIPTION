@@ -20,7 +20,7 @@ Depends:
 License: GPL-3
 Imports:
     data.table (>= 1.9.6),
-    dplyr (>= 0.4.3),
+    dplyr (>= 0.4),
     ggplot2,
     gridExtra,
     lazyeval,
