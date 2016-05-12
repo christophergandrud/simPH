@@ -123,8 +123,8 @@ Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
 
 # Example with a categorical variable
 # Download data
-library(rio)
-hmohiv <- import("http://www.ats.ucla.edu/stat/r/examples/asa/hmohiv.csv")
+hmohiv <- read.csv("http://www.ats.ucla.edu/stat/r/examples/asa/hmohiv.csv",
+                     stringsAsFactors = FALSE)
 
 # Create category lables
 hmohiv$drug <- factor(hmohiv$drug, labels = c('not treated', 'treated'))
