@@ -1,3 +1,11 @@
+## Version 1.3.9
+
+- Fixed a bug when including rug plots with `simGG.siminteract`. Thanks to
+Ting Shuo Huang for reporting.
+
+- Corrected a bug in `simGG.siminteract` and `simGG.simlinear` where the
+`shape` parameter was incorrectly supplied to `geom_line`.
+
 ## Version 1.3.8
 
 - No longer suggests rio package. Thanks to Jan Gorecki.

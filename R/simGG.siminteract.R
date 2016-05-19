@@ -315,7 +315,7 @@ simGG.siminteract <- function(obj, from = NULL,
                 p <- ggplot(obj, aes(x = Time, y = HRate, colour = HRValue),
                         environment = .e) +
                         geom_line(aes(group = SimID, alpha = PercRank),
-                            shape = 21, size = psize) +
+                                    size = psize) +
                         geom_smooth(aes(group = HRValue),
                             method = method, size = lsize, se = FALSE) +
                         scale_colour_brewer(palette = spalette, name = leg.name,
@@ -446,7 +446,8 @@ simGG.siminteract <- function(obj, from = NULL,
 
     if (isTRUE(rug) & qi != 'Hazard Rate'){
         p <- p + geom_rug(data = rugger, aes(x = xaxis, y = QI), sides = "b",
-                    position = rug_position, colour = pcolour)
+                    position = rug_position, colour = pcolour, 
+                    inherit.aes = FALSE)
     }
     return(p)
 }

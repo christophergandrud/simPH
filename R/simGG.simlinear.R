@@ -234,7 +234,7 @@ simGG.simlinear <- function(obj, from = NULL, to = NULL, rug = TRUE,
         } else if (!('strata' %in% names(obj))){
             p <- ggplot(obj, aes(Time, HRate, colour = factor(HRValue))) +
                     geom_line(aes(group = interaction(SimID, factor(HRValue)),
-                                  alpha = PercRank), shape = 21, size = psize) +
+                                  alpha = PercRank), size = psize) +
                     geom_smooth(aes(colour = factor(HRValue)), method = method,
                                     size = lsize, se = FALSE) +
                     scale_colour_brewer(palette = spalette, name = leg.name,
