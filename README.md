@@ -5,7 +5,7 @@ simPH
 
 ### Christopher Gandrud
 
-### Version 1.3.8 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) [![CRAN Version](http://www.r-pkg.org/badges/version/simPH)](http://cran.r-project.org/package=simPH) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/simPH) ![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/simPH)
+### Version 1.3.9 [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) [![CRAN Version](http://www.r-pkg.org/badges/version/simPH)](http://cran.r-project.org/package=simPH) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/simPH) ![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/simPH)
 
 #### Please report any bugs to:
 
@@ -101,7 +101,7 @@ additional aesthetic attributes in the normal *ggplot2* way. See the
 continuous observations into equal interval continuous observations. This is
 useful to do before creating time interactions.
 
-    + See also the [SurvSetup](https://github.com/christophergandrud/SurvSetup) 
+    + See also the [SurvSetup](https://github.com/christophergandrud/SurvSetup)
     package for additional functions to set up your data for survival analysis.
 
 - `tvc`: a function for creating time interactions. Currently supports
