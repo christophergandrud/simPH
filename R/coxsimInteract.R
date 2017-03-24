@@ -1,4 +1,4 @@
-#' Simulate quantities of interest for linear multiplicative interactions */
+#' Simulate quantities of interest for linear multiplicative interactions
 #' from Cox Proportional Hazards models
 #'
 #' \code{coxsimInteract} simulates quantities of interest for linear
