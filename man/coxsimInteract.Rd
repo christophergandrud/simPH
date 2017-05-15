@@ -2,7 +2,7 @@
 % Please edit documentation in R/coxsimInteract.R
 \name{coxsimInteract}
 \alias{coxsimInteract}
-\title{Simulate quantities of interest for linear multiplicative interactions */
+\title{Simulate quantities of interest for linear multiplicative interactions
 from Cox Proportional Hazards models}
 \usage{
 coxsimInteract(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL,
@@ -123,8 +123,7 @@ Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
 
 # Example with a categorical variable
 # Download data
-hmohiv <- read.csv("http://www.ats.ucla.edu/stat/r/examples/asa/hmohiv.csv",
-                     stringsAsFactors = FALSE)
+data(hmohiv)
 
 # Create category lables
 hmohiv$drug <- factor(hmohiv$drug, labels = c('not treated', 'treated'))
@@ -157,4 +156,3 @@ Shortest Probability Intervals.'' Arvix.
 \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},
 and \code{\link{coxph}},
 }
-

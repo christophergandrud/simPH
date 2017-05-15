@@ -28,4 +28,3 @@ setXj = seq(1100, 1700, by = 10)
 setXl(Xj = setXj, diff = 1)
 }
 \keyword{utilities}
-

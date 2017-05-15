@@ -175,4 +175,3 @@ FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
 \code{\link{coxsimInteract}}, \code{\link{simGG.simlinear}},
 and \code{ggplot2}
 }
-

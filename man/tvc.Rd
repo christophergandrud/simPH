@@ -66,4 +66,3 @@ Test <- tvc(GolubEUPData, b = BaseVars, tvar = 'end', tfun = 'log')
 \code{\link{coxsimtvc}}, \code{\link{survival}}, and \code{\link{coxph}}
 }
 \keyword{utilities}
-

@@ -68,4 +68,3 @@ ggfitStrata(M1Fit, byStrata = FALSE)
 \code{\link{survfit}}, \code{ggplot2} and
 \code{\link{strata}}
 }
-

@@ -17,4 +17,3 @@ Nonproportional Hazards In Cox Models".
 A data set from Carpenter (2002).
 }
 \keyword{datasets}
-

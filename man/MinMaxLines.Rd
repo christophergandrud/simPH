@@ -56,4 +56,3 @@ Sum <- MinMaxLines(Sim1, clean = TRUE)
 
 }
 \keyword{internals}
-

@@ -12,14 +12,12 @@ library("gridExtra")
 
 #### Illustration of linear effects####
 # Load hmohiv data from UCLA repository
-hmohiv <- read.table(
-           "http://www.ats.ucla.edu/stat/r/examples/asa/hmohiv.csv", 
-           sep = ",", header = TRUE)
+data(hmohiv)
 
 # Center age at its median (35)
 hmohiv$AgeMed <- hmohiv$age - 35
 
-M1 <- coxph(Surv(time, censor) ~ AgeMed + drug, 
+M1 <- coxph(Surv(time, censor) ~ AgeMed + drug,
             method = "breslow", data = hmohiv)
 
 # Simulate relative hazards
@@ -41,6 +39,6 @@ Sim2 <- coxsimLinear(M1, b = "drug", Xj = 0:1)
 
 simGG(Sim2, psize = 3, xlab = "",
       ylab = "Relative Hazard\n",
-      type = 'points', method = 'lm') + 
-    scale_x_continuous(breaks = c(0, 1), 
+      type = 'points', method = 'lm') +
+    scale_x_continuous(breaks = c(0, 1),
                        labels = c('\nNo Drug Use', '\nDrug Use'))

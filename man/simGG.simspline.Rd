@@ -176,4 +176,3 @@ Nonlinear Effects. Journal of Statistical Software. 65(3)1-20.
 \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}},
 \code{ggplot2}
 }
-

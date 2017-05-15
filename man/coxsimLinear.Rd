@@ -114,4 +114,3 @@ Shortest Probability Intervals.'' Arvix.
 \code{\link{simGG.simlinear}}, \code{\link{survival}},
 \code{\link{strata}}, and \code{\link{coxph}}
 }
-

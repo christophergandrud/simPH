@@ -153,4 +153,3 @@ FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
 \code{\link{coxsimLinear}}, \code{\link{simGG.simtvc}}, and
 \code{ggplot2}
 }
-

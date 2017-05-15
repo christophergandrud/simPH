@@ -141,4 +141,3 @@ Nonlinear Effects. Journal of Statistical Software. 65(3)1-20.
 \seealso{
 \code{\link{coxsimPoly}} and \code{ggplot2}
 }
-

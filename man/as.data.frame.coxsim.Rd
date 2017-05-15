@@ -14,4 +14,3 @@
 \description{
 Convert a coxsim class object into a data frame
 }
-

@@ -1,3 +1,7 @@
+## Version 1.3.10
+
+- hmohiv data now stored internally to avoid breaking URL.
+
 ## Version 1.3.9
 
 - Fixed a bug when including rug plots with `simGG.siminteract`. Thanks to

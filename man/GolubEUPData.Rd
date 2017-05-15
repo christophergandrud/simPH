@@ -17,4 +17,3 @@ Amanda A. Licht, 2011, "Replication data for: Change Comes with Time".
 A data set from Golub & Steunenberg (2007)
 }
 \keyword{datasets}
-

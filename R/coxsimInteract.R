@@ -97,8 +97,7 @@
 #'
 #' # Example with a categorical variable
 #' # Download data
-#' hmohiv <- read.csv("http://www.ats.ucla.edu/stat/r/examples/asa/hmohiv.csv",
-#'                      stringsAsFactors = FALSE)
+#' data(hmohiv)
 #'
 #' # Create category lables
 #' hmohiv$drug <- factor(hmohiv$drug, labels = c('not treated', 'treated'))
@@ -108,7 +107,7 @@
 #' # Note: Use relevant coefficient name as shown in model summary, e.g.
 #' # 'drugtreated'.
 #' Sim5 <- coxsimInteract(M3, b1 = "drugtreated", b2 = 'age', X2 = 20:54)
-#' 
+#'
 #' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating
 #' Estimates from Cox Proportional Hazard Models Including for Interactive and
 #' Nonlinear Effects. Journal of Statistical Software. 65(3)1-20.

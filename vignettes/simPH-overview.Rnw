@@ -264,9 +264,7 @@ Let's estimate a simple Cox PH model that includes information on the HMO member
 library("survival")
 library("simPH")
 
-hmohiv <- read.table(
-            "http://www.ats.ucla.edu/stat/r/examples/asa/hmohiv.csv",
-            sep = ",", header = TRUE)
+data(hmohiv)
 @
 
 In the data set intravenous drug use is recorded as a binary variable called \code{drug}, where one is a history of drug use and zero otherwise. Each member's age in years is recorded in a variable called \code{age}. The ages range from 20 to 54 with a median of 35.
