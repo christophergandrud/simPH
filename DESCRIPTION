@@ -13,7 +13,7 @@ Authors@R: c(
     person("Christopher", "Gandrud", email = "christopher.gandrud@gmail.com",
     role = c("aut", "cre"))
     )
-URL: http://cran.r-project.org/package=simPH
+URL: https://CRAN.R-project.org/package=simPH
 BugReports: https://github.com/christophergandrud/simPH/issues
 Depends:
     R (>= 3.0.2)
