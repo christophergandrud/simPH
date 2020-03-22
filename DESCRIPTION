@@ -35,4 +35,4 @@ Suggests:
 VignetteBuilder: knitr
 BuildVignettes: true
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 7.1.0

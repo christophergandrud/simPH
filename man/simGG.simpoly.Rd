@@ -5,11 +5,27 @@
 \title{Plot simulated polynomial quantities of interest from Cox Proportional
 Hazards Models}
 \usage{
-\method{simGG}{simpoly}(obj, from = NULL, to = NULL, rug = TRUE,
-  rug_position = "identity", xlab = NULL, ylab = NULL, title = NULL,
-  method = "auto", spalette = "Set1", legend = "legend", leg.name = "",
-  lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3", psize = 1,
-  alpha = 0.2, type = "ribbons", ...)
+\method{simGG}{simpoly}(
+  obj,
+  from = NULL,
+  to = NULL,
+  rug = TRUE,
+  rug_position = "identity",
+  xlab = NULL,
+  ylab = NULL,
+  title = NULL,
+  method = "auto",
+  spalette = "Set1",
+  legend = "legend",
+  leg.name = "",
+  lcolour = "#2B8CBE",
+  lsize = 1,
+  pcolour = "#A6CEE3",
+  psize = 1,
+  alpha = 0.2,
+  type = "ribbons",
+  ...
+)
 }
 \arguments{
 \item{obj}{a \code{simpoly} class object.}

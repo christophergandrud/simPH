@@ -5,9 +5,20 @@
 \title{Simulate quantities of interest for linear multiplicative interactions
 from Cox Proportional Hazards models}
 \usage{
-coxsimInteract(obj, b1, b2, qi = "Marginal Effect", X1 = NULL, X2 = NULL,
-  means = FALSE, expMarg = TRUE, nsim = 1000, ci = 0.95, spin = FALSE,
-  extremesDrop = TRUE)
+coxsimInteract(
+  obj,
+  b1,
+  b2,
+  qi = "Marginal Effect",
+  X1 = NULL,
+  X2 = NULL,
+  means = FALSE,
+  expMarg = TRUE,
+  nsim = 1000,
+  ci = 0.95,
+  spin = FALSE,
+  extremesDrop = TRUE
+)
 }
 \arguments{
 \item{obj}{a \code{\link{coxph}} class fitted model object with a linear

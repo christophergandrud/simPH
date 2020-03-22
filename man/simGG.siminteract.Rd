@@ -5,11 +5,27 @@
 \title{Plot simulated linear multiplicative interactions from Cox Proportional
 Hazards Models}
 \usage{
-\method{simGG}{siminteract}(obj, from = NULL, rug = TRUE,
-  rug_position = "identity", to = NULL, xlab = NULL, ylab = NULL,
-  title = NULL, method = "auto", spalette = "Set1", legend = "legend",
-  leg.name = "", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
-  psize = 1, alpha = 0.2, type = "ribbons", ...)
+\method{simGG}{siminteract}(
+  obj,
+  from = NULL,
+  rug = TRUE,
+  rug_position = "identity",
+  to = NULL,
+  xlab = NULL,
+  ylab = NULL,
+  title = NULL,
+  method = "auto",
+  spalette = "Set1",
+  legend = "legend",
+  leg.name = "",
+  lcolour = "#2B8CBE",
+  lsize = 1,
+  pcolour = "#A6CEE3",
+  psize = 1,
+  alpha = 0.2,
+  type = "ribbons",
+  ...
+)
 }
 \arguments{
 \item{obj}{a \code{siminteract} class object}
@@ -148,8 +164,8 @@ Sim4 <- coxsimInteract(M2, b1 = "prevgenx", b2 = "lethal",
                        X1 = 100, X2 = 1, qi = "Hazard Rate")
 
 # Plot quantities of interest
-simGG(Sim1, xlab = "\\nprevgenx",
-       ylab = "Marginal Effect of lethal\\n")
+simGG(Sim1, xlab = "\nprevgenx",
+       ylab = "Marginal Effect of lethal\n")
 simGG(Sim2, type = 'ribbons', rug_position = 'jitter')
 simGG(Sim3)
 simGG(Sim4, to = 150, type = 'lines', legend = FALSE)

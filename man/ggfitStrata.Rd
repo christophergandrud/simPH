@@ -4,8 +4,15 @@
 \alias{ggfitStrata}
 \title{Graph fitted stratified survival curves from Cox Proportional Hazards models}
 \usage{
-ggfitStrata(obj, byStrata = FALSE, xlab = "", ylab = "", title = "",
-  lcolour = "#2C7FB8", rcolour = "#2C7FB8")
+ggfitStrata(
+  obj,
+  byStrata = FALSE,
+  xlab = "",
+  ylab = "",
+  title = "",
+  lcolour = "#2C7FB8",
+  rcolour = "#2C7FB8"
+)
 }
 \arguments{
 \item{obj}{a \code{survfit} object.}

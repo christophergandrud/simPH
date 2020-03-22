@@ -5,9 +5,18 @@
 \title{Simulate quantities of interest for a range of values for a polynomial
 nonlinear effect from Cox Proportional Hazards models}
 \usage{
-coxsimPoly(obj, b = NULL, qi = "Relative Hazard", pow = 2, Xj = NULL,
-  Xl = NULL, nsim = 1000, ci = 0.95, spin = FALSE,
-  extremesDrop = TRUE)
+coxsimPoly(
+  obj,
+  b = NULL,
+  qi = "Relative Hazard",
+  pow = 2,
+  Xj = NULL,
+  Xl = NULL,
+  nsim = 1000,
+  ci = 0.95,
+  spin = FALSE,
+  extremesDrop = TRUE
+)
 }
 \arguments{
 \item{obj}{a \code{\link{coxph}} class fitted model object with a polynomial

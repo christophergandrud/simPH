@@ -5,10 +5,23 @@
 \title{Plot simulated time-interactive hazard ratios or stratified time-interactive
 hazard rates from Cox Proportional Hazards Models}
 \usage{
-\method{simGG}{simtvc}(obj, from = NULL, to = NULL, xlab = NULL,
-  ylab = NULL, title = NULL, method = "auto", spalette = "Set1",
-  legend = "legend", leg.name = "", lsize = 1, psize = 1, alpha = 0.2,
-  type = "ribbons", ...)
+\method{simGG}{simtvc}(
+  obj,
+  from = NULL,
+  to = NULL,
+  xlab = NULL,
+  ylab = NULL,
+  title = NULL,
+  method = "auto",
+  spalette = "Set1",
+  legend = "legend",
+  leg.name = "",
+  lsize = 1,
+  psize = 1,
+  alpha = 0.2,
+  type = "ribbons",
+  ...
+)
 }
 \arguments{
 \item{obj}{a \code{simtvc} class object}

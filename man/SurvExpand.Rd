@@ -5,8 +5,15 @@
 \title{Convert a data frame of non-equal interval continuous observations into
 equal interval continuous observations}
 \usage{
-SurvExpand(data, GroupVar, Time, Time2, event, PartialData = TRUE,
-  messages = TRUE)
+SurvExpand(
+  data,
+  GroupVar,
+  Time,
+  Time2,
+  event,
+  PartialData = TRUE,
+  messages = TRUE
+)
 }
 \arguments{
 \item{data}{a data frame.}

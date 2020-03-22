@@ -6,8 +6,7 @@
 constricted intervals, as well as the lower and upper bounds of the middle 50
 percent of the constricted intervals}
 \usage{
-MinMaxLines(df, byVars = "Xj", hr = FALSE, strata = FALSE,
-  clean = FALSE)
+MinMaxLines(df, byVars = "Xj", hr = FALSE, strata = FALSE, clean = FALSE)
 }
 \arguments{
 \item{df}{a data frame or a simulation class object.}

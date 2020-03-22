@@ -5,9 +5,23 @@
 \title{Simulate time-interactive quantities of interest from Cox Proportional
 Hazards models}
 \usage{
-coxsimtvc(obj, b, btvc, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
-  tfun = "linear", pow = NULL, nsim = 1000, from, to, by = 1,
-  ci = 0.95, spin = FALSE, extremesDrop = TRUE)
+coxsimtvc(
+  obj,
+  b,
+  btvc,
+  qi = "Relative Hazard",
+  Xj = NULL,
+  Xl = NULL,
+  tfun = "linear",
+  pow = NULL,
+  nsim = 1000,
+  from,
+  to,
+  by = 1,
+  ci = 0.95,
+  spin = FALSE,
+  extremesDrop = TRUE
+)
 }
 \arguments{
 \item{obj}{a \code{\link{coxph}} fitted model object with a time interaction.}

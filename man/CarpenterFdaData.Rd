@@ -4,7 +4,9 @@
 \name{CarpenterFdaData}
 \alias{CarpenterFdaData}
 \title{A data set from Carpenter (2002).}
-\format{A data set with 408 observations and 32 variables.}
+\format{
+A data set with 408 observations and 32 variables.
+}
 \source{
 Carpenter, Daniel P. 2002. ''Groups, the Media, Agency Waiting Costs, 
 and FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.

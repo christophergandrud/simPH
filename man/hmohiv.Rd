@@ -4,7 +4,9 @@
 \name{hmohiv}
 \alias{hmohiv}
 \title{Simulated HIV patient data from UCLA IDRE}
-\format{An object of class \code{data.frame} with 100 rows and 7 columns.}
+\format{
+An object of class \code{data.frame} with 100 rows and 7 columns.
+}
 \source{
 UCLA IDRE \url{https://stats.idre.ucla.edu/r/examples/asa/r-applied-survival-analysis-ch-1/}
 }

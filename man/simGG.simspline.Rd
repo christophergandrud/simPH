@@ -4,11 +4,27 @@
 \alias{simGG.simspline}
 \title{Plot simulated penalised spline hazards from Cox Proportional Hazards Models}
 \usage{
-\method{simGG}{simspline}(obj, SmoothSpline = TRUE, FacetTime = NULL,
-  from = NULL, to = NULL, rug = TRUE, rug_position = "identity",
-  xlab = NULL, ylab = NULL, zlab = NULL, title = NULL,
-  method = "auto", lcolour = "#2B8CBE", lsize = 1, pcolour = "#A6CEE3",
-  psize = 1, alpha = 0.2, type = "ribbons", ...)
+\method{simGG}{simspline}(
+  obj,
+  SmoothSpline = TRUE,
+  FacetTime = NULL,
+  from = NULL,
+  to = NULL,
+  rug = TRUE,
+  rug_position = "identity",
+  xlab = NULL,
+  ylab = NULL,
+  zlab = NULL,
+  title = NULL,
+  method = "auto",
+  lcolour = "#2B8CBE",
+  lsize = 1,
+  pcolour = "#A6CEE3",
+  psize = 1,
+  alpha = 0.2,
+  type = "ribbons",
+  ...
+)
 }
 \arguments{
 \item{obj}{a \code{simspline} class object}
@@ -161,8 +177,8 @@ Sim3 <- coxsimSpline(M1, bspline = "pspline(stafcder, df = 4)",
                     Xl = seq(1099, 1699, by = 10), ci = 0.90)
 
 # Plot simulated Hazard Ratios
-simGG(Sim3, xlab = "\\nFDA Drug Review Staff", type = 'lines', alpha = 0.2)
-simGG(Sim3, xlab = "\\nFDA Drug Review Staff", alpha = 0.2,
+simGG(Sim3, xlab = "\nFDA Drug Review Staff", type = 'lines', alpha = 0.2)
+simGG(Sim3, xlab = "\nFDA Drug Review Staff", alpha = 0.2,
       SmoothSpline = TRUE, type = 'points')
 }
 
