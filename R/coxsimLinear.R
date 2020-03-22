@@ -220,7 +220,7 @@ coxsimLinear <- function(obj, b, qi = "Relative Hazard", Xj = NULL, Xl = NULL,
                 BarValue <- MeanValues[i, ]
                 DrawnCoef <- DrawnDF[, i]
                 FittedCoef <- outer(DrawnCoef, BarValue)
-                FCMolten <- data.frame(melt(FittedCoef))
+                FCMolten <- MatrixMelter(FittedCoef)
                 Temp <- cbind(Temp, FCMolten[,3])
             }
             Names <- c("ID", Z)

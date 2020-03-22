@@ -201,7 +201,7 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL,
 
     # Multiply time function with btvc
     TVSim <- outer(Drawn[,2], tf)
-    TVSim <- data.frame(melt(TVSim))
+    TVSim <- MatrixMelter(TVSim)
     names(TVSim) <- c("SimID", "time", "TVC")
     time <- 1:length(tf)
     TempDF <- data.frame(time, tf)

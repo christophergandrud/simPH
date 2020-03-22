@@ -269,6 +269,7 @@ SubsetTime <- function(f, Temps){
 #' @noRd
 
 MatrixMelter <- function(x){
+  . <- NULL
     x %>%
       as.data.frame %>%
       as.data.table(., keep.rownames = TRUE) %>%
