@@ -223,7 +223,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
     names(CoefIntervals) <- c("CoefName", "IntervalStart", "IntervalFinish")
 
     # Melt Drawn DF to long format
-    DrawnDF <- data.frame(SimID, DrawnDF)
+    DrawnDF <- data.frame(SimID, DrawnDF) %>% as.data.table
     TempDF <- suppressMessages(data.frame(melt(DrawnDF,
                                id.vars = 'SimID')))
     names(TempDF) <- c("SimID", "CoefName", "Coef")
