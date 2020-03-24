@@ -371,7 +371,7 @@ Added functions for simulating and plotting linear non-time-varying hazards.
 ## Version 0.01
 
 First version, largely ported from simtvc version 0.04
-(<http://christophergandrud.github.com/simtvc/>), with the addition of the
+(<https://christophergandrud.github.com/simtvc/>), with the addition of the
 ability to work with polynomials. This includes two functions
 
 - `coxsimPoly` simulates polynomial relative hazards

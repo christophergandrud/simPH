@@ -26,4 +26,4 @@ citEntry(entry = "Article",
 #         author = c(person("Christopher", "Gandrud")),
 #         year = year,
 #         note = note,
-#         url = "http://CRAN.R-project.org/package=simPH")
+#         url = "	https://CRAN.R-project.org/package=simPH")

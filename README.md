@@ -5,7 +5,7 @@ simPH
 
 ### Christopher Gandrud
 
-### [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) [![CRAN Version](http://www.r-pkg.org/badges/version/simPH)](http://cran.r-project.org/package=simPH) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/simPH) ![CRAN Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/simPH)
+### [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) [![CRAN Version](https://CRAN.R-project.org/package=simPH)](https://CRAN.R-project.org/package=simPH) ![CRAN Downloads](https://cranlogs.r-pkg.org/badges/last-month/simPH) ![CRAN Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/simPH)
 
 #### Please report any bugs to:
 
@@ -74,7 +74,7 @@ syntax and capabilities of `simGG` varies depending on the `sim` object class
 you are using:
 
 - `simGG.simlinear`: plots simulated linear time-constant hazards using
-[ggplot2](http://ggplot2.org/).
+[ggplot2](https://CRAN.R-project.org/package=ggplot2 ).
 
 - `simGG.simtvc`: uses **ggplot2** to graph the simulated time-varying relative
 hazards, first differences, hazard ratios or stratified hazard rates.
@@ -93,7 +93,7 @@ interactions.
 
 Because in almost all cases `simGG` returns a *ggplot2* object, you can add
 additional aesthetic attributes in the normal *ggplot2* way. See the
-[ggplot2 documentation for more details](http://docs.ggplot2.org).
+[ggplot2 documentation for more details](https://ggplot2.tidyverse.org/reference/).
 
 #### Misc.
 
