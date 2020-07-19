@@ -3,7 +3,8 @@
 - Resolves Issue #23 where passing matrices to `melt.data.table` cause a silent
 failure for `coxsimtvc`.
 
-- 
+- Updated internal function `IntervalConstrict` to dplyr 0.7.0 `group_by` syntax.
+Function no longer returns a deprecation warning.
 
 ## Version 1.3.11
 
@@ -27,7 +28,7 @@ Ting Shuo Huang for reporting.
 
 ## Version 1.3.7
 
-- Enable compatability with dplyr version 0.4.4.
+- Enable compatibility with dplyr version 0.4.4.
 
 - Fixes bugs when finding hazard rates.
 
