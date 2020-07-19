@@ -6,11 +6,11 @@ test_that("coxsimtvc works for error in Issue # 24", {
                                Time = 'begin', Time2 = 'end', event = 'event')
     
     # Create time interactions
-    BaseVars <- c('qmv', 'qmvpostsea')
+    BaseVars <- c('qmv')
     GolubEUPData <- tvc(GolubEUPData, b = BaseVars, tvar = 'end', tfun = 'log')
     
     # Run Cox PH Model
-    M1 <- coxph(Surv(begin, end, event) ~ qmv + qmvpostsea,
+    M1 <- coxph(Surv(begin, end, event) ~ qmv + qmv_log,
                 data = GolubEUPData, ties = "efron")
     
     # Create simtvc object for Relative Hazard 

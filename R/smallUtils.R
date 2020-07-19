@@ -266,13 +266,18 @@ SubsetTime <- function(f, Temps){
 #' Melt matrix via data.table
 #'
 #' @keywords internals
+#' @importFrom data.table as.data.table melt.data.table
+#' @importFrom dplyr %>%
 #' @noRd
 
 MatrixMelter <- function(x){
-  . <- NULL
-    x %>%
+    . <- NULL
+    x_out <- x %>%
       as.data.frame %>%
       as.data.table(., keep.rownames = TRUE) %>%
-      melt(., id.vars = "rn") %>%
+      melt.data.table(., id.vars = "rn", variable.factor = FALSE, 
+                      variable.name = "variable") %>%
       as.data.frame
+    x_out$variable <- gsub("V", "", x_out$variable) %>% as.integer()  
+    return(x_out)
 }

@@ -76,7 +76,7 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi,
     else if (qi == "Marginal Effect"){
         lb <- -Inf
     }
-browser()
+
     Simb <- group_by_(Simb, .dots = SubVar)
 
     if (!isTRUE(spin)){

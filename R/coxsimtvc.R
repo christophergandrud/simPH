@@ -196,6 +196,10 @@ coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL,
     bpos <- match(b, dfn)
     btvcpos <- match(btvc, dfn)
 
+    # Check if exists
+    if (any(is.na(c(bpos, btvcpos))))
+        stop("Unable to locate b and/or btvc variables.", call. = FALSE) 
+
     Drawn <- data.frame(Drawn[, c(bpos, btvcpos)])
     Drawn$SimID <- SimID
 
