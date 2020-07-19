@@ -31,7 +31,8 @@ Imports:
     quadprog
 Suggests:
     knitr,
-    stats
+    stats,
+    testthat
 VignetteBuilder: knitr
 BuildVignettes: true
 LazyData: true
