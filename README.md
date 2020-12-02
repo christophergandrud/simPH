@@ -126,14 +126,6 @@ the middle 50% of these intervals.
 
 The package is available on CRAN and can be installed in the normal R way.
 
-To install the development version use the
-[devtools](https://github.com/hadley/devtools) function `install_github`. Here
-is the code for installing the most recent development version:
-
-```{S}
-devtools::install_github('christophergandrud/simPH')
-```
-
 ## Tip
 
 Before running the simulation and graph functions in this package carefully
@@ -156,8 +148,7 @@ King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
 
 ### Stratified Cox PH
 
-For more information about stratified Cox PH models (and frailties, which I am
-working to incorporate in future versions) see:
+For more information about stratified Cox PH models see:
 
 Box-Steffensmeier, Janet M, and Suzanna De Boef. 2006. [“Repeated Events Survival Models: the Conditional Frailty Model.”](http://onlinelibrary.wiley.com/doi/10.1002/sim.2434/abstract;jsessionid=28218243DD3D6E01A3D10EEE75D96675.d01t02) *Statistics in Medicine* 25(20): 3518–33.
 
