@@ -1,11 +1,10 @@
-simPH
-======
+# simPH
 
 <img src="man/figures/plotbanner.png" height="40" width="1000" alt="banner-image"></img>
 
-### Christopher Gandrud
+**Christopher Gandrud**
 
-### [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) [![CRAN Version](https://CRAN.R-project.org/package=simPH)](https://CRAN.R-project.org/package=simPH) ![CRAN Downloads](https://cranlogs.r-pkg.org/badges/last-month/simPH) ![CRAN Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/simPH)
+### [![R build status](https://github.com/christophergandrud/simPH/workflows/R-CMD-check/badge.svg)](https://github.com/christophergandrud/simPH/actions) [![Build Status](https://travis-ci.org/christophergandrud/simPH.png)](https://travis-ci.org/christophergandrud/simPH) [![Codecov test coverage](https://codecov.io/gh/christophergandrud/simPH/branch/master/graph/badge.svg)](https://codecov.io/gh/christophergandrud/simPH?branch=master) [![CRAN Version](https://CRAN.R-project.org/package=simPH)](https://CRAN.R-project.org/package=simPH) ![CRAN Downloads](https://cranlogs.r-pkg.org/badges/last-month/simPH) ![CRAN Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/simPH)
 
 #### Please report any bugs to:
 

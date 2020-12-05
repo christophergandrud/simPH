@@ -32,7 +32,8 @@ Imports:
 Suggests:
     knitr,
     stats,
-    testthat
+    testthat,
+    covr
 VignetteBuilder: knitr
 BuildVignettes: true
 LazyData: true

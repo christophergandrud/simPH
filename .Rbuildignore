@@ -12,3 +12,5 @@
 ^img
 
 LICENSE.md
+^codecov\.yml$
+^\.github$
