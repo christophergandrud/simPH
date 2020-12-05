@@ -136,7 +136,7 @@ Nonlinear Effects. Journal of Statistical Software. 65(3)1-20.
 
 Luke Keele, "Replication data for: Proportionally Difficult:
 Testing for Nonproportional Hazards In Cox Models", 2010,
-\url{http://hdl.handle.net/1902.1/17068} V1 [Version].
+\url{https://hdl.handle.net/1902.1/17068} V1 [Version].
 
 King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of
 Statistical Analyses: Improving Interpretation and Presentation.'' American
@@ -144,7 +144,7 @@ Journal of Political Science 44(2): 347-61.
 
 Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 Shortest Probability Intervals.'' Arvix.
-\url{http://arxiv.org/pdf/1302.2142v1.pdf}.
+\url{https://arxiv.org/pdf/1302.2142v1.pdf}.
 }
 \seealso{
 \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},

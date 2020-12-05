@@ -175,7 +175,7 @@ setXl <- function(Xj, diff = 1){
 #'
 #'  names(df)
 #'
-#' @source Based primarily on a Stack Overflow answer written by rcs: \url{http://stackoverflow.com/questions/3369959/moving-columns-within-a-data-frame-without-retyping}.
+#' @source Based primarily on a Stack Overflow answer written by rcs: \url{https://stackoverflow.com/questions/3369959/moving-columns-within-a-data-frame-without-retyping}.
 #'
 #' @keywords internals
 #' @noRd

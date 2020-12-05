@@ -140,7 +140,7 @@
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 #' Shortest Probability Intervals.'' Arvix.
-#' \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
+#' \url{https://arxiv.org/pdf/1302.2142v1.pdf}.
 
 coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL,
                       Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000,

@@ -21,7 +21,7 @@ Proportional Hazard models.
 
 For more information plus examples, please see the
 [description paper](https://www.jstatsoft.org/article/view/v065i03) in the
-[Journal of Statistical Software](http://www.jstatsoft.org/).
+[Journal of Statistical Software](https://www.jstatsoft.org/).
 
 To cite the paper please use:
 
@@ -140,17 +140,17 @@ to run very many simulations. This will be computationally intensive.
 For more information about simulating parameter estimates to make interpretation
 of results easier see:
 
-Licht, Amanda A. 2011. [“Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.”](http://pan.oxfordjournals.org/content/19/2/227.abstract)
+Licht, Amanda A. 2011. [“Change Comes with Time: Substantive Interpretation of Nonproportional Hazards in Event History Analysis.”](https://www.jstor.org/stable/23011265)
 *Political Analysis* 19: 227–43.
 
 King, Gary, Michael Tomz, and Jason Wittenberg. 2000.
-[“Making the Most of Statistical Analyses: Improving Interpretation and Presentation.”](http://www.jstor.org/stable/2669316) *American Journal of Political Science* 44(2): 347–61.
+[“Making the Most of Statistical Analyses: Improving Interpretation and Presentation.”](https://www.jstor.org/stable/2669316) *American Journal of Political Science* 44(2): 347–61.
 
 ### Stratified Cox PH
 
 For more information about stratified Cox PH models see:
 
-Box-Steffensmeier, Janet M, and Suzanna De Boef. 2006. [“Repeated Events Survival Models: the Conditional Frailty Model.”](http://onlinelibrary.wiley.com/doi/10.1002/sim.2434/abstract;jsessionid=28218243DD3D6E01A3D10EEE75D96675.d01t02) *Statistics in Medicine* 25(20): 3518–33.
+Box-Steffensmeier, Janet M, and Suzanna De Boef. 2006. [“Repeated Events Survival Models: the Conditional Frailty Model.”](https://onlinelibrary.wiley.com/doi/10.1002/sim.2434/abstract;jsessionid=28218243DD3D6E01A3D10EEE75D96675.d01t02) *Statistics in Medicine* 25(20): 3518–33.
 
 ### Shortest Probability Intervals
 
@@ -158,11 +158,11 @@ To learn more about shortest probability intervals (and also for the source of
 the code that made this possible in **simPH**) see:
 
 Liu, Y., Gelman, A., & Zheng, T. (2015).
-["Simulation-efficient Shortest Probablility Intervals."](http://www.stat.columbia.edu/~gelman/research/published/spin.pdf)
+["Simulation-efficient Shortest Probablility Intervals."](https://www.stat.columbia.edu/~gelman/research/published/spin.pdf)
 *Statistics and Computing* 25:809-819.
 
 **Also good:** Hyndman, R. J. (1996).
-["Computing and Graphing Highest Density Regions."](http://www.jstor.org/stable/10.2307/2684423)
+["Computing and Graphing Highest Density Regions."](https://www.jstor.org/stable/10.2307/2684423)
 *The American Statistician*, 50(2): 120–126.
 
 ### Interpreting Interactions
@@ -170,7 +170,7 @@ Liu, Y., Gelman, A., & Zheng, T. (2015).
 For more information about interpreting interaction terms:
 
 Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006.
-[“Understanding Interaction Models: Improving Empirical Analyses.”](http://pan.oxfordjournals.org/content/14/1/63.abstract)
+[“Understanding Interaction Models: Improving Empirical Analyses.”](https://www.jstor.org/stable/25791835)
 *Political Analysis* 14(1): 63–82.
 
 ### The Olden Days
@@ -179,7 +179,7 @@ For an example of how non-proportional hazard results were often presented
 before **simPH** see (some of the problems I encountered in this paper were a
 major part of why I'm developing this package):
 
-Gandrud, Christopher. 2013. [“The Diffusion of Financial Supervisory Governance Ideas.”](http://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362)
+Gandrud, Christopher. 2013. [“The Diffusion of Financial Supervisory Governance Ideas.”](https://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362)
 *Review of International Political Economy*. 20(4): 881-916.
 
 ## Future Plans
@@ -187,7 +187,7 @@ Gandrud, Christopher. 2013. [“The Diffusion of Financial Supervisory Governanc
 I intend to expand the quantities of interest that can be simulated and graphed
 for Cox PH models. I am also currently working on functions that can simulate
 and graph hazard ratios estimated from
-[Fine and Gray competing risks models](http://www.jstor.org/stable/2670170).
+[Fine and Gray competing risks models](https://www.jstor.org/stable/2670170).
 
 I am also working on a way to graph hazard ratios with frailties.
 

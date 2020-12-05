@@ -8,13 +8,13 @@ citEntry(entry = "Article",
   volume       = "65",
   number       = "3",
   pages        = "1--20",
-  url          = "http://www.jstatsoft.org/v65/i03/",
+  url          = "https://www.jstatsoft.org/v65/i03/",
 
   textVersion  =
   paste("Christopher Gandrud (2015).",
         "simPH: An R Package for Illustrating Estimates from Cox Proportional Hazard Models Including for Interactive and Nonlinear Effects.",
         "Journal of Statistical Software, 65(3), 1-20.",
-        "URL http://www.jstatsoft.org/v65/i03/.")
+        "URL https://www.jstatsoft.org/v65/i03/.")
 )
 
 # year <- sub("-.*", "", meta$Date)

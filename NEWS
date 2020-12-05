@@ -1,9 +1,11 @@
 ## Version 1.3.13
 
-A test error occurs on CRAN build of Fedora and Debian. Due to time and resource
-constraints, I am unable to test and resolve this issue. So this version is a 
-hack that removes the tests for Linux. Therefore, Linux is no longer "officially"
-supported.  #26
+- A test error occurs on CRAN build of Fedora and Debian. Due to time and 
+resource constraints, I am unable to test and resolve this issue. So this 
+version is a  hack that removes the tests for Linux. Therefore, Linux is no 
+longer "officially" supported.  #26
+
+- Changes to DESCRIPTION for CRAN and updated URLs for references.
 
 ## Version 1.3.12
 

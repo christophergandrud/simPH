@@ -106,7 +106,7 @@
 #'
 #' Luke Keele, "Replication data for: Proportionally Difficult:
 #' Testing for Nonproportional Hazards In Cox Models", 2010,
-#' \url{http://hdl.handle.net/1902.1/17068} V1 [Version].
+#' \url{https://hdl.handle.net/1902.1/17068} V1 [Version].
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of
 #' Statistical Analyses: Improving Interpretation and Presentation.'' American
@@ -114,7 +114,7 @@
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 #' Shortest Probability Intervals.'' Arvix.
-#' \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
+#' \url{https://arxiv.org/pdf/1302.2142v1.pdf}.
 #'
 #' @import data.table
 #' @importFrom stringr word str_match str_replace
@@ -173,7 +173,7 @@ coxsimSpline <- function(obj, bspline, bdata, qi = "Relative Hazard", Xj = 1,
     # get("cbase", environment(obj$printfun[[1]]))
     # (replace 1 with the spline term number)
     #### From:
-    # http://r.789695.n4.nabble.com/help-on-pspline-in-coxph-td3431829.html
+    # https://r.789695.n4.nabble.com/help-on-pspline-in-coxph-td3431829.html
     OA <- obj$assign
     ListKnots <- OA[bterm]
     NumKnots <- length(unlist(ListKnots))
