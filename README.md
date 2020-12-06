@@ -176,7 +176,7 @@ Brambor, Thomas, William Roberts Clark, and Matt Golder. 2006.
 
 For an example of how non-proportional hazard results were often presented
 before **simPH** see (some of the problems I encountered in this paper were a
-major part of why I'm developing this package):
+major part of why I developed this package):
 
 Gandrud, Christopher. 2013. [“The Diffusion of Financial Supervisory Governance Ideas.”](https://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362)
 *Review of International Political Economy*. 20(4): 881-916.
