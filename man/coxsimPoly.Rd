@@ -38,7 +38,7 @@ rates for each strata will also be calculated.}
 \item{Xj}{numeric vector of fitted values for \code{b} to simulate for.}
 
 \item{Xl}{numeric vector of values to compare \code{Xj} to. If \code{NULL},
-then it is authomatically set to 0.}
+then it is automatically set to 0.}
 
 \item{nsim}{the number of simulations to run per value of \code{Xj}. Default
 is \code{nsim = 1000}.}
