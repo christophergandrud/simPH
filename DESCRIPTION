@@ -5,10 +5,10 @@ Description: Simulates and plots quantities of interest (relative
     multiplicative interactions, polynomials, penalised splines, and
     non-proportional hazards, as well as stratified survival curves from Cox
     Proportional Hazard models. It also simulates and plots marginal effects
-    for multiplicative interactions. Methods described in Gandrud 
-    <10.18637/jss.v065.i03>.
+    for multiplicative interactions. Methods described in Gandrud (2015)
+    <doi:10.18637/jss.v065.i03>.
 Version: 1.3.13
-Date: 2020-12-06
+Date: 2020-12-12
 Authors@R: c(
     person("Christopher", "Gandrud", email = "christopher.gandrud@gmail.com",
     role = c("aut", "cre"))
