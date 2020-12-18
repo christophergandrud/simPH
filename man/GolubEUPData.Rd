@@ -12,7 +12,7 @@ Golub, Jonathan, and Bernard Steunenberg. 2007. ''How Time Affects
 EU Decision-Making.'' European Union Politics 8(4): 555-66.
 
 Amanda A. Licht, 2011, "Replication data for: Change Comes with Time". 
-\url{https://hdl.handle.net/1902.1/15633}. IQSS Dataverse Network 
+\url{https://doi.org/10.7910/DVN/VJAHRG}. IQSS Dataverse Network 
 [Distributor] V3 [Version].
 }
 \description{

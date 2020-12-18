@@ -13,7 +13,7 @@ and FDA Drug Approval.'' American Journal of Political Science 46(3): 490-505.
 
 Luke Keele, "Replication data for: Proportionally Difficult: Testing for 
 Nonproportional Hazards In Cox Models". 
-\url{https://hdl.handle.net/1902.1/17068}. V1 [Version].
+\url{https://doi.org/10.7910/DVN/VJAHRG}. V1 [Version].
 }
 \description{
 A data set from Carpenter (2002).
