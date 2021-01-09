@@ -106,7 +106,7 @@
 #'
 #' Luke Keele, "Replication data for: Proportionally Difficult:
 #' Testing for Nonproportional Hazards In Cox Models", 2010,
-#' \url{https://doi.org/10.7910/DVN/VJAHRG} V1 [Version].
+#' \doi{10.7910/DVN/VJAHRG} V1 [Version].
 #'
 #' King, Gary, Michael Tomz, and Jason Wittenberg. 2000. ''Making the Most of
 #' Statistical Analyses: Improving Interpretation and Presentation.'' American

@@ -5,7 +5,7 @@
 #' EU Decision-Making.'' European Union Politics 8(4): 555-66.
 #'
 #' Amanda A. Licht, 2011, "Replication data for: Change Comes with Time". 
-#' \url{https://doi.org/10.7910/DVN/VJAHRG}. IQSS Dataverse Network 
+#' \doi{10.7910/DVN/VJAHRG}. IQSS Dataverse Network 
 #' [Distributor] V3 [Version].
 #' @keywords datasets
 #' @format A data set with 3001 observations and 17 variables.

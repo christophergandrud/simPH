@@ -8,7 +8,7 @@ Description: Simulates and plots quantities of interest (relative
     for multiplicative interactions. Methods described in Gandrud (2015)
     <doi:10.18637/jss.v065.i03>.
 Version: 1.3.13
-Date: 2020-12-18
+Date: 2021-01-09
 Authors@R: c(
     person("Christopher", "Gandrud", email = "christopher.gandrud@gmail.com",
     role = c("aut", "cre"))
