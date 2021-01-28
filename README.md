@@ -181,14 +181,18 @@ major part of why I developed this package):
 Gandrud, Christopher. 2013. [“The Diffusion of Financial Supervisory Governance Ideas.”](https://www.tandfonline.com/doi/full/10.1080/09692290.2012.727362)
 *Review of International Political Economy*. 20(4): 881-916.
 
-## Future Plans
+## Thoughts on future versions
 
-I intend to expand the quantities of interest that can be simulated and graphed
+I intended to expand the quantities of interest that can be simulated and graphed
 for Cox PH models. I am also currently working on functions that can simulate
 and graph hazard ratios estimated from
 [Fine and Gray competing risks models](https://www.jstor.org/stable/2670170).
 
-I am also working on a way to graph hazard ratios with frailties.
+It would also be great to enable graphing hazard ratios with frailties.
+
+However, I don't currently plan to make major improvements to the package. My ambition is to ensure that it remains stable and on CRAN.
+
+But pull requests are always welcome!
 
 ---
 
