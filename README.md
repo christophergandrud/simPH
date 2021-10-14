@@ -19,7 +19,7 @@ non-proportional hazards, as well as stratified survival curves from Cox
 Proportional Hazard models.
 
 For more information plus examples, please see the
-[description paper](https://www.jstatsoft.org/article/view/v065i03) in the
+[description paper](https://doi.org/10.18637/jss.v065.i03) in the
 [Journal of Statistical Software](https://www.jstatsoft.org/).
 
 To cite the paper please use:
@@ -184,7 +184,7 @@ Gandrud, Christopher. 2013. [“The Diffusion of Financial Supervisory Governanc
 ## Thoughts on future versions
 
 I intended to expand the quantities of interest that can be simulated and graphed
-for Cox PH models. I am also currently working on functions that can simulate
+for Cox PH models. An extension could be to simulate
 and graph hazard ratios estimated from
 [Fine and Gray competing risks models](https://www.jstor.org/stable/2670170).
 
