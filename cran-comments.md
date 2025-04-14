@@ -1,18 +1,18 @@
 ## R CMD check results
 
-0 errors | 1 warning | 1 note
-
-* checking sizes of PDF files under 'inst/doc' ... WARNING
-  'gs+qpdf' made some significant size reductions:
-     compacted 'simPH-overview.pdf' from 677Kb to 305Kb
-  consider running tools::compactPDF(gs_quality = "ebook") on these files,
-  or build the source package with --compact-vignettes=both
-  
-* checking for future file timestamps ... NOTE
+❯ checking for future file timestamps ... NOTE
   unable to verify current time
+
+❯ checking top-level files ... NOTE
+  Non-standard file/directory found at top level:
+    ‘cran-comments.md’
+
+0 errors ✔ | 0 warnings ✔ | 2 notes ✖
+  
+  Non-standard file/directory found at top level:
+  'cran-comments.md'
   
 ### Comments on check results:
-* The WARNING about PDF sizes will be addressed before final submission by building the package with --compact-vignettes=both
 * The NOTE about future file timestamps is due to system time verification issues and does not affect package functionality
 * The NOTE about "Non-standard file/directory found at top level: 'cran-comments.md'" is expected and can be ignored as this file is for CRAN submission purposes
 
@@ -23,6 +23,10 @@ This release (1.3.14):
 * Improves documentation to meet new CRAN requirements
 * Updates class() comparisons to use inherits() instead
 * Fixes issues with LaTeX equations in documentation
+* Updates the CITATION file to use modern syntax
+* Fixes redirected URLs in documentation
+* Updates package anchor links in Rd files
+* Adds vignette compression
 * Addresses various documentation formatting issues
 
 ## Test environments

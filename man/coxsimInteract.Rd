@@ -21,7 +21,7 @@ coxsimInteract(
 )
 }
 \arguments{
-\item{obj}{a \code{\link{coxph}} class fitted model object with a linear
+\item{obj}{a \code{\link[survival]{coxph}} class fitted model object with a linear
 multiplicative interaction.}
 
 \item{b1}{character string of the first constitutive variable's name.
@@ -161,9 +161,9 @@ Journal of Political Science 44(2): 347-61.
 
 Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 Shortest Probability Intervals.'' Arvix.
-\url{https://arxiv.org/pdf/1302.2142v1.pdf}.
+\url{http://arxiv.org/pdf/1302.2142v1}.
 }
 \seealso{
-\code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},
-and \code{\link{coxph}},
+\code{\link{simGG}}, \code{\link[survival]{strata}},
+and \code{\link[survival]{coxph}},
 }

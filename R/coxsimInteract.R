@@ -4,7 +4,7 @@
 #' \code{coxsimInteract} simulates quantities of interest for linear
 #' multiplicative interactions using multivariate normal distributions.
 #' These can be plotted with \code{\link{simGG}}.
-#' @param obj a \code{\link{coxph}} class fitted model object with a linear
+#' @param obj a \code{\link[survival]{coxph}} class fitted model object with a linear
 #' multiplicative interaction.
 #' @param b1 character string of the first constitutive variable's name.
 #' Note \code{b1} and \code{b2} must be entered in the order in which they are
@@ -122,10 +122,10 @@
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 #' Shortest Probability Intervals.'' Arvix.
-#' \url{https://arxiv.org/pdf/1302.2142v1.pdf}.
+#' \url{http://arxiv.org/pdf/1302.2142v1}.
 #'
-#' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},
-#' and \code{\link{coxph}},
+#' @seealso \code{\link{simGG}}, \code{\link[survival]{strata}},
+#' and \code{\link[survival]{coxph}},
 #' @return a \code{siminteract} class object
 #' @import data.table
 #' @importFrom stats vcov model.frame

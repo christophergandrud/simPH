@@ -1,8 +1,9 @@
 citHeader("To cite simPH in publications use:")
 
-citEntry(entry = "Article",
+bibentry(
+  bibtype      = "Article",
   title        = "{simPH}: An {R} Package for Illustrating Estimates from Cox Proportional Hazard Models Including for Interactive and Nonlinear Effects",
-  author       = personList(as.person("Christopher Gandrud")),
+  author       = c(person("Christopher", "Gandrud")),
   journal      = "Journal of Statistical Software",
   year         = "2015",
   volume       = "65",
@@ -17,13 +18,15 @@ citEntry(entry = "Article",
         "URL https://doi.org/10.18637/jss.v065.i03.")
 )
 
+# Uncomment for additional citation if needed
 # year <- sub("-.*", "", meta$Date)
 # note <- sprintf("R package version %s", meta$Version)
-
-# bibentry(bibtype = "Manual",
-#         title = "{simPH}: = Tools for Simulating and Plotting Quantities of Interest Estimated from
-#             Cox Proportional Hazards Models",
-#         author = c(person("Christopher", "Gandrud")),
-#         year = year,
-#         note = note,
-#         url = "	https://CRAN.R-project.org/package=simPH")
+# 
+# bibentry(
+#   bibtype = "Manual",
+#   title = "{simPH}: Tools for Simulating and Plotting Quantities of Interest Estimated from Cox Proportional Hazards Models",
+#   author = c(person("Christopher", "Gandrud")),
+#   year = year,
+#   note = note,
+#   url = "https://CRAN.R-project.org/package=simPH"
+# )
