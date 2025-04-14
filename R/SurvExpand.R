@@ -58,7 +58,7 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, PartialData = TRUE,
         message('Reminder (2): Times should be in 1 unit intervals, otherwise this could take awhile.\n\n')
     }
     # Warnings
-    if (class(data[, Time]) != 'numeric'){
+    if (!inherits(data[, Time], 'numeric')){
         if (isTRUE(messages)){
             message(paste0('Converting ', deparse(substitute(Time)),
                     ' to numeric. Things might get wacky. Please check.'))
@@ -66,7 +66,7 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, PartialData = TRUE,
         data[, Time] <- as.character(data[, Time])
         data[, Time] <- as.numeric(data[, Time])
     }
-    if (class(data[, Time2]) != 'numeric'){
+    if (!inherits(data[, Time2], 'numeric')){
         if (isTRUE(messages)){
             message(paste0('Converting ', deparse(substitute(Time2)),
                     ' to numeric. Things might get wacky. Please check.'))
@@ -74,7 +74,7 @@ SurvExpand <- function(data, GroupVar, Time, Time2, event, PartialData = TRUE,
         data[, Time2] <- as.character(data[, Time2])
         data[, Time2] <- as.numeric(data[, Time2])
     }
-    if (class(data[, event]) != 'numeric'){
+    if (!inherits(data[, event], 'numeric')){
         if (isTRUE(messages)){
             message(paste0('Converting ', deparse(substitute(event)),
                     ' to numeric. Things might get wacky. Please check.'))

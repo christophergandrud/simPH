@@ -89,7 +89,7 @@ described above. We then use these simulated coefficients to estimates
 quantities of interest for a range covariate values. For example, the first
 difference between two values \eqn{x_{j}}{x[j]} and \eqn{x_{l}}{x[l]} is:
 
-   \deqn{\%\triangle h_{i}(t) = (\mathrm{e}^{g(x_{j}) - g(x_{l})} - 1) * 100}{\%\triangle h[i](t) = (exp(g(x[j]) - g(x[l])) - 1) * 100}
+   \deqn{FD = (e^{g(x_{j}) - g(x_{l})} - 1) * 100}{FD = (exp(g(x[j]) - g(x[l])) - 1) * 100}
 
 Relative hazards and hazard ratios can be calculated by extension.
 

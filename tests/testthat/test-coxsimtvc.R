@@ -1,4 +1,5 @@
 test_that("coxsimtvc works for error in Issue # 24", {
+    library(survival) # Explicitly load the survival package
     
     # Hack to address https://github.com/christophergandrud/simPH/issues/26
     # Modified from https://conjugateprior.org/2015/06/identifying-the-os-from-r/
