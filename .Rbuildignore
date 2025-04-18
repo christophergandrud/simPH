@@ -15,3 +15,7 @@ LICENSE.md
 ^codecov\.yml$
 ^\.github$
 ^CRAN-SUBMISSION$
+
+# Exclude vignettes for CI
+^vignettes$
+^vignettes/.*$
