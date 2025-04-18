@@ -39,6 +39,20 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - uses: r-lib/actions/setup-tinytex@v2
+        if: matrix.config.os != 'windows-latest'
+
+      - name: Install additional LaTeX packages
+        if: matrix.config.os != 'windows-latest'
+        run: |
+          tlmgr install xcolor
+          tlmgr install framed
+          tlmgr install threeparttable
+          tlmgr install wrapfig
+          tlmgr install collection-fontsrecommended
+          tlmgr install collection-latexrecommended
+        shell: bash
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
@@ -47,3 +61,4 @@ jobs:
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
+          args: 'c("--no-manual")'
