@@ -4,7 +4,7 @@
 #' \code{coxsimPoly} simulates quantities of interest for polynomial covariate
 #' effects estimated from Cox Proportional Hazards models. These can be plotted
 #' with \code{\link{simGG}}.
-#' @param obj a \code{\link{coxph}} class fitted model object with a polynomial
+#' @param obj a \code{\link[survival]{coxph}} class fitted model object with a polynomial
 #'  coefficient. These can be plotted with \code{\link{simGG}}.
 #' @param b character string name of the coefficient you would like to simulate.
 #' To find the quantity of interest using only the polynomial and not the

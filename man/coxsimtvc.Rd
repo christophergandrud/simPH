@@ -80,7 +80,7 @@ a \code{simtvc} object
 }
 \description{
 \code{coxsimtvc} simulates time-interactive relative hazards, first
-differences, and hazard ratios from models estimated with \code{\link{coxph}}
+differences, and hazard ratios from models estimated with \code{\link[survival]{coxph}}
 using the multivariate normal distribution. These can be plotted with
 \code{\link{simGG}}.
 }
@@ -174,7 +174,7 @@ Journal of Political Science 44(2): 347-61.
 
 Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 Shortest Probability Intervals.'' Arvix.
-\url{http://arxiv.org/pdf/1302.2142v1.pdf}.
+\url{http://arxiv.org/pdf/1302.2142v1}.
 }
 \seealso{
 \code{\link{simGG}}, survival, \code{\link[survival]{strata}},

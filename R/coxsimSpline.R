@@ -7,7 +7,7 @@
 #' spline. These can be plotted with \code{\link{simGG}}.
 #' @param bspline a character string of the full \code{\link[survival]{pspline}} call
 #' used in \code{obj}. It should be exactly the same as how you entered it in
-#' \code{\link{coxph}}.
+#' \code{\link[survival]{coxph}}.
 #' @param bdata a numeric vector of the splined variable's values.
 #' @param qi quantity of interest to simulate. Values can be
 #' \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"},
@@ -113,7 +113,7 @@
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 #' Shortest Probability Intervals.'' Arvix.
-#' \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
+#' \url{http://arxiv.org/pdf/1302.2142v1}.
 #'
 #' @import data.table
 #' @importFrom stringr word str_match str_replace

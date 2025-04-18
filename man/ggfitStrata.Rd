@@ -47,7 +47,7 @@ component.
 }
 \details{
 \code{ggfitStrata} graphs fitted survival curves created with
-\code{\link{survfit}} using ggplot2.
+\code{\link[survival]{survfit}} using ggplot2.
 }
 \examples{
 # Load packages

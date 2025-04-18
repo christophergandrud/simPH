@@ -3,10 +3,10 @@
 #'
 #' \code{coxsimLinear} simulates relative hazards, first differences, and
 #' hazard ratios for linear covariates that are not interacted with time or
-#' nonlinearly transformed from models estimated with \code{\link{coxph}} using
+#' nonlinearly transformed from models estimated with \code{\link[survival]{coxph}} using
 #' the multivariate normal distribution. These can be plotted with
 #' \code{\link{simGG}}.
-#' @param obj a \code{\link{coxph}} class fitted model object.
+#' @param obj a \code{\link[survival]{coxph}} class fitted model object.
 #' @param b character string name of the coefficient you would like to simulate.
 #' @param qi quantity of interest to simulate. Values can be
 #' \code{"Relative Hazard"}, \code{"First Difference"}, \code{"Hazard Ratio"},

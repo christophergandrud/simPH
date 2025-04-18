@@ -19,7 +19,7 @@ coxsimPoly(
 )
 }
 \arguments{
-\item{obj}{a \code{\link{coxph}} class fitted model object with a polynomial
+\item{obj}{a \code{\link[survival]{coxph}} class fitted model object with a polynomial
 coefficient. These can be plotted with \code{\link{simGG}}.}
 
 \item{b}{character string name of the coefficient you would like to simulate.

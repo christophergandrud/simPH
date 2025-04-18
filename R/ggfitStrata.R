@@ -1,7 +1,7 @@
 #' Graph fitted stratified survival curves from Cox Proportional Hazards models
 #'
 #' \code{ggfitStrata} graphs fitted survival curves created with
-#' \code{\link{survfit}} using ggplot2.
+#' \code{\link[survival]{survfit}} using ggplot2.
 #'
 #' @param obj a \code{\link[survival]{survfit}} object.
 #' @param byStrata logical, whether or not you want to include all of the

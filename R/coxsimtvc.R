@@ -2,7 +2,7 @@
 #' Hazards models
 #'
 #' \code{coxsimtvc} simulates time-interactive relative hazards, first
-#' differences, and hazard ratios from models estimated with \code{\link{coxph}}
+#' differences, and hazard ratios from models estimated with \code{\link[survival]{coxph}}
 #' using the multivariate normal distribution. These can be plotted with
 #' \code{\link{simGG}}.
 #' @param obj a \code{\link[survival]{coxph}} fitted model object with a time interaction.
@@ -140,7 +140,7 @@
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 #' Shortest Probability Intervals.'' Arvix.
-#' \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
+#' \url{http://arxiv.org/pdf/1302.2142v1}.
 
 coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL,
                       Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000,
