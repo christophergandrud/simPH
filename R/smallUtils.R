@@ -42,7 +42,7 @@
 #' Test <- tvc(GolubEUPData, b = BaseVars, tvar = 'end', tfun = 'log')
 #'
 #' @seealso \code{\link{SurvExpand}}, \code{\link{simGG.simtvc}},
-#' \code{\link{coxsimtvc}}, \code{\link{survival}}, and \code{\link[survival]{coxph}}
+#' \code{\link{coxsimtvc}}, and \code{\link[survival]{coxph}}
 #' @keywords utilities
 #' @export
 
