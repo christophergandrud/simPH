@@ -5,6 +5,7 @@ Version 1.3.14
 ==============
 
 * Improvements to documentation to meet new CRAN requirements
+* Removed Vignette due to challenge with CRAN build
 
 Version 1.3.13
 ==============
