@@ -15,7 +15,7 @@ ggfitStrata(
 )
 }
 \arguments{
-\item{obj}{a \code{survfit} object.}
+\item{obj}{a \code{\link[survival]{survfit}} object.}
 
 \item{byStrata}{logical, whether or not you want to include all of the
 stratified survival curves on one plot or separate them into a grid arranged
@@ -35,7 +35,7 @@ vector of colours. The default it \code{lcolour = "#2C7FB8"}
 (a bluish hexadecimal colour)}
 }
 \description{
-This function largely improves \code{\link{plot.survfit}}. It
+This function largely improves \code{\link[survival]{plot.survfit}}. It
 plots the curves using ggplot2 rather than base R graphics. One major
 advantage is the ability to split the survival curves into multiple plots and
 arrange them in a grid. This makes it easier to examine many strata at once.
@@ -72,6 +72,6 @@ ggfitStrata(M1Fit, byStrata = FALSE)
 
 }
 \seealso{
-\code{\link{survfit}}, \code{ggplot2} and
-\code{\link{strata}}
+\code{\link[survival]{survfit}}, \code{ggplot2} and
+\code{\link[survival]{strata}}
 }

@@ -91,10 +91,10 @@
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 #' Shortest Probability Intervals.'' Arvix.
-#' \url{https://arxiv.org/pdf/1302.2142v1.pdf}.
+#' \url{http://arxiv.org/pdf/1302.2142v1}.
 #'
-#' @seealso \code{\link{simGG.simpoly}}, \code{\link{survival}},
-#' \code{\link{strata}}, and \code{\link{coxph}}
+#' @seealso \code{\link{simGG.simpoly}}, survival,
+#' \code{\link[survival]{strata}}, and \code{\link[survival]{coxph}}
 #'
 #' @importFrom MASS mvrnorm
 #' @importFrom stats vcov model.frame

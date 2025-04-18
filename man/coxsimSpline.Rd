@@ -19,10 +19,10 @@ coxsimSpline(
 )
 }
 \arguments{
-\item{obj}{a \code{\link{coxph}} class fitted model object with a penalized
+\item{obj}{a \code{\link[survival]{coxph}} class fitted model object with a penalized
 spline. These can be plotted with \code{\link{simGG}}.}
 
-\item{bspline}{a character string of the full \code{\link{pspline}} call
+\item{bspline}{a character string of the full \code{\link[survival]{pspline}} call
 used in \code{obj}. It should be exactly the same as how you entered it in
 \code{\link{coxph}}.}
 
@@ -143,9 +143,9 @@ Journal of Political Science 44(2): 347-61.
 
 Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 Shortest Probability Intervals.'' Arvix.
-\url{https://arxiv.org/pdf/1302.2142v1.pdf}.
+\url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 }
 \seealso{
-\code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},
-and \code{\link{coxph}}
+\code{\link{simGG}}, survival, \code{\link[survival]{strata}},
+and \code{\link[survival]{coxph}}
 }

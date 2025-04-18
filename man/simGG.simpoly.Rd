@@ -56,11 +56,11 @@ of the simulation distribution.}
 
 \item{spalette}{colour palette for when there are multiple sets of
 comparisons to plot. Default palette is \code{"Set1"}. See
-\code{\link{scale_colour_brewer}}.}
+\code{\link[ggplot2]{scale_colour_brewer}}.}
 
 \item{legend}{specifies what type of legend to include (if applicable). The
 default is \code{legend = "legend"}. To hide the legend use
-\code{legend = FALSE}. See the \code{\link{discrete_scale}} for more details.}
+\code{legend = FALSE}. See the \code{\link[ggplot2]{discrete_scale}} for more details.}
 
 \item{leg.name}{name of the legend (if applicable).}
 

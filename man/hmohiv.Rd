@@ -8,7 +8,7 @@
 An object of class \code{data.frame} with 100 rows and 7 columns.
 }
 \source{
-UCLA IDRE \url{https://stats.idre.ucla.edu/r/examples/asa/r-applied-survival-analysis-ch-1/}
+UCLA IDRE \url{https://stats.oarc.ucla.edu/r/examples/asa/r-applied-survival-analysis-ch-1/}
 }
 \usage{
 hmohiv

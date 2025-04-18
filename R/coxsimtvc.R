@@ -5,7 +5,7 @@
 #' differences, and hazard ratios from models estimated with \code{\link{coxph}}
 #' using the multivariate normal distribution. These can be plotted with
 #' \code{\link{simGG}}.
-#' @param obj a \code{\link{coxph}} fitted model object with a time interaction.
+#' @param obj a \code{\link[survival]{coxph}} fitted model object with a time interaction.
 #' @param b the non-time interacted variable's name.
 #' @param btvc the time interacted variable's name.
 #' @param qi character string indicating what quantity of interest you would
@@ -114,8 +114,8 @@
 #'                   by = 15, ci = 0.5)
 #' }
 #'
-#' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},
-#' and \code{\link{coxph}}
+#' @seealso \code{\link{simGG}}, survival, \code{\link[survival]{strata}},
+#' and \code{\link[survival]{coxph}}
 #'
 #' @import data.table
 #' @importFrom stats vcov
@@ -140,7 +140,7 @@
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 #' Shortest Probability Intervals.'' Arvix.
-#' \url{https://arxiv.org/pdf/1302.2142v1.pdf}.
+#' \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 
 coxsimtvc <- function(obj, b, btvc, qi = "Relative Hazard", Xj = NULL,
                       Xl = NULL, tfun = "linear", pow = NULL, nsim = 1000,

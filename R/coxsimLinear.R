@@ -71,8 +71,8 @@
 #'                       ci = 0.99)
 #' }
 #'
-#' @seealso \code{\link{simGG.simlinear}}, \code{\link{survival}},
-#' \code{\link{strata}}, and \code{\link{coxph}}
+#' @seealso \code{\link{simGG.simlinear}}
+#' \code{\link[survival]{strata}}, and \code{\link[survival]{coxph}}
 #'
 #' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating
 #' Estimates from Cox Proportional Hazard Models Including for Interactive and
@@ -88,7 +88,7 @@
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 #' Shortest Probability Intervals.'' Arvix.
-#' \url{https://arxiv.org/pdf/1302.2142v1.pdf}.
+#' \url{http://arxiv.org/pdf/1302.2142v1}.
 #'
 #' @import data.table
 #' @importFrom stats vcov model.frame

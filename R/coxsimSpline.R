@@ -3,9 +3,9 @@
 #'
 #' \code{coxsimSpline} simulates quantities of interest from penalized splines
 #' using multivariate normal distributions.
-#' @param obj a \code{\link{coxph}} class fitted model object with a penalized
+#' @param obj a \code{\link[survival]{coxph}} class fitted model object with a penalized
 #' spline. These can be plotted with \code{\link{simGG}}.
-#' @param bspline a character string of the full \code{\link{pspline}} call
+#' @param bspline a character string of the full \code{\link[survival]{pspline}} call
 #' used in \code{obj}. It should be exactly the same as how you entered it in
 #' \code{\link{coxph}}.
 #' @param bdata a numeric vector of the splined variable's values.
@@ -96,8 +96,8 @@
 #'                        qi = "Hazard Rate",
 #'                        Xj = seq(2, 53, by = 3), nsim = 100)
 #'
-#' @seealso \code{\link{simGG}}, \code{\link{survival}}, \code{\link{strata}},
-#' and \code{\link{coxph}}
+#' @seealso \code{\link{simGG}}, survival, \code{\link[survival]{strata}},
+#' and \code{\link[survival]{coxph}}
 #'
 #' @references Gandrud, Christopher. 2015. simPH: An R Package for Illustrating
 #' Estimates from Cox Proportional Hazard Models Including for Interactive and
@@ -113,7 +113,7 @@
 #'
 #' Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 #' Shortest Probability Intervals.'' Arvix.
-#' \url{https://arxiv.org/pdf/1302.2142v1.pdf}.
+#' \url{http://arxiv.org/pdf/1302.2142v1.pdf}.
 #'
 #' @import data.table
 #' @importFrom stringr word str_match str_replace

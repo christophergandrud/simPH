@@ -117,9 +117,9 @@ Journal of Political Science 44(2): 347-61.
 
 Liu, Ying, Andrew Gelman, and Tian Zheng. 2013. ''Simulation-Efficient
 Shortest Probability Intervals.'' Arvix.
-\url{https://arxiv.org/pdf/1302.2142v1.pdf}.
+\url{http://arxiv.org/pdf/1302.2142v1}.
 }
 \seealso{
-\code{\link{simGG.simlinear}}, \code{\link{survival}},
-\code{\link{strata}}, and \code{\link{coxph}}
+\code{\link{simGG.simlinear}}
+\code{\link[survival]{strata}}, and \code{\link[survival]{coxph}}
 }
