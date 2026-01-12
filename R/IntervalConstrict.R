@@ -16,7 +16,7 @@
 #' \code{spin = TRUE}. These values are difficult to plot \code{\link{simGG}}
 #' and may prevent \code{spin} from finding the central interval.
 #'
-#' @importFrom dplyr group_by_at vars all_of mutate
+#' @importFrom dplyr group_by pick all_of mutate
 #' @keywords internals
 #' @noRd
 
@@ -77,7 +77,7 @@ IntervalConstrict <- function(Simb = Simb, SubVar = SubVar, qi = qi,
         lb <- -Inf
     }
     
-    Simb <- group_by_at(Simb, vars(all_of(SubVar)))
+    Simb <- group_by(Simb, pick(all_of(SubVar)))
 
     if (!isTRUE(spin)){
         Bottom <- (1 - ci)/2
