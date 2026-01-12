@@ -41,7 +41,7 @@
 #' # Find summary statistics of the constricted interval
 #' Sum <- MinMaxLines(Sim1, clean = TRUE)
 #'
-#' @importFrom dplyr group_by_ ungroup mutate distinct_
+#' @importFrom dplyr group_by ungroup mutate distinct all_of
 #' @import lazyeval
 #' @importFrom stats median quantile
 #' @keywords internals
@@ -60,7 +60,7 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
         byVars <- c("Time", "HRValue", "Strata")
     }
 
-    df <- group_by_(df, .dots = byVars)
+    df <- group_by(df, pick(all_of(byVars)))
 
     if (!isTRUE(hr)){
         Linesdf <- mutate(df, Median = median(QI),
@@ -69,7 +69,7 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
                         Lower50 = quantile(QI, 0.25),
                         Upper50 = quantile(QI, 0.75))
 
-        Linesdf <- distinct_(Linesdf, .dots = byVars, .keep_all = TRUE)
+        Linesdf <- distinct(Linesdf, pick(all_of(byVars)), .keep_all = TRUE)
     }
     else if (isTRUE(hr) & !isTRUE(strata)){
         Linesdf <- mutate(df, Median = median(HRate),
@@ -78,7 +78,7 @@ MinMaxLines <- function(df, byVars = "Xj", hr = FALSE, strata = FALSE,
                           Lower50 = quantile(QI, 0.25),
                           Upper50 = quantile(QI, 0.75))
 
-        Linesdf <- distinct_(Linesdf, .dots = c(1, 3), .keep_all = TRUE)
+        Linesdf <- distinct(Linesdf, pick(all_of(byVars)), .keep_all = TRUE)
         #Linesdf <- Linesdf[!duplicated(Linesdf[, c(1, 3)]), ]
     }
     else if (isTRUE(hr) & isTRUE(strata)){
