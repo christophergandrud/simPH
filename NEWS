@@ -1,6 +1,16 @@
 simPH NEWS
 ==========
 
+Version 1.3.15
+==============
+
+* Fixed CRAN check failure caused by deprecated dplyr functions
+* Replaced defunct `group_by_()` and `distinct_()` with modern `across()`/`pick()` equivalents
+* Updated `group_by_at()` to use `group_by(across())` for future compatibility
+* Removed deprecated `as_data_frame()` usage
+* Removed `lazyeval` dependency (no longer needed)
+* Now requires dplyr >= 1.1.0
+
 Version 1.3.14
 ==============
 

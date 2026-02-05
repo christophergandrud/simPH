@@ -99,7 +99,7 @@
 #' @importFrom MASS mvrnorm
 #' @importFrom stats vcov model.frame
 #' @importFrom survival basehaz
-#' @importFrom dplyr inner_join as_data_frame
+#' @importFrom dplyr inner_join
 #' @export
 
 coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
@@ -246,8 +246,7 @@ coxsimPoly <- function(obj, b = NULL, qi = "Relative Hazard", pow = 2,
     } else if (qi == "Hazard Ratio" | qi == "Relative Hazard" |
             qi == "First Difference"){
         merger_xj <- data.frame(Xj = Xj, Xjl = Xjl)
-        SimbPerc <- inner_join(SimbPerc, merger_xj, by = 'Xjl') %>%
-                        as_data_frame
+        SimbPerc <- inner_join(SimbPerc, merger_xj, by = 'Xjl')
         SimbPercSub <- data.frame(SimbPerc$SimID, SimbPerc$Xj, SimbPerc$QI)
         names(SimbPercSub) <- c("SimID", "Xj", "QI")
     }

@@ -7,12 +7,13 @@ Description: Simulates and plots quantities of interest (relative
     Proportional Hazard models. It also simulates and plots marginal effects
     for multiplicative interactions. Methods described in Gandrud (2015)
     <doi:10.18637/jss.v065.i03>.
-Version: 1.3.14
-Date: 2025-04-18
+Version: 1.3.15
+Date: 2026-02-05
 Authors@R: person(given = "Christopher",
     family = "Gandrud",
     role = c("aut", "cre"),
     email = "christopher.gandrud@gmail.com")
+Author: Christopher Gandrud [aut, cre]
 Maintainer: Christopher Gandrud <christopher.gandrud@gmail.com>
 URL: https://CRAN.R-project.org/package=simPH
 BugReports: https://github.com/christophergandrud/simPH/issues
@@ -21,10 +22,9 @@ Depends:
 License: GPL-3
 Imports:
     data.table (>= 1.9.6),
-    dplyr (>= 0.4),
+    dplyr (>= 1.1.0),
     ggplot2,
     gridExtra,
-    lazyeval,
     MASS,
     mgcv,
     stringr,
@@ -37,4 +37,4 @@ Suggests:
     covr
 LazyData: true
 Encoding: UTF-8
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
