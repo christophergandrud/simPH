@@ -1,7 +1,5 @@
 # simPH
 
-<img src="man/figures/plotbanner.png" height="40" width="1000" alt="banner-image"></img>
-
 **Christopher Gandrud**
 
 ###  [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable) [![R build status](https://github.com/christophergandrud/simPH/workflows/R-CMD-check/badge.svg)](https://github.com/christophergandrud/simPH/actions) [![Codecov test coverage](https://codecov.io/gh/christophergandrud/simPH/branch/master/graph/badge.svg)](https://app.codecov.io/gh/christophergandrud/simPH?branch=master) [![CRAN status](https://www.r-pkg.org/badges/version/simPH)](https://CRAN.R-project.org/package=simPH) ![CRAN Downloads](https://cranlogs.r-pkg.org/badges/last-month/simPH) ![CRAN Total Downloads](https://cranlogs.r-pkg.org/badges/grand-total/simPH)
@@ -157,7 +155,7 @@ To learn more about shortest probability intervals (and also for the source of
 the code that made this possible in **simPH**) see:
 
 Liu, Y., Gelman, A., & Zheng, T. (2015).
-["Simulation-efficient Shortest Probablility Intervals."](https://www.stat.columbia.edu/~gelman/research/published/spin.pdf)
+["Simulation-efficient Shortest Probablility Intervals."](https://sites.stat.columbia.edu/gelman/research/published/spin.pdf)
 *Statistics and Computing* 25:809-819.
 
 **Also good:** Hyndman, R. J. (1996).

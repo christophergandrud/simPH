@@ -5,9 +5,6 @@
 # Git related
 ./.git*
 
-# Travis scripts
-.travis.yml
-
 # Images
 ^img
 
@@ -19,3 +16,6 @@ LICENSE.md
 # Exclude vignettes for CI
 ^vignettes$
 ^vignettes/.*$
+
+# Claude Code
+^\.claude$
